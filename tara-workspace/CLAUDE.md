@@ -1,80 +1,65 @@
-# TARA Lima — Runtime Identity (Layer 0)
+# TARA Lima — Multi-Type Workspace Router (Layer 0)
 
-**Tool:** Automated TARA (Threat Analysis & Risk Assessment)  
+**Tool:** TARA Lima — Automated Threat Analysis & Risk Assessment  
 **Model:** claude-sonnet-4-20250514  
-**Standards:** ISO/SAE 21434 + UNECE WP.29/R155 + NIST 800-53 + ISO 27001:2022  
-**Scope (MVP):** Web-based automotive applications
+**Design:** Each TARA type is fully isolated in its own subfolder.
 
 ---
 
-## What This Tool Does
+## Supported TARA Types
 
-Runs a 7-stage automated TARA on a target web-based automotive system:
-
-| Stage | Type | Purpose |
-|-------|------|---------|
-| 01 Item Definition | AI (Vision) | Extract system boundary, components, protocols |
-| 02 Asset Analysis | AI | Identify assets, assign CIA ratings |
-| 03 Impact Analysis | AI + Engine | Generate damage scenarios, rate SFOP impact |
-| 04 Threat Analysis | AI (extended thinking) | STRIDE threats, attack paths, feasibility sub-factors |
-| 05 Risk Determination | Deterministic | impact × feasibility → risk level |
-| 06 Risk Treatment | AI | Recommend controls, map to standards |
-| 07 Residual Risk | Deterministic | Post-treatment risk calculation |
-
-**AI stages:** 1, 2, 3, 4, 6  
-**Deterministic stages:** 5, 7  
-**Extended thinking:** Stage 4 ONLY
+| Folder | Type | Status |
+|--------|------|--------|
+| `web-based-tara/` | Web-Based Application TARA | ✅ Active — MVP |
+| `vehicle-domain-tara/` | Vehicle & Domain Level TARA | 🔲 Future |
+| `ecu-component-tara/` | ECU & Component Level TARA | 🔲 Future |
 
 ---
 
-## ICM Architecture (5 Layers)
+## Why Isolated Folders?
 
-```
-Layer 0: tara-workspace/CLAUDE.md          ← THIS FILE. Always loaded.
-Layer 1: tara-workspace/CONTEXT.md         ← Stage routing, assessment state.
-Layer 2: stages/*/CONTEXT.md               ← Per-stage instructions. Load per stage.
-Layer 3: _config/                          ← Static domain knowledge. Load selectively.
-Layer 4: stages/*/output/                  ← Runtime artifacts. Written/read per stage.
-```
+Each TARA type differs in:
+- Asset taxonomy (web assets vs ECUs vs CAN signals)
+- Cybersecurity properties (CIAAAN for web; CIA for hardware)
+- Feasibility method (CVSS v3.1 for web; ISO 21434 AFR for hardware)
+- Threat library (OWASP + API threats vs AUTOSAR/UDS/OBD threats)
+- Impact dimensions (web: 7-dimension; automotive: SFOP)
+- Standards emphasis (NIST 800-53 / ISO 27001 for web; ISO 21434 Clause 15 for ECU)
 
----
-
-## Rules for AI Agents (Non-Negotiable)
-
-1. **NEVER generate risk numbers.** Feasibility values, impact ratings, risk scores = deterministic engines only.
-2. **ALWAYS use tool_use** to submit structured output. Never return free-text JSON.
-3. **Load ONLY the Layer 3 files** specified for your stage. See CONTEXT.md routing table.
-4. **Log every API call** to the audit trail before returning to orchestrator.
-5. **Output MUST match** the JSON schema in `.meta/specs/00-json-schema-contracts.md` exactly.
+Isolating them means adding a new TARA type never touches the existing ones.
 
 ---
 
-## Checkpoint Protocol
+## How the Orchestrator Routes
 
-Stages 1, 2, 3, 4 require human approval before pipeline continues.
-
-```
-POST {CHECKPOINT_URL}
-Body: { stage_id, output_json, assessment_id }
-Response: { approved: boolean, feedback?: string }
+```javascript
+// run-tara.js (top-level)
+const type = config.tara_type; // 'web-based' | 'vehicle-domain' | 'ecu-component'
+const workspace = {
+  'web-based':      './web-based-tara/orchestrator/run-web-tara.js',
+  'vehicle-domain': './vehicle-domain-tara/orchestrator/run-vehicle-tara.js',
+  'ecu-component':  './ecu-component-tara/orchestrator/run-ecu-tara.js',
+};
+require(workspace[type]).run(config);
 ```
 
-On rejection (`approved: false`): re-run stage with feedback appended to context. Max 3 retries.  
-On approval: write stage output to `stages/0X/output/`, proceed to next stage.
+---
 
-Fallback (no API): presence of `.APPROVED` file in `stages/0X/output/` = approved.
+## Adding a New TARA Type
+
+1. Create `{type}-tara/` folder
+2. Add `CLAUDE.md` (Layer 0 identity for that type)
+3. Add `CONTEXT.md` (stage routing for that type)
+4. Add `_config/` (type-specific domain knowledge)
+5. Add `_engines/` (type-specific deterministic calculators)
+6. Add `stages/` (type-specific stage agents)
+7. Add `orchestrator/run-{type}-tara.js`
+8. Register in this file's routing table above
+9. Write spec in `.meta/specs/{type}-tara-architecture.md`
+
+**Never modify another type's folder. Isolation is the contract.**
 
 ---
 
-## File Ownership at Runtime
-
-| Path | Read | Write |
-|------|------|-------|
-| `_engines/` | Orchestrator, stage runners | Never at runtime |
-| `_config/` | AI agents (selectively) | Never at runtime |
-| `stages/*/output/` | Next stage agent | Current stage agent |
-| `outputs/` | Output formatters | Output formatters |
-
----
-
-**This file is read-only. Do not modify during an assessment run.**
+**Load next:** Read `web-based-tara/CLAUDE.md` for web TARA identity.  
+**This file is read-only at runtime.**

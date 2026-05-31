@@ -22,12 +22,17 @@ Every component Codex implements must trace to a Claude-authored spec in `.meta/
 ## ICM Architecture (5 Layers)
 
 ```
-Layer 0: tara-workspace/CLAUDE.md        Runtime identity. Always loaded.
-Layer 1: tara-workspace/CONTEXT.md       Stage routing. Loaded by orchestrator.
-Layer 2: stages/*/CONTEXT.md             Per-stage instructions. Loaded per stage.
-Layer 3: _config/                        Static domain knowledge. Loaded selectively.
-Layer 4: stages/*/output/                Runtime artifacts. Written/read per stage.
+Layer 0: tara-workspace/web-based-tara/CLAUDE.md            Runtime identity. Always loaded.
+Layer 1: tara-workspace/web-based-tara/CONTEXT.md           Stage routing. Loaded by orchestrator.
+Layer 2: web-based-tara/stages/*/CONTEXT.md                 Per-stage instructions. Loaded per stage.
+Layer 3: web-based-tara/_config/                            Static domain knowledge. Loaded selectively.
+Layer 4: web-based-tara/stages/*/output/                    Runtime artifacts. Written/read per stage.
 ```
+
+Multi-TARA type structure:
+- `tara-workspace/web-based-tara/` — Web TARA module (MVP, active)
+- `tara-workspace/vehicle-domain-tara/` — Vehicle/Domain TARA (future)
+- `tara-workspace/ecu-component-tara/` — ECU/Component TARA (future)
 
 Two ICM workspaces in this repo:
 - `.meta/` — Meta-workspace (how Claude + Codex BUILD the tool)
@@ -58,23 +63,25 @@ Max 800 tokens per spec. If longer: too much scope in one spec — split it.
 
 **Claude owns:**
 ```
-.meta/                          All specs, governance, workflow docs
-tara-workspace/CLAUDE.md        Layer 0 runtime identity
-tara-workspace/CONTEXT.md       Layer 1 stage routing
-tara-workspace/stages/*/CONTEXT.md   Layer 2 per-stage instructions
-tara-workspace/_config/         Layer 3 domain knowledge files
-Agents/claude/                  Claude agent docs
+.meta/                                          All specs, governance, workflow docs
+tara-workspace/CLAUDE.md                        Top-level multi-TARA router (Layer 0)
+tara-workspace/CONTEXT.md                       Top-level dispatcher (Layer 1)
+tara-workspace/web-based-tara/CLAUDE.md         Web TARA identity (Layer 0)
+tara-workspace/web-based-tara/CONTEXT.md        Web TARA stage routing (Layer 1)
+tara-workspace/web-based-tara/stages/*/CONTEXT.md  Per-stage instructions (Layer 2)
+tara-workspace/web-based-tara/_config/          Domain knowledge files (Layer 3)
+Agents/claude/                                  Claude agent docs
 ```
 
 **Codex owns:**
 ```
-tara-workspace/_engines/        Deterministic engine implementations
-tara-workspace/stages/*/agent.js  AI stage agent implementations
-tara-workspace/orchestrator/    Pipeline runner
-output-formatters/              Excel formatter, audit trail
-src/schemas/                    JSON schema files
-tests/                          All tests and fixtures
-Agents/Codex/                   Codex protocol docs
+tara-workspace/web-based-tara/_engines/         Deterministic engine implementations
+tara-workspace/web-based-tara/stages/*/agent.js AI stage agent implementations
+tara-workspace/web-based-tara/orchestrator/     Pipeline runner
+output-formatters/                              Excel formatter, audit trail
+src/schemas/                                    JSON schema files
+tests/                                          All tests and fixtures
+Agents/Codex/                                   Codex protocol docs
 ```
 
 ---
@@ -117,18 +124,22 @@ Omkar final merge → develop
 
 Last updated: 2026-05-31
 
-| Spec | File | Status |
-|------|------|--------|
-| JSON Schema Contracts | `00-json-schema-contracts.md` | ✅ Complete |
-| Web-TARA MVP Architecture | `WEB-TARA-MVP-ARCHITECTURE.md` | ✅ Complete |
-| Feasibility Engine | `05-feasibility-engine.md` | 📋 Write next (no blockers) |
-| Risk Engine | `05-risk-engine.md` | 📋 Write next (no blockers) |
-| Item Definition Agent | `01-item-definition-agent.md` | ⏸ Blocked: checkpoint API |
-| Asset Analysis Agent | `02-asset-analysis-agent.md` | ⏸ Blocked: checkpoint API |
-| Impact Analysis Agent | `03-impact-analysis-agent.md` | ⏸ Blocked: checkpoint API |
-| Threat Analysis Agent | `04-threat-analysis-agent.md` | ⏸ Blocked: checkpoint API |
-| Risk Treatment Agent | `06-risk-treatment-agent.md` | ⏸ Blocked: controls DB schema |
-| Residual Risk Engine | `07-residual-risk-engine.md` | ⏸ Blocked: custom logic |
-| Orchestrator | `09-orchestrator.md` | ⏸ Blocked: all above |
-| Excel Formatter | `10-excel-formatter.md` | ⏸ Blocked: stage 07 |
-| Audit Trail | `11-audit-trail.md` | ⏸ Blocked: all AI stages |
+**Active MVP: Web-Based TARA** — 8-stage pipeline, CIAAAN + CVSS v3.1 + 7-dimension impact
+
+| Spec | File | Status | Notes |
+|------|------|--------|-------|
+| JSON Schema Contracts | `00-json-schema-contracts.md` | ⚠️ Needs update | CIA → CIAAAN properties |
+| Web-TARA MVP Architecture | `WEB-TARA-MVP-ARCHITECTURE.md` | ✅ Complete | |
+| CVSS AFR Engine | `05-cvss-afr-engine.md` | 📋 Write next | No blockers |
+| Risk Score Engine | `05-risk-engine.md` | 📋 Write next | No blockers |
+| Stage 01 — Input Normalization | `01-input-normalization-agent.md` | ⏸ Blocked | Checkpoint API |
+| Stage 02 — Damage Analysis | `02-damage-analysis-agent.md` | ⏸ Blocked | Checkpoint API |
+| Stage 03 — Threat Identification | `03-threat-identification-agent.md` | ⏸ Blocked | Checkpoint API |
+| Stage 04 — Attack Path Modelling | `04-attack-path-agent.md` | ⏸ Blocked | Checkpoint API |
+| Stage 05 — Impact Analysis | `05-impact-analysis-agent.md` | 📋 Write next | No blockers |
+| Stage 06 — Risk Scoring | `06-risk-scoring-engine.md` | 📋 Write next | No blockers |
+| Stage 07 — Risk Treatment | `07-risk-treatment-agent.md` | ⏸ Blocked | Controls DB schema |
+| Stage 08 — Residual Risk | `08-residual-risk-engine.md` | ⏸ Blocked | Custom logic needed |
+| Orchestrator | `09-orchestrator.md` | ⏸ Blocked | All above + checkpoint API |
+| Excel Formatter | `10-excel-formatter.md` | ⏸ Blocked | Needs stage 07 |
+| Audit Trail | `11-audit-trail.md` | ⏸ Blocked | Needs all AI stages |
