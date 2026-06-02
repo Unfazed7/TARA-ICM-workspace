@@ -12,7 +12,6 @@ const CIAAAN_PROPERTIES = [
   'non_repudiation'
 ];
 
-const STAKEHOLDERS = ['tool_user', 'organization', 'vehicle_owner', 'regulator', 'oem'];
 const RATINGS = ['Negligible', 'Moderate', 'Major', 'Severe'];
 const STRIDE_CATEGORIES = [
   'spoofing',
@@ -101,7 +100,6 @@ function assertRating(value, label) {
 module.exports = {
   CIAAAN_PROPERTIES,
   RATINGS,
-  STAKEHOLDERS,
   STRIDE_CATEGORIES,
   assertRating,
   countBy,

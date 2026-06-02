@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from ..database import get_db
@@ -44,7 +45,14 @@ def create_checkpoint(
         output_summary=request.output_summary,
     )
     db.add(checkpoint)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Checkpoint for this assessment and stage already exists",
+        ) from exc
     db.refresh(checkpoint)
     return checkpoint
 
@@ -75,6 +83,7 @@ def review_checkpoint(
     checkpoint_id: str,
     request: CheckpointReview,
     db: Session = Depends(get_db),
+    current_user: str = Depends(get_current_user),
 ):
     checkpoint = db.query(Checkpoint).filter_by(checkpoint_id=checkpoint_id).first()
     if not checkpoint:
@@ -86,7 +95,7 @@ def review_checkpoint(
         )
 
     checkpoint.status = request.decision
-    checkpoint.reviewer_id = request.reviewer_id
+    checkpoint.reviewer_id = current_user
     checkpoint.notes = request.notes
     checkpoint.reviewed_at = utc_now()
     db.commit()

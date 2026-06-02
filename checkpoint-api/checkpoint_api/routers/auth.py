@@ -6,14 +6,18 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 
 security = HTTPBearer()
+DEFAULT_JWT_SECRET = "dev-secret"
+JWT_SECRET = os.getenv("JWT_SECRET")
+
+if not JWT_SECRET or JWT_SECRET == DEFAULT_JWT_SECRET:
+    raise RuntimeError("JWT_SECRET must be set to a non-default value")
 
 
 async def get_current_user(
     token: HTTPAuthorizationCredentials = Depends(security),
 ) -> str:
-    secret = os.getenv("JWT_SECRET", "dev-secret")
     try:
-        payload = jwt.decode(token.credentials, secret, algorithms=["HS256"])
+        payload = jwt.decode(token.credentials, JWT_SECRET, algorithms=["HS256"])
     except jwt.PyJWTError as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -48,7 +48,7 @@ class CheckpointListItem(BaseModel):
 
 class CheckpointReview(BaseModel):
     decision: Literal["approved", "rejected"]
-    reviewer_id: str = Field(min_length=1)
+    reviewer_id: str | None = Field(default=None, min_length=1)
     notes: str | None = None
 
 

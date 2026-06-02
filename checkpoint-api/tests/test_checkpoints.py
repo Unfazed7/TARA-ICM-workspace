@@ -55,10 +55,11 @@ def test_full_approval_flow(client, auth_headers):
     review_response = client.post(
         f"/api/v1/checkpoints/{checkpoint_id}/review",
         headers=auth_headers,
-        json={"decision": "approved", "reviewer_id": "usr_01"},
+        json={"decision": "approved"},
     )
     assert review_response.status_code == 200
     assert review_response.json()["status"] == "approved"
+    assert review_response.json()["reviewer_id"] == "usr_test"
 
     poll_response = client.get(
         "/api/v1/assessments/ASS_01/checkpoints/2",
@@ -77,7 +78,6 @@ def test_rejection_flow(client, auth_headers):
         headers=auth_headers,
         json={
             "decision": "rejected",
-            "reviewer_id": "usr_01",
             "notes": "Damage scenario needs clearer stakeholder impact.",
         },
     )
@@ -89,6 +89,7 @@ def test_rejection_flow(client, auth_headers):
     )
     body = poll_response.json()
     assert body["status"] == "rejected"
+    assert body["reviewer_id"] == "usr_test"
     assert body["notes"] == "Damage scenario needs clearer stakeholder impact."
 
 
@@ -112,14 +113,14 @@ def test_status_transitions(client, auth_headers):
     approved = client.post(
         f"/api/v1/checkpoints/{checkpoint_id}/review",
         headers=auth_headers,
-        json={"decision": "approved", "reviewer_id": "usr_01"},
+        json={"decision": "approved"},
     )
     assert approved.status_code == 200
 
     second_review = client.post(
         f"/api/v1/checkpoints/{checkpoint_id}/review",
         headers=auth_headers,
-        json={"decision": "rejected", "reviewer_id": "usr_02"},
+        json={"decision": "rejected"},
     )
     assert second_review.status_code == 409
     assert second_review.json()["detail"] == "Checkpoint already reviewed"
