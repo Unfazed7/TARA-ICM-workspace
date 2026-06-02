@@ -133,7 +133,7 @@ For web assets, CIA ratings follow this scale:
 ## Asset ID Naming Convention
 
 ```
-AST-{NNN}  — Sequential, zero-padded (AST-001, AST-002, ...)
+AS_{NN}  — Sequential, zero-padded to at least 2 digits (AS_01, AS_02, ...)
 ```
 
 Asset IDs must be globally unique within an assessment.
