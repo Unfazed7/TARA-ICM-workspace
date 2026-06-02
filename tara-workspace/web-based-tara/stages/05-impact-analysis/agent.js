@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const {
   RATINGS,
   assertRating,
@@ -10,96 +12,174 @@ const {
   writeJson
 } = require('../agent-utils');
 
+const MODEL = 'claude-opus-4-8';
+const TOOL_NAME = 'submit_impact_analysis';
 const FIXED_SAFETY_RATIONALE = 'Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.';
 const FIXED_FINANCIAL_RATIONALE = 'Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.';
 
-function buildImpactAnalysis(threats, damageScenarios, timestamp = new Date().toISOString()) {
+function ensureThreats(threats) {
   if (!Array.isArray(threats) || threats.length === 0) throw new Error('No threats to process');
-  const damageById = new Map(damageScenarios.map((scenario) => [scenario.damage_id, scenario]));
+}
 
-  const impacts = threats.map((threat, index) => {
+function buildImpactTool() {
+  return {
+    name: TOOL_NAME,
+    description: 'Submit impact analysis ratings and rationales for one threat',
+    input_schema: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['impact_narrative', 'tool_user', 'other_stakeholders'],
+      properties: {
+        impact_narrative: { type: 'string', minLength: 1 },
+        tool_user: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['privacy', 'operational', 'rationale_privacy', 'rationale_operational'],
+          properties: {
+            privacy: { type: 'string', enum: RATINGS },
+            operational: { type: 'string', enum: RATINGS },
+            rationale_privacy: { type: 'string', minLength: 1 },
+            rationale_operational: { type: 'string', minLength: 1 }
+          }
+        },
+        other_stakeholders: {
+          type: 'object',
+          additionalProperties: false,
+          required: [
+            'legal',
+            'financial',
+            'business',
+            'rationale_legal',
+            'rationale_financial',
+            'rationale_business'
+          ],
+          properties: {
+            legal: { type: 'string', enum: RATINGS },
+            financial: { type: 'string', enum: RATINGS },
+            business: { type: 'string', enum: RATINGS },
+            rationale_legal: { type: 'string', minLength: 1 },
+            rationale_financial: { type: 'string', minLength: 1 },
+            rationale_business: { type: 'string', minLength: 1 }
+          }
+        }
+      }
+    }
+  };
+}
+
+function buildSystemPrompt() {
+  const configDir = path.resolve(__dirname, '../../_config');
+  return [
+    fs.readFileSync(path.join(configDir, 'impact-dimensions.md'), 'utf8'),
+    fs.readFileSync(path.join(configDir, 'web-tara-constraints.md'), 'utf8'),
+    'Tool User Safety and Financial are always Negligible - do not compute them.',
+    'Rate only tool_user.privacy, tool_user.operational, other_stakeholders.legal, other_stakeholders.financial, and other_stakeholders.business.',
+    'Write a specific impact narrative derived from the threat statement, and derive ratings from the damage scenario.',
+    `Return only via the ${TOOL_NAME} tool.`
+  ].join('\n\n');
+}
+
+function buildUserMessage(threat, damageScenario) {
+  return [
+    `Threat ID: ${threat.threat_id}`,
+    `Threat statement: ${threat.threat_statement}`,
+    `STRIDE category: ${threat.stride_category}`,
+    `Derivation note: ${threat.derivation_note}`,
+    `Damage scenario ID: ${damageScenario.damage_id}`,
+    `Damage scenario: ${damageScenario.damage_scenario}`,
+    `Stakeholder affected: ${damageScenario.stakeholder_affected}`,
+    `Asset ID: ${damageScenario.asset_id}`,
+    `Asset title: ${damageScenario.asset_title}`,
+    `CIAAAN property: ${damageScenario.property}`,
+    'Produce one impact narrative and the five non-fixed impact ratings with rationales.'
+  ].join('\n');
+}
+
+function extractToolUse(response) {
+  const content = response?.content || [];
+  const toolUse = content.find((item) => item.type === 'tool_use' && item.name === TOOL_NAME);
+  if (!toolUse?.input) return null;
+  if (Array.isArray(toolUse.input.impact_analysis)) return toolUse.input.impact_analysis[0] || null;
+  return toolUse.input;
+}
+
+async function callClaudeForThreat(threat, damageScenario, fetchImpl = fetch) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is required for Stage 05 impact analysis');
+
+  const requestBody = {
+    model: MODEL,
+    max_tokens: 1024,
+    system: buildSystemPrompt(),
+    messages: [{ role: 'user', content: buildUserMessage(threat, damageScenario) }],
+    tools: [buildImpactTool()],
+    tool_choice: { type: 'tool', name: TOOL_NAME }
+  };
+
+  const response = await fetchImpl('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestBody)
+  });
+
+  if (!response.ok) throw new Error(`Claude impact analysis request failed: ${response.status}`);
+  return response.json();
+}
+
+async function generateImpactForThreat(threat, damageScenario, fetchImpl) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const response = await callClaudeForThreat(threat, damageScenario, fetchImpl);
+    const impact = extractToolUse(response);
+    if (impact) return impact;
+  }
+  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${threat.threat_id}`);
+}
+
+async function buildImpactAnalysisWithClaude(threats, damageScenarios, options = {}) {
+  ensureThreats(threats);
+  const damageById = new Map(damageScenarios.map((scenario) => [scenario.damage_id, scenario]));
+  const impacts = [];
+  const timestamp = options.timestamp || new Date().toISOString();
+
+  for (const threat of threats) {
     const damage = damageById.get(threat.damage_scenario_id);
     if (!damage) throw new Error(`No damage scenario found for threat ${threat.threat_id}`);
-    const ratings = ratingsForProperty(threat.property);
-    return {
-      impact_id: formatId('IM', index),
+    const impact = await generateImpactForThreat(threat, damage, options.fetchImpl);
+    impacts.push({
+      impact_id: formatId('IM', impacts.length),
       threat_id: threat.threat_id,
       damage_scenario_id: threat.damage_scenario_id,
       asset_id: threat.asset_id,
       property: threat.property,
-      impact_narrative: `${threat.threat_statement} The resulting impact is tied to ${damage.damage_scenario}`,
+      impact_narrative: impact.impact_narrative,
       tool_user: {
         safety: 'Negligible',
-        privacy: ratings.toolPrivacy,
+        privacy: impact.tool_user?.privacy,
         financial: 'Negligible',
-        operational: ratings.toolOperational,
+        operational: impact.tool_user?.operational,
         rationale_safety: FIXED_SAFETY_RATIONALE,
-        rationale_privacy: `Privacy impact follows the ${threat.property} damage to ${threat.asset_title}.`,
+        rationale_privacy: impact.tool_user?.rationale_privacy,
         rationale_financial: FIXED_FINANCIAL_RATIONALE,
-        rationale_operational: `Operational impact reflects disruption to workflows using ${threat.asset_title}.`
+        rationale_operational: impact.tool_user?.rationale_operational
       },
       other_stakeholders: {
-        legal: ratings.legal,
-        financial: ratings.orgFinancial,
-        business: ratings.business,
-        rationale_legal: `Legal exposure follows from ${damage.stakeholder_affected} impact in ${damage.damage_id}.`,
-        rationale_financial: `Organizational financial impact follows remediation and service recovery needs for ${threat.asset_title}.`,
-        rationale_business: `Business impact follows trust and continuity effects from ${threat.threat_id}.`
+        legal: impact.other_stakeholders?.legal,
+        financial: impact.other_stakeholders?.financial,
+        business: impact.other_stakeholders?.business,
+        rationale_legal: impact.other_stakeholders?.rationale_legal,
+        rationale_financial: impact.other_stakeholders?.rationale_financial,
+        rationale_business: impact.other_stakeholders?.rationale_business
       },
       created_timestamp: timestamp
-    };
-  });
+    });
+  }
 
   validateImpactAnalysis(impacts, threats, damageScenarios);
   return impacts;
-}
-
-function ratingsForProperty(property) {
-  const table = {
-    confidentiality: {
-      toolPrivacy: 'Major',
-      toolOperational: 'Moderate',
-      legal: 'Major',
-      orgFinancial: 'Moderate',
-      business: 'Major'
-    },
-    integrity: {
-      toolPrivacy: 'Moderate',
-      toolOperational: 'Major',
-      legal: 'Moderate',
-      orgFinancial: 'Major',
-      business: 'Major'
-    },
-    availability: {
-      toolPrivacy: 'Negligible',
-      toolOperational: 'Major',
-      legal: 'Moderate',
-      orgFinancial: 'Major',
-      business: 'Major'
-    },
-    authenticity: {
-      toolPrivacy: 'Moderate',
-      toolOperational: 'Moderate',
-      legal: 'Major',
-      orgFinancial: 'Major',
-      business: 'Major'
-    },
-    authorization: {
-      toolPrivacy: 'Moderate',
-      toolOperational: 'Major',
-      legal: 'Moderate',
-      orgFinancial: 'Major',
-      business: 'Major'
-    },
-    non_repudiation: {
-      toolPrivacy: 'Negligible',
-      toolOperational: 'Moderate',
-      legal: 'Major',
-      orgFinancial: 'Moderate',
-      business: 'Major'
-    }
-  };
-  return table[property] || table.integrity;
 }
 
 function validateImpactAnalysis(impacts, threats, damageScenarios) {
@@ -119,6 +199,8 @@ function validateImpactAnalysis(impacts, threats, damageScenarios) {
       business: impact.other_stakeholders.business
     };
     for (const [dimension, rating] of Object.entries(dimensions)) assertRating(rating, dimension);
+    assertRating(impact.tool_user.safety, 'safety');
+    assertRating(impact.tool_user.financial, 'financial');
     for (const group of [impact.tool_user, impact.other_stakeholders]) {
       for (const [key, value] of Object.entries(group)) {
         if (key.startsWith('rationale_') && !value) throw new Error(`Empty rationale for ${key} in ${impact.impact_id}`);
@@ -134,7 +216,7 @@ function validateImpactAnalysis(impacts, threats, damageScenarios) {
 async function run(options) {
   const threats = readJson(options.threats);
   const damageScenarios = readJson(options.damageScenarios);
-  const impacts = buildImpactAnalysis(threats, damageScenarios);
+  const impacts = await buildImpactAnalysisWithClaude(threats, damageScenarios, { fetchImpl: options.fetchImpl });
   writeJson(options.out, impacts);
   return impacts;
 }
@@ -156,8 +238,13 @@ if (require.main === module) {
 }
 
 module.exports = {
-  buildImpactAnalysis,
-  ratingsForProperty,
+  buildImpactAnalysisWithClaude,
+  buildImpactTool,
+  buildSystemPrompt,
+  buildUserMessage,
+  callClaudeForThreat,
+  extractToolUse,
+  generateImpactForThreat,
   run,
   validateImpactAnalysis
 };
