@@ -133,10 +133,11 @@ Last updated: 2026-05-31
 | CVSS AFR Engine | `05-cvss-afr-engine.md` | ✅ Complete | Codex-ready |
 | Stage 05 — Impact Analysis | `05-impact-analysis-agent.md` | ✅ Complete | Codex-ready |
 | Stage 06 — Risk Scoring | `06-risk-scoring-engine.md` | ✅ Complete | Codex-ready |
-| Stage 01 — Input Normalization | `01-input-normalization-agent.md` | ⏸ Blocked | Checkpoint API |
-| Stage 02 — Damage Analysis | `02-damage-analysis-agent.md` | ⏸ Blocked | Checkpoint API |
-| Stage 03 — Threat Identification | `03-threat-identification-agent.md` | ⏸ Blocked | Checkpoint API |
-| Stage 04 — Attack Path Modelling | `04-attack-path-agent.md` | ⏸ Blocked | Checkpoint API |
+| Checkpoint API (FastAPI) | `09-checkpoint-api.md` | ✅ Complete | Codex-ready |
+| Stage 01 — Input Normalization | `01-input-normalization-agent.md` | ✅ Complete | Codex-ready |
+| Stage 02 — Damage Analysis | `02-damage-analysis-agent.md` | ✅ Complete | Codex-ready |
+| Stage 03 — Threat Identification | `03-threat-identification-agent.md` | ✅ Complete | Codex-ready |
+| Stage 04 — Attack Path Modelling | `04-attack-path-agent.md` | ✅ Complete | Codex-ready |
 | Stage 07 — Risk Treatment | `07-risk-treatment-agent.md` | ⏸ Blocked | Controls DB schema |
 | Stage 08 — Residual Risk | `08-residual-risk-engine.md` | ⏸ Blocked | Custom logic needed |
 | Orchestrator | `09-orchestrator.md` | ⏸ Blocked | All above + checkpoint API |
