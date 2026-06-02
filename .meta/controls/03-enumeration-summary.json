@@ -1,0 +1,15 @@
+{
+  "run_timestamp": "2026-06-02T21:02:38.597Z",
+  "total_skills_in_index": 754,
+  "keyword_candidates": 452,
+  "fetch_succeeded": 451,
+  "fetch_failed": 1,
+  "fetch_skipped_no_frontmatter": 0,
+  "fetch_skipped_no_nist_csf": 0,
+  "treatment_candidates_final": 440,
+  "csf_breakdown": {
+    "PR": 279,
+    "DE": 355,
+    "RS": 90
+  }
+}
