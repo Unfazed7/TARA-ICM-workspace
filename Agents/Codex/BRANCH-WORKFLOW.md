@@ -118,14 +118,41 @@ The rebase will be clean because Claude and Codex own different files.
 
 ---
 
+## Review Step (Before Any Merge)
+
+After Codex pushes an implementation, Claude reviews it before Omkar merges.
+
+```
+Codex pushes implementation to claude
+        ↓
+Codex signals ready: commit message contains "feat(ready-for-review): ..."
+        ↓
+Claude pulls + reviews against spec (see Agents/Claude/REVIEW-PROTOCOL.md)
+        ↓
+PASS: Claude commits "review: Approve {module} — spec compliant"
+FAIL: Claude commits REVIEW-ISSUES.md with exact problems + line numbers
+        ↓ (if fail)
+Codex fixes issues, deletes REVIEW-ISSUES.md, pushes again
+Claude re-reviews
+        ↓
+Omkar merges claude → develop only after Claude's approval commit
+```
+
+**Codex signals ready for review by using this commit message format:**
+```bash
+git commit -m "feat(ready-for-review): Implement {module} per spec {spec-filename}.md"
+```
+
+---
+
 ## PR: claude → develop
 
-When a full milestone is complete (a logical set of specs + their implementations):
+When Claude has approved all modules in a milestone:
 
 ```
 Omkar opens PR: claude → develop
-Reviews the full diff
-Merges when satisfied
+Reviews the approval commits as evidence
+Merges
 ```
 
 Codex does NOT open PRs. Omkar decides when `claude` is ready to merge into `develop`.

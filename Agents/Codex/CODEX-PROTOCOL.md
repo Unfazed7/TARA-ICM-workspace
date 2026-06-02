@@ -140,6 +140,12 @@ All 9 specs are written and waiting. Implement in this order (Wave 1 has no depe
 
 ## Commit Message Convention
 
+When implementation is complete and ready for Claude's review, use `ready-for-review` scope:
+```
+feat(ready-for-review): Implement {module} per spec {spec-filename}.md
+```
+
+For all other commits:
 ```
 feat: Implement {module} per spec {spec-filename}.md
 fix: {module} — {specific thing fixed}
@@ -147,6 +153,11 @@ test: Add tests for {module}
 chore: {small non-feature change}
 wip: {module} partial — {what's done, what remains}
 ```
+
+**Do not start the next module until you see Claude's approval commit:**
+`review: Approve {module} — spec compliant`
+
+If you see `REVIEW-ISSUES.md` committed instead — read it, fix every issue listed, delete the file, and push again with `feat(ready-for-review):` message.
 
 ---
 
