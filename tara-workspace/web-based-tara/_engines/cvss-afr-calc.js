@@ -55,3 +55,43 @@ module.exports = {
   MIN_EXPLOITABILITY,
   MAX_EXPLOITABILITY
 };
+
+function readJson(filePath) {
+  return JSON.parse(require('fs').readFileSync(filePath, 'utf8'));
+}
+
+function writeJson(filePath, value) {
+  require('fs').writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+function parseArgs(argv) {
+  const args = {};
+  for (let index = 0; index < argv.length; index += 2) {
+    const key = argv[index];
+    if (!key || !key.startsWith('--')) throw new Error(`Invalid argument: ${key}`);
+    args[key.slice(2)] = argv[index + 1];
+  }
+  return args;
+}
+
+function main() {
+  const args = parseArgs(process.argv.slice(2));
+  if (!args.input || !args.out) {
+    throw new Error('Usage: node cvss-afr-calc.js --input <attack-paths.json> --out <attack-paths.json>');
+  }
+  const paths = readJson(args.input);
+  const updated = paths.map((attackPath) => ({
+    ...attackPath,
+    ...calculateCVSSAFR(attackPath.cvss_metrics)
+  }));
+  writeJson(args.out, updated);
+}
+
+if (require.main === module) {
+  try {
+    main();
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
+}

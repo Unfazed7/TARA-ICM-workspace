@@ -30,12 +30,14 @@ function inferStage(filePath) {
 
 function main() {
   const target = process.argv[2];
+  const explicitSchema = process.argv[3] && !process.argv[3].startsWith('--') ? process.argv[3] : null;
   const expectFailure = process.argv.includes('--expect-failure');
   if (!target) throw new Error('Usage: node scripts/validate-all.js <file-or-directory> [--expect-failure]');
 
   let failures = 0;
   for (const filePath of filesFrom(path.resolve(target))) {
-    const result = validateSchema(readJson(filePath), readJson(schemaPath(inferStage(filePath))));
+    const schema = explicitSchema ? readJson(path.resolve(explicitSchema)) : readJson(schemaPath(inferStage(filePath)));
+    const result = validateSchema(readJson(filePath), schema);
     const passed = expectFailure ? !result.valid : result.valid;
     if (!passed) {
       failures += 1;
