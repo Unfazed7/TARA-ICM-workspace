@@ -1,46 +1,81 @@
 # VERIFICATION PROTOCOL
 
-Run this checklist before opening any PR. All checks must pass.
-
-## The 4 Checks
-
-**1. Compilation / Lint**
-```bash
-node --check {file}         # syntax check (Node.js)
-npx eslint {file}           # lint (if eslint configured)
-```
-Passes when: no syntax errors, no lint errors.
-
-**2. Scope Check**
-```bash
-git diff --name-only        # shows every file you've touched
-```
-Passes when: ONLY files designated in the spec appear in this list.
-If any unexpected file appears: undo that change, investigate why it got touched.
-
-**3. Regression Check**
-```bash
-npm test                    # full test suite
-```
-Passes when: no previously-passing tests now fail.
-If tests fail that you didn't write: you broke something adjacent — fix it.
-
-**4. Test Coverage**
-```bash
-npm test -- {module}        # module-specific tests
-```
-Passes when:
-- Golden path test: valid input → correct output, matches schema
-- Error path test: invalid/missing input → correct error, no crash
-- Edge cases: empty arrays, null fields, boundary values
+Run this checklist before every push. All checks must pass.
 
 ---
 
-## Sign-Off
+## The 4 Checks
 
-After all 4 checks pass, add to your PR body:
+### 1. Compilation / Lint
+
+**Node.js modules:**
+```bash
+node --check {file}          # syntax check
+npx eslint {file}            # lint (if eslint configured)
 ```
-## Verification Results (VERIFY.md)
+
+**Python modules (checkpoint-api):**
+```bash
+cd checkpoint-api
+python -m py_compile {file}  # syntax check
+flake8 {file}                # lint (if flake8 configured)
+```
+
+Passes when: no syntax errors, no lint errors.
+
+---
+
+### 2. Scope Check
+
+```bash
+git diff --name-only
+```
+
+Passes when: ONLY files designated in the spec appear.
+
+If any unexpected file appears — especially anything in `.meta/`, `_config/`, or any `CONTEXT.md` — undo that change. You touched something you shouldn't have.
+
+---
+
+### 3. Regression Check
+
+**Node.js:**
+```bash
+npm test
+```
+
+**Python (checkpoint-api):**
+```bash
+cd checkpoint-api && pytest
+```
+
+Passes when: no previously-passing tests now fail. If tests fail that you didn't write: you broke something adjacent — fix it before pushing.
+
+---
+
+### 4. Test Coverage
+
+**Node.js:**
+```bash
+npm test -- {module}
+```
+
+**Python:**
+```bash
+cd checkpoint-api && pytest tests/test_{module}.py -v
+```
+
+Passes when:
+- Golden path: valid input → correct output, matches schema
+- Error path: invalid/missing input → correct error thrown, no crash
+- Edge cases: empty arrays, null fields, boundary values listed in spec
+
+---
+
+## Sign-Off (Add to Every Commit Message or PR)
+
+```
+Verification Results (VERIFY.md):
 - [x] Compilation/lint: PASS
 - [x] Scope: Only touched {list files}
 - [x] Regression: {N} suite tests, all pass
@@ -49,5 +84,6 @@ After all 4 checks pass, add to your PR body:
 
 ---
 
-**If any check fails: fix it before opening the PR.**  
-Do not open a PR with known failures and promise to fix later.
+**If any check fails: fix it. Do not push with known failures.**
+
+**Last updated: 2026-06-02**

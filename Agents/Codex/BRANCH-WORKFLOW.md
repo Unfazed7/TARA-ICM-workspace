@@ -1,189 +1,160 @@
-# BRANCH WORKFLOW — Git Hierarchy & PR Protocol
+# BRANCH WORKFLOW — Git Protocol for TARA Aegis
 
 ## Branch Hierarchy
 
 ```
-main                        ← Production. Protected. Tagged releases only.
+main                  ← Production. Protected. Tagged releases only.
 │
-└── develop                 ← Integration. All feature work lands here.
+└── develop           ← Integration. All reviewed work lands here.
     │
-    ├── claude              ← Claude's spec branch. Specs, Layer 2-3 docs, governance.
-    │
-    └── codex/{module}      ← Codex's feature branches. One per module.
-        ├── codex/schemas
-        ├── codex/engines
-        ├── codex/stage-01
-        ├── codex/stage-02
-        ├── codex/stage-03
-        ├── codex/stage-04
-        ├── codex/stage-05
-        ├── codex/stage-06
-        ├── codex/stage-07
-        ├── codex/orchestrator
-        └── codex/output-formatters
+    └── claude        ← Shared working branch. Both Claude and Codex push here.
 ```
 
-## Branch Protection Rules (Set in GitHub)
+Claude writes specs here. Codex implements here. When a milestone is complete, `claude → develop` PR is opened and Omkar merges it.
+
+---
+
+## Branch Protection Rules
 
 | Branch | Require PR | Required Approver | Direct Push |
 |--------|-----------|-------------------|-------------|
 | `main` | YES | Omkar (1) | NEVER |
 | `develop` | YES | Omkar (1) | NEVER |
-| `claude` | No | — | Claude only |
-| `codex/*` | No | — | Codex only |
+| `claude` | No | — | Claude + Codex |
 
 ---
 
-## How Claude Works (Spec Engine)
+## The Sequential Rule (Most Important)
+
+Claude and Codex share the `claude` branch. **They never push at the same time.**
 
 ```
-Step 1: Write spec → .meta/specs/{module}.md
-Step 2: Commit to claude branch:
-          git add .meta/specs/{module}.md
-          git commit -m "spec: Add {module-name} specification"
-          git push origin claude
-Step 3: Open PR: claude → develop
-          Title: "spec: {module-name} specification"
-          Body:  "Spec complete. Codex starts after merge."
-Step 4: Omkar reviews + merges PR
-Step 5: Codex starts codex/{module}
+Claude finishes + pushes
+        ↓
+Codex pulls latest claude → implements → pushes
+        ↓
+Claude pulls latest claude → writes next spec → pushes
+        ↓
+(repeat until milestone complete)
 ```
+
+Before starting any work: `git pull origin claude` — always.
+
+Conflicts are prevented by file ownership. Claude and Codex never touch the same files (see CODEX-PROTOCOL.md). If a conflict ever appears, it means one of them touched a file they shouldn't have.
 
 ---
 
-## How Codex Works (Implementation Engine)
-
-### Step 1 — Confirm Spec Is Merged
-
-Before touching any code, confirm the spec exists in `develop`:
-```bash
-git checkout develop
-git pull origin develop
-ls .meta/specs/{module}.md      # must exist
-```
-
-### Step 2 — Create Branch FROM develop
+## How Claude Works
 
 ```bash
-git checkout develop
-git pull origin develop
-git checkout -b codex/{module}
+# 1. Always pull latest before writing
+git pull origin claude
+
+# 2. Write spec or ICM file, then commit
+git add .meta/specs/{module}.md
+git commit -m "spec: Add {module} specification"
+git push origin claude
 ```
 
-Examples:
+Claude never touches `_engines/`, `agent.js` files, `src/schemas/`, or `tests/`.
+
+---
+
+## How Codex Works
+
+### Step 1 — Pull Latest
+
 ```bash
-git checkout -b codex/schemas
-git checkout -b codex/engines
-git checkout -b codex/stage-01
+git pull origin claude
 ```
 
-**ALWAYS branch from `develop`. Never from `claude` or `main`.**
-
-### Step 3 — Read Spec, State Assumptions
-
-Read `.meta/specs/{module}.md` completely.
-
-Before writing a single line of code, post (as PR draft comment or message):
-```
-Read spec: {module}.md
-Assumptions:
-  - Input comes from: {previous stage output / file path}
-  - I will touch only: {list files}
-  - I will NOT touch: {list files}
-  - Schema validation via: {method}
-  - Dependencies I assume exist: {list}
-Ready to code.
+Confirm the spec you're about to implement exists:
+```bash
+ls .meta/specs/{module}.md   # must exist
 ```
 
-If any assumption is unclear → stop and flag it. Do not guess.
+### Step 2 — State Scope Before Coding
 
-### Step 4 — Implement
+Before writing a single line, declare:
+```
+Spec: .meta/specs/{module}.md
+Files I WILL touch:         {exact list}
+Files I WILL NOT touch:     .meta/, _config/, CONTEXT.md files, CLAUDE.md files
+Dependencies I assume exist: {list}
+```
 
-- Work only in files designated by the spec
-- Do NOT touch `.meta/`, `_config/`, or any `CONTEXT.md` files
-- Run tests continuously during implementation
+If anything in the spec is unclear → stop. Do not guess. Flag the ambiguity.
 
-### Step 5 — Run VERIFY.md Before Opening PR
+### Step 3 — Implement
 
-All 4 checks must pass:
+Work only in files designated by the spec. Run tests continuously.
+
+### Step 4 — Run VERIFY.md Checklist
+
+All 4 checks must pass before committing:
 ```
 [ ] Compilation/lint passes
 [ ] Scope: only touched designated files (git diff --name-only)
-[ ] No regressions in adjacent code
+[ ] No regressions (full test suite passes)
 [ ] Tests pass for valid AND invalid inputs
 ```
 
-### Step 6 — Commit and Push
+### Step 5 — Commit and Push to claude
 
 ```bash
 git add {specific files only — never git add -A}
 git commit -m "feat: Implement {module} per spec {spec-filename}.md"
-git push -u origin codex/{module}
+git push origin claude
 ```
 
-### Step 7 — Open PR: codex/{module} → develop
+### Step 6 — If Push Fails (Someone Pushed Ahead)
 
-PR Title: `feat: Implement {module}`
-
-PR Body (fill this template exactly):
-```markdown
-## Spec Reference
-`.meta/specs/{spec-filename}.md`
-
-## Assumptions Confirmed
-- Input: {what I receive and from where}
-- Output: {what I produce, matches schema in spec 00}
-- Files touched: {list each file}
-
-## Verification Results (VERIFY.md)
-- [x] Compilation/lint: PASS
-- [x] Scope: Only touched {list files}
-- [x] Regression: No adjacent breakage
-- [x] Tests: {N} tests passing, 0 failing
-
-## Test Command
-`npm test -- {module-name}`
-```
-
-### Step 8 — Respond to Claude's Review
-
-Claude reviews for spec compliance (not code style).
-
-If Claude requests changes:
 ```bash
-git add {fixed files}
-git commit -m "fix: Address review comment — {what was fixed}"
-git push origin codex/{module}
-# PR auto-updates. No new PR needed.
+git pull --rebase origin claude
+git push origin claude
 ```
 
-### Step 9 — Omkar Merges
-
-After Claude approves → Omkar merges `codex/{module}` → `develop`.
-Delete branch after merge.
+The rebase will be clean because Claude and Codex own different files.
 
 ---
 
-## PR Rules (Non-Negotiable)
+## PR: claude → develop
 
-| Rule | Why |
-|------|-----|
-| One PR per module | Easy to review, easy to revert independently |
-| Branch from `develop`, not `claude` | Clean integration baseline |
-| PR body = VERIFY.md results | Reviewer knows it was checked |
-| Every PR references a spec | Every line traces to a spec |
-| Codex never merges own PR | Claude reviews spec compliance first |
-| Specific `git add` only | Prevents accidental inclusion of unrelated files |
+When a full milestone is complete (a logical set of specs + their implementations):
+
+```
+Omkar opens PR: claude → develop
+Reviews the full diff
+Merges when satisfied
+```
+
+Codex does NOT open PRs. Omkar decides when `claude` is ready to merge into `develop`.
+
+---
+
+## Commit Message Convention
+
+```bash
+# Claude
+spec: Add {module} specification
+spec: Update {module} — {what changed and why}
+
+# Codex
+feat: Implement {module} per spec {spec-filename}.md
+fix: {module} — {specific fix}
+test: Add tests for {module}
+chore: {small non-feature change}
+```
 
 ---
 
 ## Milestone: develop → main
 
 When all modules for a milestone pass E2E testing in `develop`:
+
 ```bash
 # Omkar does this:
 git checkout main
-git pull origin main
 git merge develop --no-ff -m "release: v0.1.0-mvp"
 git tag v0.1.0-mvp
 git push origin main
@@ -192,34 +163,22 @@ git push origin --tags
 
 ---
 
-## Quick Reference Cheat Sheet
+## Quick Reference
 
 ```bash
-# Start a new Codex module
-git checkout develop && git pull origin develop
-git checkout -b codex/{module-name}
+# Always start with this
+git pull origin claude
 
-# Save work in progress
-git add {specific files}
-git commit -m "wip: {module} — {what's done so far}"
-git push origin codex/{module-name}
+# Commit specific files (never git add -A)
+git add path/to/specific/file.js
+git commit -m "feat: Implement {module} per spec {spec}.md"
+git push origin claude
 
-# Final push before opening PR
-git push -u origin codex/{module-name}
-
-# After review comments — fix and push to same branch
-git add {fixed files}
-git commit -m "fix: {what was fixed}"
-git push origin codex/{module-name}   # PR auto-updates
-
-# If develop moved ahead while you were working
-git checkout develop && git pull origin develop
-git checkout codex/{module-name}
-git rebase develop
-git push --force-with-lease origin codex/{module-name}
+# If push is rejected because someone pushed ahead
+git pull --rebase origin claude
+git push origin claude
 ```
 
 ---
 
-**Read this before starting any implementation task.**  
-Last updated: 2026-05-31
+**Last updated: 2026-06-02**
