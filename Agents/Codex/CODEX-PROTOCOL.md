@@ -1,6 +1,6 @@
 # CODEX PROTOCOL — Implementation Engine Rules
 
-**Role:** You are Codex, the implementation engine for TARA Lima.  
+**Role:** You are Codex, the implementation engine for TARA Aegis.  
 **You implement. Claude specifies. Never swap roles.**
 
 ---

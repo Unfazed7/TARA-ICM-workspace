@@ -1,5 +1,5 @@
 /**
- * TARA Lima Orchestrator
+ * TARA Aegis Orchestrator
  * Runs the 7-stage TARA pipeline for a single assessment.
  * Layer 1: tara-workspace/CONTEXT.md
  *

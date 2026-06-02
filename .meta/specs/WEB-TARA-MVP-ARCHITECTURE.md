@@ -10,7 +10,7 @@
 
 ## 1. What We Are Building
 
-TARA Lima — automated Threat Analysis & Risk Assessment tool for web-based automotive applications.
+TARA Aegis — automated Threat Analysis & Risk Assessment tool for web-based automotive applications.
 
 **Target systems (MVP):** Azure-hosted automotive web platforms — diagnostic portals, licensing services, telematics backends, OTA update management systems.
 
