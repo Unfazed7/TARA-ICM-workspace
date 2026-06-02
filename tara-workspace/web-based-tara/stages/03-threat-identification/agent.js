@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const {
   STRIDE_CATEGORIES,
   countBy,
@@ -11,47 +13,17 @@ const {
   writeJson
 } = require('../agent-utils');
 
-const STRIDE_BY_PROPERTY = {
-  confidentiality: 'information_disclosure',
-  integrity: 'tampering',
-  availability: 'denial_of_service',
-  authenticity: 'spoofing',
-  authorization: 'elevation_of_privilege',
-  non_repudiation: 'repudiation'
-};
+const MODEL = 'claude-opus-4-8';
+const TOOL_NAME = 'submit_threat';
+const OWASP_REFERENCES = [
+  'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+  'API1', 'API2', 'API3', 'API4', 'API5', 'API6', 'API7', 'API8', 'API9', 'API10'
+];
 
-const OWASP_BY_STRIDE = {
-  information_disclosure: 'A02',
-  tampering: 'A03',
-  denial_of_service: 'API4',
-  spoofing: 'A07',
-  elevation_of_privilege: 'A01',
-  repudiation: 'A09'
-};
-
-function buildThreats(damageScenarios, timestamp = new Date().toISOString()) {
+function ensureDamageScenarios(damageScenarios) {
   if (!Array.isArray(damageScenarios) || damageScenarios.length === 0) {
     throw new Error('No damage scenarios to process');
   }
-
-  const threats = damageScenarios.map((scenario, index) => {
-    const stride = STRIDE_BY_PROPERTY[scenario.property];
-    return {
-      threat_id: formatId('TH', index),
-      damage_scenario_id: scenario.damage_id,
-      asset_id: scenario.asset_id,
-      asset_title: scenario.asset_title,
-      property: scenario.property,
-      stride_category: stride,
-      threat_statement: `${scenario.asset_title} may be compromised through ${stride.replace(/_/g, ' ')} that directly causes the ${scenario.property} damage scenario.`,
-      derivation_note: `Derived from ${scenario.damage_id}: ${scenario.damage_scenario}`,
-      owasp_reference: OWASP_BY_STRIDE[stride],
-      created_timestamp: timestamp
-    };
-  });
-
-  validateThreats(threats, damageScenarios);
-  return threats;
 }
 
 function validateThreats(threats, damageScenarios) {
@@ -73,9 +45,121 @@ function validateThreats(threats, damageScenarios) {
   }
 }
 
+function buildThreatTool() {
+  return {
+    name: TOOL_NAME,
+    description: 'Submit one STRIDE threat derived from one damage scenario',
+    input_schema: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['stride_category', 'threat_statement', 'derivation_note', 'owasp_reference'],
+      properties: {
+        stride_category: { type: 'string', enum: STRIDE_CATEGORIES },
+        threat_statement: { type: 'string', minLength: 1 },
+        derivation_note: { type: 'string', minLength: 1 },
+        owasp_reference: {
+          anyOf: [
+            { type: 'string', enum: OWASP_REFERENCES },
+            { type: 'null' }
+          ]
+        }
+      }
+    }
+  };
+}
+
+function buildSystemPrompt() {
+  const configDir = path.resolve(__dirname, '../../_config');
+  return [
+    fs.readFileSync(path.join(configDir, 'stride-taxonomy.md'), 'utf8'),
+    fs.readFileSync(path.join(configDir, 'owasp-stride-mapping.md'), 'utf8'),
+    'Derive exactly one concrete threat for the provided damage scenario.',
+    'The threat statement must name the specific asset_title exactly.',
+    'Return only via the submit_threat tool.'
+  ].join('\n\n');
+}
+
+function buildUserMessage(damageScenario) {
+  return [
+    `Damage scenario ID: ${damageScenario.damage_id}`,
+    `Damage scenario: ${damageScenario.damage_scenario}`,
+    `Asset ID: ${damageScenario.asset_id}`,
+    `Asset title: ${damageScenario.asset_title}`,
+    `CIAAAN property: ${damageScenario.property}`,
+    'Derive the specific attack action that would directly cause this damage scenario.'
+  ].join('\n');
+}
+
+function extractToolUse(response) {
+  const content = response?.content || [];
+  const toolUse = content.find((item) => item.type === 'tool_use' && item.name === TOOL_NAME);
+  return toolUse?.input || null;
+}
+
+async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is required for Stage 03 threat identification');
+
+  const requestBody = {
+    model: MODEL,
+    max_tokens: 1024,
+    system: buildSystemPrompt(),
+    messages: [{ role: 'user', content: buildUserMessage(damageScenario) }],
+    tools: [buildThreatTool()],
+    tool_choice: { type: 'tool', name: TOOL_NAME }
+  };
+
+  const response = await fetchImpl('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestBody)
+  });
+
+  if (!response.ok) throw new Error(`Claude threat identification request failed: ${response.status}`);
+  return response.json();
+}
+
+async function generateThreatForDamageScenario(damageScenario, fetchImpl) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const response = await callClaudeForDamageScenario(damageScenario, fetchImpl);
+    const threat = extractToolUse(response);
+    if (threat) return threat;
+  }
+  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${damageScenario.damage_id}`);
+}
+
+async function buildThreatsWithClaude(damageScenarios, options = {}) {
+  ensureDamageScenarios(damageScenarios);
+
+  const threats = [];
+  const timestamp = options.timestamp || new Date().toISOString();
+  for (const scenario of damageScenarios) {
+    const threat = await generateThreatForDamageScenario(scenario, options.fetchImpl);
+    threats.push({
+      threat_id: formatId('TH', threats.length),
+      damage_scenario_id: scenario.damage_id,
+      asset_id: scenario.asset_id,
+      asset_title: scenario.asset_title,
+      property: scenario.property,
+      stride_category: threat.stride_category,
+      threat_statement: threat.threat_statement,
+      derivation_note: threat.derivation_note,
+      owasp_reference: threat.owasp_reference ?? null,
+      created_timestamp: timestamp
+    });
+  }
+
+  validateThreats(threats, damageScenarios);
+  return threats;
+}
+
 async function run(options) {
   const damageScenarios = readJson(options.damageScenarios);
-  const threats = buildThreats(damageScenarios);
+  const threats = await buildThreatsWithClaude(damageScenarios, { fetchImpl: options.fetchImpl });
   writeJson(options.out, threats);
   await submitCheckpoint(options.assessmentId, {
     stage_num: 3,
@@ -106,7 +190,13 @@ if (require.main === module) {
 }
 
 module.exports = {
-  buildThreats,
+  buildSystemPrompt,
+  buildThreatTool,
+  buildThreatsWithClaude,
+  buildUserMessage,
+  callClaudeForDamageScenario,
+  extractToolUse,
+  generateThreatForDamageScenario,
   run,
   validateThreats
 };
