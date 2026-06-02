@@ -1,0 +1,31 @@
+[
+  {
+    "attack_id": "AT_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "asset_id": "AS_01",
+    "attack_description": "A remote caller abuses a weak authorization boundary to perform diagnostic actions.",
+    "attack_path": {
+      "step_1_initial_precondition": "The diagnostic API is reachable over the network.",
+      "step_2_abuse_technique": "The caller reuses a valid low-privilege session token.",
+      "step_3_exploit_effect": "The API accepts the request without enforcing the required entitlement.",
+      "step_4_control_gap": "Endpoint-level authorization is not bound to the diagnostic operation.",
+      "step_5_threat_realization": "Privileged diagnostic functionality is invoked outside approved access."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "The endpoint is network reachable.",
+      "attack_complexity": "The path relies on a direct authorization gap.",
+      "privileges_required": "A low-privilege session is sufficient.",
+      "user_interaction": "No separate user action is required."
+    },
+    "created_timestamp": "2026-06-01T10:03:00Z"
+  }
+]

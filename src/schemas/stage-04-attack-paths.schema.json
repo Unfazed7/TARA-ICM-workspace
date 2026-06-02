@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-04-attack-paths.schema.json",
+  "title": "Stage 04 Attack Paths",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "attack_id",
+      "threat_id",
+      "damage_scenario_id",
+      "asset_id",
+      "attack_description",
+      "attack_path",
+      "cvss_metrics",
+      "afr_value",
+      "afr_label",
+      "justifications",
+      "created_timestamp"
+    ],
+    "properties": {
+      "attack_id": { "type": "string", "pattern": "^AT_\\d{2,}$" },
+      "threat_id": { "type": "string", "pattern": "^TH_\\d{2,}$" },
+      "damage_scenario_id": { "type": "string", "pattern": "^DS_\\d{2,}$" },
+      "asset_id": { "type": "string", "pattern": "^AS_\\d{2,}$" },
+      "attack_description": { "type": "string", "minLength": 1 },
+      "attack_path": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step_1_initial_precondition",
+          "step_2_abuse_technique",
+          "step_3_exploit_effect",
+          "step_4_control_gap",
+          "step_5_threat_realization"
+        ],
+        "properties": {
+          "step_1_initial_precondition": { "type": "string", "minLength": 1 },
+          "step_2_abuse_technique": { "type": "string", "minLength": 1 },
+          "step_3_exploit_effect": { "type": "string", "minLength": 1 },
+          "step_4_control_gap": { "type": "string", "minLength": 1 },
+          "step_5_threat_realization": { "type": "string", "minLength": 1 }
+        }
+      },
+      "cvss_metrics": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attack_vector",
+          "attack_complexity",
+          "privileges_required",
+          "user_interaction"
+        ],
+        "properties": {
+          "attack_vector": { "type": "string", "enum": ["N", "A", "L", "P"] },
+          "attack_complexity": { "type": "string", "enum": ["L", "H"] },
+          "privileges_required": { "type": "string", "enum": ["N", "L", "H"] },
+          "user_interaction": { "type": "string", "enum": ["N", "R"] }
+        }
+      },
+      "afr_value": {
+        "anyOf": [{ "type": "null" }, { "type": "integer", "minimum": 1, "maximum": 5 }]
+      },
+      "afr_label": {
+        "anyOf": [
+          { "type": "null" },
+          { "type": "string", "enum": ["very low", "low", "medium", "high", "very high"] }
+        ]
+      },
+      "justifications": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attack_vector",
+          "attack_complexity",
+          "privileges_required",
+          "user_interaction"
+        ],
+        "properties": {
+          "attack_vector": { "type": "string", "minLength": 1 },
+          "attack_complexity": { "type": "string", "minLength": 1 },
+          "privileges_required": { "type": "string", "minLength": 1 },
+          "user_interaction": { "type": "string", "minLength": 1 }
+        }
+      },
+      "created_timestamp": { "type": "string", "format": "date-time" }
+    }
+  },
+  "uniqueItemProperties": ["attack_id"]
+}

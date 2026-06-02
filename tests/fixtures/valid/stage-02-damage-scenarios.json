@@ -1,0 +1,11 @@
+[
+  {
+    "damage_id": "DS_01",
+    "asset_id": "AS_01",
+    "asset_title": "Diagnostic API Endpoint",
+    "property": "authorization",
+    "damage_scenario": "Unauthorized diagnostic command execution causes vehicle service operations to proceed without valid entitlement checks.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-01T10:01:00Z"
+  }
+]
