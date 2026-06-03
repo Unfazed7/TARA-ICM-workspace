@@ -122,7 +122,7 @@ Omkar final merge → develop
 
 ## Status Tracker
 
-Last updated: 2026-05-31
+Last updated: 2026-06-03
 
 **Active MVP: Web-Based TARA** — 8-stage pipeline, CIAAAN + CVSS v3.1 + 7-dimension impact
 
@@ -138,7 +138,7 @@ Last updated: 2026-05-31
 | Stage 02 — Damage Analysis | `02-damage-analysis-agent.md` | ✅ Complete | Codex-ready |
 | Stage 03 — Threat Identification | `03-threat-identification-agent.md` | ✅ Complete | Codex-ready |
 | Stage 04 — Attack Path Modelling | `04-attack-path-agent.md` | ✅ Complete | Codex-ready |
-| Stage 07 — Risk Treatment | `07-risk-treatment-agent.md` | ⏸ Blocked | Controls DB schema |
+| Stage 07 — Risk Treatment | `07-risk-treatment-agent.md` | ✅ Complete | Codex-ready — controls catalogue (89 CTR_##) authored |
 | Stage 08 — Residual Risk | `08-residual-risk-engine.md` | ⏸ Blocked | Custom logic needed |
 | Orchestrator | `09-orchestrator.md` | ⏸ Blocked | All above + checkpoint API |
 | Excel Formatter | `10-excel-formatter.md` | ⏸ Blocked | Needs stage 07 |
