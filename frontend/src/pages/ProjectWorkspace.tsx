@@ -154,7 +154,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
   const { getProject, updateProject } = useProjects();
   const { saveProgress, isSaving, hasUnsavedChanges } = useTara();
 
-  const [activeModule, setActiveModule] = useState<ModuleType>('feature-analysis');
+  const [activeModule, setActiveModule] = useState<ModuleType>('tara');
   const [activeTab, setActiveTab] = useState<string>('asset-damage');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
 

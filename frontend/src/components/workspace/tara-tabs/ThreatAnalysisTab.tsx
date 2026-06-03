@@ -1,170 +1,78 @@
-import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
 import { useTara } from '@/contexts/TaraContext';
-import { StrideCategory } from '@/types/risk-assessment';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 
-const ciaanProperties = [
-  { key: 'confidentiality' as const, label: 'C', full: 'Confidentiality' },
-  { key: 'integrity' as const, label: 'I', full: 'Integrity' },
-  { key: 'availability' as const, label: 'A', full: 'Availability' },
-  { key: 'authenticity' as const, label: 'Au', full: 'Authenticity' },
-  { key: 'authorization' as const, label: 'Az', full: 'Authorization' },
-  { key: 'nonRepudiation' as const, label: 'N', full: 'Non-Repudiation' },
-];
+const STRIDE_COLORS: Record<string, string> = {
+  spoofing:               'bg-purple-500/20 text-purple-400',
+  tampering:              'bg-orange-500/20 text-orange-400',
+  repudiation:            'bg-yellow-500/20 text-yellow-400',
+  'information-disclosure': 'bg-blue-500/20 text-blue-400',
+  'denial-of-service':    'bg-red-500/20 text-red-400',
+  'elevation-of-privilege': 'bg-emerald-500/20 text-emerald-400',
+};
 
-const strideOptions: { value: StrideCategory; label: string }[] = [
-  { value: 'spoofing', label: 'Spoofing' },
-  { value: 'tampering', label: 'Tampering' },
-  { value: 'repudiation', label: 'Repudiation' },
-  { value: 'information-disclosure', label: 'Info Disclosure' },
-  { value: 'denial-of-service', label: 'Denial of Service' },
-  { value: 'elevation-of-privilege', label: 'Elevation of Privilege' },
-];
+function EmptyState({ status }: { status: string }) {
+  return (
+    <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">3</div>
+      <div>
+        <p className="text-sm font-semibold text-foreground">No threat data yet</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          {status === 'running'
+            ? 'Stage 03 — Threat Identification is running…'
+            : 'Run Stage 02 (Damage Analysis) then Stage 03 (Threat Identification) from the pipeline panel above.'}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export function ThreatAnalysisTab() {
-  const { assets, threats, addThreat, updateThreat, removeThreat } = useTara();
-  const [newThreat, setNewThreat] = useState({ scenario: '', linkedAssetId: '', strideCategory: 'spoofing' as StrideCategory });
+  const { threats, assets, stageStatuses } = useTara();
+  const status = stageStatuses['03'] ?? 'not_started';
 
-  const handleAdd = () => {
-    if (!newThreat.scenario.trim() || !newThreat.linkedAssetId) return;
-    addThreat(newThreat);
-    setNewThreat({ scenario: '', linkedAssetId: '', strideCategory: 'spoofing' });
-  };
+  if (threats.length === 0) return <EmptyState status={status} />;
 
-  const getAssetById = (id: string) => assets.find(a => a.id === id);
+  const assetById = new Map(assets.map((a) => [a.id, a]));
 
   return (
     <div className="h-full flex flex-col bg-[#05070a]">
-      <div className="px-4 py-3 border-b border-white/5">
+      <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
         <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">Clause 15.4 — Threat Scenario Identification</p>
+        <Badge variant="default" className="text-xs">{threats.length} threats</Badge>
       </div>
 
       <div className="flex-1 overflow-auto">
         <div className="min-w-max">
           <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
-            <div className="w-[160px] min-w-[160px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Asset</div>
-            <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">CIAAAN</div>
-            <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">STRIDE</div>
-            <div className="w-[90px] min-w-[90px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Threat ID</div>
-            <div className="flex-1 min-w-[400px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Threat</div>
-            <div className="w-[80px] min-w-[80px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Actions</div>
+            <div className="w-[90px]  min-w-[90px]  px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">ID</div>
+            <div className="w-[160px] min-w-[160px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Asset</div>
+            <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">STRIDE</div>
+            <div className="flex-1 min-w-[400px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Threat Statement</div>
           </div>
 
-          {threats.map(threat => {
-            const asset = getAssetById(threat.linkedAssetId);
-            const activeCiaaan = asset ? ciaanProperties.filter(p => asset[p.key]) : [];
-
+          {threats.map((threat) => {
+            const asset = assetById.get(threat.linkedAssetId);
+            const strideClass = STRIDE_COLORS[threat.strideCategory] ?? 'bg-slate-500/20 text-slate-400';
             return (
               <div key={threat.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                {/* Asset */}
-                <div className="w-[160px] min-w-[160px] px-3 py-3">
-                  <Select value={threat.linkedAssetId} onValueChange={v => updateThreat(threat.id, { linkedAssetId: v })}>
-                    <SelectTrigger className="h-8 bg-transparent border-transparent hover:border-white/10 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-[#1a1f2e] border-white/10">
-                      {assets.map(a => <SelectItem key={a.id} value={a.id}>{a.assetId} — {a.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {/* CIAAAN (read-only from asset) */}
-                <div className="w-[200px] min-w-[200px] px-3 py-3 flex items-center gap-1.5 flex-wrap">
-                  {activeCiaaan.length > 0 ? activeCiaaan.map(prop => (
-                    <span key={prop.key} className="px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-mono font-medium">
-                      {prop.label}
-                    </span>
-                  )) : (
-                    <span className="text-[10px] text-slate-600 italic">—</span>
-                  )}
-                </div>
-                {/* STRIDE */}
-                <div className="w-[180px] min-w-[180px] px-3 py-3">
-                  <Select value={threat.strideCategory} onValueChange={(v: StrideCategory) => updateThreat(threat.id, { strideCategory: v })}>
-                    <SelectTrigger className="h-8 bg-transparent border-transparent hover:border-white/10 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-[#1a1f2e] border-white/10">
-                      {strideOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {/* Threat ID */}
                 <div className="w-[90px] min-w-[90px] px-3 py-3 flex items-center">
                   <span className="text-xs font-mono text-primary">{threat.threatId}</span>
                 </div>
-                {/* Threat */}
-                <div className="flex-1 min-w-[400px] px-3 py-2">
-                  <Textarea
-                    value={threat.scenario}
-                    onChange={e => updateThreat(threat.id, { scenario: e.target.value })}
-                    className="bg-transparent border-transparent hover:border-white/10 focus:border-white/20 text-sm text-foreground resize-none min-h-[60px] p-2 whitespace-pre-wrap break-words"
-                  />
+                <div className="w-[160px] min-w-[160px] px-3 py-3">
+                  <p className="text-xs font-mono text-primary/70">{asset?.assetId ?? threat.linkedAssetId}</p>
+                  <p className="text-xs text-foreground truncate mt-0.5">{asset?.name ?? '—'}</p>
                 </div>
-                {/* Actions */}
-                <div className="w-[80px] min-w-[80px] px-3 py-3 flex items-center">
-                  <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-red-400" onClick={() => removeThreat(threat.id)}>
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </Button>
+                <div className="w-[180px] min-w-[180px] px-3 py-3 flex items-start pt-3.5">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-medium capitalize ${strideClass}`}>
+                    {threat.strideCategory.replace(/-/g, ' ')}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-[400px] px-3 py-3">
+                  <p className="text-xs text-slate-300 leading-relaxed">{threat.scenario}</p>
                 </div>
               </div>
             );
           })}
-
-          {/* Add Row */}
-          <div className="flex border-b border-white/5 bg-white/[0.01]">
-            <div className="w-[160px] min-w-[160px] px-3 py-3">
-              <Select value={newThreat.linkedAssetId} onValueChange={v => setNewThreat(p => ({ ...p, linkedAssetId: v }))}>
-                <SelectTrigger className="h-8 bg-[#0b0f17] border-white/10 text-xs">
-                  <SelectValue placeholder="Select asset..." />
-                </SelectTrigger>
-                <SelectContent className="bg-[#1a1f2e] border-white/10">
-                  {assets.map(a => <SelectItem key={a.id} value={a.id}>{a.assetId} — {a.name}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="w-[200px] min-w-[200px] px-3 py-3 flex items-center">
-              {newThreat.linkedAssetId ? (
-                <div className="flex gap-1.5 flex-wrap">
-                  {ciaanProperties.filter(p => getAssetById(newThreat.linkedAssetId)?.[p.key]).map(prop => (
-                    <span key={prop.key} className="px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-mono font-medium">
-                      {prop.label}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <span className="text-[10px] text-slate-600 italic">—</span>
-              )}
-            </div>
-            <div className="w-[180px] min-w-[180px] px-3 py-3">
-              <Select value={newThreat.strideCategory} onValueChange={(v: StrideCategory) => setNewThreat(p => ({ ...p, strideCategory: v }))}>
-                <SelectTrigger className="h-8 bg-[#0b0f17] border-white/10 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-[#1a1f2e] border-white/10">
-                  {strideOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="w-[90px] min-w-[90px] px-3 py-3 flex items-center">
-              <span className="text-xs font-mono text-slate-600">T-{String(threats.length + 1).padStart(2, '0')}</span>
-            </div>
-            <div className="flex-1 min-w-[400px] px-3 py-2">
-              <Textarea
-                value={newThreat.scenario}
-                onChange={e => setNewThreat(p => ({ ...p, scenario: e.target.value }))}
-                placeholder="Describe the threat scenario..."
-                className="bg-[#0b0f17] border-white/10 text-sm text-foreground resize-none min-h-[60px] p-2"
-              />
-            </div>
-            <div className="w-[80px] min-w-[80px] px-3 py-3 flex items-center">
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-primary" onClick={handleAdd}>
-                <Plus className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

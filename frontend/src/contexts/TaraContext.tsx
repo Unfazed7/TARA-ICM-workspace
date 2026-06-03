@@ -1,3 +1,4 @@
+'use client';
 import { createContext, useContext, ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
@@ -69,6 +70,152 @@ export interface TaraTreatment {
   residualRisk: number;
 }
 
+// ── Raw pipeline output interfaces ───────────────────────────────────────────
+
+interface RawAsset {
+  asset_id: string;
+  asset_title: string;
+  component?: string;
+  asset_type?: string;
+  description?: string;
+  ciaaan?: Record<string, boolean>;
+}
+
+interface RawThreat {
+  threat_id: string;
+  asset_id: string;
+  asset_title?: string;
+  stride_category: string;
+  threat_statement: string;
+  damage_scenario_id?: string;
+  owasp_reference?: string | null;
+}
+
+interface RawAttackPath {
+  attack_id: string;
+  threat_id: string;
+  attack_description?: string;
+  attack_path?: Record<string, string>;
+  cvss_metrics?: { attack_vector?: string };
+}
+
+interface RawImpact {
+  impact_id: string;
+  threat_id: string;
+  tool_user?: {
+    safety?: string;
+    financial?: string;
+    operational?: string;
+    privacy?: string;
+  };
+}
+
+interface RawTreatment {
+  treatment_id: string;
+  threat_id?: string;
+  risk_id?: string;
+  treatment_option?: string;
+  treatment_rationale?: string;
+  goal_statement?: string | null;
+  claim_statement?: string | null;
+  control_ids?: string[];
+  residual_risk_expected?: string;
+}
+
+// ── Mapper functions ──────────────────────────────────────────────────────────
+
+const STRIDE_MAP: Record<string, string> = {
+  'Spoofing': 'spoofing',
+  'Tampering': 'tampering',
+  'Repudiation': 'repudiation',
+  'Information Disclosure': 'information-disclosure',
+  'Denial of Service': 'denial-of-service',
+  'Elevation of Privilege': 'elevation-of-privilege',
+};
+
+const CVSS_VECTOR_MAP: Record<string, string> = {
+  N: 'network', A: 'adjacent', L: 'local', P: 'physical',
+};
+
+const RATING_MAP: Record<string, string> = {
+  Negligible: 'negligible',
+  Low: 'moderate',
+  Medium: 'moderate',
+  Moderate: 'moderate',
+  High: 'major',
+  Critical: 'severe',
+  Severe: 'severe',
+};
+
+function mapAsset(raw: RawAsset): TaraAsset {
+  return {
+    id: raw.asset_id,
+    assetId: raw.asset_id,
+    name: raw.asset_title,
+    assetType: 'other',
+    description: raw.description ?? '',
+    confidentiality: raw.ciaaan?.confidentiality ?? false,
+    integrity: raw.ciaaan?.integrity ?? false,
+    availability: raw.ciaaan?.availability ?? false,
+    authenticity: raw.ciaaan?.authenticity ?? false,
+    authorization: raw.ciaaan?.authorization ?? false,
+    nonRepudiation: raw.ciaaan?.non_repudiation ?? false,
+    damageScenario: '',
+  };
+}
+
+function mapThreat(raw: RawThreat): TaraThreat {
+  return {
+    id: raw.threat_id,
+    threatId: raw.threat_id,
+    scenario: raw.threat_statement,
+    linkedAssetId: raw.asset_id,
+    strideCategory: STRIDE_MAP[raw.stride_category] ?? raw.stride_category.toLowerCase(),
+  };
+}
+
+function mapAttackPath(raw: RawAttackPath): TaraAttackPath {
+  const steps = raw.attack_path ?? {};
+  const stepLines = Object.values(steps).map((s, i) => `${i + 1}. ${s}`).join('\n');
+  return {
+    id: raw.attack_id,
+    linkedThreatId: raw.threat_id,
+    attackVector: CVSS_VECTOR_MAP[raw.cvss_metrics?.attack_vector ?? ''] ?? 'network',
+    description: raw.attack_description
+      ? `${raw.attack_description}\n\n${stepLines}`
+      : stepLines,
+  };
+}
+
+function mapImpact(raw: RawImpact, threatIdToAssetId: Map<string, string>): TaraImpact {
+  return {
+    id: raw.impact_id,
+    linkedAssetId: threatIdToAssetId.get(raw.threat_id) ?? raw.threat_id,
+    safety: RATING_MAP[raw.tool_user?.safety ?? ''] ?? 'negligible',
+    financial: RATING_MAP[raw.tool_user?.financial ?? ''] ?? 'negligible',
+    operational: RATING_MAP[raw.tool_user?.operational ?? ''] ?? 'negligible',
+    privacy: RATING_MAP[raw.tool_user?.privacy ?? ''] ?? 'negligible',
+  };
+}
+
+function mapTreatment(raw: RawTreatment): TaraTreatment {
+  const riskLevelMap: Record<string, number> = {
+    informational: 1, low: 2, medium: 3, high: 4, critical: 5,
+  };
+  return {
+    id: raw.treatment_id,
+    linkedThreatId: raw.threat_id ?? '',
+    riskValue: riskLevelMap[raw.residual_risk_expected ?? ''] ?? 1,
+    decision: raw.treatment_option ?? 'reduce',
+    cybersecurityGoal: raw.goal_statement ?? '',
+    cybersecurityClaim: raw.claim_statement ?? '',
+    controls: (raw.control_ids ?? []).join(', '),
+    residualRisk: riskLevelMap[raw.residual_risk_expected ?? ''] ?? 1,
+  };
+}
+
+// ── Context type ──────────────────────────────────────────────────────────────
+
 type StageStatus = 'not_started' | 'pending' | 'running' | 'complete' | 'failed';
 
 interface TaraContextType {
@@ -80,7 +227,6 @@ interface TaraContextType {
   treatments: TaraTreatment[];
   stageStatuses: Record<string, StageStatus>;
   runStage: (stageNum: number) => Promise<void>;
-  // Legacy stubs — kept for workspace components not yet migrated
   addAsset: (asset: Omit<TaraAsset, 'id'>) => void;
   updateAsset: (id: string, updates: Partial<TaraAsset>) => void;
   removeAsset: (id: string) => void;
@@ -129,35 +275,48 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
     select: (data) => data.stages as Record<string, StageStatus>,
   });
 
-  const { data: assetsOutput } = useQuery({
+  const { data: rawAssets } = useQuery({
     queryKey: ['stage-output', assessmentId, 1],
-    queryFn: () => api.pipeline.output<TaraAsset[]>(assessmentId, 1),
+    queryFn: () => api.pipeline.output<RawAsset[]>(assessmentId, 1),
     enabled: !!assessmentId && stageStatuses?.['01'] === 'complete',
   });
 
-  const { data: threatsOutput } = useQuery({
+  const { data: rawThreats } = useQuery({
     queryKey: ['stage-output', assessmentId, 3],
-    queryFn: () => api.pipeline.output<TaraThreat[]>(assessmentId, 3),
+    queryFn: () => api.pipeline.output<RawThreat[]>(assessmentId, 3),
     enabled: !!assessmentId && stageStatuses?.['03'] === 'complete',
   });
 
-  const { data: impactsOutput } = useQuery({
-    queryKey: ['stage-output', assessmentId, 5],
-    queryFn: () => api.pipeline.output<TaraImpact[]>(assessmentId, 5),
-    enabled: !!assessmentId && stageStatuses?.['05'] === 'complete',
-  });
-
-  const { data: attackPathsOutput } = useQuery({
+  const { data: rawAttackPaths } = useQuery({
     queryKey: ['stage-output', assessmentId, 4],
-    queryFn: () => api.pipeline.output<TaraAttackPath[]>(assessmentId, 4),
+    queryFn: () => api.pipeline.output<RawAttackPath[]>(assessmentId, 4),
     enabled: !!assessmentId && stageStatuses?.['04'] === 'complete',
   });
 
-  const { data: treatmentsOutput } = useQuery({
+  const { data: rawImpacts } = useQuery({
+    queryKey: ['stage-output', assessmentId, 5],
+    queryFn: () => api.pipeline.output<RawImpact[]>(assessmentId, 5),
+    enabled: !!assessmentId && stageStatuses?.['05'] === 'complete',
+  });
+
+  const { data: rawTreatments } = useQuery({
     queryKey: ['stage-output', assessmentId, 7],
-    queryFn: () => api.pipeline.output<TaraTreatment[]>(assessmentId, 7),
+    queryFn: () => api.pipeline.output<RawTreatment[]>(assessmentId, 7),
     enabled: !!assessmentId && stageStatuses?.['07'] === 'complete',
   });
+
+  const assets = (rawAssets ?? []).map(mapAsset);
+
+  const threats = (rawThreats ?? []).map(mapThreat);
+
+  const attackPaths = (rawAttackPaths ?? []).map(mapAttackPath);
+
+  const threatIdToAssetId = new Map(
+    (rawThreats ?? []).map((t) => [t.threat_id, t.asset_id])
+  );
+  const impacts = (rawImpacts ?? []).map((r) => mapImpact(r, threatIdToAssetId));
+
+  const treatments = (rawTreatments ?? []).map(mapTreatment);
 
   const runStage = async (stageNum: number) => {
     await api.pipeline.run(assessmentId, stageNum);
@@ -169,12 +328,12 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
 
   return (
     <TaraContext.Provider value={{
-      assets: assetsOutput ?? [],
-      threats: threatsOutput ?? [],
-      impacts: impactsOutput ?? [],
-      attackPaths: attackPathsOutput ?? [],
+      assets,
+      threats,
+      impacts,
+      attackPaths,
       feasibilities: [],
-      treatments: treatmentsOutput ?? [],
+      treatments,
       stageStatuses: stageStatuses ?? {},
       runStage,
       addAsset: noop,
@@ -189,7 +348,7 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
       removeAttackPath: noop,
       updateFeasibility: noop,
       updateTreatment: noop,
-      getImpactForAsset: (_id: string) => undefined,
+      getImpactForAsset: (id: string) => impacts.find((i) => i.linkedAssetId === id),
       getRiskForThreat: (_id: string) => 1,
       saveProgress: asyncNoop,
       isSaving: false,
