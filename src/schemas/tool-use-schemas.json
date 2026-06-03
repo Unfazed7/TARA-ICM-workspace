@@ -75,6 +75,37 @@
         },
         "required": ["impact_analysis"]
       }
+    },
+    {
+      "name": "submit_treatment",
+      "description": "Submit the risk treatment decision for one RSK_## record",
+      "input_schema": {
+        "type": "object",
+        "required": ["treatment_option", "treatment_rationale", "residual_risk_expected"],
+        "properties": {
+          "treatment_option": { "type": "string", "enum": ["reduce", "accept", "share", "avoid"] },
+          "treatment_rationale": { "type": "string" },
+          "goal_statement": { "type": ["string", "null"] },
+          "goal_self_test_note": { "type": ["string", "null"] },
+          "claim_statement": { "type": ["string", "null"] },
+          "acceptance_basis": { "type": ["string", "null"] },
+          "control_ids": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^CTR_\\d{2,}$" },
+            "maxItems": 3
+          },
+          "control_assignment_rationales": {
+            "type": "array",
+            "items": { "type": "string" },
+            "maxItems": 3
+          },
+          "avoidance_action": { "type": ["string", "null"] },
+          "residual_risk_expected": {
+            "type": "string",
+            "enum": ["informational", "low", "medium", "high", "critical"]
+          }
+        }
+      }
     }
   ]
 }
