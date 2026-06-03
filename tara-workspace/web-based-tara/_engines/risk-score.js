@@ -53,25 +53,9 @@ function getRiskLevel(score) {
   return 'critical';
 }
 
-function assignRiskRanks(risks) {
-  return risks
-    .sort((a, b) => {
-      if (b.risk_score !== a.risk_score) return b.risk_score - a.risk_score;
-      return b.afr_value - a.afr_value;
-    })
-    .map((risk, index) => ({ ...risk, risk_rank: index + 1 }));
-}
-
-function calculateRiskScore(impactValue, feasibilityValue) {
-  const riskScore = impactValue * feasibilityValue;
-  return { risk_score: riskScore, risk_level: getRiskLevel(riskScore) };
-}
-
 module.exports = {
   computeRiskScore,
   computeImpactRatingValue,
   getRiskLevel,
-  calculateRiskScore,
-  assignRiskRanks,
   RATING_TO_NUM
 };
