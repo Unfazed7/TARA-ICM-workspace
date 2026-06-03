@@ -141,5 +141,5 @@ Last updated: 2026-06-03
 | Stage 07 — Risk Treatment | `07-risk-treatment-agent.md` | ✅ Complete | Codex-ready — controls catalogue (89 CTR_##) authored |
 | Stage 08 — Residual Risk | `08-residual-risk-engine.md` | ⏸ Blocked | Custom logic needed |
 | Orchestrator | `09-orchestrator.md` | ⏸ Blocked | All above + checkpoint API |
-| Excel Formatter | `10-excel-formatter.md` | ⏸ Blocked | Needs stage 07 |
-| Audit Trail | `11-audit-trail.md` | ⏸ Blocked | Needs all AI stages |
+| Backend REST API | `10-backend-api.md` | ✅ Complete | Codex-ready — extends checkpoint-api |
+| Frontend Integration | `11-frontend-integration.md` | ✅ Complete | Codex-ready — depends on spec 10 |
