@@ -75,9 +75,9 @@ function buildSystemPrompt() {
     fs.readFileSync(path.join(configDir, 'stride-taxonomy.md'), 'utf8'),
     fs.readFileSync(path.join(configDir, 'owasp-stride-mapping.md'), 'utf8'),
     'Derive exactly one threat for the provided damage scenario.',
-    'The threat statement must name the asset_title and describe the specific attack mechanism — what the attacker does and what weakness they exploit, not just the property that is violated.',
-    'Include in the threat statement: the technique used (e.g. token replay, parameter injection, unauthenticated API call), the specific vulnerability or missing control being targeted, and the concrete outcome against this asset.',
-    'Self-test before submitting: could this threat statement apply unchanged to a different asset? If yes, it is too generic — rederive it around the mechanism unique to this asset.',
+    'Write the threat as one flowing sentence with three parts: (1) what the attacker first does or gains access to, (2) what they do next and what specific gap or missing control allows it, (3) the outcome — stated as what actually results, not as a declared intention.',
+    'Use plain language. Do not end with "with the goal of" — state the outcome as the natural consequence of the action.',
+    'The threat must be specific to this asset. Self-test: could this statement apply unchanged to a different asset? If yes, rederive it around the mechanism unique to this asset.',
     'Return only via the submit_threat tool.'
   ].join('\n\n');
 }

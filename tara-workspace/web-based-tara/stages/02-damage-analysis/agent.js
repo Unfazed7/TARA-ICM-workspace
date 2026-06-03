@@ -125,10 +125,10 @@ function buildSystemPrompt() {
     fs.readFileSync(path.join(configDir, 'ciaaan-properties.md'), 'utf8'),
     fs.readFileSync(path.join(configDir, 'web-tara-constraints.md'), 'utf8'),
     'For each requested CIAAAN property, return exactly one damage scenario.',
-    'Damage scenarios describe consequences to stakeholders, not attacks. Do not use attacker, hacker, or malicious actor language.',
-    'Write scenarios specific to this asset — name the actual data types, workflows, or functions at risk. Describe the concrete adverse outcome: what information is exposed, what decision is corrupted, what workflow is disrupted, or what action can no longer be proven.',
-    'Avoid vague language such as "loss of confidentiality", "potential reputational damage", or "unauthorized access". These are properties, not consequences.',
-    'Self-test before submitting: could this damage scenario apply word-for-word to a different asset in the register? If yes, rewrite it to capture what makes this asset and its function unique.'
+    'Damage scenarios describe consequences to stakeholders — not attacks. Do not use attacker, hacker, or malicious actor language.',
+    'Write two sentences. The first sentence briefly states what this asset does or what role it plays in the system. The second sentence states: if its [CIAAAN property] is compromised, what concretely breaks — describing the real-world harm in plain language that a non-technical manager can understand.',
+    'Be moderately descriptive: name what specifically fails, who is affected, and why that matters. Avoid vague outcomes like "loss of confidentiality" or "reputational damage" — these describe properties, not consequences.',
+    'Self-test: could this damage scenario apply word-for-word to a different asset? If yes, rewrite it around what makes this asset and its function unique.'
   ].join('\n\n');
 }
 
