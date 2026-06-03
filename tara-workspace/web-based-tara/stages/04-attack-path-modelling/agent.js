@@ -10,6 +10,7 @@ const {
   writeJson
 } = require('../agent-utils');
 
+const { callLLM, getConfig } = require('../llm-client');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_attack_path';
 const THINKING = { type: 'enabled', budget_tokens: 8000 };
@@ -134,31 +135,19 @@ function extractToolUse(response) {
 }
 
 async function callClaudeForThreat(threat, fetchImpl = fetch) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is required for Stage 04 attack path modelling');
-
-  const requestBody = {
+  const params = {
     model: MODEL,
     max_tokens: 16000,
-    thinking: THINKING,
     system: buildSystemPrompt(),
     messages: [{ role: 'user', content: buildUserMessage(threat) }],
     tools: [buildAttackPathTool()],
-    tool_choice: { type: 'tool', name: TOOL_NAME }
+    tool_choice: { type: 'tool', name: TOOL_NAME },
   };
-
-  const response = await fetchImpl('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!response.ok) throw new Error(`Claude attack path request failed: ${response.status}`);
-  return response.json();
+  // Extended thinking only supported on Anthropic native API
+  if (getConfig().provider === 'anthropic') {
+    params.thinking = THINKING;
+  }
+  return callLLM(params, fetchImpl);
 }
 
 async function generateAttackPathForThreat(threat, fetchImpl) {

@@ -12,6 +12,7 @@ const {
   writeJson
 } = require('../agent-utils');
 
+const { callLLM } = require('../llm-client');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_impact_analysis';
 const FIXED_SAFETY_RATIONALE = 'Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.';
@@ -104,30 +105,14 @@ function extractToolUse(response) {
 }
 
 async function callClaudeForThreat(threat, damageScenario, fetchImpl = fetch) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is required for Stage 05 impact analysis');
-
-  const requestBody = {
+  return callLLM({
     model: MODEL,
     max_tokens: 1024,
     system: buildSystemPrompt(),
     messages: [{ role: 'user', content: buildUserMessage(threat, damageScenario) }],
     tools: [buildImpactTool()],
-    tool_choice: { type: 'tool', name: TOOL_NAME }
-  };
-
-  const response = await fetchImpl('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!response.ok) throw new Error(`Claude impact analysis request failed: ${response.status}`);
-  return response.json();
+    tool_choice: { type: 'tool', name: TOOL_NAME },
+  }, fetchImpl);
 }
 
 async function generateImpactForThreat(threat, damageScenario, fetchImpl) {

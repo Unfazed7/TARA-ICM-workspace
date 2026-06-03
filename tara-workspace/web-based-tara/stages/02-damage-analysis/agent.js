@@ -15,6 +15,7 @@ const {
   writeJson
 } = require('../agent-utils');
 
+const { callLLM } = require('../llm-client');
 const MODEL = 'claude-opus-4-8';
 
 const STAKEHOLDER_BY_PROPERTY = {
@@ -148,30 +149,14 @@ function extractToolUse(response) {
 }
 
 async function callClaudeForAsset(asset, properties, fetchImpl = fetch) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is required for Stage 02 damage analysis');
-
-  const requestBody = {
+  return callLLM({
     model: MODEL,
     max_tokens: 2048,
     system: buildSystemPrompt(),
     messages: [{ role: 'user', content: buildUserMessage(asset, properties) }],
     tools: [buildDamageScenarioTool()],
-    tool_choice: { type: 'tool', name: TOOL_NAME }
-  };
-
-  const response = await fetchImpl('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!response.ok) throw new Error(`Claude damage analysis request failed: ${response.status}`);
-  return response.json();
+    tool_choice: { type: 'tool', name: TOOL_NAME },
+  }, fetchImpl);
 }
 
 async function generateDamageScenariosForAsset(asset, properties, fetchImpl) {

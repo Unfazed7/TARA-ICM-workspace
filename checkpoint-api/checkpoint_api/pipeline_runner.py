@@ -8,7 +8,13 @@ from .models import Assessment, PipelineRun
 
 WORKSPACE_ROOT = os.getenv("WORKSPACE_ROOT", ".")
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", os.path.join(WORKSPACE_ROOT, "uploads"))
+
+# LLM provider config — forwarded to Node.js stage agents
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "anthropic")   # anthropic | openrouter | openai
+LLM_API_KEY = os.getenv("LLM_API_KEY", ANTHROPIC_API_KEY)
+LLM_MODEL = os.getenv("LLM_MODEL", "")
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")
 
 STAGE_DIRS = {
     1: "01-input-normalization",
@@ -140,6 +146,10 @@ async def run_stage_subprocess(assessment_id: str, stage_num: int, db=None) -> N
 
         env = os.environ.copy()
         env["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
+        env["LLM_PROVIDER"] = LLM_PROVIDER
+        env["LLM_API_KEY"] = LLM_API_KEY
+        env["LLM_MODEL"] = LLM_MODEL
+        env["LLM_BASE_URL"] = LLM_BASE_URL
         env["CHECKPOINT_API_URL"] = os.getenv("CHECKPOINT_API_URL", "http://localhost:8000")
         env["CHECKPOINT_API_TOKEN"] = os.getenv("CHECKPOINT_API_TOKEN", "")
 

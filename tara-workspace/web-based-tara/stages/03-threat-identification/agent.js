@@ -13,6 +13,7 @@ const {
   writeJson
 } = require('../agent-utils');
 
+const { callLLM } = require('../llm-client');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_threat';
 const OWASP_REFERENCES = [
@@ -97,30 +98,14 @@ function extractToolUse(response) {
 }
 
 async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is required for Stage 03 threat identification');
-
-  const requestBody = {
+  return callLLM({
     model: MODEL,
     max_tokens: 1024,
     system: buildSystemPrompt(),
     messages: [{ role: 'user', content: buildUserMessage(damageScenario) }],
     tools: [buildThreatTool()],
-    tool_choice: { type: 'tool', name: TOOL_NAME }
-  };
-
-  const response = await fetchImpl('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!response.ok) throw new Error(`Claude threat identification request failed: ${response.status}`);
-  return response.json();
+    tool_choice: { type: 'tool', name: TOOL_NAME },
+  }, fetchImpl);
 }
 
 async function generateThreatForDamageScenario(damageScenario, fetchImpl) {
