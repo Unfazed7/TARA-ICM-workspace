@@ -99,3 +99,12 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     token = create_access_token({"sub": user.email, "role": user.role})
     return TokenResponse(access_token=token)
+
+
+@router.get("/me", response_model=UserResponse)
+def me(claims: dict = Depends(get_current_claims), db: Session = Depends(get_db)):
+    email = claims.get("sub")
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return UserResponse(email=user.email, name=user.name, role=user.role)
