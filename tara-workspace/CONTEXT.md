@@ -1,4 +1,4 @@
-# TARA Lima — Top-Level TARA Type Dispatcher (Layer 1)
+# TARA Aegis — Top-Level TARA Type Dispatcher (Layer 1)
 
 Loaded by top-level orchestrator. Routes each assessment to the correct TARA type workspace.
 

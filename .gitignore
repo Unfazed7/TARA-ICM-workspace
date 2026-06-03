@@ -1,0 +1,7 @@
+node_modules/
+.pytest_cache/
+__pycache__/
+*.pyc
+tara_aegis.db
+test-risk-register.tmp.json
+tests/.tmp-*/

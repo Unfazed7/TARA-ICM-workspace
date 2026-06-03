@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "tools": [
+    {
+      "name": "submit_asset_register",
+      "description": "Submit the normalized asset register as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": { "$ref": "stage-01-asset-register.schema.json#/items" }
+          }
+        },
+        "required": ["assets"]
+      }
+    },
+    {
+      "name": "submit_damage_scenarios",
+      "description": "Submit the damage scenarios as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "damage_scenarios": {
+            "type": "array",
+            "items": { "$ref": "stage-02-damage-scenarios.schema.json#/items" }
+          }
+        },
+        "required": ["damage_scenarios"]
+      }
+    },
+    {
+      "name": "submit_threats",
+      "description": "Submit the STRIDE threats as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "threats": {
+            "type": "array",
+            "items": { "$ref": "stage-03-threats.schema.json#/items" }
+          }
+        },
+        "required": ["threats"]
+      }
+    },
+    {
+      "name": "submit_attack_paths",
+      "description": "Submit attack paths and CVSS metrics as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attack_paths": {
+            "type": "array",
+            "items": { "$ref": "stage-04-attack-paths.schema.json#/items" }
+          }
+        },
+        "required": ["attack_paths"]
+      }
+    },
+    {
+      "name": "submit_impact_analysis",
+      "description": "Submit impact analysis as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "impact_analysis": {
+            "type": "array",
+            "items": { "$ref": "stage-05-impact-analysis.schema.json#/items" }
+          }
+        },
+        "required": ["impact_analysis"]
+      }
+    }
+  ]
+}

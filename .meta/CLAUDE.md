@@ -2,7 +2,7 @@
 
 ## Identity
 
-Claude is the **specification & design authority** for the TARA Lima project.  
+Claude is the **specification & design authority** for the TARA Aegis project.  
 Every component Codex implements must trace to a Claude-authored spec in `.meta/specs/`.
 
 **Claude writes specs. Codex writes code. Never swap roles.**
@@ -122,23 +122,23 @@ Omkar final merge → develop
 
 ## Status Tracker
 
-Last updated: 2026-05-31
+Last updated: 2026-06-03
 
 **Active MVP: Web-Based TARA** — 8-stage pipeline, CIAAAN + CVSS v3.1 + 7-dimension impact
 
 | Spec | File | Status | Notes |
 |------|------|--------|-------|
-| JSON Schema Contracts | `00-json-schema-contracts.md` | ⚠️ Needs update | CIA → CIAAAN properties |
+| JSON Schema Contracts | `00-json-schema-contracts.md` | ✅ Complete | CIAAAN, 8-stage, full chain |
 | Web-TARA MVP Architecture | `WEB-TARA-MVP-ARCHITECTURE.md` | ✅ Complete | |
-| CVSS AFR Engine | `05-cvss-afr-engine.md` | 📋 Write next | No blockers |
-| Risk Score Engine | `05-risk-engine.md` | 📋 Write next | No blockers |
-| Stage 01 — Input Normalization | `01-input-normalization-agent.md` | ⏸ Blocked | Checkpoint API |
-| Stage 02 — Damage Analysis | `02-damage-analysis-agent.md` | ⏸ Blocked | Checkpoint API |
-| Stage 03 — Threat Identification | `03-threat-identification-agent.md` | ⏸ Blocked | Checkpoint API |
-| Stage 04 — Attack Path Modelling | `04-attack-path-agent.md` | ⏸ Blocked | Checkpoint API |
-| Stage 05 — Impact Analysis | `05-impact-analysis-agent.md` | 📋 Write next | No blockers |
-| Stage 06 — Risk Scoring | `06-risk-scoring-engine.md` | 📋 Write next | No blockers |
-| Stage 07 — Risk Treatment | `07-risk-treatment-agent.md` | ⏸ Blocked | Controls DB schema |
+| CVSS AFR Engine | `05-cvss-afr-engine.md` | ✅ Complete | Codex-ready |
+| Stage 05 — Impact Analysis | `05-impact-analysis-agent.md` | ✅ Complete | Codex-ready |
+| Stage 06 — Risk Scoring | `06-risk-scoring-engine.md` | ✅ Complete | Codex-ready |
+| Checkpoint API (FastAPI) | `09-checkpoint-api.md` | ✅ Complete | Codex-ready |
+| Stage 01 — Input Normalization | `01-input-normalization-agent.md` | ✅ Complete | Codex-ready |
+| Stage 02 — Damage Analysis | `02-damage-analysis-agent.md` | ✅ Complete | Codex-ready |
+| Stage 03 — Threat Identification | `03-threat-identification-agent.md` | ✅ Complete | Codex-ready |
+| Stage 04 — Attack Path Modelling | `04-attack-path-agent.md` | ✅ Complete | Codex-ready |
+| Stage 07 — Risk Treatment | `07-risk-treatment-agent.md` | ✅ Complete | Codex-ready — controls catalogue (89 CTR_##) authored |
 | Stage 08 — Residual Risk | `08-residual-risk-engine.md` | ⏸ Blocked | Custom logic needed |
 | Orchestrator | `09-orchestrator.md` | ⏸ Blocked | All above + checkpoint API |
 | Excel Formatter | `10-excel-formatter.md` | ⏸ Blocked | Needs stage 07 |

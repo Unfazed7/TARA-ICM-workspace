@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-06-risk-register.schema.json",
+  "title": "Stage 06 Risk Register",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "risk_id",
+      "threat_id",
+      "damage_scenario_id",
+      "attack_id",
+      "impact_id",
+      "asset_id",
+      "impact_rating_value",
+      "impact_rating_label",
+      "afr_value",
+      "afr_label",
+      "risk_score",
+      "risk_level",
+      "risk_rank",
+      "created_timestamp"
+    ],
+    "properties": {
+      "risk_id": { "type": "string", "pattern": "^RSK_\\d{2,}$" },
+      "threat_id": { "type": "string", "pattern": "^TH_\\d{2,}$" },
+      "damage_scenario_id": { "type": "string", "pattern": "^DS_\\d{2,}$" },
+      "attack_id": { "type": "string", "pattern": "^AT_\\d{2,}$" },
+      "impact_id": { "type": "string", "pattern": "^IM_\\d{2,}$" },
+      "asset_id": { "type": "string", "pattern": "^AS_\\d{2,}$" },
+      "impact_rating_value": { "type": "integer", "enum": [0, 1, 2, 3] },
+      "impact_rating_label": { "type": "string", "enum": ["Negligible", "Moderate", "Major", "Severe"] },
+      "afr_value": { "type": "integer", "minimum": 1, "maximum": 5 },
+      "afr_label": { "type": "string", "enum": ["very low", "low", "medium", "high", "very high"] },
+      "risk_score": { "type": "integer", "minimum": 0, "maximum": 15 },
+      "risk_level": {
+        "type": "string",
+        "enum": ["informational", "low", "medium", "high", "critical"]
+      },
+      "risk_rank": { "type": "integer", "minimum": 1 },
+      "created_timestamp": { "type": "string", "format": "date-time" }
+    }
+  },
+  "uniqueItemProperties": ["risk_id", "risk_rank"]
+}

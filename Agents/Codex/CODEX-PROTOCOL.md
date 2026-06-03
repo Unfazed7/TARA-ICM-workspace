@@ -1,170 +1,189 @@
 # CODEX PROTOCOL — Implementation Engine Rules
 
-**Role:** You are Codex, the implementation engine for TARA Lima.  
+**Role:** You are Codex, the implementation engine for TARA Aegis.  
 **You implement. Claude specifies. Never swap roles.**
 
 ---
 
 ## Core Rules (Read These First)
 
-### Rule 1: Read Spec Before Writing a Line
+### Rule 1: Pull Before You Start
+```bash
+git pull origin claude
+```
+Always. No exceptions. Claude may have pushed specs since your last session.
+
+### Rule 2: Read Spec Before Writing a Line
 - Full spec is in `.meta/specs/{module}.md`
 - Read completely. Stop if anything is unclear.
 - List all assumptions before touching code.
 
-### Rule 2: State Scope Before Touching Files
+### Rule 3: State Scope Before Touching Files
 For every task, declare before starting:
 ```
-Files I WILL touch:         {list}
-Files I WILL NOT touch:     {list}
-Dependencies I assume exist: {list}
+Spec:                    .meta/specs/{module}.md
+Files I WILL touch:      {exact list}
+Files I WILL NOT touch:  .meta/, _config/, CONTEXT.md files, CLAUDE.md files
+Dependencies I assume:   {list}
 ```
 
-### Rule 3: Surgical Changes Only
+### Rule 4: Surgical Changes Only
 - Touch ONLY files designated in the spec
-- Never touch `.meta/`, `_config/`, or `stages/*/CONTEXT.md` — Claude's domain
+- Never touch `.meta/`, `_config/`, or any `CONTEXT.md` / `CLAUDE.md` — Claude's domain
 - If adjacent code is broken, flag it — don't silently fix it unless the spec says to
 
-### Rule 4: Stop on Ambiguity
+### Rule 5: Stop on Ambiguity
 - If the spec is unclear → STOP
-- Post the ambiguity as a PR draft comment
+- State the ambiguity explicitly: "Spec says X but this is unclear because Y"
 - Wait for Claude to update the spec
 - Never guess
 
-### Rule 5: Simplicity First
-- Write minimum viable code
+### Rule 6: Simplicity First
+- Write minimum viable code that satisfies the spec
 - No speculative features, no "just in case" logic
-- No unnecessary abstractions or wrapper classes
-- If you write >200 lines for a simple function, STOP and simplify
-- Three lines of explicit code > one clever abstraction
+- No unnecessary abstractions
+- See `simplicity.md` for the full rule
 
-### Rule 6: Tests Are Not Optional
+### Rule 7: Tests Are Not Optional
 Every implementation includes:
 - Unit test: valid inputs (golden path)
 - Unit test: invalid inputs (error handling)
-- File location: `tests/unit/{module}.test.js`
-- Run before opening any PR
+- Unit test: edge cases listed in spec
+- File location: `tests/` following the path in the spec
 
 ---
 
 ## What Codex Owns
 
 ```
-tara-workspace/_engines/          → All 3 deterministic engines
-tara-workspace/stages/*/agent.js  → All AI stage agents
-tara-workspace/orchestrator/      → run-tara.js pipeline runner
-output-formatters/                → Excel formatter, audit trail logger
-src/schemas/                      → JSON schema files from spec 00
-tests/                            → All test files
+tara-workspace/web-based-tara/_engines/          All deterministic engines
+tara-workspace/web-based-tara/stages/*/agent.js  All AI stage agents
+tara-workspace/web-based-tara/orchestrator/      Pipeline runner
+checkpoint-api/                                  FastAPI checkpoint service
+src/schemas/                                     JSON schema files
+tests/                                           All test files
 ```
 
 ## What Codex Does NOT Touch
 
 ```
-.meta/                            → Claude's spec domain
-tara-workspace/CLAUDE.md          → Layer 0 identity, read-only
-tara-workspace/_config/           → Layer 3 domain knowledge, read-only
-tara-workspace/stages/*/CONTEXT.md → Layer 2, Claude writes these
+.meta/                                           Claude's spec domain
+tara-workspace/CLAUDE.md                         Layer 0 identity, read-only
+tara-workspace/web-based-tara/CLAUDE.md          Layer 0 identity, read-only
+tara-workspace/web-based-tara/CONTEXT.md         Layer 1 routing, read-only
+tara-workspace/web-based-tara/_config/           Layer 3 domain knowledge, read-only
+tara-workspace/web-based-tara/stages/*/CONTEXT.md  Layer 2, Claude writes these
+Agents/Codex/BRANCH-WORKFLOW.md                  Claude writes this
+Agents/Codex/CODEX-PROTOCOL.md                   Claude writes this
 ```
+
+These two sets never overlap. Conflicts on `claude` branch = someone touched the wrong files.
 
 ---
 
 ## Pre-Implementation Checklist
 
 Before writing any code:
-- [ ] Spec is merged into `develop` (not just in `claude` branch)
-- [ ] I have read the full spec — not skimmed
-- [ ] I have listed all assumptions explicitly
-- [ ] I have declared file scope (WILL / WON'T touch)
-- [ ] No outstanding ambiguities (or they're flagged and awaiting Claude)
+- [ ] Ran `git pull origin claude`
+- [ ] Spec exists at `.meta/specs/{module}.md`
+- [ ] Read the full spec — not skimmed
+- [ ] Listed all assumptions explicitly
+- [ ] Declared file scope (WILL / WON'T touch)
+- [ ] No outstanding ambiguities (or they're flagged)
 
 ---
 
 ## Post-Implementation Checklist (VERIFY.md)
 
-Before opening any PR:
+Before pushing:
 - [ ] Compilation/lint passes — no syntax errors, no missing imports
-- [ ] Scope: ONLY touched designated files — run `git diff --name-only` to confirm
-- [ ] Regression: no adjacent code broken — run full test suite
-- [ ] Tests pass: valid inputs AND invalid inputs — zero test failures
-- [ ] Output matches JSON schema from spec 00 exactly — field names, types, enum values
+- [ ] Scope: ONLY touched designated files — `git diff --name-only` confirms
+- [ ] Regression: full test suite passes — nothing adjacent broken
+- [ ] Tests pass: valid inputs AND invalid inputs — zero failures
+- [ ] Output matches JSON schema from spec 00 exactly
+
+---
+
+## Implementation Order — All Specs Ready
+
+All 9 specs are written and waiting. Implement in this order (Wave 1 has no dependencies — all can be started):
+
+### Wave 1 — Start immediately, no dependencies
+
+| Module | Spec file | Files to create |
+|--------|-----------|-----------------|
+| JSON schemas | `00-json-schema-contracts.md` | `src/schemas/stage-0{1-6}.schema.json`, `src/schemas/tool-use-schemas.json` |
+| CVSS AFR engine | `05-cvss-afr-engine.md` | `tara-workspace/web-based-tara/_engines/cvss-afr-calc.js`, `tests/engines/cvss-afr-calc.test.js` |
+| Risk score engine | `06-risk-scoring-engine.md` | `tara-workspace/web-based-tara/_engines/risk-score.js`, `tests/engines/risk-score.test.js` |
+| Checkpoint API | `09-checkpoint-api.md` | `checkpoint-api/main.py`, `checkpoint-api/models.py`, `checkpoint-api/schemas.py`, `checkpoint-api/routers/`, `checkpoint-api/tests/` |
+
+### Wave 2 — After Wave 1 schemas and engines are pushed
+
+| Module | Spec file | Files to create |
+|--------|-----------|-----------------|
+| Stage 01 | `01-input-normalization-agent.md` | `tara-workspace/web-based-tara/stages/01-input-normalization/agent.js` |
+| Stage 02 | `02-damage-analysis-agent.md` | `tara-workspace/web-based-tara/stages/02-damage-analysis/agent.js` |
+| Stage 03 | `03-threat-identification-agent.md` | `tara-workspace/web-based-tara/stages/03-threat-identification/agent.js` |
+| Stage 04 | `04-attack-path-agent.md` | `tara-workspace/web-based-tara/stages/04-attack-path-modelling/agent.js` |
+| Stage 05 | `05-impact-analysis-agent.md` | `tara-workspace/web-based-tara/stages/05-impact-analysis/agent.js` |
+| Stage 06 | `06-risk-scoring-engine.md` | `tara-workspace/web-based-tara/stages/06-risk-scoring/agent.js` |
+
+### Still blocked (do not start)
+
+| Module | Blocked by |
+|--------|-----------|
+| Stage 07 — Risk Treatment | Controls DB schema (from Omkar) |
+| Stage 08 — Residual Risk | Residual risk calculation logic (from Omkar) |
+| Orchestrator | All stage agents + checkpoint API |
 
 ---
 
 ## Commit Message Convention
 
+When implementation is complete and ready for Claude's review, use `ready-for-review` scope:
+```
+feat(ready-for-review): Implement {module} per spec {spec-filename}.md
+```
+
+For all other commits:
 ```
 feat: Implement {module} per spec {spec-filename}.md
-fix: Address review comment — {specific thing fixed}
-test: Add unit tests for {module}
+fix: {module} — {specific thing fixed}
+test: Add tests for {module}
+chore: {small non-feature change}
 wip: {module} partial — {what's done, what remains}
 ```
 
+**Do not start the next module until you see Claude's approval commit:**
+`review: Approve {module} — spec compliant`
+
+If you see `REVIEW-ISSUES.md` committed instead — read it, fix every issue listed, delete the file, and push again with `feat(ready-for-review):` message.
+
 ---
 
-## PR Body Template (Copy-Paste This)
+## If You Find a Spec Bug
 
-```markdown
-## Spec Reference
-`.meta/specs/{spec-filename}.md`
+1. Stop coding immediately
+2. State exactly: "SPEC ISSUE in {spec-filename}.md: Spec says X but this conflicts with Y because Z"
+3. Wait for Claude to update the spec
+4. `git pull origin claude` to get the updated spec
+5. Resume only after the spec is updated
 
-## Assumptions Confirmed
-- Input: {what I receive, from which file/stage}
-- Output: {what I produce, which schema it matches}
-- Files touched: {exact list}
+---
 
-## Verification Results (VERIFY.md)
-- [x] Compilation/lint: PASS
-- [x] Scope: Only touched {list files}
-- [x] Regression: No adjacent breakage
-- [x] Tests: {N} tests passing, 0 failing
+## If You Find a Conflict When Pushing
 
-## Test Command
-`npm test -- {module-name}`
+```bash
+git pull --rebase origin claude
+git push origin claude
 ```
 
----
-
-## Implementation Order for MVP
-
-Start with schemas and engines — zero dependencies on anything else:
-
-| Priority | Module | Branch | Status |
-|----------|--------|--------|--------|
-| 1 | JSON schemas | `codex/schemas` | Available — spec 00 is done |
-| 2 | Deterministic engines | `codex/engines` | Available — spec TBD but logic is defined |
-| 3 | Stage 01 agent | `codex/stage-01` | Waiting on spec |
-| 4 | Stage 02 agent | `codex/stage-02` | Waiting on spec |
-| 5 | Stage 03 agent | `codex/stage-03` | Waiting on spec |
-| 6 | Stage 04 agent | `codex/stage-04` | Waiting on spec |
-| 7 | Stage 05 runner | `codex/stage-05` | Waiting on spec |
-| 8 | Stage 06 agent | `codex/stage-06` | BLOCKED — controls DB schema |
-| 9 | Stage 07 runner | `codex/stage-07` | BLOCKED — residual risk logic |
-| 10 | Orchestrator | `codex/orchestrator` | Waiting on all stage specs |
-| 11 | Output formatters | `codex/output-formatters` | Waiting on orchestrator |
-
-**Start today with: `codex/schemas` (read spec 00, implement 7 schema files)**
+A conflict means one of two things:
+1. You touched a file you shouldn't have → undo that change
+2. Claude pushed a spec update to a file you were also editing → this should not happen by design; flag it
 
 ---
 
-## Emergency Protocol
-
-**If blocked waiting for Claude:**
-1. Continue with next available unblocked module
-2. Create GitHub Issue: "BLOCKED: {module} — {exact reason}"
-3. Example: "BLOCKED: codex/stage-06 — Controls DB schema not defined in spec"
-
-**If you find a spec bug during implementation:**
-1. Stop coding immediately
-2. Post PR comment: "SPEC ISSUE: {description}"
-3. Explain specifically: "Spec says X but this conflicts with Y because Z"
-4. Wait for Claude to update spec
-5. Resume only after spec is updated
-
-**If spec and schema disagree:**
-Spec always wins. Flag the discrepancy, Claude fixes the schema.
-
----
-
-**Read BRANCH-WORKFLOW.md for the full Git + PR process.**  
-Last updated: 2026-05-31
+**Read BRANCH-WORKFLOW.md for the full Git process.**  
+**Read VERIFY.md before every push.**  
+**Last updated: 2026-06-02**

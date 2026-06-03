@@ -1,6 +1,6 @@
-# TARA Lima — Multi-Type Workspace Router (Layer 0)
+# TARA Aegis — Multi-Type Workspace Router (Layer 0)
 
-**Tool:** TARA Lima — Automated Threat Analysis & Risk Assessment  
+**Tool:** TARA Aegis — Automated Threat Analysis & Risk Assessment  
 **Model:** claude-sonnet-4-20250514  
 **Design:** Each TARA type is fully isolated in its own subfolder.
 

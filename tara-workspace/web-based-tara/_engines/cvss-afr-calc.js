@@ -1,17 +1,3 @@
-/**
- * CVSS v3.1 Attack Feasibility Rating Calculator
- * Web-Based TARA — Deterministic Engine
- * Spec: tara-workspace/web-based-tara/_config/cvss-afr-formula.md
- *
- * PLACEHOLDER — Awaiting spec: .meta/specs/05-cvss-afr-engine.md
- *
- * Input:  { attack_vector, attack_complexity, privileges_required, user_interaction }
- * Output: { exploitability_raw, afr_value, afr_label }
- *
- * AI agents estimate the 4 CVSS metrics.
- * This engine computes the numeric score — AI never generates numbers.
- */
-
 'use strict';
 
 const WEIGHTS = {
@@ -22,28 +8,90 @@ const WEIGHTS = {
 };
 
 const AFR_LABELS = {
-  5: 'very_high',
-  4: 'high',
-  3: 'medium',
+  1: 'very low',
   2: 'low',
-  1: 'very_low'
+  3: 'medium',
+  4: 'high',
+  5: 'very high'
 };
 
-const MIN_EXPLOITABILITY = 8.22 * 0.20 * 0.44 * 0.27 * 0.62;
-const MAX_EXPLOITABILITY = 8.22 * 0.85 * 0.77 * 0.85 * 0.85;
+const MIN_EXPLOITABILITY = 0.121;
+const MAX_EXPLOITABILITY = 3.893;
 
-/**
- * @param {Object} metrics
- * @param {'N'|'A'|'L'|'P'} metrics.attack_vector
- * @param {'L'|'H'}          metrics.attack_complexity
- * @param {'N'|'L'|'H'}      metrics.privileges_required
- * @param {'N'|'R'}          metrics.user_interaction
- * @returns {{ exploitability_raw: number, afr_value: number, afr_label: string }}
- */
 function calculateCVSSAFR(metrics) {
-  // TODO: Implement per spec .meta/specs/05-cvss-afr-engine.md
-  // Formula reference: _config/cvss-afr-formula.md
-  throw new Error('cvss-afr-calc.js not yet implemented — awaiting spec');
+  const input = metrics || {};
+  const av = requireMetric(input, 'attack_vector', WEIGHTS.AV);
+  const ac = requireMetric(input, 'attack_complexity', WEIGHTS.AC);
+  const pr = requireMetric(input, 'privileges_required', WEIGHTS.PR);
+  const ui = requireMetric(input, 'user_interaction', WEIGHTS.UI);
+
+  const exploitability = 8.22 * av * ac * pr * ui;
+  if (Number.isNaN(exploitability)) {
+    throw new Error('CVSS exploitability computation produced NaN');
+  }
+
+  const normalized = (exploitability - MIN_EXPLOITABILITY) / (MAX_EXPLOITABILITY - MIN_EXPLOITABILITY);
+  const scaled = Math.round(1 + normalized * 4);
+  const afrValue = Math.max(1, Math.min(5, scaled));
+
+  return { afr_value: afrValue, afr_label: AFR_LABELS[afrValue] };
 }
 
-module.exports = { calculateCVSSAFR, WEIGHTS, AFR_LABELS };
+function requireMetric(metrics, field, allowedValues) {
+  const value = metrics[field];
+  if (value === undefined || value === null || value === '') {
+    throw new Error(`Missing required field: ${field}`);
+  }
+  if (!Object.prototype.hasOwnProperty.call(allowedValues, value)) {
+    throw new Error(`Invalid ${field}: ${value}`);
+  }
+  return allowedValues[value];
+}
+
+module.exports = {
+  calculateCVSSAFR,
+  WEIGHTS,
+  AFR_LABELS,
+  MIN_EXPLOITABILITY,
+  MAX_EXPLOITABILITY
+};
+
+function readJson(filePath) {
+  return JSON.parse(require('fs').readFileSync(filePath, 'utf8'));
+}
+
+function writeJson(filePath, value) {
+  require('fs').writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+function parseArgs(argv) {
+  const args = {};
+  for (let index = 0; index < argv.length; index += 2) {
+    const key = argv[index];
+    if (!key || !key.startsWith('--')) throw new Error(`Invalid argument: ${key}`);
+    args[key.slice(2)] = argv[index + 1];
+  }
+  return args;
+}
+
+function main() {
+  const args = parseArgs(process.argv.slice(2));
+  if (!args.input || !args.out) {
+    throw new Error('Usage: node cvss-afr-calc.js --input <attack-paths.json> --out <attack-paths.json>');
+  }
+  const paths = readJson(args.input);
+  const updated = paths.map((attackPath) => ({
+    ...attackPath,
+    ...calculateCVSSAFR(attackPath.cvss_metrics)
+  }));
+  writeJson(args.out, updated);
+}
+
+if (require.main === module) {
+  try {
+    main();
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
+}
