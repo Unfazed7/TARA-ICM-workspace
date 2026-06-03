@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { assignRiskRanks, computeRiskScore } = require('../../_engines/risk-score');
+const { computeRiskScore, getRiskLevel } = require('../../_engines/risk-score');
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -39,7 +39,7 @@ function buildRiskRegister(impactRecords, attackRecords, timestamp = new Date().
 
     const score = computeRiskScore(impact, attack);
     return {
-      risk_id: `RSK_${String(index + 1).padStart(2, '0')}`,
+      risk_id: null,
       threat_id: impact.threat_id,
       damage_scenario_id: impact.damage_scenario_id,
       attack_id: attack.attack_id,
@@ -51,7 +51,41 @@ function buildRiskRegister(impactRecords, attackRecords, timestamp = new Date().
     };
   });
 
-  return assignRiskRanks(risks);
+  const ranked = risks
+    .sort((a, b) => {
+      if (b.risk_score !== a.risk_score) return b.risk_score - a.risk_score;
+      return b.afr_value - a.afr_value;
+    })
+    .map((risk, index) => ({
+      ...risk,
+      risk_id: `RSK_${String(index + 1).padStart(2, '0')}`,
+      risk_rank: index + 1
+    }));
+
+  validateRiskRegister(ranked, impactRecords, attackRecords);
+  return ranked;
+}
+
+function validateRiskRegister(risks, impactRecords, attackRecords) {
+  const impactIds = new Set(impactRecords.map((impact) => impact.impact_id));
+  const attackIds = new Set(attackRecords.map((attack) => attack.attack_id));
+  risks.forEach((risk, index) => {
+    if (risk.risk_score !== risk.impact_rating_value * risk.afr_value) {
+      throw new Error(`${risk.risk_id}: risk_score must equal impact_rating_value * afr_value`);
+    }
+    if (risk.risk_level !== getRiskLevel(risk.risk_score)) {
+      throw new Error(`${risk.risk_id}: risk_level does not match matrix threshold`);
+    }
+    if (risk.risk_rank !== index + 1) throw new Error(`Rank gap at ${risk.risk_rank}`);
+    if (!impactIds.has(risk.impact_id)) throw new Error(`Unknown impact_id for ${risk.risk_id}`);
+    if (!attackIds.has(risk.attack_id)) throw new Error(`Unknown attack_id for ${risk.risk_id}`);
+    if (![0, 1, 2, 3].includes(risk.impact_rating_value)) {
+      throw new Error(`Invalid impact_rating_value for ${risk.risk_id}`);
+    }
+    if (![1, 2, 3, 4, 5].includes(risk.afr_value)) {
+      throw new Error(`Invalid afr_value for ${risk.risk_id}`);
+    }
+  });
 }
 
 function main() {
@@ -60,6 +94,7 @@ function main() {
     throw new Error('Usage: node agent.js --impact <impact-analysis.json> --attacks <attack-paths.json> --out <risk-register.json>');
   }
 
+  readJson(path.resolve(__dirname, '../../_config/iso-21434-risk-matrix.json'));
   const riskRegister = buildRiskRegister(readJson(args.impact), readJson(args.attacks));
   writeJson(args.out, riskRegister);
 }
@@ -68,4 +103,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { buildRiskRegister };
+module.exports = { buildRiskRegister, validateRiskRegister };

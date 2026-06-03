@@ -3,7 +3,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
-  assignRiskRanks,
   computeImpactRatingValue,
   computeRiskScore,
   getRiskLevel
@@ -41,15 +40,25 @@ test('risk score combines impact and AFR', () => {
 });
 
 test('risk ranking sorts by score then higher AFR', () => {
-  const ranked = assignRiskRanks([
-    { risk_id: 'RSK_01', risk_score: 8, afr_value: 2 },
-    { risk_id: 'RSK_02', risk_score: 8, afr_value: 5 },
-    { risk_id: 'RSK_03', risk_score: 12, afr_value: 3 }
-  ]);
-  assert.deepEqual(ranked.map((risk) => [risk.risk_id, risk.risk_rank]), [
-    ['RSK_03', 1],
-    ['RSK_02', 2],
-    ['RSK_01', 3]
+  const impactTemplate = readJson(fixturePath('valid', 'stage-05-impact-analysis.json'))[0];
+  const attackTemplate = readJson(fixturePath('valid', 'stage-04-attack-paths-post-engine.json'))[0];
+  const impacts = [
+    { ...impactTemplate, impact_id: 'IM_01', threat_id: 'TH_01' },
+    { ...impactTemplate, impact_id: 'IM_02', threat_id: 'TH_02' },
+    { ...impactTemplate, impact_id: 'IM_03', threat_id: 'TH_03' }
+  ];
+  const attacks = [
+    { ...attackTemplate, attack_id: 'AT_01', threat_id: 'TH_01', afr_value: 2, afr_label: 'low' },
+    { ...attackTemplate, attack_id: 'AT_02', threat_id: 'TH_02', afr_value: 3, afr_label: 'medium' },
+    { ...attackTemplate, attack_id: 'AT_03', threat_id: 'TH_03', afr_value: 4, afr_label: 'high' }
+  ];
+  impacts[0].tool_user.privacy = 'Severe';
+  impacts[2].tool_user.privacy = 'Severe';
+  const ranked = buildRiskRegister(impacts, attacks, '2026-06-01T10:05:00.000Z');
+  assert.deepEqual(ranked.map((risk) => [risk.threat_id, risk.risk_id, risk.risk_rank]), [
+    ['TH_03', 'RSK_01', 1],
+    ['TH_02', 'RSK_02', 2],
+    ['TH_01', 'RSK_03', 3]
   ]);
 });
 
