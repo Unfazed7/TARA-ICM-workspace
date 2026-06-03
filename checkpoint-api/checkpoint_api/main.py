@@ -4,7 +4,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import Base, engine
+from .routers.assessments import router as assessments_router
+from .routers.auth import router as auth_router
 from .routers.checkpoints import router as checkpoints_router
+from .routers.pipeline import router as pipeline_router
+from .routers.uploads import router as uploads_router
 
 
 def create_app() -> FastAPI:
@@ -22,6 +26,10 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(checkpoints_router)
+    app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
+    app.include_router(assessments_router, prefix="/api/v1/assessments", tags=["assessments"])
+    app.include_router(pipeline_router, prefix="/api/v1/assessments", tags=["pipeline"])
+    app.include_router(uploads_router, prefix="/api/v1/assessments", tags=["uploads"])
     return app
 
 
