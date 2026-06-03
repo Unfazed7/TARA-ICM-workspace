@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Search, Shield, ChevronsLeft, ChevronsRight, ClipboardList } from 'lucide-react';
+import { Box, Search, Shield, ShieldCheck, ChevronsLeft, ChevronsRight, ClipboardList } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { ModuleType } from '@/types/tara';
