@@ -1,9 +1,17 @@
 # Codex Brief — Frontend Integration (Spec 11)
 
 **Spec:** `.meta/specs/11-frontend-integration.md` — read it fully before starting.  
-**Branch:** Create `codex/frontend-integration` from `develop`.  
-**PR target:** `develop`  
-**Prerequisite:** `codex/backend-api` must be merged first. The API endpoints must exist.
+**Branch:** Create `codex/frontend-integration` from `claude`. PR targets `claude`.  
+**Do NOT branch from `develop` or any other branch.**  
+**Prerequisite:** `codex/backend-api` must be merged into `claude` first. The API endpoints must exist before starting this task.
+
+```bash
+git fetch origin claude
+git checkout -b codex/frontend-integration origin/claude
+# ... implement, commit, push ...
+git push -u origin codex/frontend-integration
+# open PR: codex/frontend-integration → claude
+```
 
 ---
 

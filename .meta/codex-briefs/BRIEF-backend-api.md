@@ -1,9 +1,16 @@
 # Codex Brief — Backend REST API Extension (Spec 10)
 
 **Spec:** `.meta/specs/10-backend-api.md` — read it fully before starting.  
-**Branch:** Create `codex/backend-api` from `develop`.  
-**PR target:** `develop`  
-**Do NOT implement spec 11 (frontend) in this branch.**
+**Branch:** Create `codex/backend-api` from `claude`. PR targets `claude`.  
+**Do NOT branch from `develop` or any other branch. Do NOT implement spec 11 (frontend) in this branch.**
+
+```bash
+git fetch origin claude
+git checkout -b codex/backend-api origin/claude
+# ... implement, commit, push ...
+git push -u origin codex/backend-api
+# open PR: codex/backend-api → claude
+```
 
 ---
 
