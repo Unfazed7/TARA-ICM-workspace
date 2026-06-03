@@ -51,6 +51,8 @@ export interface TaraAttackPath {
   linkedThreatId: string;
   attackVector: string;
   description: string;
+  narrative: string;
+  steps: string[];
 }
 
 export interface TaraFeasibility {
@@ -174,16 +176,24 @@ function mapThreat(raw: RawThreat): TaraThreat {
   };
 }
 
+const STEP_LABELS = [
+  'Initial Precondition',
+  'Abuse Technique',
+  'Exploit Effect',
+  'Control Gap',
+  'Threat Realization',
+];
+
 function mapAttackPath(raw: RawAttackPath): TaraAttackPath {
-  const steps = raw.attack_path ?? {};
-  const stepLines = Object.values(steps).map((s, i) => `${i + 1}. ${s}`).join('\n');
+  const rawSteps = raw.attack_path ?? {};
+  const steps = Object.values(rawSteps);
   return {
     id: raw.attack_id,
     linkedThreatId: raw.threat_id,
     attackVector: CVSS_VECTOR_MAP[raw.cvss_metrics?.attack_vector ?? ''] ?? 'network',
-    description: raw.attack_description
-      ? `${raw.attack_description}\n\n${stepLines}`
-      : stepLines,
+    description: raw.attack_description ?? '',
+    narrative: raw.attack_description ?? '',
+    steps,
   };
 }
 

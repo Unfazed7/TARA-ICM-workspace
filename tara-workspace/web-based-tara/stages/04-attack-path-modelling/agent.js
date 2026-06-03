@@ -108,7 +108,13 @@ function buildSystemPrompt() {
     fs.readFileSync(path.join(configDir, 'owasp-stride-mapping.md'), 'utf8'),
     fs.readFileSync(path.join(configDir, 'cvss-afr-formula.md'), 'utf8'),
     'Model the most feasible realistic five-step attack path working backward from the damage scenario.',
-    'Step 4 must describe an actual control gap, not a hypothetical or generic missing control.',
+    'Each step must be written as a narrative continuation of the previous step — the chain must read like a connected story, not five isolated bullets.',
+    'Step 1 sets the scene: who the attacker is and what initial access or position they have.',
+    'Step 2 must pick up exactly where Step 1 left off: "With this access, the attacker..." or "Leveraging [Step 1 outcome], they..."',
+    'Step 3 must follow from what Step 2 enabled: describe what the attacker can now do or reach as a direct result.',
+    'Step 4 must identify the specific control gap that allows Step 3 to succeed — not a hypothetical or generic missing control, but the actual absence or weakness present in this asset.',
+    'Step 5 must close the chain back to the damage scenario: "This results in..." or "The attacker now achieves..." — it must be the direct consequence of Step 4\'s gap being exploited.',
+    'The attack_description field must be a single fluent paragraph that tells the full story across all five steps as one narrative — suitable for reading aloud to a client.',
     'Assign CVSS v3.1 exploitability metrics from the attack mechanism.',
     'Return only via the submit_attack_path tool.'
   ].join('\n\n');
@@ -124,7 +130,7 @@ function buildUserMessage(threat) {
     `Asset ID: ${threat.asset_id}`,
     `Asset title: ${threat.asset_title}`,
     `CIAAAN property: ${threat.property}`,
-    'Model the most feasible 5-step attack path and assign CVSS metrics.'
+    'Model the most feasible 5-step attack path. Write each step so it picks up where the previous step ended — the five steps must form a continuous narrative chain. The attack_description must be a single paragraph retelling the full chain in plain language.'
   ].join('\n');
 }
 
