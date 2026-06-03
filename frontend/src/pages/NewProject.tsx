@@ -124,18 +124,23 @@ export default function NewProject() {
   };
 
   const handleCreate = async () => {
-    const project = await createProject({
-      name: name || moduleName || 'Untitled TARA',
-      description,
-      vehicleType,
-      catalogVersion,
-      domains,
-      scope,
-      workflowMode,
-      objectives,
-    });
-    setActiveProject(project.id);
-    navigate(`/project/${project.id}`);
+    try {
+      const effectiveDomains = domains.length > 0 ? domains : ['web-based'];
+      const project = await createProject({
+        name: name || moduleName || 'Untitled TARA',
+        description,
+        vehicleType,
+        catalogVersion,
+        domains: effectiveDomains,
+        scope,
+        workflowMode,
+        objectives,
+      });
+      setActiveProject(project.id);
+      navigate(`/project/${project.id}`);
+    } catch (err) {
+      alert(`Failed to create project: ${err instanceof Error ? err.message : String(err)}`);
+    }
   };
 
   // Per-step validation
