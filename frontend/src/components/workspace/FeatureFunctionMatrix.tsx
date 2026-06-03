@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { VehicleComponent, FeatureFunction, FunctionComponentMapping } from '@/data/mock-feature-analysis';
+import type { VehicleComponent, FeatureFunction, FunctionComponentMapping } from '@/data/feature-types';
 
 interface Props {
   components: VehicleComponent[];

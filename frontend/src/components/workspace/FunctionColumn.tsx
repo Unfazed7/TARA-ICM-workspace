@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { FeatureFunction } from '@/data/mock-feature-analysis';
+import type { FeatureFunction } from '@/data/feature-types';
 
 interface Props {
   functions: FeatureFunction[];

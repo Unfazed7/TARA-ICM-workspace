@@ -32,10 +32,10 @@ export default function Login() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
-  const { login, verify2FA, resend2FA, pendingUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleCredentialSubmit = (e: React.FormEvent) => {
+  const handleCredentialSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -46,47 +46,24 @@ export default function Login() {
     }
 
     setIsLoading(true);
-    // Simulate network delay
-    setTimeout(() => {
-      const result = login(email.trim(), password);
+    try {
+      await login(email.trim(), password);
+      setStep('success');
+      setTimeout(() => navigate('/dashboard'), 800);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+      triggerShake();
+    } finally {
       setIsLoading(false);
-
-      if (result.success) {
-        setStep('2fa');
-      } else {
-        setError(result.error || 'Login failed');
-        triggerShake();
-      }
-    }, 400);
-  };
-
-  const handleOTPComplete = (value: string) => {
-    setOtpValue(value);
-    if (value.length === 6) {
-      setIsLoading(true);
-      setTimeout(() => {
-        const success = verify2FA(value);
-        setIsLoading(false);
-
-        if (success) {
-          setStep('success');
-          // Brief animation then redirect
-          setTimeout(() => {
-            navigate(pendingUser?.role === 'analyst' ? '/review' : '/dashboard');
-          }, 800);
-        } else {
-          setError('Invalid verification code. Please try again.');
-          setOtpValue('');
-          triggerShake();
-        }
-      }, 300);
     }
   };
 
+  const handleOTPComplete = (_value: string) => {
+    // 2FA not used with API auth
+  };
+
   const handleResend = () => {
-    resend2FA();
-    setOtpValue('');
-    setError('');
+    // 2FA not used with API auth
   };
 
   const handleBackToCredentials = () => {
@@ -259,7 +236,7 @@ export default function Login() {
                     We've sent a 6-digit verification code to
                   </p>
                   <p className="text-xs font-medium text-primary">
-                    {pendingUser?.email || email}
+                    {email}
                   </p>
                 </div>
 

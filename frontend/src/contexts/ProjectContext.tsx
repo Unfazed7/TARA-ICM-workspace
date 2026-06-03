@@ -1,15 +1,18 @@
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { Project, ProjectDomain, ProjectScope, ProjectStatus, VehicleType, WorkflowMode } from '@/types/tara';
-import { loadProjectsFromDB, saveProjectToDB, deleteProjectFromDB, saveAllProjectsToDB } from '@/lib/database';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Project } from '@/types/tara';
+import { api } from '@/lib/api';
+import { assessmentToProject } from '@/lib/mappers';
+import type { CreateAssessmentBody } from '@/types/api';
 
 interface CreateProjectData {
   name: string;
   description?: string;
-  vehicleType: VehicleType;
-  catalogVersion: string;
-  domains: ProjectDomain[];
-  scope: ProjectScope;
-  workflowMode: WorkflowMode;
+  vehicleType: string;
+  catalogVersion?: string;
+  domains: string[];
+  scope?: string;
+  workflowMode?: string;
   objectives?: string;
   directory?: string;
 }
@@ -18,7 +21,7 @@ interface ProjectContextType {
   projects: Project[];
   activeProject: Project | null;
   isLoading: boolean;
-  createProject: (data: CreateProjectData) => Project;
+  createProject: (data: CreateProjectData) => Promise<Project>;
   updateProject: (id: string, data: Partial<Project>) => void;
   deleteProject: (id: string) => void;
   setActiveProject: (id: string | null) => void;
@@ -27,134 +30,43 @@ interface ProjectContextType {
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
-const ACTIVE_PROJECT_KEY = 'autotara-active-project';
-const LEGACY_STORAGE_KEY = 'autotara-projects';
-
 export function ProjectProvider({ children }: { children: ReactNode }) {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const queryClient = useQueryClient();
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Load projects from IndexedDB on mount (with localStorage migration)
-  useEffect(() => {
-    async function loadProjects() {
-      try {
-        let dbProjects = await loadProjectsFromDB();
+  const { data: assessments = [], isLoading } = useQuery({
+    queryKey: ['assessments'],
+    queryFn: () => api.assessments.list(),
+  });
 
-        // Migrate from localStorage if IndexedDB is empty but localStorage has data
-        if (dbProjects.length === 0) {
-          const stored = localStorage.getItem(LEGACY_STORAGE_KEY);
-          if (stored) {
-            try {
-              const parsed = JSON.parse(stored) as Project[];
-              if (parsed.length > 0) {
-                await saveAllProjectsToDB(parsed);
-                dbProjects = parsed;
-              }
-            } catch (e) {
-              console.error('Failed to parse legacy localStorage projects:', e);
-            }
-          }
-        }
+  const projects = assessments.map(assessmentToProject);
 
-        setProjects(dbProjects);
-      } catch (e) {
-        console.error('Failed to load projects from DB:', e);
-        // Fallback to localStorage
-        const stored = localStorage.getItem(LEGACY_STORAGE_KEY);
-        if (stored) {
-          try {
-            setProjects(JSON.parse(stored));
-          } catch { /* ignore */ }
-        }
-      }
+  const createMutation = useMutation({
+    mutationFn: (body: CreateAssessmentBody) => api.assessments.create(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['assessments'] }),
+  });
 
-      const activeId = localStorage.getItem(ACTIVE_PROJECT_KEY);
-      if (activeId) {
-        setActiveProjectId(activeId);
-      }
-      setIsLoading(false);
-    }
-
-    loadProjects();
-  }, []);
-
-  // Also keep localStorage in sync (backup)
-  useEffect(() => {
-    if (!isLoading) {
-      localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(projects));
-    }
-  }, [projects, isLoading]);
-
-  // Persist active project ID
-  useEffect(() => {
-    if (!isLoading) {
-      if (activeProjectId) {
-        localStorage.setItem(ACTIVE_PROJECT_KEY, activeProjectId);
-      } else {
-        localStorage.removeItem(ACTIVE_PROJECT_KEY);
-      }
-    }
-  }, [activeProjectId, isLoading]);
-
-  const createProject = useCallback((data: CreateProjectData): Project => {
-    const newProject: Project = {
-      id: crypto.randomUUID(),
-      ...data,
-      status: 'active' as ProjectStatus,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      threatCount: 0,
-      riskCount: 0,
-      completionPercentage: 0,
-    };
-
-    setProjects(prev => [...prev, newProject]);
-
-    // Save to IndexedDB
-    saveProjectToDB(newProject).catch(e => console.error('Failed to save project to DB:', e));
-
-    return newProject;
-  }, []);
-
-  const updateProject = useCallback((id: string, data: Partial<Project>) => {
-    setProjects(prev => {
-      const updated = prev.map(p =>
-        p.id === id
-          ? { ...p, ...data, updatedAt: new Date().toISOString() }
-          : p
-      );
-      // Save updated project to IndexedDB
-      const updatedProject = updated.find(p => p.id === id);
-      if (updatedProject) {
-        saveProjectToDB(updatedProject).catch(e => console.error('Failed to update project in DB:', e));
-      }
-      return updated;
+  const createProject = async (data: CreateProjectData): Promise<Project> => {
+    const assessment = await createMutation.mutateAsync({
+      name: data.name,
+      description: data.description,
+      vehicle_type: data.vehicleType,
+      domains: data.domains,
     });
-  }, []);
+    return assessmentToProject(assessment);
+  };
 
-  const deleteProject = useCallback((id: string) => {
-    setProjects(prev => prev.filter(p => p.id !== id));
+  // Stub — backend update not yet wired; no-op to keep workspace compiling
+  const updateProject = (_id: string, _data: Partial<Project>) => {};
 
-    // Delete from IndexedDB
-    deleteProjectFromDB(id).catch(e => console.error('Failed to delete project from DB:', e));
+  // Stub — backend delete not yet wired; no-op
+  const deleteProject = (_id: string) => {};
 
-    if (activeProjectId === id) {
-      setActiveProjectId(null);
-    }
-  }, [activeProjectId]);
+  const setActiveProject = (id: string | null) => setActiveProjectId(id);
 
-  const setActiveProject = useCallback((id: string | null) => {
-    setActiveProjectId(id);
-  }, []);
+  const getProject = (id: string) => projects.find(p => p.id === id);
 
-  const getProject = useCallback((id: string) => {
-    return projects.find(p => p.id === id);
-  }, [projects]);
-
-  const activeProject = activeProjectId
-    ? projects.find(p => p.id === activeProjectId) ?? null
-    : null;
+  const activeProject = activeProjectId ? getProject(activeProjectId) ?? null : null;
 
   return (
     <ProjectContext.Provider value={{

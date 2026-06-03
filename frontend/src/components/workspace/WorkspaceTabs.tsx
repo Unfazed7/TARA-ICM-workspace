@@ -14,9 +14,9 @@ import { AttackTreesTab } from './tara-tabs/AttackTreesTab';
 import { ResidualRiskTab } from './tara-tabs/ResidualRiskTab';
 import { FinalTaraTab } from './tara-tabs/FinalTaraTab';
 import { ReportExportCenter } from './ReportExportCenter';
-import { mockThreatScenarios } from '@/data/mock-threat-scenarios';
 import { useState } from 'react';
 import { ThreatScenario } from '@/types/risk-assessment';
+const mockThreatScenarios: ThreatScenario[] = [];
 
 type TaraTab = 'asset-id' | 'threat-analysis' | 'attack-trees' | 'impact-rating' | 'attack-path' | 'feasibility' | 'risk-treatment' | 'cybersecurity-goals' | 'residual-risk' | 'final-tara' | 'reports';
 

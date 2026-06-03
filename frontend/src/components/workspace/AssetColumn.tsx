@@ -10,8 +10,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import type { FunctionAsset, AssetCategory } from '@/data/mock-feature-analysis';
-import { assetCategories } from '@/data/mock-feature-analysis';
+import type { FunctionAsset, AssetCategory } from '@/data/feature-types';
+import { assetCategories } from '@/data/feature-types';
 
 interface Props {
   functionName: string | null;

@@ -10,7 +10,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import { type ThreatAsset, assetCategories } from '@/data/mock-threat-stream';
+import { type ThreatAsset, assetCategories } from '@/data/threat-stream-types';
 
 const ciaaanProperties = [
   { key: 'confidentiality' as const, short: 'C', label: 'Confidentiality' },

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
-import type { VehicleComponent, FunctionComponentMapping } from '@/data/mock-feature-analysis';
+import type { VehicleComponent, FunctionComponentMapping } from '@/data/feature-types';
 
 interface Props {
   functionName: string | null;

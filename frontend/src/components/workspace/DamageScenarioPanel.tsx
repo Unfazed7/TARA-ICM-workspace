@@ -37,7 +37,9 @@ import {
   impactCategoryDescriptions,
   cybersecurityPropertyDescriptions 
 } from '@/types/damage-scenario';
-import { mockDamageScenarios, mockAssets } from '@/data/mock-damage-scenarios';
+import type { DamageScenario as _DS, Asset as _A } from '@/types/damage-scenario';
+const mockDamageScenarios: _DS[] = [];
+const mockAssets: _A[] = [];
 
 interface DamageScenarioPanelProps {
   onLinkToThreat?: (damageScenarioId: string) => void;

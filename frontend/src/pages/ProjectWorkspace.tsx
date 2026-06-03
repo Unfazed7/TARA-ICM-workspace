@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
@@ -8,6 +8,7 @@ import { WorkspaceTabs } from '@/components/workspace/WorkspaceTabs';
 import { ItemDefinition } from '@/components/workspace/ItemDefinition';
 import { AssumptionScope } from '@/components/workspace/AssumptionScope';
 import { FeatureAnalysis } from '@/components/workspace/FeatureAnalysis';
+import { CALDetermination } from '@/components/workspace/CALDetermination';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { TaraProvider, useTara } from '@/contexts/TaraContext';
 import { ModuleType } from '@/types/tara';
@@ -34,6 +35,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { api } from '@/lib/api';
 import {
   Save,
   Play,
@@ -44,7 +46,106 @@ import {
   AlertTriangle,
   KeyRound,
   UserCircle,
+  Upload,
 } from 'lucide-react';
+
+const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+  not_started: 'outline',
+  pending: 'secondary',
+  running: 'secondary',
+  complete: 'default',
+  failed: 'destructive',
+};
+
+const STAGE_LABELS = [
+  { num: 1, label: '01 — Input Normalization' },
+  { num: 2, label: '02 — Damage Analysis' },
+  { num: 3, label: '03 — Threat Identification' },
+  { num: 4, label: '04 — Attack Path Modelling' },
+  { num: 5, label: '05 — Impact Analysis' },
+  { num: 6, label: '06 — Risk Scoring' },
+  { num: 7, label: '07 — Risk Treatment' },
+];
+
+function StageRunnerPanel({ assessmentId }: { assessmentId: string }) {
+  const { stageStatuses, runStage } = useTara();
+  const [uploading, setUploading] = useState(false);
+  const [csvReady, setCsvReady] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      await api.uploads.csv(assessmentId, file);
+      setCsvReady(true);
+      toast.success('CSV uploaded successfully');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRun = async (stageNum: number) => {
+    try {
+      await runStage(stageNum);
+      toast.success(`Stage ${stageNum} queued`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to start stage');
+    }
+  };
+
+  return (
+    <div className="border border-border rounded-lg p-4 space-y-3">
+      <div className="flex items-center gap-2 mb-2">
+        <Play className="w-4 h-4 text-primary" />
+        <span className="text-sm font-medium">Pipeline Stages</span>
+      </div>
+
+      {/* CSV Upload */}
+      <div className="flex items-center gap-2 pb-3 border-b border-border">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv"
+          className="hidden"
+          onChange={handleCsvUpload}
+        />
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 text-xs"
+          disabled={uploading}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Upload className="w-3.5 h-3.5" />
+          {uploading ? 'Uploading...' : csvReady ? 'Replace CSV' : 'Upload Assets CSV'}
+        </Button>
+        {csvReady && <span className="text-xs text-emerald-400">✓ CSV ready</span>}
+      </div>
+
+      {/* Stage rows */}
+      {STAGE_LABELS.map(({ num, label }) => {
+        const key = String(num).padStart(2, '0');
+        const status = stageStatuses[key] ?? 'not_started';
+        const canRun = status === 'not_started' || status === 'failed';
+        return (
+          <div key={num} className="flex items-center gap-3">
+            <span className="text-xs w-44 text-muted-foreground">{label}</span>
+            <Badge variant={STATUS_VARIANT[status]}>{status.replace('_', ' ')}</Badge>
+            {canRun && (
+              <Button size="sm" variant="ghost" className="h-6 text-xs px-2" onClick={() => handleRun(num)}>
+                Run
+              </Button>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 // Inner component that can use useTara
 function WorkspaceContent({ projectId }: { projectId: string }) {
@@ -222,7 +323,12 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
           {activeModule === 'assumption-scope' && <AssumptionScope />}
           {activeModule === 'item-definition' && <ItemDefinition />}
           {activeModule === 'tara' && (
-            <WorkspaceTabs activeTab={activeTab} onTabChange={setActiveTab} />
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <div className="px-4 pt-3 pb-2 border-b border-border shrink-0">
+                <StageRunnerPanel assessmentId={projectId} />
+              </div>
+              <WorkspaceTabs activeTab={activeTab} onTabChange={setActiveTab} />
+            </div>
           )}
         </main>
       </div>

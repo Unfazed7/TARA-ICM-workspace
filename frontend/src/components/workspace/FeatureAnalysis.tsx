@@ -28,7 +28,7 @@ import {
   type CiaaanItem,
   type ThreatAsset,
   type AssociatedECU,
-} from '@/data/mock-threat-stream';
+} from '@/data/threat-stream-types';
 
 /* ── Connection Lines ── */
 function ConnectionLines({ containerRef, selections }: {

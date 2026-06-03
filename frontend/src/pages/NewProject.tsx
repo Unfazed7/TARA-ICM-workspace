@@ -123,8 +123,8 @@ export default function NewProject() {
     setWorkHistory(prev => prev.filter(e => e.id !== id));
   };
 
-  const handleCreate = () => {
-    const project = createProject({
+  const handleCreate = async () => {
+    const project = await createProject({
       name: name || moduleName || 'Untitled TARA',
       description,
       vehicleType,

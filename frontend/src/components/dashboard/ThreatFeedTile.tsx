@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { mockThreatScenarios } from '@/data/mock-threat-scenarios';
 import { ThreatScenario } from '@/types/risk-assessment';
+const mockThreatScenarios: ThreatScenario[] = [];
 import { cn } from '@/lib/utils';
 import { AlertTriangle, Shield, Target, Crosshair } from 'lucide-react';
 import {

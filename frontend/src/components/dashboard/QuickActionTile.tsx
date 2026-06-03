@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Project } from '@/types/tara';
-import { loadTaraDataFromDB, TaraDataSnapshot } from '@/lib/database';
 import {
   TaraAsset, TaraThreat, TaraImpact, TaraAttackPath,
   TaraFeasibility, TaraTreatment,
@@ -479,25 +478,14 @@ export function QuickActionTile({ projects = [] }: QuickActionTileProps) {
     setIsGenerating(true);
 
     try {
-      // Load real TARA data from IndexedDB for this project
-      const saved = await loadTaraDataFromDB(project.id);
-
-      let reportData: TaraReportData;
-      if (saved) {
-        reportData = {
-          assets: saved.assets as TaraAsset[],
-          threats: saved.threats as TaraThreat[],
-          impacts: saved.impacts as TaraImpact[],
-          attackPaths: saved.attackPaths as TaraAttackPath[],
-          feasibilities: saved.feasibilities as TaraFeasibility[],
-          treatments: saved.treatments as TaraTreatment[],
-        };
-      } else {
-        // If no saved data, use seed data from TaraContext
-        const { buildSeedData } = await import('@/contexts/TaraContext');
-        const seed = buildSeedData();
-        reportData = seed;
-      }
+      const reportData: TaraReportData = {
+        assets: [],
+        threats: [],
+        impacts: [],
+        attackPaths: [],
+        feasibilities: [],
+        treatments: [],
+      };
 
       switch (selectedFormat) {
         case 'pdf':
