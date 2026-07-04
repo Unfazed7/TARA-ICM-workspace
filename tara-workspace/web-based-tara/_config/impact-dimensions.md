@@ -122,6 +122,24 @@ All 7 dimensions use the same 4-level scale:
 
 ---
 
+## Rating Guard Rules (apply before scoring any dimension)
+
+These rules prevent known mis-rating patterns. Apply each check before assigning a rating.
+
+**Guard 1 — Safety cap:**
+Maximum safety rating for any stakeholder in web-based TARA is Major. Severe is only applicable if confirmed, actual physical harm has already occurred. A credible failure mechanism that could cause harm rates Major; a theoretical or indirect pathway rates Moderate or lower.
+
+**Guard 2 — Privacy gate:**
+Before evaluating privacy severity, confirm that explicit data exposure language is present in the damage scenario — words such as "is disclosed", "is exposed", "is extracted", "is accessed without authorization", or "is revealed". If no exposure language is present, privacy must be Negligible regardless of what data the asset holds.
+
+**Guard 3 — Financial inference guard:**
+Rate Other Stakeholders Financial only if the damage scenario explicitly describes financial loss, revenue impact, or direct monetary cost. Do not infer financial impact from data disclosure alone. A scenario describing data exposure without stating financial harm rates Financial as Negligible or Moderate at most.
+
+**Guard 4 — Party attribution:**
+When a consequence in the damage scenario is explicitly attributed to a specific party ("affecting the organization", "affecting the tool user"), apply the rating only to that party's dimension. Do not cross-apply a consequence described for one party to another party's dimension.
+
+---
+
 ## Output Format
 
 ```json

@@ -56,11 +56,20 @@ Do not conflate these. Each requires a distinct damage scenario and threat.
 
 **Rule:** Damage scenarios describe CONSEQUENCES, not ATTACKS. No attacker language in DS_##.
 
-**Format:** `"If the [CIAAAN property] of [Asset Title] is compromised, [specific adverse consequence] affecting [specific stakeholder] in the context of [specific function/feature]."`
+**Two-sentence format:**
+- Sentence 1: What this asset does or what role it plays in the system.
+- Sentence 2: If its [CIAAAN property] is compromised, what concretely breaks — in plain language.
 
-**Correct:** "If the Confidentiality of the Refresh Token is compromised, dealer technicians' session credentials are exposed, enabling unauthorized access to the diagnostic platform and vehicle owner data."
+**Additional rules:**
+- No stakeholder naming inside the DS text. Stakeholder-specific reasoning belongs entirely in Stage 05 (Impact Analysis).
+- No downstream causal chains. Do not write "...which could then lead to..." or "...enabling...". State only the immediate, direct consequence.
+- No attacker language. DS_## is a consequence statement, not an attack description.
 
-**Incorrect:** "An attacker steals the Refresh Token, gaining unauthorized access." ← This is a threat statement (TH_##), not a damage scenario.
+**Correct:** "The Refresh Token maintains an authenticated technician's session across requests. If its confidentiality is compromised, active session credentials are exposed and can be used to access the diagnostic platform without re-authentication."
+
+**Incorrect (has stakeholder + downstream chain):** "If the Confidentiality of the Refresh Token is compromised, dealer technicians' session credentials are exposed, enabling unauthorized access to the diagnostic platform and vehicle owner data." ← Names stakeholder; "enabling..." is a downstream chain.
+
+**Incorrect (attacker language):** "An attacker steals the Refresh Token, gaining unauthorized access." ← This is a threat statement (TH_##), not a damage scenario.
 
 ---
 
@@ -72,4 +81,4 @@ Do not conflate these. Each requires a distinct damage scenario and threat.
 | Tool User — Financial | Always Negligible | No |
 | NR damage scenario format | Absence of accountability | No |
 | Az vs Au distinction | Must be separate DS_## | No |
-| DS_## language | No attacker language | No |
+| DS_## language | No attacker language, no stakeholder naming, no downstream chains | No |

@@ -115,8 +115,9 @@ function buildSystemPrompt() {
     'Step 3: what they can now reach or do as a direct result.',
     'Step 4: the specific control gap — the actual missing or weak control on this asset — that lets Step 3 succeed.',
     'Step 5: the direct outcome that realizes the damage scenario.',
+    'Do not pad artificially: if the threat\'s causal chain is genuinely complete in fewer steps, compress the remaining steps to confirm closure rather than inventing filler content.',
     'The attack_description must be a single sentence covering the full chain — the TL;DR a reviewer reads first.',
-    'Assign CVSS v3.1 exploitability metrics from the attack mechanism.',
+    'Assign CVSS v3.1 exploitability metrics from the attack mechanism. Derive Scope per threat: use Scope=Changed only for SSRF-into-IAM, RCE-to-OS, or cross-tenant BFLA/BOLA patterns.',
     'Return only via the submit_attack_path tool.'
   ].join('\n\n');
 }

@@ -76,6 +76,11 @@ function buildSystemPrompt() {
     'Tool User Safety and Financial are always Negligible - do not compute them.',
     'Rate only tool_user.privacy, tool_user.operational, other_stakeholders.legal, other_stakeholders.financial, and other_stakeholders.business.',
     'Write a specific impact narrative derived from the threat statement, and derive ratings from the damage scenario.',
+    'Apply the four rating guard rules before scoring any dimension:',
+    '1. Safety cap: maximum rating is Major — never Severe — for web-based TARA.',
+    '2. Privacy gate: if the damage scenario contains no explicit exposure language ("is disclosed", "is exposed", "is extracted", "accessed without authorization"), privacy must be Negligible.',
+    '3. Financial inference guard: rate Other Stakeholders Financial only if the damage scenario explicitly describes financial loss or revenue impact — do not infer it from data disclosure alone.',
+    '4. Party attribution: apply a consequence only to the stakeholder party the damage scenario explicitly attributes it to — do not cross-apply consequences between parties.',
     `Return only via the ${TOOL_NAME} tool.`
   ].join('\n\n');
 }

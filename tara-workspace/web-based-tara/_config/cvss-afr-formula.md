@@ -67,6 +67,23 @@ Whether a non-attacker user must do something for the exploit to succeed.
 
 ---
 
+## Scope — Derive Per Threat (Not Fixed)
+
+Scope affects the PR weight and must be derived for each threat individually. Do not assume Scope=Unchanged across the board.
+
+**Scope: Changed** — the exploit crosses into a security authority the vulnerable component does not itself control.
+
+| Pattern | Scope |
+|---------|-------|
+| SSRF that pivots into cloud IAM or another service's credentials | Changed |
+| RCE that achieves OS-level access outside the web app's sandbox | Changed |
+| Cross-organization BOLA/BFLA where a user escapes their own tenant boundary | Changed |
+| All other web attacks (XSS, SQLi, broken auth within the same component) | Unchanged |
+
+When Scope=Changed, use the higher PR weights below. When in doubt, default to Unchanged.
+
+---
+
 ## CVSS AFR Calculation Formula
 
 ```javascript
@@ -74,12 +91,16 @@ Whether a non-attacker user must do something for the exploit to succeed.
 const weights = {
   AV: { N: 0.85, A: 0.62, L: 0.55, P: 0.20 },
   AC: { L: 0.77, H: 0.44 },
-  PR: { N: 0.85, L: 0.62, H: 0.27 },  // Scope: Unchanged
+  // Scope: Unchanged
+  PR: { N: 0.85, L: 0.62, H: 0.27 },
+  // Scope: Changed — PR weights increase for Low and High
+  PR_changed: { N: 0.85, L: 0.68, H: 0.50 },
   UI: { N: 0.85, R: 0.62 }
 };
 
 // Raw exploitability score (0 to ~3.89)
 exploitability = 8.22 × AV × AC × PR × UI
+// Use PR_changed weights when Scope = Changed
 
 // Max possible: 8.22 × 0.85 × 0.77 × 0.85 × 0.85 = 3.89
 // Min possible: 8.22 × 0.20 × 0.44 × 0.27 × 0.62 = 0.121
@@ -89,7 +110,7 @@ afr_value = round(1 + ((exploitability - 0.121) / (3.89 - 0.121)) × 4)
 afr_value = clamp(afr_value, 1, 5)
 ```
 
-**AI agents estimate the 4 metrics. The engine computes `afr_value`. AI never outputs a number.**
+**AI agents estimate AV, AC, PR, UI, and Scope. The engine computes `afr_value`. AI never outputs a number.**
 
 ---
 
