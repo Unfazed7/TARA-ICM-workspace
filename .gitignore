@@ -9,5 +9,6 @@ uploads/
 __pycache__/
 *.pyc
 tara_aegis.db
+*.db
 test-risk-register.tmp.json
 tests/.tmp-*/
