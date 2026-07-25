@@ -1,5 +1,5 @@
-import { ArchitectureVisualizer } from './ArchitectureVisualizer';
+import { BoundaryReview } from './BoundaryReview';
 
-export function ItemDefinition() {
-  return <ArchitectureVisualizer />;
+export function ItemDefinition({ assessmentId }: { assessmentId: string }) {
+  return <BoundaryReview assessmentId={assessmentId} />;
 }

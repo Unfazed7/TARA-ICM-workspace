@@ -94,3 +94,75 @@ class Checkpoint(Base):
     __table_args__ = (
         UniqueConstraint("assessment_id", "stage_num", name="uq_assessment_stage"),
     )
+
+
+def new_boundary_id():
+    return f"BND_{uuid4().hex[:8].upper()}"
+
+
+class BoundaryState(Base):
+    """Stage 1 CP1 boundary under analyst review.
+
+    Holds the live boundary document for an assessment. Starts as the agent's
+    proposal (phase='proposal') and becomes the source of truth once the analyst
+    resolves every ambiguous element and finalizes it (phase='final').
+    """
+
+    __tablename__ = "boundary_states"
+
+    boundary_id = Column(String, primary_key=True, default=new_boundary_id)
+    assessment_id = Column(String, nullable=False, index=True)
+    model_ref = Column(String, nullable=False)
+    phase = Column(
+        Enum("proposal", "final", name="boundary_phase"),
+        nullable=False,
+        default="proposal",
+    )
+    boundary_statement = Column(String, nullable=False)
+    decisions = Column(JSON, nullable=False)
+    merged_model = Column(JSON, nullable=True)
+    conflicts = Column(JSON, nullable=True)
+    coverage = Column(JSON, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=utc_now, nullable=False)
+    updated_at = Column(
+        DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False
+    )
+    finalized_at = Column(DateTime(timezone=True), nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint("assessment_id", name="uq_boundary_assessment"),
+    )
+
+
+class BoundaryEdit(Base):
+    """Append-only audit log of analyst edits at CP1.
+
+    Every mutation to a BoundaryState writes one row here. Never updated or
+    deleted -- this is the audit trail an assessor inspects.
+    """
+
+    __tablename__ = "boundary_edits"
+
+    edit_id = Column(String, primary_key=True, default=lambda: str(uuid4()))
+    boundary_id = Column(String, nullable=False, index=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    action = Column(
+        Enum(
+            "status_change",
+            "rename",
+            "add_element",
+            "delete_element",
+            "add_link",
+            "delete_link",
+            "resolve_conflict",
+            "edit_rationale",
+            name="boundary_edit_action",
+        ),
+        nullable=False,
+    )
+    element_id = Column(String, nullable=False)
+    before = Column(JSON, nullable=True)
+    after = Column(JSON, nullable=True)
+    rationale = Column(String, nullable=True)
+    actor = Column(String, nullable=False)
+    timestamp = Column(DateTime(timezone=True), default=utc_now, nullable=False)

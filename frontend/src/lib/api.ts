@@ -1,4 +1,13 @@
 import type { Assessment, PipelineRunStatus, CreateAssessmentBody } from '@/types/api';
+import type {
+  BoundaryState,
+  BoundaryEdit,
+  BoundaryFinalizeResponse,
+  ElementScopeUpdate,
+  ElementAdd,
+  ElementDelete,
+  ConflictResolve,
+} from '@/types/item-definition';
 
 const API_BASE = '/api/v1';
 
@@ -69,5 +78,37 @@ export const api = {
         body: form,
       }).then(r => r.json());
     },
+  },
+
+  boundary: {
+    get: (assessmentId: string) =>
+      apiFetch<BoundaryState>(`/assessments/${assessmentId}/boundary`),
+    updateElement: (assessmentId: string, elementId: string, body: ElementScopeUpdate) =>
+      apiFetch<BoundaryState>(`/assessments/${assessmentId}/boundary/elements/${elementId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      }),
+    addElement: (assessmentId: string, body: ElementAdd) =>
+      apiFetch<BoundaryState>(`/assessments/${assessmentId}/boundary/elements`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    deleteElement: (assessmentId: string, elementId: string, body: ElementDelete) =>
+      apiFetch<BoundaryState>(`/assessments/${assessmentId}/boundary/elements/${elementId}`, {
+        method: 'DELETE',
+        body: JSON.stringify(body),
+      }),
+    resolveConflict: (assessmentId: string, body: ConflictResolve) =>
+      apiFetch<BoundaryState>(`/assessments/${assessmentId}/boundary/conflicts/resolve`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    edits: (assessmentId: string) =>
+      apiFetch<BoundaryEdit[]>(`/assessments/${assessmentId}/boundary/edits`),
+    finalize: (assessmentId: string, actor: string) =>
+      apiFetch<BoundaryFinalizeResponse>(`/assessments/${assessmentId}/boundary/finalize`, {
+        method: 'POST',
+        body: JSON.stringify({ actor }),
+      }),
   },
 };

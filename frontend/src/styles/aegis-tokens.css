@@ -1,0 +1,236 @@
+/* Aegis — token vocabulary
+ *
+ * Implements the approved design system. Import AFTER index.css so these
+ * values override the generated defaults without touching component code.
+ *
+ * Rules encoded here:
+ *   - Colour means "needs attention". Neutral means "fine".
+ *   - --primary is ink, not a hue, so actions never compete with state signals.
+ *   - Four reserved roles: neutral / ochre / brick / teal. One meaning each.
+ *   - Ordinal severity is ONE warm ramp, monotonic in lightness (L* 92 -> 42),
+ *     so it survives greyscale print and red-green deficiency.
+ *   - Origin is line style, not colour. Confidence is opacity, not colour.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:wght@400;600&display=swap');
+
+:root {
+  /* --- Base: warm neutral, paper and ink ---------------------------------- */
+  --background: 40 33% 98%;          /* #FFFDFA paper                        */
+  --foreground: 27 22% 15%;          /* #2D2620 warm near-black, never #000  */
+  --card: 40 20% 96%;                /* #F9F6F1                              */
+  --card-foreground: 27 22% 15%;
+  --popover: 40 33% 98%;
+  --popover-foreground: 27 22% 15%;
+
+  --muted: 36 15% 90%;               /* #EBE6DE ruled surfaces               */
+  --muted-foreground: 30 8% 45%;     /* #7A736B secondary text               */
+  --border: 36 14% 84%;              /* #DCD5CA hairline rules               */
+  --input: 36 14% 84%;
+  --ring: 27 22% 15%;                /* focus = ink, not a hue               */
+
+  /* --- Primary is INK, deliberately not a hue ------------------------------
+   * A primary action can therefore never outrank a state signal. This is what
+   * keeps the canvas calm when 6 elements are blocking.                     */
+  --primary: 27 22% 15%;
+  --primary-foreground: 40 33% 98%;
+
+  --secondary: 36 15% 90%;
+  --secondary-foreground: 27 22% 15%;
+  --accent: 36 15% 90%;
+  --accent-foreground: 27 22% 15%;
+
+  /* --- Reserved role 1: OCHRE — a human must decide ------------------------
+   * ambiguous elements, agent_proposed fields, escalated conflicts,
+   * pending checkpoints. Always paired with a diamond glyph.               */
+  --aegis-decide: 38 72% 44%;
+  --aegis-decide-fill: 40 78% 92%;
+  --aegis-decide-text: 32 78% 28%;
+
+  /* --- Reserved role 2: BRICK — contradiction or invalid -------------------
+   * source conflicts, validation failures, orphan refs. Paired with X glyph.
+   * NOT high risk. Severity uses the ramp below.                           */
+  --destructive: 6 58% 42%;
+  --destructive-foreground: 40 33% 98%;
+  --aegis-conflict: 6 58% 42%;
+  --aegis-conflict-fill: 8 55% 94%;
+  --aegis-conflict-text: 6 62% 30%;
+
+  /* --- Reserved role 3: TEAL — boundary interface, the attack surface ------
+   * Paired with position at the perimeter and a half-tone hatch.           */
+  --aegis-interface: 188 62% 30%;
+  --aegis-interface-fill: 186 40% 94%;
+  --aegis-interface-text: 190 66% 22%;
+
+  /* --- Ordinal severity ramp (stages 3-7) ---------------------------------
+   * One warm hue family, monotonic lightness. Fills cells; never outlines.
+   * Always paired with its numeral, so hue is redundant encoding.          */
+  --aegis-scale-1: 40 60% 92%;       /* negligible / very low               */
+  --aegis-scale-2: 40 72% 80%;       /* moderate / low                      */
+  --aegis-scale-3: 36 78% 62%;       /* major / medium                      */
+  --aegis-scale-4: 24 72% 48%;       /* severe / high                       */
+  --aegis-scale-5: 6 62% 38%;        /* critical                            */
+  --aegis-scale-1-text: 30 40% 25%;
+  --aegis-scale-2-text: 30 45% 22%;
+  --aegis-scale-3-text: 28 50% 18%;
+  --aegis-scale-4-text: 40 33% 98%;
+  --aegis-scale-5-text: 40 33% 98%;
+
+  /* 4-step scales (CAL 1-4, impact rating) collapse by dropping scale-2.
+   * Defined once here so no stage improvises its own mapping.             */
+  --aegis-cal-1: var(--aegis-scale-1);
+  --aegis-cal-2: var(--aegis-scale-3);
+  --aegis-cal-3: var(--aegis-scale-4);
+  --aegis-cal-4: var(--aegis-scale-5);
+
+  /* --- Chart colours: sequential, not categorical -------------------------- */
+  --chart-1: var(--aegis-scale-1);
+  --chart-2: var(--aegis-scale-2);
+  --chart-3: var(--aegis-scale-3);
+  --chart-4: var(--aegis-scale-4);
+  --chart-5: var(--aegis-scale-5);
+
+  /* --- Geometry: drafting, not dashboard ---------------------------------- */
+  --radius: 0.25rem;
+  --aegis-hairline: 0.5px;
+  --aegis-rule: hsl(36 14% 84%);
+  --aegis-grid: hsl(36 16% 93%);
+
+  /* Depth comes from rules and whitespace, not elevation. */
+  --shadow-card: none;
+  --shadow-elevated: none;
+
+  /* --- Typography ---------------------------------------------------------- */
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+
+  /* --- Line styles encode ORIGIN (never colour) ---------------------------- */
+  --aegis-dash-derived: 5 3;
+  --aegis-dash-lowconf: 2 3;
+  --aegis-opacity-lowconf: 0.55;
+}
+
+.dark {
+  /* Warm-neutral inversion. Low-chroma washes, not glows on black. */
+  --background: 30 12% 9%;           /* #191B10-ish warm charcoal            */
+  --foreground: 40 25% 92%;
+  --card: 30 10% 13%;
+  --card-foreground: 40 25% 92%;
+  --popover: 30 12% 9%;
+  --popover-foreground: 40 25% 92%;
+
+  --muted: 30 8% 18%;
+  --muted-foreground: 36 10% 62%;
+  --border: 30 8% 24%;
+  --input: 30 8% 24%;
+  --ring: 40 25% 92%;
+
+  --primary: 40 25% 92%;             /* ink inverts to paper                 */
+  --primary-foreground: 30 12% 9%;
+  --secondary: 30 8% 18%;
+  --secondary-foreground: 40 25% 92%;
+  --accent: 30 8% 18%;
+  --accent-foreground: 40 25% 92%;
+
+  /* Roles: lift lightness ~14 pts, drop chroma slightly, so they read at the
+   * same signal strength on dark stock without blooming. */
+  --aegis-decide: 40 62% 58%;
+  --aegis-decide-fill: 38 30% 18%;
+  --aegis-decide-text: 40 62% 70%;
+
+  --destructive: 8 52% 56%;
+  --destructive-foreground: 40 25% 92%;
+  --aegis-conflict: 8 52% 56%;
+  --aegis-conflict-fill: 6 30% 18%;
+  --aegis-conflict-text: 8 55% 68%;
+
+  --aegis-interface: 188 46% 56%;
+  --aegis-interface-fill: 188 28% 16%;
+  --aegis-interface-text: 188 50% 68%;
+
+  --aegis-scale-1: 40 20% 26%;
+  --aegis-scale-2: 40 34% 38%;
+  --aegis-scale-3: 36 48% 50%;
+  --aegis-scale-4: 24 56% 56%;
+  --aegis-scale-5: 6 54% 54%;
+  --aegis-scale-1-text: 40 25% 92%;
+  --aegis-scale-2-text: 40 25% 92%;
+  --aegis-scale-3-text: 30 30% 12%;
+  --aegis-scale-4-text: 30 30% 12%;
+  --aegis-scale-5-text: 40 25% 92%;
+
+  --aegis-rule: hsl(30 8% 24%);
+  --aegis-grid: hsl(30 8% 14%);
+}
+
+/* --- Utility classes ------------------------------------------------------ */
+
+.aegis-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+}
+
+.aegis-doc {
+  font-family: var(--font-serif);
+  line-height: 1.6;
+}
+
+/* Identifiers, protocol names, enum values — always mono, always tabular. */
+.aegis-id {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  letter-spacing: 0.02em;
+}
+
+/* Section label in the drafting register. */
+.aegis-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Hairline rule replaces card elevation everywhere. */
+.aegis-ruled {
+  border: var(--aegis-hairline) solid var(--aegis-rule);
+  box-shadow: none;
+}
+
+/* Blocking state. Colour is never the sole carrier — the glyph is required. */
+.aegis-blocking {
+  border: 1.5px solid hsl(var(--aegis-decide));
+  background: hsl(var(--aegis-decide-fill));
+  color: hsl(var(--aegis-decide-text));
+}
+
+.aegis-interface-mark {
+  border: 1.5px solid hsl(var(--aegis-interface));
+  background: hsl(var(--aegis-interface-fill));
+  color: hsl(var(--aegis-interface-text));
+}
+
+.aegis-conflict-mark {
+  border: 1px solid hsl(var(--aegis-conflict));
+  color: hsl(var(--aegis-conflict-text));
+}
+
+/* Derived origin: dashed. Applies to nodes and edges alike. */
+.aegis-derived {
+  border-style: dashed;
+}
+
+.aegis-lowconf {
+  opacity: var(--aegis-opacity-lowconf);
+  border-style: dashed;
+}
+
+/* Kill the generated glow/pulse vocabulary wherever it survives. */
+.aegis-scope .animate-pulse,
+.aegis-scope .animate-ping {
+  animation: none;
+}

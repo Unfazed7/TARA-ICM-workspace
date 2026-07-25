@@ -321,7 +321,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
           {activeModule === 'cal-determination' && <CALDetermination />}
           {activeModule === 'feature-analysis' && <FeatureAnalysis />}
           {activeModule === 'assumption-scope' && <AssumptionScope />}
-          {activeModule === 'item-definition' && <ItemDefinition />}
+          {activeModule === 'item-definition' && <ItemDefinition assessmentId={projectId} />}
           {activeModule === 'tara' && (
             <div className="flex-1 flex flex-col overflow-hidden">
               <div className="px-4 pt-3 pb-2 border-b border-border shrink-0">

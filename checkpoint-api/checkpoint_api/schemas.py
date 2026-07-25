@@ -133,3 +133,116 @@ class UploadResponse(BaseModel):
     uploaded: bool
     filename: str | None = None
     size_bytes: int = 0
+
+
+# --- Stage 1 CP1: element-level boundary review ------------------------------
+
+BoundaryStatus = Literal["in_scope", "out_of_scope", "interface", "ambiguous"]
+BoundaryPhase = Literal["proposal", "final"]
+EscalationReason = Literal[
+    "low_extraction_confidence",
+    "unresolved_conflict",
+    "derived_element",
+    "boundary_genuinely_unclear",
+]
+BoundaryEditAction = Literal[
+    "status_change",
+    "rename",
+    "add_element",
+    "delete_element",
+    "add_link",
+    "delete_link",
+    "resolve_conflict",
+    "edit_rationale",
+]
+
+
+class BoundaryDecision(BaseModel):
+    element_id: str
+    status: BoundaryStatus
+    rationale: str = Field(min_length=5)
+    escalation_reason: EscalationReason | None = None
+    decided_by: Literal["agent", "analyst"] = "agent"
+
+
+class BoundaryOut(BaseModel):
+    boundary_id: str
+    assessment_id: str
+    model_ref: str
+    phase: BoundaryPhase
+    boundary_statement: str
+    decisions: list[BoundaryDecision]
+    merged_model: dict | None = None
+    conflicts: dict | None = None
+    coverage: dict | None = None
+    unresolved_count: int
+    created_at: datetime
+    updated_at: datetime
+    finalized_at: datetime | None = None
+
+
+class ElementScopeUpdate(BaseModel):
+    """Element-level scope reassignment. The core CP1 mutation."""
+
+    status: BoundaryStatus
+    rationale: str = Field(min_length=5)
+    actor: str = Field(min_length=1)
+
+
+class ElementAdd(BaseModel):
+    """Analyst adds an element the extraction missed."""
+
+    element_id: str | None = None
+    name: str = Field(min_length=1)
+    type: Literal["component", "function", "feature_group", "network_segment", "node"]
+    component_type: str | None = None
+    domain: str | None = None
+    status: BoundaryStatus = "in_scope"
+    rationale: str = Field(min_length=5)
+    actor: str = Field(min_length=1)
+
+
+class ElementDelete(BaseModel):
+    """Analyst removes an element the agent hallucinated."""
+
+    rationale: str = Field(min_length=5)
+    actor: str = Field(min_length=1)
+
+
+class ConflictResolve(BaseModel):
+    conflict_id: str
+    analyst_note: str = Field(min_length=5)
+    actor: str = Field(min_length=1)
+
+
+class BoundarySeed(BaseModel):
+    """Payload the pipeline runner posts after Call 1B produces a proposal."""
+
+    boundary_statement: str = Field(min_length=10)
+    decisions: list[BoundaryDecision]
+    merged_model: dict
+    conflicts: dict | None = None
+    coverage: dict | None = None
+
+
+class BoundaryEditOut(BaseModel):
+    edit_id: str
+    action: BoundaryEditAction
+    element_id: str
+    before: dict | None = None
+    after: dict | None = None
+    rationale: str | None = None
+    actor: str
+    timestamp: datetime
+
+
+class BoundaryFinalize(BaseModel):
+    actor: str = Field(min_length=1)
+
+
+class BoundaryFinalizeResponse(BaseModel):
+    boundary_id: str
+    phase: BoundaryPhase
+    finalized_at: datetime
+    decisions_count: int
+    edit_count: int
