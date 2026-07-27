@@ -93,28 +93,76 @@ function buildUserMessage(damageScenario) {
   ].join('\n');
 }
 
+function buildRepairUserMessage(damageScenario, reason) {
+  return [
+    buildUserMessage(damageScenario),
+    '',
+    `Previous response was invalid: ${reason}`,
+    'Retry now and return only via the submit_threat tool.',
+    `The threat_statement must include the exact asset title: ${damageScenario.asset_title}`,
+    'Do not return free text outside the tool call.',
+    'Use a valid STRIDE category and a concrete attack action that directly causes the damage scenario.'
+  ].join('\n');
+}
+
 function extractToolUse(response) {
   const content = response?.content || [];
   const toolUse = content.find((item) => item.type === 'tool_use' && item.name === TOOL_NAME);
   return toolUse?.input || null;
 }
 
-async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
+async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch, userMessage = buildUserMessage(damageScenario)) {
   return callLLM({
     model: MODEL,
     max_tokens: 1024,
     system: buildSystemPrompt(),
-    messages: [{ role: 'user', content: buildUserMessage(damageScenario) }],
+    messages: [{ role: 'user', content: userMessage }],
     tools: [buildThreatTool()],
     tool_choice: { type: 'tool', name: TOOL_NAME },
   }, fetchImpl);
 }
 
 async function generateThreatForDamageScenario(damageScenario, fetchImpl) {
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await callClaudeForDamageScenario(damageScenario, fetchImpl);
+  let userMessage = buildUserMessage(damageScenario);
+  let lastValidationError = null;
+  let sawFreeText = false;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await callClaudeForDamageScenario(damageScenario, fetchImpl, userMessage);
     const threat = extractToolUse(response);
-    if (threat) return threat;
+    if (!threat) {
+      sawFreeText = true;
+      userMessage = buildRepairUserMessage(damageScenario, `free text returned instead of ${TOOL_NAME} tool_use`);
+      continue;
+    }
+
+    const normalized = {
+      threat_id: 'TH_01',
+      damage_scenario_id: damageScenario.damage_id,
+      asset_id: damageScenario.asset_id,
+      asset_title: damageScenario.asset_title,
+      property: damageScenario.property,
+      stride_category: threat.stride_category,
+      threat_statement: threat.threat_statement,
+      derivation_note: threat.derivation_note,
+      owasp_reference: threat.owasp_reference ?? null,
+      created_timestamp: new Date().toISOString()
+    };
+
+    try {
+      validateThreats([normalized], [damageScenario]);
+      return threat;
+    } catch (error) {
+      lastValidationError = error;
+      userMessage = buildRepairUserMessage(damageScenario, error.message);
+    }
+  }
+
+  if (lastValidationError) {
+    throw lastValidationError;
+  }
+  if (sawFreeText) {
+    throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${damageScenario.damage_id}`);
   }
   throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${damageScenario.damage_id}`);
 }

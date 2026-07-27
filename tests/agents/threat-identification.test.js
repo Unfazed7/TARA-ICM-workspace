@@ -124,6 +124,39 @@ test('threat identification retries once on free text before accepting tool_use'
   assert.equal(threats.length, 1);
 });
 
+test('threat identification retries generic threat before accepting asset-specific repair', async () => {
+  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  let calls = 0;
+  const fakeFetch = async () => {
+    calls += 1;
+    return {
+      ok: true,
+      json: async () => ({
+        content: [{
+          type: 'tool_use',
+          name: 'submit_threat',
+          input: {
+            stride_category: 'elevation_of_privilege',
+            threat_statement: calls === 1
+              ? 'Authorization checks may be bypassed to invoke privileged diagnostic actions.'
+              : 'Diagnostic API Endpoint authorization checks may be bypassed to invoke privileged diagnostic actions.',
+            derivation_note: 'The damage scenario concerns authorization failure, which maps to elevation of privilege.',
+            owasp_reference: 'A01'
+          }
+        }]
+      })
+    };
+  };
+
+  const threats = await buildThreatsWithClaude(damage, { fetchImpl: fakeFetch });
+  restoreEnv('ANTHROPIC_API_KEY', previousKey);
+  assert.equal(calls, 2);
+  assert.equal(threats.length, 1);
+  assert.match(threats[0].threat_statement, /Diagnostic API Endpoint/);
+});
+
 test('threat identification Claude path fails without API key', async () => {
   const previousKey = process.env.ANTHROPIC_API_KEY;
   delete process.env.ANTHROPIC_API_KEY;
@@ -132,7 +165,7 @@ test('threat identification Claude path fails without API key', async () => {
       readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'))[0],
       async () => { throw new Error('not called'); }
     ),
-    /ANTHROPIC_API_KEY is required/
+    /LLM API key not set/
   );
   restoreEnv('ANTHROPIC_API_KEY', previousKey);
 });

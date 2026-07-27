@@ -28,6 +28,18 @@ test('CSV input normalizes asset register', () => {
   assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
 });
 
+test('CSV input accepts ME final asset headers and infers credential asset type', () => {
+  const assets = buildAssetsFromCsv(fs.readFileSync(inputFixture('ME_Final_Assets.csv'), 'utf8'), '2026-06-01T10:00:00Z');
+  validateAssets(assets);
+  assert.equal(assets.length, 5);
+  assert.equal(assets[0].asset_id, 'AS_01');
+  assert.equal(assets[0].asset_title, 'Access Token (JWT)');
+  assert.equal(assets[0].asset_type, 'auth_credential');
+  assert.equal(assets[0].ciaaan.non_repudiation, false);
+  const result = validateSchema(assets, readJson(schemaPath(1)));
+  assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
+});
+
 test('diagram mode uses tool_choice and normalizes tool_use result', async () => {
   const previousKey = process.env.ANTHROPIC_API_KEY;
   process.env.ANTHROPIC_API_KEY = 'test-key';

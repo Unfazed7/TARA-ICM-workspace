@@ -26,6 +26,9 @@ const BASE_URLS = {
   openrouter: 'https://openrouter.ai/api/v1',
 };
 
+const DEFAULT_RETRIES = 2;
+const RETRY_STATUSES = new Set([408, 409, 425, 429, 500, 502, 503, 504]);
+
 function getConfig() {
   const provider = (process.env.LLM_PROVIDER || 'anthropic').toLowerCase();
   const apiKey = process.env.LLM_API_KEY
@@ -33,6 +36,55 @@ function getConfig() {
   const model = process.env.LLM_MODEL || DEFAULT_MODELS[provider] || DEFAULT_MODELS.anthropic;
   const baseUrl = process.env.LLM_BASE_URL || BASE_URLS[provider] || BASE_URLS.openrouter;
   return { provider, apiKey, model, baseUrl };
+}
+
+function getRetryCount() {
+  const raw = process.env.LLM_RETRIES;
+  if (raw === undefined || raw === '') return DEFAULT_RETRIES;
+  const parsed = Number(raw);
+  if (!Number.isInteger(parsed) || parsed < 0) return DEFAULT_RETRIES;
+  return parsed;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isTransientFetchError(error) {
+  const message = String(error?.message || '').toLowerCase();
+  return [
+    'fetch failed',
+    'terminated',
+    'socket',
+    'econnreset',
+    'etimedout',
+    'network',
+    'connection'
+  ].some((needle) => message.includes(needle));
+}
+
+async function fetchWithRetry(url, options, fetchImpl) {
+  const retries = getRetryCount();
+  let lastError = null;
+
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      const response = await fetchImpl(url, options);
+      if (!RETRY_STATUSES.has(response.status) || attempt === retries) {
+        return response;
+      }
+      lastError = new Error(`retryable HTTP ${response.status}`);
+    } catch (error) {
+      lastError = error;
+      if (!isTransientFetchError(error) || attempt === retries) {
+        throw error;
+      }
+    }
+
+    await sleep(500 * (attempt + 1));
+  }
+
+  throw lastError;
 }
 
 // ── Format translators ────────────────────────────────────────────────────────
@@ -121,7 +173,7 @@ async function callLLM(params, fetchImpl = fetch) {
     if (params.tools) body.tools = params.tools;
     if (params.tool_choice) body.tool_choice = params.tool_choice;
 
-    const res = await fetchImpl(`${config.baseUrl}/messages`, {
+    const res = await fetchWithRetry(`${config.baseUrl}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -129,7 +181,7 @@ async function callLLM(params, fetchImpl = fetch) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify(body),
-    });
+    }, fetchImpl);
 
     if (!res.ok) {
       const text = await res.text().catch(() => '');
@@ -163,11 +215,11 @@ async function callLLM(params, fetchImpl = fetch) {
     headers['X-Title'] = 'TARA Aegis';
   }
 
-  const res = await fetchImpl(`${config.baseUrl}/chat/completions`, {
+  const res = await fetchWithRetry(`${config.baseUrl}/chat/completions`, {
     method: 'POST',
     headers,
     body: JSON.stringify(body),
-  });
+  }, fetchImpl);
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -178,4 +230,4 @@ async function callLLM(params, fetchImpl = fetch) {
   return openAIResponseToAnthropic(data);
 }
 
-module.exports = { callLLM, getConfig };
+module.exports = { callLLM, fetchWithRetry, getConfig, isTransientFetchError };

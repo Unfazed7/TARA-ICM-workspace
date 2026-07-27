@@ -69,11 +69,28 @@ function parseCsv(text) {
   const lines = text.trim().split(/\r?\n/).filter(Boolean);
   if (lines.length < 2) throw new Error('CSV contains no asset rows');
 
-  const headers = splitCsvLine(lines[0]).map((header) => header.trim().toLowerCase());
+  const headers = splitCsvLine(lines[0]).map(normalizeCsvHeader);
   return lines.slice(1).map((line) => {
     const values = splitCsvLine(line);
     return Object.fromEntries(headers.map((header, index) => [header, values[index] || '']));
   });
+}
+
+function normalizeCsvHeader(header) {
+  const normalized = String(header || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[-\s]+/g, '_');
+
+  const aliases = {
+    asset_name: 'asset_title',
+    name: 'asset_title',
+    description: 'asset_description',
+    asset_description: 'asset_description',
+    non_repudiation: 'non_repudiation'
+  };
+
+  return aliases[normalized] || normalized;
 }
 
 function parseBoolean(value) {
@@ -87,8 +104,20 @@ function formatAssetId(index) {
   return `AS_${String(index + 1).padStart(2, '0')}`;
 }
 
+function inferAssetType(row) {
+  const text = `${row.asset_title || ''} ${row.asset_description || ''}`.toLowerCase();
+  if (/(token|jwt|secret|credential|cookie|session|oauth|oidc|key)/.test(text)) return 'auth_credential';
+  if (/(api|endpoint)/.test(text)) return 'api_endpoint';
+  if (/(database|data store|datastore|log|repository)/.test(text)) return 'data_store';
+  if (/(cloud|service)/.test(text)) return 'cloud_service';
+  if (/(gateway|bus|channel|path|link|connection)/.test(text)) return 'communication_path';
+  if (/\becu\b/.test(text)) return 'ecu';
+  return 'function';
+}
+
 function normalizeCsvAsset(row, index, inputMode, timestamp = new Date().toISOString()) {
-  if (!ASSET_TYPES.includes(row.asset_type)) throw new Error(`Invalid asset_type: ${row.asset_type}`);
+  const assetType = String(row.asset_type || inferAssetType(row)).trim().toLowerCase();
+  if (!ASSET_TYPES.includes(assetType)) throw new Error(`Invalid asset_type: ${row.asset_type}`);
 
   const ciaaan = Object.fromEntries(CIAAAN_PROPERTIES.map((property) => [
     property,
@@ -102,7 +131,7 @@ function normalizeCsvAsset(row, index, inputMode, timestamp = new Date().toISOSt
   return {
     asset_id: formatAssetId(index),
     asset_title: row.asset_title,
-    asset_type: row.asset_type,
+    asset_type: assetType,
     asset_description: row.asset_description,
     ciaaan,
     input_mode: inputMode,
@@ -113,7 +142,6 @@ function normalizeCsvAsset(row, index, inputMode, timestamp = new Date().toISOSt
 function buildAssetsFromCsv(csvText, timestamp) {
   const requiredColumns = [
     'asset_title',
-    'asset_type',
     'asset_description',
     ...CIAAAN_PROPERTIES
   ];

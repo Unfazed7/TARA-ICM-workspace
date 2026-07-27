@@ -143,6 +143,26 @@ function buildUserMessage(asset, properties) {
   ].join('\n');
 }
 
+function buildRepairUserMessage(asset, properties, returnedScenarios, reason) {
+  const returnedProperties = Array.isArray(returnedScenarios)
+    ? returnedScenarios.map((scenario) => scenario.property).filter(Boolean)
+    : [];
+  const missingProperties = properties.filter((property) => !returnedProperties.includes(property));
+
+  return [
+    buildUserMessage(asset, properties),
+    '',
+    `Previous response was invalid: ${reason}`,
+    `Expected exactly ${properties.length} damage scenarios, one for each requested property.`,
+    `Returned properties: ${returnedProperties.length ? returnedProperties.join(', ') : 'none'}`,
+    `Missing properties: ${missingProperties.length ? missingProperties.join(', ') : 'unknown'}`,
+    'Retry now and return exactly one damage_scenario for every requested property.',
+    'Do not omit any property.',
+    'Do not use attacker, hacker, malicious actor, exploit, breach, steal, compromise by attacker, or threat actor language.',
+    'Phrase every damage scenario as a consequence: "If the [property] of [asset] is compromised, [business/safety/privacy/operational consequence] affecting [stakeholder]..."'
+  ].join('\n');
+}
+
 function extractToolUse(response) {
   const content = response?.content || [];
   const toolUse = content.find((item) => item.type === 'tool_use' && item.name === TOOL_NAME);
@@ -150,27 +170,57 @@ function extractToolUse(response) {
   return toolUse.input?.damage_scenarios || null;
 }
 
-async function callClaudeForAsset(asset, properties, fetchImpl = fetch) {
+async function callClaudeForAsset(asset, properties, fetchImpl = fetch, userMessage = buildUserMessage(asset, properties)) {
   return callLLM({
     model: MODEL,
     max_tokens: 2048,
     system: buildSystemPrompt(),
-    messages: [{ role: 'user', content: buildUserMessage(asset, properties) }],
+    messages: [{ role: 'user', content: userMessage }],
     tools: [buildDamageScenarioTool()],
     tool_choice: { type: 'tool', name: TOOL_NAME },
   }, fetchImpl);
 }
 
 async function generateDamageScenariosForAsset(asset, properties, fetchImpl) {
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await callClaudeForAsset(asset, properties, fetchImpl);
+  let userMessage = buildUserMessage(asset, properties);
+  let lastCount = null;
+  let lastValidationError = null;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await callClaudeForAsset(asset, properties, fetchImpl, userMessage);
     const scenarios = extractToolUse(response);
     if (Array.isArray(scenarios)) {
       if (scenarios.length !== properties.length) {
-        throw new Error(`Wrong scenario count returned for ${asset.asset_id}: expected ${properties.length}, got ${scenarios.length}`);
+        lastCount = scenarios.length;
+        userMessage = buildRepairUserMessage(asset, properties, scenarios, `wrong scenario count returned for ${asset.asset_id}`);
+        continue;
+      }
+
+      const normalized = scenarios.map((scenario, index) => ({
+        damage_id: formatId('DS', index),
+        asset_id: asset.asset_id,
+        asset_title: asset.asset_title,
+        property: scenario.property,
+        damage_scenario: scenario.damage_scenario,
+        stakeholder_affected: scenario.stakeholder_affected,
+        created_timestamp: new Date().toISOString()
+      }));
+
+      try {
+        validateDamageScenarios(normalized, [asset]);
+      } catch (error) {
+        lastValidationError = error;
+        userMessage = buildRepairUserMessage(asset, properties, scenarios, error.message);
+        continue;
       }
       return scenarios;
     }
+  }
+  if (lastValidationError) {
+    throw lastValidationError;
+  }
+  if (lastCount !== null) {
+    throw new Error(`Wrong scenario count returned for ${asset.asset_id}: expected ${properties.length}, got ${lastCount}`);
   }
   throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${asset.asset_id}`);
 }
@@ -230,7 +280,8 @@ async function main() {
   await run({
     assets: requireFileArg(args, 'assets'),
     assessmentId: args['assessment-id'],
-    out: requireFileArg(args, 'out')
+    out: requireFileArg(args, 'out'),
+    useDeterministic: args.deterministic === 'true'
   });
 }
 

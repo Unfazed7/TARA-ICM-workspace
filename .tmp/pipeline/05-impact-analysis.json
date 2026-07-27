@@ -1,0 +1,677 @@
+[
+  {
+    "impact_id": "IM_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "asset_id": "AS_01",
+    "property": "confidentiality",
+    "impact_narrative": "Access Token (JWT) can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience. The main impact is loss of confidentiality assurance for Access Token (JWT), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Major",
+      "financial": "Negligible",
+      "operational": "Moderate",
+      "rationale_safety": "Access Token (JWT) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "confidentiality compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Access Token (JWT).",
+      "rationale_operational": "confidentiality compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Access Token (JWT) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Access Token (JWT) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_02",
+    "threat_id": "TH_02",
+    "damage_scenario_id": "DS_02",
+    "asset_id": "AS_01",
+    "property": "integrity",
+    "impact_narrative": "Access Token (JWT) can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state. The main impact is loss of integrity assurance for Access Token (JWT), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Access Token (JWT) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "integrity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Access Token (JWT).",
+      "rationale_operational": "integrity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Access Token (JWT) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Access Token (JWT) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_03",
+    "threat_id": "TH_03",
+    "damage_scenario_id": "DS_03",
+    "asset_id": "AS_01",
+    "property": "availability",
+    "impact_narrative": "Access Token (JWT) can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows. The main impact is loss of availability assurance for Access Token (JWT), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Access Token (JWT) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "availability compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Access Token (JWT).",
+      "rationale_operational": "availability compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Major",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Access Token (JWT) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Access Token (JWT) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_04",
+    "threat_id": "TH_04",
+    "damage_scenario_id": "DS_04",
+    "asset_id": "AS_01",
+    "property": "authenticity",
+    "impact_narrative": "Access Token (JWT) can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine. The main impact is loss of authenticity assurance for Access Token (JWT), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Access Token (JWT) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authenticity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Access Token (JWT).",
+      "rationale_operational": "authenticity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Moderate",
+      "rationale_legal": "Credential misuse involving Access Token (JWT) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Access Token (JWT) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_05",
+    "threat_id": "TH_05",
+    "damage_scenario_id": "DS_05",
+    "asset_id": "AS_01",
+    "property": "authorization",
+    "impact_narrative": "Access Token (JWT) can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary. The main impact is loss of authorization assurance for Access Token (JWT), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Access Token (JWT) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authorization compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Access Token (JWT).",
+      "rationale_operational": "authorization compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Access Token (JWT) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Access Token (JWT) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_06",
+    "threat_id": "TH_06",
+    "damage_scenario_id": "DS_06",
+    "asset_id": "AS_02",
+    "property": "confidentiality",
+    "impact_narrative": "Refresh Token can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience. The main impact is loss of confidentiality assurance for Refresh Token, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Severe",
+      "financial": "Negligible",
+      "operational": "Moderate",
+      "rationale_safety": "Refresh Token is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "confidentiality compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Refresh Token.",
+      "rationale_operational": "confidentiality compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Moderate",
+      "business": "Severe",
+      "rationale_legal": "Credential misuse involving Refresh Token may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Refresh Token controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_07",
+    "threat_id": "TH_07",
+    "damage_scenario_id": "DS_07",
+    "asset_id": "AS_02",
+    "property": "integrity",
+    "impact_narrative": "Refresh Token can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state. The main impact is loss of integrity assurance for Refresh Token, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Refresh Token is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "integrity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Refresh Token.",
+      "rationale_operational": "integrity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Refresh Token may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Refresh Token controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_08",
+    "threat_id": "TH_08",
+    "damage_scenario_id": "DS_08",
+    "asset_id": "AS_02",
+    "property": "availability",
+    "impact_narrative": "Refresh Token can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows. The main impact is loss of availability assurance for Refresh Token, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Refresh Token is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "availability compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Refresh Token.",
+      "rationale_operational": "availability compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Major",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Refresh Token may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Refresh Token controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_09",
+    "threat_id": "TH_09",
+    "damage_scenario_id": "DS_09",
+    "asset_id": "AS_02",
+    "property": "authenticity",
+    "impact_narrative": "Refresh Token can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine. The main impact is loss of authenticity assurance for Refresh Token, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Refresh Token is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authenticity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Refresh Token.",
+      "rationale_operational": "authenticity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Moderate",
+      "rationale_legal": "Credential misuse involving Refresh Token may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Refresh Token controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_10",
+    "threat_id": "TH_10",
+    "damage_scenario_id": "DS_10",
+    "asset_id": "AS_02",
+    "property": "authorization",
+    "impact_narrative": "Refresh Token can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary. The main impact is loss of authorization assurance for Refresh Token, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Refresh Token is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authorization compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Refresh Token.",
+      "rationale_operational": "authorization compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Refresh Token may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Refresh Token controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_11",
+    "threat_id": "TH_11",
+    "damage_scenario_id": "DS_11",
+    "asset_id": "AS_03",
+    "property": "confidentiality",
+    "impact_narrative": "ID Token (JWT claims) can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience. The main impact is loss of confidentiality assurance for ID Token (JWT claims), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Major",
+      "financial": "Negligible",
+      "operational": "Moderate",
+      "rationale_safety": "ID Token (JWT claims) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "confidentiality compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for ID Token (JWT claims).",
+      "rationale_operational": "confidentiality compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving ID Token (JWT claims) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when ID Token (JWT claims) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_12",
+    "threat_id": "TH_12",
+    "damage_scenario_id": "DS_12",
+    "asset_id": "AS_03",
+    "property": "integrity",
+    "impact_narrative": "ID Token (JWT claims) can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state. The main impact is loss of integrity assurance for ID Token (JWT claims), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "ID Token (JWT claims) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "integrity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for ID Token (JWT claims).",
+      "rationale_operational": "integrity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving ID Token (JWT claims) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when ID Token (JWT claims) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_13",
+    "threat_id": "TH_13",
+    "damage_scenario_id": "DS_13",
+    "asset_id": "AS_03",
+    "property": "availability",
+    "impact_narrative": "ID Token (JWT claims) can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows. The main impact is loss of availability assurance for ID Token (JWT claims), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "ID Token (JWT claims) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "availability compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for ID Token (JWT claims).",
+      "rationale_operational": "availability compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Major",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving ID Token (JWT claims) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when ID Token (JWT claims) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_14",
+    "threat_id": "TH_14",
+    "damage_scenario_id": "DS_14",
+    "asset_id": "AS_03",
+    "property": "authenticity",
+    "impact_narrative": "ID Token (JWT claims) can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine. The main impact is loss of authenticity assurance for ID Token (JWT claims), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "ID Token (JWT claims) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authenticity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for ID Token (JWT claims).",
+      "rationale_operational": "authenticity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Moderate",
+      "rationale_legal": "Credential misuse involving ID Token (JWT claims) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when ID Token (JWT claims) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_15",
+    "threat_id": "TH_15",
+    "damage_scenario_id": "DS_15",
+    "asset_id": "AS_03",
+    "property": "authorization",
+    "impact_narrative": "ID Token (JWT claims) can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary. The main impact is loss of authorization assurance for ID Token (JWT claims), affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "ID Token (JWT claims) is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authorization compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for ID Token (JWT claims).",
+      "rationale_operational": "authorization compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving ID Token (JWT claims) may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when ID Token (JWT claims) controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_16",
+    "threat_id": "TH_16",
+    "damage_scenario_id": "DS_16",
+    "asset_id": "AS_04",
+    "property": "confidentiality",
+    "impact_narrative": "Django Session Cookie / Session State can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience. The main impact is loss of confidentiality assurance for Django Session Cookie / Session State, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Major",
+      "financial": "Negligible",
+      "operational": "Moderate",
+      "rationale_safety": "Django Session Cookie / Session State is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "confidentiality compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Django Session Cookie / Session State.",
+      "rationale_operational": "confidentiality compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Django Session Cookie / Session State may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Django Session Cookie / Session State controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_17",
+    "threat_id": "TH_17",
+    "damage_scenario_id": "DS_17",
+    "asset_id": "AS_04",
+    "property": "integrity",
+    "impact_narrative": "Django Session Cookie / Session State can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state. The main impact is loss of integrity assurance for Django Session Cookie / Session State, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Django Session Cookie / Session State is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "integrity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Django Session Cookie / Session State.",
+      "rationale_operational": "integrity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Django Session Cookie / Session State may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Django Session Cookie / Session State controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_18",
+    "threat_id": "TH_18",
+    "damage_scenario_id": "DS_18",
+    "asset_id": "AS_04",
+    "property": "availability",
+    "impact_narrative": "Django Session Cookie / Session State can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows. The main impact is loss of availability assurance for Django Session Cookie / Session State, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Django Session Cookie / Session State is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "availability compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Django Session Cookie / Session State.",
+      "rationale_operational": "availability compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Major",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Django Session Cookie / Session State may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Django Session Cookie / Session State controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_19",
+    "threat_id": "TH_19",
+    "damage_scenario_id": "DS_19",
+    "asset_id": "AS_04",
+    "property": "authenticity",
+    "impact_narrative": "Django Session Cookie / Session State can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine. The main impact is loss of authenticity assurance for Django Session Cookie / Session State, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Django Session Cookie / Session State is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authenticity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Django Session Cookie / Session State.",
+      "rationale_operational": "authenticity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Moderate",
+      "rationale_legal": "Credential misuse involving Django Session Cookie / Session State may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Django Session Cookie / Session State controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_20",
+    "threat_id": "TH_20",
+    "damage_scenario_id": "DS_20",
+    "asset_id": "AS_04",
+    "property": "authorization",
+    "impact_narrative": "Django Session Cookie / Session State can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary. The main impact is loss of authorization assurance for Django Session Cookie / Session State, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "Django Session Cookie / Session State is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authorization compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for Django Session Cookie / Session State.",
+      "rationale_operational": "authorization compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving Django Session Cookie / Session State may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when Django Session Cookie / Session State controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_21",
+    "threat_id": "TH_21",
+    "damage_scenario_id": "DS_21",
+    "asset_id": "AS_05",
+    "property": "confidentiality",
+    "impact_narrative": "OAuth Client Secret / OIDC Config can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience. The main impact is loss of confidentiality assurance for OAuth Client Secret / OIDC Config, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Severe",
+      "financial": "Negligible",
+      "operational": "Moderate",
+      "rationale_safety": "OAuth Client Secret / OIDC Config is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "confidentiality compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for OAuth Client Secret / OIDC Config.",
+      "rationale_operational": "confidentiality compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Moderate",
+      "business": "Severe",
+      "rationale_legal": "Credential misuse involving OAuth Client Secret / OIDC Config may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when OAuth Client Secret / OIDC Config controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_22",
+    "threat_id": "TH_22",
+    "damage_scenario_id": "DS_22",
+    "asset_id": "AS_05",
+    "property": "integrity",
+    "impact_narrative": "OAuth Client Secret / OIDC Config can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state. The main impact is loss of integrity assurance for OAuth Client Secret / OIDC Config, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "OAuth Client Secret / OIDC Config is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "integrity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for OAuth Client Secret / OIDC Config.",
+      "rationale_operational": "integrity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving OAuth Client Secret / OIDC Config may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when OAuth Client Secret / OIDC Config controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_23",
+    "threat_id": "TH_23",
+    "damage_scenario_id": "DS_23",
+    "asset_id": "AS_05",
+    "property": "availability",
+    "impact_narrative": "OAuth Client Secret / OIDC Config can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows. The main impact is loss of availability assurance for OAuth Client Secret / OIDC Config, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "OAuth Client Secret / OIDC Config is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "availability compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for OAuth Client Secret / OIDC Config.",
+      "rationale_operational": "availability compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Major",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving OAuth Client Secret / OIDC Config may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when OAuth Client Secret / OIDC Config controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_24",
+    "threat_id": "TH_24",
+    "damage_scenario_id": "DS_24",
+    "asset_id": "AS_05",
+    "property": "authenticity",
+    "impact_narrative": "OAuth Client Secret / OIDC Config can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine. The main impact is loss of authenticity assurance for OAuth Client Secret / OIDC Config, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "OAuth Client Secret / OIDC Config is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authenticity compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for OAuth Client Secret / OIDC Config.",
+      "rationale_operational": "authenticity compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Moderate",
+      "rationale_legal": "Credential misuse involving OAuth Client Secret / OIDC Config may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when OAuth Client Secret / OIDC Config controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "impact_id": "IM_25",
+    "threat_id": "TH_25",
+    "damage_scenario_id": "DS_25",
+    "asset_id": "AS_05",
+    "property": "authorization",
+    "impact_narrative": "OAuth Client Secret / OIDC Config can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary. The main impact is loss of authorization assurance for OAuth Client Secret / OIDC Config, affecting diagnostic platform trust and recovery workload.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "OAuth Client Secret / OIDC Config is a web credential asset and does not directly command vehicle motion in this assessment scope.",
+      "rationale_privacy": "authorization compromise can expose or misuse identity/session data associated with diagnostic users.",
+      "rationale_financial": "Direct tool-user financial harm is not the primary consequence for OAuth Client Secret / OIDC Config.",
+      "rationale_operational": "authorization compromise can disrupt or misdirect diagnostic platform workflows."
+    },
+    "other_stakeholders": {
+      "legal": "Major",
+      "financial": "Moderate",
+      "business": "Major",
+      "rationale_legal": "Credential misuse involving OAuth Client Secret / OIDC Config may trigger audit, contractual, or regulatory response obligations.",
+      "rationale_financial": "Containment, token revocation, investigation, and service recovery create organizational cost.",
+      "rationale_business": "Trust in the diagnostic platform is affected when OAuth Client Secret / OIDC Config controls fail."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  }
+]

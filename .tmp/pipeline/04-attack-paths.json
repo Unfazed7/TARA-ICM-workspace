@@ -1,0 +1,727 @@
+[
+  {
+    "attack_id": "AT_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "asset_id": "AS_01",
+    "attack_description": "Abuse Access Token (JWT) via token disclosure through exposed storage, logs, or transport metadata to realize confidentiality compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Access Token (JWT) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Access Token (JWT).",
+      "step_3_exploit_effect": "The platform processes Access Token (JWT) in a way that weakens confidentiality protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Access Token (JWT) for this specific abuse path.",
+      "step_5_threat_realization": "Access Token (JWT) can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Access Token (JWT) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Access Token (JWT).",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_02",
+    "threat_id": "TH_02",
+    "damage_scenario_id": "DS_02",
+    "asset_id": "AS_01",
+    "attack_description": "Abuse Access Token (JWT) via token or session state manipulation before validation to realize integrity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Access Token (JWT) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token or session state manipulation before validation in the handling of Access Token (JWT).",
+      "step_3_exploit_effect": "The platform processes Access Token (JWT) in a way that weakens integrity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Access Token (JWT) for this specific abuse path.",
+      "step_5_threat_realization": "Access Token (JWT) can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Access Token (JWT) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Access Token (JWT).",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_03",
+    "threat_id": "TH_03",
+    "damage_scenario_id": "DS_03",
+    "asset_id": "AS_01",
+    "attack_description": "Abuse Access Token (JWT) via token endpoint exhaustion or session-state invalidation loops to realize availability compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Access Token (JWT) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Access Token (JWT).",
+      "step_3_exploit_effect": "The platform processes Access Token (JWT) in a way that weakens availability protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Access Token (JWT) for this specific abuse path.",
+      "step_5_threat_realization": "Access Token (JWT) can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "N",
+      "user_interaction": "N"
+    },
+    "afr_value": 5,
+    "afr_label": "very high",
+    "justifications": {
+      "attack_vector": "Access Token (JWT) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "No prior privilege is needed to trigger the exposed flow.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_04",
+    "threat_id": "TH_04",
+    "damage_scenario_id": "DS_04",
+    "asset_id": "AS_01",
+    "attack_description": "Abuse Access Token (JWT) via replay or impersonation using weakly bound identity material to realize authenticity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Access Token (JWT) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit replay or impersonation using weakly bound identity material in the handling of Access Token (JWT).",
+      "step_3_exploit_effect": "The platform processes Access Token (JWT) in a way that weakens authenticity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Access Token (JWT) for this specific abuse path.",
+      "step_5_threat_realization": "Access Token (JWT) can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "H",
+      "privileges_required": "L",
+      "user_interaction": "R"
+    },
+    "afr_value": 2,
+    "afr_label": "low",
+    "justifications": {
+      "attack_vector": "Access Token (JWT) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path depends on timing, claim-binding, or replay conditions that add complexity.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Access Token (JWT).",
+      "user_interaction": "The path requires a user session, browser action, or consent-like interaction."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_05",
+    "threat_id": "TH_05",
+    "damage_scenario_id": "DS_05",
+    "asset_id": "AS_01",
+    "attack_description": "Abuse Access Token (JWT) via scope, role, or claim confusion during authorization enforcement to realize authorization compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Access Token (JWT) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit scope, role, or claim confusion during authorization enforcement in the handling of Access Token (JWT).",
+      "step_3_exploit_effect": "The platform processes Access Token (JWT) in a way that weakens authorization protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Access Token (JWT) for this specific abuse path.",
+      "step_5_threat_realization": "Access Token (JWT) can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Access Token (JWT) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Access Token (JWT).",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_06",
+    "threat_id": "TH_06",
+    "damage_scenario_id": "DS_06",
+    "asset_id": "AS_02",
+    "attack_description": "Abuse Refresh Token via token disclosure through exposed storage, logs, or transport metadata to realize confidentiality compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Refresh Token through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Refresh Token.",
+      "step_3_exploit_effect": "The platform processes Refresh Token in a way that weakens confidentiality protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Refresh Token for this specific abuse path.",
+      "step_5_threat_realization": "Refresh Token can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Refresh Token is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Refresh Token.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_07",
+    "threat_id": "TH_07",
+    "damage_scenario_id": "DS_07",
+    "asset_id": "AS_02",
+    "attack_description": "Abuse Refresh Token via token or session state manipulation before validation to realize integrity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Refresh Token through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token or session state manipulation before validation in the handling of Refresh Token.",
+      "step_3_exploit_effect": "The platform processes Refresh Token in a way that weakens integrity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Refresh Token for this specific abuse path.",
+      "step_5_threat_realization": "Refresh Token can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Refresh Token is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Refresh Token.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_08",
+    "threat_id": "TH_08",
+    "damage_scenario_id": "DS_08",
+    "asset_id": "AS_02",
+    "attack_description": "Abuse Refresh Token via token endpoint exhaustion or session-state invalidation loops to realize availability compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Refresh Token through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Refresh Token.",
+      "step_3_exploit_effect": "The platform processes Refresh Token in a way that weakens availability protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Refresh Token for this specific abuse path.",
+      "step_5_threat_realization": "Refresh Token can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "N",
+      "user_interaction": "N"
+    },
+    "afr_value": 5,
+    "afr_label": "very high",
+    "justifications": {
+      "attack_vector": "Refresh Token is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "No prior privilege is needed to trigger the exposed flow.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_09",
+    "threat_id": "TH_09",
+    "damage_scenario_id": "DS_09",
+    "asset_id": "AS_02",
+    "attack_description": "Abuse Refresh Token via replay or impersonation using weakly bound identity material to realize authenticity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Refresh Token through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit replay or impersonation using weakly bound identity material in the handling of Refresh Token.",
+      "step_3_exploit_effect": "The platform processes Refresh Token in a way that weakens authenticity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Refresh Token for this specific abuse path.",
+      "step_5_threat_realization": "Refresh Token can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "H",
+      "privileges_required": "L",
+      "user_interaction": "R"
+    },
+    "afr_value": 2,
+    "afr_label": "low",
+    "justifications": {
+      "attack_vector": "Refresh Token is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path depends on timing, claim-binding, or replay conditions that add complexity.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Refresh Token.",
+      "user_interaction": "The path requires a user session, browser action, or consent-like interaction."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_10",
+    "threat_id": "TH_10",
+    "damage_scenario_id": "DS_10",
+    "asset_id": "AS_02",
+    "attack_description": "Abuse Refresh Token via scope, role, or claim confusion during authorization enforcement to realize authorization compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Refresh Token through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit scope, role, or claim confusion during authorization enforcement in the handling of Refresh Token.",
+      "step_3_exploit_effect": "The platform processes Refresh Token in a way that weakens authorization protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Refresh Token for this specific abuse path.",
+      "step_5_threat_realization": "Refresh Token can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Refresh Token is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Refresh Token.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_11",
+    "threat_id": "TH_11",
+    "damage_scenario_id": "DS_11",
+    "asset_id": "AS_03",
+    "attack_description": "Abuse ID Token (JWT claims) via token disclosure through exposed storage, logs, or transport metadata to realize confidentiality compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes ID Token (JWT claims) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of ID Token (JWT claims).",
+      "step_3_exploit_effect": "The platform processes ID Token (JWT claims) in a way that weakens confidentiality protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor ID Token (JWT claims) for this specific abuse path.",
+      "step_5_threat_realization": "ID Token (JWT claims) can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "ID Token (JWT claims) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing ID Token (JWT claims).",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_12",
+    "threat_id": "TH_12",
+    "damage_scenario_id": "DS_12",
+    "asset_id": "AS_03",
+    "attack_description": "Abuse ID Token (JWT claims) via token or session state manipulation before validation to realize integrity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes ID Token (JWT claims) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token or session state manipulation before validation in the handling of ID Token (JWT claims).",
+      "step_3_exploit_effect": "The platform processes ID Token (JWT claims) in a way that weakens integrity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor ID Token (JWT claims) for this specific abuse path.",
+      "step_5_threat_realization": "ID Token (JWT claims) can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "ID Token (JWT claims) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing ID Token (JWT claims).",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_13",
+    "threat_id": "TH_13",
+    "damage_scenario_id": "DS_13",
+    "asset_id": "AS_03",
+    "attack_description": "Abuse ID Token (JWT claims) via token endpoint exhaustion or session-state invalidation loops to realize availability compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes ID Token (JWT claims) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token endpoint exhaustion or session-state invalidation loops in the handling of ID Token (JWT claims).",
+      "step_3_exploit_effect": "The platform processes ID Token (JWT claims) in a way that weakens availability protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor ID Token (JWT claims) for this specific abuse path.",
+      "step_5_threat_realization": "ID Token (JWT claims) can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "N",
+      "user_interaction": "N"
+    },
+    "afr_value": 5,
+    "afr_label": "very high",
+    "justifications": {
+      "attack_vector": "ID Token (JWT claims) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "No prior privilege is needed to trigger the exposed flow.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_14",
+    "threat_id": "TH_14",
+    "damage_scenario_id": "DS_14",
+    "asset_id": "AS_03",
+    "attack_description": "Abuse ID Token (JWT claims) via replay or impersonation using weakly bound identity material to realize authenticity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes ID Token (JWT claims) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit replay or impersonation using weakly bound identity material in the handling of ID Token (JWT claims).",
+      "step_3_exploit_effect": "The platform processes ID Token (JWT claims) in a way that weakens authenticity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor ID Token (JWT claims) for this specific abuse path.",
+      "step_5_threat_realization": "ID Token (JWT claims) can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "H",
+      "privileges_required": "L",
+      "user_interaction": "R"
+    },
+    "afr_value": 2,
+    "afr_label": "low",
+    "justifications": {
+      "attack_vector": "ID Token (JWT claims) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path depends on timing, claim-binding, or replay conditions that add complexity.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing ID Token (JWT claims).",
+      "user_interaction": "The path requires a user session, browser action, or consent-like interaction."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_15",
+    "threat_id": "TH_15",
+    "damage_scenario_id": "DS_15",
+    "asset_id": "AS_03",
+    "attack_description": "Abuse ID Token (JWT claims) via scope, role, or claim confusion during authorization enforcement to realize authorization compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes ID Token (JWT claims) through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit scope, role, or claim confusion during authorization enforcement in the handling of ID Token (JWT claims).",
+      "step_3_exploit_effect": "The platform processes ID Token (JWT claims) in a way that weakens authorization protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor ID Token (JWT claims) for this specific abuse path.",
+      "step_5_threat_realization": "ID Token (JWT claims) can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "ID Token (JWT claims) is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing ID Token (JWT claims).",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_16",
+    "threat_id": "TH_16",
+    "damage_scenario_id": "DS_16",
+    "asset_id": "AS_04",
+    "attack_description": "Abuse Django Session Cookie / Session State via token disclosure through exposed storage, logs, or transport metadata to realize confidentiality compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Django Session Cookie / Session State through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Django Session Cookie / Session State.",
+      "step_3_exploit_effect": "The platform processes Django Session Cookie / Session State in a way that weakens confidentiality protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Django Session Cookie / Session State for this specific abuse path.",
+      "step_5_threat_realization": "Django Session Cookie / Session State can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "R"
+    },
+    "afr_value": 3,
+    "afr_label": "medium",
+    "justifications": {
+      "attack_vector": "Django Session Cookie / Session State is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Django Session Cookie / Session State.",
+      "user_interaction": "The path requires a user session, browser action, or consent-like interaction."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_17",
+    "threat_id": "TH_17",
+    "damage_scenario_id": "DS_17",
+    "asset_id": "AS_04",
+    "attack_description": "Abuse Django Session Cookie / Session State via token or session state manipulation before validation to realize integrity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Django Session Cookie / Session State through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token or session state manipulation before validation in the handling of Django Session Cookie / Session State.",
+      "step_3_exploit_effect": "The platform processes Django Session Cookie / Session State in a way that weakens integrity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Django Session Cookie / Session State for this specific abuse path.",
+      "step_5_threat_realization": "Django Session Cookie / Session State can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "R"
+    },
+    "afr_value": 3,
+    "afr_label": "medium",
+    "justifications": {
+      "attack_vector": "Django Session Cookie / Session State is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Django Session Cookie / Session State.",
+      "user_interaction": "The path requires a user session, browser action, or consent-like interaction."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_18",
+    "threat_id": "TH_18",
+    "damage_scenario_id": "DS_18",
+    "asset_id": "AS_04",
+    "attack_description": "Abuse Django Session Cookie / Session State via token endpoint exhaustion or session-state invalidation loops to realize availability compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Django Session Cookie / Session State through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Django Session Cookie / Session State.",
+      "step_3_exploit_effect": "The platform processes Django Session Cookie / Session State in a way that weakens availability protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Django Session Cookie / Session State for this specific abuse path.",
+      "step_5_threat_realization": "Django Session Cookie / Session State can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "N",
+      "user_interaction": "N"
+    },
+    "afr_value": 5,
+    "afr_label": "very high",
+    "justifications": {
+      "attack_vector": "Django Session Cookie / Session State is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "No prior privilege is needed to trigger the exposed flow.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_19",
+    "threat_id": "TH_19",
+    "damage_scenario_id": "DS_19",
+    "asset_id": "AS_04",
+    "attack_description": "Abuse Django Session Cookie / Session State via replay or impersonation using weakly bound identity material to realize authenticity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Django Session Cookie / Session State through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit replay or impersonation using weakly bound identity material in the handling of Django Session Cookie / Session State.",
+      "step_3_exploit_effect": "The platform processes Django Session Cookie / Session State in a way that weakens authenticity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Django Session Cookie / Session State for this specific abuse path.",
+      "step_5_threat_realization": "Django Session Cookie / Session State can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "R"
+    },
+    "afr_value": 3,
+    "afr_label": "medium",
+    "justifications": {
+      "attack_vector": "Django Session Cookie / Session State is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Django Session Cookie / Session State.",
+      "user_interaction": "The path requires a user session, browser action, or consent-like interaction."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_20",
+    "threat_id": "TH_20",
+    "damage_scenario_id": "DS_20",
+    "asset_id": "AS_04",
+    "attack_description": "Abuse Django Session Cookie / Session State via scope, role, or claim confusion during authorization enforcement to realize authorization compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes Django Session Cookie / Session State through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit scope, role, or claim confusion during authorization enforcement in the handling of Django Session Cookie / Session State.",
+      "step_3_exploit_effect": "The platform processes Django Session Cookie / Session State in a way that weakens authorization protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor Django Session Cookie / Session State for this specific abuse path.",
+      "step_5_threat_realization": "Django Session Cookie / Session State can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "R"
+    },
+    "afr_value": 3,
+    "afr_label": "medium",
+    "justifications": {
+      "attack_vector": "Django Session Cookie / Session State is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing Django Session Cookie / Session State.",
+      "user_interaction": "The path requires a user session, browser action, or consent-like interaction."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_21",
+    "threat_id": "TH_21",
+    "damage_scenario_id": "DS_21",
+    "asset_id": "AS_05",
+    "attack_description": "Abuse OAuth Client Secret / OIDC Config via token disclosure through exposed storage, logs, or transport metadata to realize confidentiality compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes OAuth Client Secret / OIDC Config through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of OAuth Client Secret / OIDC Config.",
+      "step_3_exploit_effect": "The platform processes OAuth Client Secret / OIDC Config in a way that weakens confidentiality protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor OAuth Client Secret / OIDC Config for this specific abuse path.",
+      "step_5_threat_realization": "OAuth Client Secret / OIDC Config can be abused through token disclosure through exposed storage, logs, or transport metadata, causing sensitive token material is exposed beyond its intended audience."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "OAuth Client Secret / OIDC Config is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing OAuth Client Secret / OIDC Config.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_22",
+    "threat_id": "TH_22",
+    "damage_scenario_id": "DS_22",
+    "asset_id": "AS_05",
+    "attack_description": "Abuse OAuth Client Secret / OIDC Config via token or session state manipulation before validation to realize integrity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes OAuth Client Secret / OIDC Config through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token or session state manipulation before validation in the handling of OAuth Client Secret / OIDC Config.",
+      "step_3_exploit_effect": "The platform processes OAuth Client Secret / OIDC Config in a way that weakens integrity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor OAuth Client Secret / OIDC Config for this specific abuse path.",
+      "step_5_threat_realization": "OAuth Client Secret / OIDC Config can be abused through token or session state manipulation before validation, causing the platform trusts altered identity or session state."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "OAuth Client Secret / OIDC Config is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing OAuth Client Secret / OIDC Config.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_23",
+    "threat_id": "TH_23",
+    "damage_scenario_id": "DS_23",
+    "asset_id": "AS_05",
+    "attack_description": "Abuse OAuth Client Secret / OIDC Config via token endpoint exhaustion or session-state invalidation loops to realize availability compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes OAuth Client Secret / OIDC Config through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit token endpoint exhaustion or session-state invalidation loops in the handling of OAuth Client Secret / OIDC Config.",
+      "step_3_exploit_effect": "The platform processes OAuth Client Secret / OIDC Config in a way that weakens availability protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor OAuth Client Secret / OIDC Config for this specific abuse path.",
+      "step_5_threat_realization": "OAuth Client Secret / OIDC Config can be abused through token endpoint exhaustion or session-state invalidation loops, causing legitimate diagnostic users cannot complete required workflows."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "N",
+      "user_interaction": "N"
+    },
+    "afr_value": 5,
+    "afr_label": "very high",
+    "justifications": {
+      "attack_vector": "OAuth Client Secret / OIDC Config is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "No prior privilege is needed to trigger the exposed flow.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_24",
+    "threat_id": "TH_24",
+    "damage_scenario_id": "DS_24",
+    "asset_id": "AS_05",
+    "attack_description": "Abuse OAuth Client Secret / OIDC Config via replay or impersonation using weakly bound identity material to realize authenticity compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes OAuth Client Secret / OIDC Config through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit replay or impersonation using weakly bound identity material in the handling of OAuth Client Secret / OIDC Config.",
+      "step_3_exploit_effect": "The platform processes OAuth Client Secret / OIDC Config in a way that weakens authenticity protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor OAuth Client Secret / OIDC Config for this specific abuse path.",
+      "step_5_threat_realization": "OAuth Client Secret / OIDC Config can be abused through replay or impersonation using weakly bound identity material, causing the platform accepts an actor or client identity that is not genuine."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "OAuth Client Secret / OIDC Config is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing OAuth Client Secret / OIDC Config.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "attack_id": "AT_25",
+    "threat_id": "TH_25",
+    "damage_scenario_id": "DS_25",
+    "asset_id": "AS_05",
+    "attack_description": "Abuse OAuth Client Secret / OIDC Config via scope, role, or claim confusion during authorization enforcement to realize authorization compromise.",
+    "attack_path": {
+      "step_1_initial_precondition": "The web application exposes OAuth Client Secret / OIDC Config through normal authentication, session, or API processing.",
+      "step_2_abuse_technique": "Exploit scope, role, or claim confusion during authorization enforcement in the handling of OAuth Client Secret / OIDC Config.",
+      "step_3_exploit_effect": "The platform processes OAuth Client Secret / OIDC Config in a way that weakens authorization protection.",
+      "step_4_control_gap": "Controls do not sufficiently bind, rotate, validate, or monitor OAuth Client Secret / OIDC Config for this specific abuse path.",
+      "step_5_threat_realization": "OAuth Client Secret / OIDC Config can be abused through scope, role, or claim confusion during authorization enforcement, causing privileged diagnostic capabilities are invoked outside the permitted boundary."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "OAuth Client Secret / OIDC Config is reachable through web authentication or API flows.",
+      "attack_complexity": "The abuse path follows normal token/session handling once preconditions are met.",
+      "privileges_required": "A low-privilege or previously authenticated foothold is required before abusing OAuth Client Secret / OIDC Config.",
+      "user_interaction": "The mechanism can execute without a separate user action after access to the flow."
+    },
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  }
+]

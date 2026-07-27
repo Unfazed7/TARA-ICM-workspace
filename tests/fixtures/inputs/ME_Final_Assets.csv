@@ -1,0 +1,6 @@
+Asset ID,Asset Name,Description,Confidentiality,Integrity,Availability,Authenticity,Authorization,Non-repudiation
+A-ME-001,Access Token (JWT),Bearer token authorizing API access,Yes,Yes,Yes,Yes,Yes,No
+A-ME-002,Refresh Token,Token to obtain new access tokens,Yes,Yes,Yes,Yes,Yes,No
+A-ME-003,ID Token (JWT claims),Identity claims from Identity Provider,Yes,Yes,Yes,Yes,Yes,No
+A-ME-004,Django Session Cookie / Session State,Session identifier and server-side state,Yes,Yes,Yes,Yes,Yes,No
+A-ME-005,OAuth Client Secret / OIDC Config,OIDC client credentials and configuration,Yes,Yes,Yes,Yes,Yes,No

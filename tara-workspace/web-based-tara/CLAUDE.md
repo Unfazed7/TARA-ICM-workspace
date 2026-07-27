@@ -28,7 +28,7 @@ Runs an 8-stage automated TARA on a web-based automotive application:
 
 | Dimension | Web-Based TARA | ECU/Vehicle TARA |
 |-----------|---------------|-----------------|
-| Cybersecurity properties | **CIAAAN** (6) | CIA (3) |
+| Cybersecurity properties | **CIAAAN** (6) | **CIAAAN** (6) |
 | Feasibility method | **CVSS v3.1 Exploitability** | ISO 21434 AFR (5 sub-factors) |
 | Impact dimensions | **7-dimension** (S+P+F+O tool user; L+F+B others) | SFOP (4-dimension) |
 | Threat library | OWASP Top 10, OWASP API Top 10 | AUTOSAR, UDS, CAN attacks |
