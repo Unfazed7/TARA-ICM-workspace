@@ -143,3 +143,4 @@ Last updated: 2026-06-03
 | Orchestrator | `09-orchestrator.md` | ⏸ Blocked | All above + checkpoint API |
 | Backend REST API | `10-backend-api.md` | ✅ Complete | Codex-ready — extends checkpoint-api |
 | Frontend Integration | `11-frontend-integration.md` | ✅ Complete | Codex-ready — depends on spec 10 |
+| Item Definition Agent (CP1) | `item-definition-agent.md` | ✅ Complete | Codex-ready — precedes Stage 01; `checkpoint-api/routers/boundary.py` + `BoundaryReview.tsx` already consume this contract |
