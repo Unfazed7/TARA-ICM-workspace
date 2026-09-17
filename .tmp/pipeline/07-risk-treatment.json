@@ -1,0 +1,927 @@
+[
+  {
+    "treatment_id": "TRT_01",
+    "risk_id": "RSK_01",
+    "threat_id": "TH_06",
+    "damage_scenario_id": "DS_06",
+    "attack_id": "AT_06",
+    "impact_id": "IM_06",
+    "asset_id": "AS_02",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_01 is critical; reduce the credential abuse path with controls that bind, rotate, and monitor Refresh Token.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_01",
+      "goal_statement": "The Refresh Token SHALL enforce bound, short-lived, and monitored credential handling to protect confidentiality against Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Refresh Token..",
+      "cal": 4,
+      "cal_rationale": "CAL 4 derived from critical risk level for RSK_01.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Refresh Token and the specific abuse mechanism in AT_06."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Refresh Token. mechanism for Refresh Token."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Refresh Token. mechanism for Refresh Token."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 4,
+    "residual_risk_expected": "medium",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_02",
+    "risk_id": "RSK_02",
+    "threat_id": "TH_21",
+    "damage_scenario_id": "DS_21",
+    "attack_id": "AT_21",
+    "impact_id": "IM_21",
+    "asset_id": "AS_05",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_02 is critical; reduce the credential abuse path with controls that bind, rotate, and monitor OAuth Client Secret / OIDC Config.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_02",
+      "goal_statement": "The OAuth Client Secret / OIDC Config SHALL enforce bound, short-lived, and monitored credential handling to protect confidentiality against Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of OAuth Client Secret / OIDC Config..",
+      "cal": 4,
+      "cal_rationale": "CAL 4 derived from critical risk level for RSK_02.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming OAuth Client Secret / OIDC Config and the specific abuse mechanism in AT_21."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      },
+      {
+        "control_id": "CTR_13",
+        "control_title": "Suspicious OAuth Application Consent Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_13 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 4,
+    "residual_risk_expected": "medium",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_03",
+    "risk_id": "RSK_03",
+    "threat_id": "TH_03",
+    "damage_scenario_id": "DS_03",
+    "attack_id": "AT_03",
+    "impact_id": "IM_03",
+    "asset_id": "AS_01",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_03 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Access Token (JWT).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_03",
+      "goal_statement": "The Access Token (JWT) SHALL enforce bound, short-lived, and monitored credential handling to protect availability against Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Access Token (JWT)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_03.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Access Token (JWT) and the specific abuse mechanism in AT_03."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_04",
+    "risk_id": "RSK_04",
+    "threat_id": "TH_08",
+    "damage_scenario_id": "DS_08",
+    "attack_id": "AT_08",
+    "impact_id": "IM_08",
+    "asset_id": "AS_02",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_04 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Refresh Token.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_04",
+      "goal_statement": "The Refresh Token SHALL enforce bound, short-lived, and monitored credential handling to protect availability against Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Refresh Token..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_04.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Refresh Token and the specific abuse mechanism in AT_08."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Refresh Token. mechanism for Refresh Token."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Refresh Token. mechanism for Refresh Token."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_05",
+    "risk_id": "RSK_05",
+    "threat_id": "TH_13",
+    "damage_scenario_id": "DS_13",
+    "attack_id": "AT_13",
+    "impact_id": "IM_13",
+    "asset_id": "AS_03",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_05 is high; reduce the credential abuse path with controls that bind, rotate, and monitor ID Token (JWT claims).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_05",
+      "goal_statement": "The ID Token (JWT claims) SHALL enforce bound, short-lived, and monitored credential handling to protect availability against Exploit token endpoint exhaustion or session-state invalidation loops in the handling of ID Token (JWT claims)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_05.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming ID Token (JWT claims) and the specific abuse mechanism in AT_13."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      },
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_16 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_06",
+    "risk_id": "RSK_06",
+    "threat_id": "TH_18",
+    "damage_scenario_id": "DS_18",
+    "attack_id": "AT_18",
+    "impact_id": "IM_18",
+    "asset_id": "AS_04",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_06 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Django Session Cookie / Session State.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_06",
+      "goal_statement": "The Django Session Cookie / Session State SHALL enforce bound, short-lived, and monitored credential handling to protect availability against Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Django Session Cookie / Session State..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_06.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Django Session Cookie / Session State and the specific abuse mechanism in AT_18."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_09",
+        "control_title": "Secure Session Cookie Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_09 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_07",
+    "risk_id": "RSK_07",
+    "threat_id": "TH_23",
+    "damage_scenario_id": "DS_23",
+    "attack_id": "AT_23",
+    "impact_id": "IM_23",
+    "asset_id": "AS_05",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_07 is high; reduce the credential abuse path with controls that bind, rotate, and monitor OAuth Client Secret / OIDC Config.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_07",
+      "goal_statement": "The OAuth Client Secret / OIDC Config SHALL enforce bound, short-lived, and monitored credential handling to protect availability against Exploit token endpoint exhaustion or session-state invalidation loops in the handling of OAuth Client Secret / OIDC Config..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_07.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming OAuth Client Secret / OIDC Config and the specific abuse mechanism in AT_23."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      },
+      {
+        "control_id": "CTR_13",
+        "control_title": "Suspicious OAuth Application Consent Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_13 directly addresses the Exploit token endpoint exhaustion or session-state invalidation loops in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_08",
+    "risk_id": "RSK_08",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "attack_id": "AT_01",
+    "impact_id": "IM_01",
+    "asset_id": "AS_01",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_08 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Access Token (JWT).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_08",
+      "goal_statement": "The Access Token (JWT) SHALL enforce bound, short-lived, and monitored credential handling to protect confidentiality against Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Access Token (JWT)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_08.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Access Token (JWT) and the specific abuse mechanism in AT_01."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_09",
+    "risk_id": "RSK_09",
+    "threat_id": "TH_02",
+    "damage_scenario_id": "DS_02",
+    "attack_id": "AT_02",
+    "impact_id": "IM_02",
+    "asset_id": "AS_01",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_09 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Access Token (JWT).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_09",
+      "goal_statement": "The Access Token (JWT) SHALL enforce bound, short-lived, and monitored credential handling to protect integrity against Exploit token or session state manipulation before validation in the handling of Access Token (JWT)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_09.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Access Token (JWT) and the specific abuse mechanism in AT_02."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit token or session state manipulation before validation in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token or session state manipulation before validation in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_10",
+    "risk_id": "RSK_10",
+    "threat_id": "TH_05",
+    "damage_scenario_id": "DS_05",
+    "attack_id": "AT_05",
+    "impact_id": "IM_05",
+    "asset_id": "AS_01",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_10 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Access Token (JWT).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_10",
+      "goal_statement": "The Access Token (JWT) SHALL enforce bound, short-lived, and monitored credential handling to protect authorization against Exploit scope, role, or claim confusion during authorization enforcement in the handling of Access Token (JWT)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_10.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Access Token (JWT) and the specific abuse mechanism in AT_05."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_11",
+    "risk_id": "RSK_11",
+    "threat_id": "TH_07",
+    "damage_scenario_id": "DS_07",
+    "attack_id": "AT_07",
+    "impact_id": "IM_07",
+    "asset_id": "AS_02",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_11 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Refresh Token.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_11",
+      "goal_statement": "The Refresh Token SHALL enforce bound, short-lived, and monitored credential handling to protect integrity against Exploit token or session state manipulation before validation in the handling of Refresh Token..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_11.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Refresh Token and the specific abuse mechanism in AT_07."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit token or session state manipulation before validation in the handling of Refresh Token. mechanism for Refresh Token."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token or session state manipulation before validation in the handling of Refresh Token. mechanism for Refresh Token."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_12",
+    "risk_id": "RSK_12",
+    "threat_id": "TH_10",
+    "damage_scenario_id": "DS_10",
+    "attack_id": "AT_10",
+    "impact_id": "IM_10",
+    "asset_id": "AS_02",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_12 is high; reduce the credential abuse path with controls that bind, rotate, and monitor Refresh Token.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_12",
+      "goal_statement": "The Refresh Token SHALL enforce bound, short-lived, and monitored credential handling to protect authorization against Exploit scope, role, or claim confusion during authorization enforcement in the handling of Refresh Token..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_12.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Refresh Token and the specific abuse mechanism in AT_10."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of Refresh Token. mechanism for Refresh Token."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of Refresh Token. mechanism for Refresh Token."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_13",
+    "risk_id": "RSK_13",
+    "threat_id": "TH_11",
+    "damage_scenario_id": "DS_11",
+    "attack_id": "AT_11",
+    "impact_id": "IM_11",
+    "asset_id": "AS_03",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_13 is high; reduce the credential abuse path with controls that bind, rotate, and monitor ID Token (JWT claims).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_13",
+      "goal_statement": "The ID Token (JWT claims) SHALL enforce bound, short-lived, and monitored credential handling to protect confidentiality against Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of ID Token (JWT claims)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_13.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming ID Token (JWT claims) and the specific abuse mechanism in AT_11."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      },
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_16 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_14",
+    "risk_id": "RSK_14",
+    "threat_id": "TH_12",
+    "damage_scenario_id": "DS_12",
+    "attack_id": "AT_12",
+    "impact_id": "IM_12",
+    "asset_id": "AS_03",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_14 is high; reduce the credential abuse path with controls that bind, rotate, and monitor ID Token (JWT claims).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_14",
+      "goal_statement": "The ID Token (JWT claims) SHALL enforce bound, short-lived, and monitored credential handling to protect integrity against Exploit token or session state manipulation before validation in the handling of ID Token (JWT claims)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_14.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming ID Token (JWT claims) and the specific abuse mechanism in AT_12."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit token or session state manipulation before validation in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      },
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_16 directly addresses the Exploit token or session state manipulation before validation in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_15",
+    "risk_id": "RSK_15",
+    "threat_id": "TH_15",
+    "damage_scenario_id": "DS_15",
+    "attack_id": "AT_15",
+    "impact_id": "IM_15",
+    "asset_id": "AS_03",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_15 is high; reduce the credential abuse path with controls that bind, rotate, and monitor ID Token (JWT claims).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_15",
+      "goal_statement": "The ID Token (JWT claims) SHALL enforce bound, short-lived, and monitored credential handling to protect authorization against Exploit scope, role, or claim confusion during authorization enforcement in the handling of ID Token (JWT claims)..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_15.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming ID Token (JWT claims) and the specific abuse mechanism in AT_15."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      },
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_16 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_16",
+    "risk_id": "RSK_16",
+    "threat_id": "TH_22",
+    "damage_scenario_id": "DS_22",
+    "attack_id": "AT_22",
+    "impact_id": "IM_22",
+    "asset_id": "AS_05",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_16 is high; reduce the credential abuse path with controls that bind, rotate, and monitor OAuth Client Secret / OIDC Config.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_16",
+      "goal_statement": "The OAuth Client Secret / OIDC Config SHALL enforce bound, short-lived, and monitored credential handling to protect integrity against Exploit token or session state manipulation before validation in the handling of OAuth Client Secret / OIDC Config..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_16.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming OAuth Client Secret / OIDC Config and the specific abuse mechanism in AT_22."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit token or session state manipulation before validation in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      },
+      {
+        "control_id": "CTR_13",
+        "control_title": "Suspicious OAuth Application Consent Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_13 directly addresses the Exploit token or session state manipulation before validation in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_17",
+    "risk_id": "RSK_17",
+    "threat_id": "TH_24",
+    "damage_scenario_id": "DS_24",
+    "attack_id": "AT_24",
+    "impact_id": "IM_24",
+    "asset_id": "AS_05",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_17 is high; reduce the credential abuse path with controls that bind, rotate, and monitor OAuth Client Secret / OIDC Config.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_17",
+      "goal_statement": "The OAuth Client Secret / OIDC Config SHALL enforce bound, short-lived, and monitored credential handling to protect authenticity against Exploit replay or impersonation using weakly bound identity material in the handling of OAuth Client Secret / OIDC Config..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_17.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming OAuth Client Secret / OIDC Config and the specific abuse mechanism in AT_24."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      },
+      {
+        "control_id": "CTR_13",
+        "control_title": "Suspicious OAuth Application Consent Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_13 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_18",
+    "risk_id": "RSK_18",
+    "threat_id": "TH_25",
+    "damage_scenario_id": "DS_25",
+    "attack_id": "AT_25",
+    "impact_id": "IM_25",
+    "asset_id": "AS_05",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_18 is high; reduce the credential abuse path with controls that bind, rotate, and monitor OAuth Client Secret / OIDC Config.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_18",
+      "goal_statement": "The OAuth Client Secret / OIDC Config SHALL enforce bound, short-lived, and monitored credential handling to protect authorization against Exploit scope, role, or claim confusion during authorization enforcement in the handling of OAuth Client Secret / OIDC Config..",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_18.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming OAuth Client Secret / OIDC Config and the specific abuse mechanism in AT_25."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      },
+      {
+        "control_id": "CTR_13",
+        "control_title": "Suspicious OAuth Application Consent Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_13 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of OAuth Client Secret / OIDC Config. mechanism for OAuth Client Secret / OIDC Config."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_19",
+    "risk_id": "RSK_19",
+    "threat_id": "TH_16",
+    "damage_scenario_id": "DS_16",
+    "attack_id": "AT_16",
+    "impact_id": "IM_16",
+    "asset_id": "AS_04",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_19 is medium; reduce the credential abuse path with controls that bind, rotate, and monitor Django Session Cookie / Session State.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_19",
+      "goal_statement": "The Django Session Cookie / Session State SHALL enforce bound, short-lived, and monitored credential handling to protect confidentiality against Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Django Session Cookie / Session State..",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_19.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Django Session Cookie / Session State and the specific abuse mechanism in AT_16."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_09",
+        "control_title": "Secure Session Cookie Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_09 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token disclosure through exposed storage, logs, or transport metadata in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_20",
+    "risk_id": "RSK_20",
+    "threat_id": "TH_17",
+    "damage_scenario_id": "DS_17",
+    "attack_id": "AT_17",
+    "impact_id": "IM_17",
+    "asset_id": "AS_04",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_20 is medium; reduce the credential abuse path with controls that bind, rotate, and monitor Django Session Cookie / Session State.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_20",
+      "goal_statement": "The Django Session Cookie / Session State SHALL enforce bound, short-lived, and monitored credential handling to protect integrity against Exploit token or session state manipulation before validation in the handling of Django Session Cookie / Session State..",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_20.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Django Session Cookie / Session State and the specific abuse mechanism in AT_17."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_09",
+        "control_title": "Secure Session Cookie Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_09 directly addresses the Exploit token or session state manipulation before validation in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit token or session state manipulation before validation in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_21",
+    "risk_id": "RSK_21",
+    "threat_id": "TH_19",
+    "damage_scenario_id": "DS_19",
+    "attack_id": "AT_19",
+    "impact_id": "IM_19",
+    "asset_id": "AS_04",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_21 is medium; reduce the credential abuse path with controls that bind, rotate, and monitor Django Session Cookie / Session State.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_21",
+      "goal_statement": "The Django Session Cookie / Session State SHALL enforce bound, short-lived, and monitored credential handling to protect authenticity against Exploit replay or impersonation using weakly bound identity material in the handling of Django Session Cookie / Session State..",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_21.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Django Session Cookie / Session State and the specific abuse mechanism in AT_19."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_09",
+        "control_title": "Secure Session Cookie Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_09 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_22",
+    "risk_id": "RSK_22",
+    "threat_id": "TH_20",
+    "damage_scenario_id": "DS_20",
+    "attack_id": "AT_20",
+    "impact_id": "IM_20",
+    "asset_id": "AS_04",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_22 is medium; reduce the credential abuse path with controls that bind, rotate, and monitor Django Session Cookie / Session State.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_22",
+      "goal_statement": "The Django Session Cookie / Session State SHALL enforce bound, short-lived, and monitored credential handling to protect authorization against Exploit scope, role, or claim confusion during authorization enforcement in the handling of Django Session Cookie / Session State..",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_22.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Django Session Cookie / Session State and the specific abuse mechanism in AT_20."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_09",
+        "control_title": "Secure Session Cookie Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_09 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit scope, role, or claim confusion during authorization enforcement in the handling of Django Session Cookie / Session State. mechanism for Django Session Cookie / Session State."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_23",
+    "risk_id": "RSK_23",
+    "threat_id": "TH_04",
+    "damage_scenario_id": "DS_04",
+    "attack_id": "AT_04",
+    "impact_id": "IM_04",
+    "asset_id": "AS_01",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_23 is medium; reduce the credential abuse path with controls that bind, rotate, and monitor Access Token (JWT).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_23",
+      "goal_statement": "The Access Token (JWT) SHALL enforce bound, short-lived, and monitored credential handling to protect authenticity against Exploit replay or impersonation using weakly bound identity material in the handling of Access Token (JWT)..",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_23.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Access Token (JWT) and the specific abuse mechanism in AT_04."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of Access Token (JWT). mechanism for Access Token (JWT)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_24",
+    "risk_id": "RSK_24",
+    "threat_id": "TH_09",
+    "damage_scenario_id": "DS_09",
+    "attack_id": "AT_09",
+    "impact_id": "IM_09",
+    "asset_id": "AS_02",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_24 is medium; reduce the credential abuse path with controls that bind, rotate, and monitor Refresh Token.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_24",
+      "goal_statement": "The Refresh Token SHALL enforce bound, short-lived, and monitored credential handling to protect authenticity against Exploit replay or impersonation using weakly bound identity material in the handling of Refresh Token..",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_24.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming Refresh Token and the specific abuse mechanism in AT_09."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_10",
+        "control_title": "OAuth Token Rotation and Short-Lived Access Tokens",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_10 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of Refresh Token. mechanism for Refresh Token."
+      },
+      {
+        "control_id": "CTR_12",
+        "control_title": "OAuth Token Theft Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_12 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of Refresh Token. mechanism for Refresh Token."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  },
+  {
+    "treatment_id": "TRT_25",
+    "risk_id": "RSK_25",
+    "threat_id": "TH_14",
+    "damage_scenario_id": "DS_14",
+    "attack_id": "AT_14",
+    "impact_id": "IM_14",
+    "asset_id": "AS_03",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_25 is medium; reduce the credential abuse path with controls that bind, rotate, and monitor ID Token (JWT claims).",
+    "cybersecurity_goal": {
+      "goal_id": "CG_25",
+      "goal_statement": "The ID Token (JWT claims) SHALL enforce bound, short-lived, and monitored credential handling to protect authenticity against Exploit replay or impersonation using weakly bound identity material in the handling of ID Token (JWT claims)..",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_25.",
+      "self_test_note": "This goal fails the self-test if it can be applied without naming ID Token (JWT claims) and the specific abuse mechanism in AT_14."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_02",
+        "control_title": "Secure OAuth 2.0 Authorization Flow with PKCE",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_02 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      },
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_16 directly addresses the Exploit replay or impersonation using weakly bound identity material in the handling of ID Token (JWT claims). mechanism for ID Token (JWT claims)."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-06-03T12:00:00.000Z"
+  }
+]

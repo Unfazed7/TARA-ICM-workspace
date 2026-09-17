@@ -1,0 +1,227 @@
+[
+  {
+    "damage_id": "DS_01",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of the Access Token (JWT) is compromised, bearer tokens are exposed in transit or storage, enabling unauthorized parties to impersonate legitimate users and access protected API endpoints without proper authentication.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_02",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of the Access Token (JWT) is compromised, token claims and payload data can be modified without detection, potentially allowing privilege escalation or alteration of user permissions within the diagnostic platform.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_03",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "availability",
+    "damage_scenario": "If the Availability of the Access Token (JWT) is compromised, authorized users cannot obtain valid tokens or experience token rejection, preventing access to diagnostic APIs and vehicle data services when needed.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_04",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of the Access Token (JWT) is compromised, forged or replayed tokens can be used to impersonate legitimate technicians and vehicle owners, undermining trust in user identity verification.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_05",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of the Access Token (JWT) is compromised, authenticated users may perform actions beyond their intended scope, such as accessing other dealerships' vehicle data or executing administrative functions.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_06",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "confidentiality",
+    "damage_scenario": "If the confidentiality of the Refresh Token is compromised, the token value is exposed to unauthorized parties, enabling session hijacking and unauthorized access to vehicle diagnostic data affecting tool_user and vehicle_owner in the context of authenticated platform sessions.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_07",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "integrity",
+    "damage_scenario": "If the integrity of the Refresh Token is compromised, the refresh token validation process may not properly verify token authenticity, potentially accepting tampered tokens and disrupting the authentication mechanism affecting tool_user in the context of session management.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_08",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "availability",
+    "damage_scenario": "If the availability of the Refresh Token is compromised, refresh tokens become unreliable or unavailable, preventing legitimate users from maintaining authenticated sessions and disrupting continuous access to diagnostic services affecting tool_user in the context of platform usage.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_09",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "authenticity",
+    "damage_scenario": "If the authenticity of the Refresh Token is compromised, fabricated refresh tokens could be generated or validated by the system, enabling identity impersonation and unauthorized platform access affecting tool_user in the context of verification processes.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_10",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "authorization",
+    "damage_scenario": "If the authorization of the Refresh Token is compromised, the refresh token scope validation fails to enforce proper access controls, potentially allowing users to exceed their intended permissions and access restricted vehicle data affecting vehicle_owner in the context of dealer-specific data management.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_11",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of the ID Token (JWT claims) is compromised, the identity claims containing technician personal information and authentication details are exposed, enabling unauthorized access to user profiles and session hijacking.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_12",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of the ID Token (JWT claims) is compromised, the identity claims can be modified to alter user roles, permissions, or organizational affiliations, enabling privilege escalation and unauthorized access to protected vehicle data.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_13",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "availability",
+    "damage_scenario": "If the Availability of the ID Token (JWT claims) is compromised, the authentication system fails to generate or validate tokens properly, preventing technician access to the diagnostic platform and vehicle management functions.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_14",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of the ID Token (JWT claims) is compromised, forged identity tokens with falsified user claims cannot be distinguished from legitimate tokens, enabling impersonation of authorized technicians and unauthorized platform access.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_15",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of the ID Token (JWT claims) is compromised, access control systems cannot enforce role-based restrictions on authenticated users, allowing technicians to access vehicle records and diagnostic functions beyond their assigned dealership scope.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_16",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "confidentiality",
+    "damage_scenario": "If the confidentiality of the Django Session Cookie / Session State is compromised, sensitive session data including user identity and vehicle access tokens are exposed, affecting vehicle owners and dealer technicians in the context of authenticated diagnostic sessions.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_17",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "integrity",
+    "damage_scenario": "If the integrity of the Django Session Cookie / Session State is compromised, session state data can be modified to impersonate authenticated users or alter access permissions, affecting vehicle owners and organization in the context of platform access control.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_18",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "availability",
+    "damage_scenario": "If the availability of the Django Session Cookie / Session State is compromised, legitimate users cannot maintain authenticated sessions, resulting in service disruption affecting dealer technicians in the context of continuous diagnostic operations.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_19",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "authenticity",
+    "damage_scenario": "If the authenticity of the Django Session Cookie / Session State is compromised, the system cannot verify that session holders are genuine authenticated users, affecting vehicle owners and organization in the context of identity validation.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_20",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "authorization",
+    "damage_scenario": "If the authorization of the Django Session Cookie / Session State is compromised, authenticated users can bypass intended access restrictions to perform actions beyond their permitted scope, affecting vehicle owners in the context of vehicle data access controls.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_21",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of the OAuth Client Secret / OIDC Config is compromised, the client secret and configuration details are exposed, enabling unauthorized parties to impersonate the application and access protected resources on behalf of legitimate users.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_22",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of the OAuth Client Secret / OIDC Config is compromised, the OIDC configuration can be modified without authorization, causing authentication requests to be redirected to malicious identity providers or allowing forged tokens to be accepted as valid.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_23",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "availability",
+    "damage_scenario": "If the Availability of the OAuth Client Secret / OIDC Config is compromised, authentication services become inaccessible, preventing all users from logging into the diagnostic platform and blocking access to vehicle diagnostic functions.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_24",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of the OAuth Client Secret / OIDC Config is compromised, fake authentication responses can be generated that appear to originate from the legitimate identity provider, allowing unauthorized users to obtain valid session tokens.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  },
+  {
+    "damage_id": "DS_25",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of the OAuth Client Secret / OIDC Config is compromised, access tokens can be obtained without proper permission validation, enabling unauthorized access to vehicle diagnostic functions beyond the intended scope of individual technician roles.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-06-09T03:29:05.209Z"
+  }
+]

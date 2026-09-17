@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TARA Aegis Local Model Stack Architecture</title>
+  <style>
+    :root {
+      --bg: #07100f;
+      --panel: #0d1b19;
+      --panel-2: #122622;
+      --ink: #edf8f3;
+      --muted: #9bb4aa;
+      --line: rgba(181, 255, 218, 0.34);
+      --mint: #7dffb2;
+      --amber: #ffc857;
+      --cyan: #65d7ff;
+      --red: #ff6b5f;
+      --violet: #b8a1ff;
+      --steel: #2f4942;
+      --shadow: 0 22px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(125, 255, 178, 0.18), transparent 30%),
+        radial-gradient(circle at 78% 8%, rgba(101, 215, 255, 0.13), transparent 27%),
+        linear-gradient(135deg, #050909 0%, #07100f 46%, #101b16 100%);
+      font-family: "Aptos", "Segoe UI", sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black, transparent 80%);
+    }
+
+    .page {
+      width: min(1500px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 34px 0 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .title-card,
+    .principle-card,
+    .panel,
+    .model-card,
+    .stage-card {
+      border: 1px solid rgba(181, 255, 218, 0.18);
+      background: linear-gradient(145deg, rgba(13, 27, 25, 0.94), rgba(10, 19, 18, 0.88));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .title-card {
+      padding: 34px;
+      border-radius: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .title-card::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: -90px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(125, 255, 178, 0.28), transparent 66%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid rgba(125, 255, 178, 0.28);
+      border-radius: 999px;
+      color: var(--mint);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: rgba(125, 255, 178, 0.08);
+    }
+
+    h1 {
+      margin: 24px 0 14px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 6vw, 82px);
+      line-height: 0.93;
+      letter-spacing: -0.06em;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 790px;
+      margin: 0;
+    }
+
+    .principle-card {
+      border-radius: 30px;
+      padding: 28px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .principle {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .badge {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      font-weight: 800;
+      color: #06100d;
+      background: var(--mint);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr 1.2fr 0.9fr;
+      gap: 18px;
+      margin: 24px 0;
+      position: relative;
+    }
+
+    .architecture::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 102px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--line), var(--mint), var(--line), transparent);
+      z-index: 0;
+    }
+
+    .panel {
+      position: relative;
+      z-index: 1;
+      border-radius: 26px;
+      padding: 22px;
+      min-height: 260px;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid rgba(181, 255, 218, 0.16);
+      padding-bottom: 13px;
+      margin-bottom: 16px;
+    }
+
+    .chip {
+      color: var(--mint);
+      background: rgba(125, 255, 178, 0.1);
+      border: 1px solid rgba(125, 255, 178, 0.2);
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .node {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .node strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink);
+    }
+
+    .routes {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .stage-card {
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 178px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stage-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: var(--accent, var(--mint));
+    }
+
+    .stage-id {
+      color: var(--accent, var(--mint));
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin: 24px 0;
+    }
+
+    .model-card {
+      border-radius: 26px;
+      padding: 22px;
+      min-height: 250px;
+    }
+
+    .model-card .type {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 13px;
+    }
+
+    .model-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .spec-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .spec {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .spec b {
+      color: var(--ink);
+      text-align: right;
+    }
+
+    .vpc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .vpc-card {
+      border: 1px solid rgba(181, 255, 218, 0.16);
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.035);
+      min-height: 168px;
+    }
+
+    .vpc-card h3 {
+      color: var(--accent, var(--ink));
+    }
+
+    .recommendation-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .recommendation {
+      border: 1px solid rgba(181, 255, 218, 0.18);
+      border-radius: 22px;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(125, 255, 178, 0.12), transparent 42%),
+        rgba(255, 255, 255, 0.035);
+    }
+
+    .recommendation .label {
+      color: var(--accent, var(--mint));
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .phase {
+      border: 1px solid rgba(181, 255, 218, 0.16);
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.035);
+      position: relative;
+    }
+
+    .phase-number {
+      color: #06100d;
+      background: var(--amber);
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      margin-bottom: 13px;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .matrix .panel {
+      min-height: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    th,
+    td {
+      padding: 13px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+    }
+
+    td strong {
+      color: var(--ink);
+    }
+
+    .callout {
+      margin-top: 24px;
+      border: 1px solid rgba(255, 200, 87, 0.32);
+      background: linear-gradient(135deg, rgba(255, 200, 87, 0.14), rgba(255, 200, 87, 0.04));
+      border-radius: 26px;
+      padding: 22px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .callout-mark {
+      flex: 0 0 auto;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #120d02;
+      background: var(--amber);
+      font-weight: 900;
+      font-size: 24px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .architecture,
+      .matrix {
+        grid-template-columns: 1fr;
+      }
+
+      .routes,
+      .model-grid,
+      .vpc-grid,
+      .recommendation-grid,
+      .timeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .architecture::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(100% - 22px, 1500px);
+        padding-top: 16px;
+      }
+
+      .routes,
+      .model-grid,
+      .vpc-grid,
+      .recommendation-grid,
+      .timeline {
+        grid-template-columns: 1fr;
+      }
+
+      .title-card,
+      .principle-card,
+      .panel,
+      .model-card,
+      .stage-card {
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="title-card">
+        <div class="eyebrow">TARA Aegis local model strategy</div>
+        <h1>Model stack for private TARA automation</h1>
+        <p>
+          A production design for routing each TARA capability to the right local or VPC-hosted model:
+          vision extraction, forced tool-calling, retrieval, reranking, and future LoRA adaptation.
+        </p>
+      </div>
+
+      <aside class="principle-card">
+        <div class="principle">
+          <div class="badge">01</div>
+          <div>
+            <h3>Tool calling is the main gate</h3>
+            <div class="small">A smart model is not enough. The main TARA agent must reliably return forced tool/function calls and exact item counts.</div>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="badge">02</div>
+          <div>
+            <h3>No full-project prompt stuffing</h3>
+            <div class="small">Each call should receive one scoped chain: asset to damage to threat to attack to impact to risk.</div>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="badge">03</div>
+          <div>
+            <h3>RAG before fine-tuning</h3>
+            <div class="small">Use approved examples and company memory first. Fine-tune only after we collect clean reviewer-approved data.</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="architecture">
+      <div class="panel">
+        <div class="panel-title">
+          <h2>Inputs</h2>
+          <span class="chip">source</span>
+        </div>
+        <div class="stack">
+          <div class="node"><strong>Asset list CSV</strong><span class="small">Deterministic Stage 01 normalization.</span></div>
+          <div class="node"><strong>Architecture diagram</strong><span class="small">Vision model extracts assets and boundaries.</span></div>
+          <div class="node"><strong>Company methodology</strong><span class="small">Overrides, examples, controls, and calibration rules.</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <h2>TARA Aegis Orchestrator</h2>
+          <span class="chip">control plane</span>
+        </div>
+        <div class="stack">
+          <div class="node"><strong>Stage runner</strong><span class="small">Runs 01 to 07 in order and writes JSON artifacts.</span></div>
+          <div class="node"><strong>Schema gates</strong><span class="small">Rejects missing fields, wrong counts, free-text responses, and invalid enums.</span></div>
+          <div class="node"><strong>Deterministic engines</strong><span class="small">CVSS AFR and risk scoring stay in code, not inside the model.</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <h2>LLM Gateway</h2>
+          <span class="chip">routing layer</span>
+        </div>
+        <div class="stack">
+          <div class="node"><strong>Stage-aware routing</strong><span class="small">Chooses vision, main reasoning, embeddings, or reranker per task.</span></div>
+          <div class="node"><strong>OpenAI-compatible API</strong><span class="small">vLLM exposes local models behind a private endpoint.</span></div>
+          <div class="node"><strong>Retry discipline</strong><span class="small">Retry only for wrong count or missing tool call; never silently repair compliance data.</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <h2>Outputs</h2>
+          <span class="chip">audit</span>
+        </div>
+        <div class="stack">
+          <div class="node"><strong>Stage JSON</strong><span class="small">One versionable artifact per stage.</span></div>
+          <div class="node"><strong>Excel review pack</strong><span class="small">Structured workbook for analysts and stakeholders.</span></div>
+          <div class="node"><strong>Approved memory</strong><span class="small">Reviewer-approved lessons feed future runs.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="routes">
+      <div class="stage-card" style="--accent: var(--cyan);">
+        <div class="stage-id">Stage 01</div>
+        <h3>Input normalization</h3>
+        <div class="small">CSV path is deterministic. Diagram path uses Qwen2.5-VL-7B or InternVL3-8B.</div>
+      </div>
+      <div class="stage-card" style="--accent: var(--mint);">
+        <div class="stage-id">Stages 02-03</div>
+        <h3>Damage and threats</h3>
+        <div class="small">Main tool-calling model produces exact schema-valid records with one output per required input.</div>
+      </div>
+      <div class="stage-card" style="--accent: var(--amber);">
+        <div class="stage-id">Stage 04</div>
+        <h3>Attack path modelling</h3>
+        <div class="small">Strongest reasoning route. Still forced tool output. CVSS metrics are calculated after this.</div>
+      </div>
+      <div class="stage-card" style="--accent: var(--violet);">
+        <div class="stage-id">Stages 05-06</div>
+        <h3>Impact and risk</h3>
+        <div class="small">Model writes impact rationale. Risk score and rank remain deterministic.</div>
+      </div>
+      <div class="stage-card" style="--accent: var(--red);">
+        <div class="stage-id">Stage 07</div>
+        <h3>Treatment</h3>
+        <div class="small">Main model plus RAG selects controls, writes goals, claims, and residual expectations.</div>
+      </div>
+    </section>
+
+    <section class="model-grid">
+      <article class="model-card" style="--accent: var(--mint);">
+        <div class="type">Main TARA agent</div>
+        <div class="model-name">Qwen3-32B Instruct</div>
+        <div class="small">Primary local/VPC candidate for Stage 02, 03, 04, 05, and 07. Best balance of tool calling, reasoning, fine-tuning path, and deployability.</div>
+        <div class="spec-list">
+          <div class="spec"><span>Serving</span><b>vLLM</b></div>
+          <div class="spec"><span>Context target</span><b>32K to 128K</b></div>
+          <div class="spec"><span>GPU target</span><b>48GB+</b></div>
+        </div>
+      </article>
+
+      <article class="model-card" style="--accent: var(--cyan);">
+        <div class="type">Vision agent</div>
+        <div class="model-name">Qwen2.5-VL-7B-Instruct</div>
+        <div class="small">Reads architecture diagrams, screenshots, and document-like images. Keeps multimodal work separate from the main reasoning model.</div>
+        <div class="spec-list">
+          <div class="spec"><span>Use</span><b>Stage 01 diagram</b></div>
+          <div class="spec"><span>Backup</span><b>InternVL3-8B</b></div>
+          <div class="spec"><span>GPU target</span><b>16-24GB+</b></div>
+        </div>
+      </article>
+
+      <article class="model-card" style="--accent: var(--amber);">
+        <div class="type">Retrieval brain</div>
+        <div class="model-name">BAAI/bge-m3</div>
+        <div class="small">Embeds standards, control catalogues, company methodology, approved examples, and prior project memory.</div>
+        <div class="spec-list">
+          <div class="spec"><span>Use</span><b>RAG index</b></div>
+          <div class="spec"><span>Data</span><b>Org memory</b></div>
+          <div class="spec"><span>Fine-tune</span><b>Usually no</b></div>
+        </div>
+      </article>
+
+      <article class="model-card" style="--accent: var(--violet);">
+        <div class="type">Reranker</div>
+        <div class="model-name">bge-reranker-v2-m3</div>
+        <div class="small">Ranks retrieved controls, standards clauses, and previous examples before injecting them into stage prompts.</div>
+        <div class="spec-list">
+          <div class="spec"><span>Use</span><b>Top-k selection</b></div>
+          <div class="spec"><span>Stage fit</span><b>03, 04, 07</b></div>
+          <div class="spec"><span>Cost</span><b>Low</b></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="matrix">
+      <div class="panel">
+        <h2>Model routing map</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Pipeline capability</th>
+              <th>Model route</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Diagram parsing</strong></td>
+              <td>Qwen2.5-VL-7B</td>
+              <td>Dedicated visual extraction keeps image reasoning out of the main agent context.</td>
+            </tr>
+            <tr>
+              <td><strong>Damage, threat, impact, treatment</strong></td>
+              <td>Qwen3-32B</td>
+              <td>Best practical local balance for reasoning plus forced tool calls.</td>
+            </tr>
+            <tr>
+              <td><strong>Attack path modelling</strong></td>
+              <td>Qwen3-32B or GLM-4.5-Air</td>
+              <td>Route to strongest reasoning model available; output still must be schema-valid.</td>
+            </tr>
+            <tr>
+              <td><strong>Controls and prior examples</strong></td>
+              <td>bge-m3 + reranker</td>
+              <td>Retrieves and ranks only the most relevant company memory.</td>
+            </tr>
+            <tr>
+              <td><strong>Risk math</strong></td>
+              <td>Deterministic code</td>
+              <td>CVSS AFR, impact scoring, and risk ranking remain auditable and reproducible.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Validation gates</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Gate</th>
+              <th>Pass condition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Forced tool call</strong></td>
+              <td>Model returns the named tool, not prose or markdown JSON.</td>
+            </tr>
+            <tr>
+              <td><strong>Exact count</strong></td>
+              <td>One required output per asset, scenario, threat, or risk chain.</td>
+            </tr>
+            <tr>
+              <td><strong>Schema valid</strong></td>
+              <td>All enums, IDs, nullability, timestamps, and nested objects pass validation.</td>
+            </tr>
+            <tr>
+              <td><strong>Scoped context</strong></td>
+              <td>Prompt contains only the relevant chain, not the entire assessment.</td>
+            </tr>
+            <tr>
+              <td><strong>Human-approved memory</strong></td>
+              <td>Reviewer feedback becomes reusable only after approval and versioning.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top: 24px;">
+      <div class="panel-title">
+        <h2>VPC/GPU provider selection</h2>
+        <span class="chip">private inference</span>
+      </div>
+      <div class="small">
+        TARA Aegis should choose GPU infrastructure by workload tier, not by brand name alone.
+        The pilot target is a private vLLM endpoint for Qwen3-32B-class tool calling, with enough headroom
+        to add a vision model and RAG services without exposing customer TARA data to public model APIs.
+      </div>
+
+      <div class="vpc-grid">
+        <div class="vpc-card" style="--accent: var(--mint);">
+          <h3>GPU fit</h3>
+          <div class="small">48GB VRAM is the practical floor for the main Qwen3-32B route. Use 16-24GB for the vision agent and 80GB+ when quality, longer context, or concurrency matters.</div>
+        </div>
+        <div class="vpc-card" style="--accent: var(--cyan);">
+          <h3>Serving/runtime fit</h3>
+          <div class="small">Require Linux, Docker, CUDA, persistent storage, and vLLM or an OpenAI-compatible server so the existing TARA Aegis LLM gateway can point to a private endpoint.</div>
+        </div>
+        <div class="vpc-card" style="--accent: var(--amber);">
+          <h3>Security fit</h3>
+          <div class="small">Default to private networking, SSH key auth, locked firewall rules, encrypted volumes, no public model endpoint, and API keys scoped to TARA Aegis services only.</div>
+        </div>
+        <div class="vpc-card" style="--accent: var(--violet);">
+          <h3>Reliability fit</h3>
+          <div class="small">Use non-interruptible instances for demos and production. Prefer reserved capacity or enterprise support once customer-sensitive assessments depend on the service.</div>
+        </div>
+        <div class="vpc-card" style="--accent: var(--red);">
+          <h3>Cost fit</h3>
+          <div class="small">Compare hourly GPU price plus storage, snapshots, idle volumes, bandwidth, and restart cost. Cheapest hourly GPU is not cheapest if it breaks long TARA runs.</div>
+        </div>
+        <div class="vpc-card" style="--accent: var(--mint);">
+          <h3>Data posture</h3>
+          <div class="small">Customer TARA data should stay in our controlled deployment. Avoid shared community hosts for production unless isolation, logging, deletion, and support are verified.</div>
+        </div>
+      </div>
+
+      <div class="recommendation-grid">
+        <div class="recommendation" style="--accent: var(--mint);">
+          <div class="label">Balanced pilot</div>
+          <h3>RunPod Secure Cloud, 48GB GPU class</h3>
+          <div class="small">
+            Best first choice for TARA Aegis pilot work: fast setup, clear GPU menu, Secure Cloud option,
+            and 48GB cards such as RTX 6000 Ada, L40S, A40, or RTX A6000 for Qwen3-32B-class testing.
+          </div>
+        </div>
+        <div class="recommendation" style="--accent: var(--cyan);">
+          <div class="label">Enterprise ready</div>
+          <h3>Lambda Cloud, A6000/A100/H100 class</h3>
+          <div class="small">
+            Better when reliability, vendor maturity, reserved capacity, and customer-facing posture matter more than
+            lowest hourly cost. Use A6000 for 48GB tests and A100/H100 for heavier throughput.
+          </div>
+        </div>
+        <div class="recommendation" style="--accent: var(--amber);">
+          <div class="label">Lowest-cost experiment</div>
+          <h3>Vast.ai On-Demand or Reserved only</h3>
+          <div class="small">
+            Useful for non-sensitive model experiments and quick benchmarks. Avoid interruptible/community-style hosts
+            for customer TARA data unless security and persistence are verified.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="matrix">
+      <div class="panel">
+        <h2>Provider comparison</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Best fit</th>
+              <th>Why it fits TARA Aegis</th>
+              <th>Use with care</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>RunPod Secure Cloud</strong></td>
+              <td>Pilot and demo VPC</td>
+              <td>Official pricing lists dedicated Pods, serverless workers, clusters, and 48GB/80GB GPU classes. Good balance for private vLLM endpoints.</td>
+              <td>Choose Secure Cloud over community-style capacity for sensitive work. Verify region, storage, and endpoint exposure.</td>
+            </tr>
+            <tr>
+              <td><strong>Lambda Cloud</strong></td>
+              <td>Enterprise pilot</td>
+              <td>Clear instance pricing for A6000, A100, H100, and B200 classes. Stronger fit when support, capacity, and customer trust matter.</td>
+              <td>Higher hourly cost. Capacity is first-come/self-serve unless reserved or enterprise capacity is arranged.</td>
+            </tr>
+            <tr>
+              <td><strong>Vast.ai On-Demand / Reserved</strong></td>
+              <td>Low-cost benchmark</td>
+              <td>Marketplace model offers transparent live pricing, per-second billing, on-demand, interruptible, and reserved tiers.</td>
+              <td>Do not use interruptible instances for production TARA runs. Vet host reliability, disk persistence, and isolation before sensitive data.</td>
+            </tr>
+            <tr>
+              <td><strong>TensorDock</strong></td>
+              <td>Secondary GPU VPS candidate</td>
+              <td>Worth checking for competitively priced RTX 4090/A6000/A100-style GPU VPS capacity when RunPod or Lambda availability is weak.</td>
+              <td>Verify live marketplace pricing, networking controls, persistent storage, and support before selecting.</td>
+            </tr>
+            <tr>
+              <td><strong>AWS / Azure / GCP GPU instances</strong></td>
+              <td>Regulated enterprise fallback</td>
+              <td>Best when a customer mandates hyperscaler governance, IAM, private networking, key management, audit logs, and existing cloud contracts.</td>
+              <td>Usually more expensive and slower to provision. GPU quota approvals can block early experimentation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Decision rule</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Choose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Experiment</strong></td>
+              <td>Vast.ai On-Demand or RunPod lower-cost 48GB class with synthetic/non-sensitive data only.</td>
+            </tr>
+            <tr>
+              <td><strong>Pilot / customer demo</strong></td>
+              <td>RunPod Secure Cloud 48GB class first; move to 80GB if Qwen3-32B latency or context is weak.</td>
+            </tr>
+            <tr>
+              <td><strong>Production sensitive data</strong></td>
+              <td>Lambda Cloud or hyperscaler GPU VPC with reserved capacity, private endpoint, logging, and customer-approved region.</td>
+            </tr>
+            <tr>
+              <td><strong>Fine-tuning</strong></td>
+              <td>Use a separate training instance or cluster. Keep inference endpoint stable and do not fine-tune on production traffic directly.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule of thumb</strong></td>
+              <td>Never expose the vLLM endpoint publicly. Put it behind TARA Aegis backend/auth and allowlist only internal services.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="callout">
+      <div class="callout-mark">!</div>
+      <div>
+        <h3>VPC caution</h3>
+        <div class="small">
+          Interruptible or community GPU hosts are useful for low-cost experiments, but they should not process customer-sensitive
+          TARA assessments. For production, require non-interruptible capacity, private networking, encrypted persistent storage,
+          and an explicit data deletion and logging posture.
+        </div>
+      </div>
+    </div>
+
+    <section class="panel" style="margin-top: 24px;">
+      <h2>Implementation phases</h2>
+      <div class="timeline">
+        <div class="phase">
+          <div class="phase-number">1</div>
+          <h3>Gateway</h3>
+          <div class="small">Add model registry and stage routing around the existing OpenAI-compatible client.</div>
+        </div>
+        <div class="phase">
+          <div class="phase-number">2</div>
+          <h3>Benchmark</h3>
+          <div class="small">Score models by forced tool-call success, schema validity, latency, and TARA quality.</div>
+        </div>
+        <div class="phase">
+          <div class="phase-number">3</div>
+          <h3>RAG</h3>
+          <div class="small">Index standards, controls, approved examples, and methodology packs.</div>
+        </div>
+        <div class="phase">
+          <div class="phase-number">4</div>
+          <h3>Org brain</h3>
+          <div class="small">Capture reviewer corrections as proposed memory updates with approval gates.</div>
+        </div>
+        <div class="phase">
+          <div class="phase-number">5</div>
+          <h3>LoRA</h3>
+          <div class="small">Fine-tune only after approved datasets exist for Stages 03, 04, and 07.</div>
+        </div>
+        <div class="phase">
+          <div class="phase-number">6</div>
+          <h3>Hardening</h3>
+          <div class="small">Private endpoints, audit trail, tenant memory isolation, and model observability.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="callout">
+      <div class="callout-mark">!</div>
+      <div>
+        <h3>Operating principle</h3>
+        <div class="small">
+          TARA Aegis should not depend on model memory across calls. Every stage receives explicit JSON from previous stages.
+          If a prompt exceeds context, the fix is chunking and scoped retrieval, not asking a larger model to remember everything.
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

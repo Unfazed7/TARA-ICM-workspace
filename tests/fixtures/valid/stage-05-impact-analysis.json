@@ -1,0 +1,29 @@
+[
+  {
+    "impact_id": "IM_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "asset_id": "AS_01",
+    "property": "authorization",
+    "impact_narrative": "Unauthorized diagnostic actions can disrupt service operations and create legal exposure for the organization.",
+    "tool_user": {
+      "safety": "Negligible",
+      "privacy": "Moderate",
+      "financial": "Negligible",
+      "operational": "Major",
+      "rationale_safety": "The web workflow does not directly actuate safety-critical controls in this scenario.",
+      "rationale_privacy": "Diagnostic metadata may include sensitive vehicle information.",
+      "rationale_financial": "Direct tool-user financial harm is not expected.",
+      "rationale_operational": "Service workflow disruption can be substantial."
+    },
+    "other_stakeholders": {
+      "legal": "Moderate",
+      "financial": "Major",
+      "business": "Major",
+      "rationale_legal": "Unauthorized diagnostic activity can create compliance exposure.",
+      "rationale_financial": "Fraudulent service operations can cause revenue and remediation losses.",
+      "rationale_business": "Customer trust and service continuity are affected."
+    },
+    "created_timestamp": "2026-06-01T10:04:00Z"
+  }
+]

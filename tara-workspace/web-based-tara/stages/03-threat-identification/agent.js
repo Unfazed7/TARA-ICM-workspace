@@ -1,0 +1,237 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const {
+  STRIDE_CATEGORIES,
+  countBy,
+  formatId,
+  parseArgs,
+  readJson,
+  requireFileArg,
+  submitCheckpoint,
+  writeJson
+} = require('../agent-utils');
+
+const { callLLM } = require('../llm-client');
+const MODEL = 'claude-opus-4-8';
+const TOOL_NAME = 'submit_threat';
+const OWASP_REFERENCES = [
+  'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+  'API1', 'API2', 'API3', 'API4', 'API5', 'API6', 'API7', 'API8', 'API9', 'API10'
+];
+
+function ensureDamageScenarios(damageScenarios) {
+  if (!Array.isArray(damageScenarios) || damageScenarios.length === 0) {
+    throw new Error('No damage scenarios to process');
+  }
+}
+
+function validateThreats(threats, damageScenarios) {
+  if (threats.length !== damageScenarios.length) {
+    throw new Error('Exactly one TH_## per DS_## required');
+  }
+  const damageIds = new Set(damageScenarios.map((scenario) => scenario.damage_id));
+  for (const threat of threats) {
+    if (!damageIds.has(threat.damage_scenario_id)) {
+      throw new Error(`Unknown damage_scenario_id for ${threat.threat_id}`);
+    }
+    if (!STRIDE_CATEGORIES.includes(threat.stride_category)) {
+      throw new Error(`Invalid stride_category for ${threat.threat_id}: ${threat.stride_category}`);
+    }
+    if (!threat.threat_statement.includes(threat.asset_title)) {
+      throw new Error(`Threat statement does not contain asset title for ${threat.threat_id}`);
+    }
+    if (!threat.derivation_note) throw new Error(`Empty derivation_note for ${threat.threat_id}`);
+  }
+}
+
+function buildThreatTool() {
+  return {
+    name: TOOL_NAME,
+    description: 'Submit one STRIDE threat derived from one damage scenario',
+    input_schema: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['stride_category', 'threat_statement', 'derivation_note', 'owasp_reference'],
+      properties: {
+        stride_category: { type: 'string', enum: STRIDE_CATEGORIES },
+        threat_statement: { type: 'string', minLength: 1 },
+        derivation_note: { type: 'string', minLength: 1 },
+        owasp_reference: {
+          anyOf: [
+            { type: 'string', enum: OWASP_REFERENCES },
+            { type: 'null' }
+          ]
+        }
+      }
+    }
+  };
+}
+
+function buildSystemPrompt() {
+  const configDir = path.resolve(__dirname, '../../_config');
+  return [
+    fs.readFileSync(path.join(configDir, 'stride-taxonomy.md'), 'utf8'),
+    fs.readFileSync(path.join(configDir, 'owasp-stride-mapping.md'), 'utf8'),
+    'Derive exactly one threat for the provided damage scenario.',
+    'Write the threat as one flowing sentence with three parts: (1) what the attacker first does or gains access to, (2) what they do next and what specific gap or missing control allows it, (3) the outcome — stated as what actually results, not as a declared intention.',
+    'Use plain language. Do not end with "with the goal of" — state the outcome as the natural consequence of the action.',
+    'The threat must be specific to this asset. Self-test: could this statement apply unchanged to a different asset? If yes, rederive it around the mechanism unique to this asset.',
+    'Return only via the submit_threat tool.'
+  ].join('\n\n');
+}
+
+function buildUserMessage(damageScenario) {
+  return [
+    `Damage scenario ID: ${damageScenario.damage_id}`,
+    `Damage scenario: ${damageScenario.damage_scenario}`,
+    `Asset ID: ${damageScenario.asset_id}`,
+    `Asset title: ${damageScenario.asset_title}`,
+    `CIAAAN property: ${damageScenario.property}`,
+    'Derive the specific attack action that would directly cause this damage scenario.'
+  ].join('\n');
+}
+
+function buildRepairUserMessage(damageScenario, reason) {
+  return [
+    buildUserMessage(damageScenario),
+    '',
+    `Previous response was invalid: ${reason}`,
+    'Retry now and return only via the submit_threat tool.',
+    `The threat_statement must include the exact asset title: ${damageScenario.asset_title}`,
+    'Do not return free text outside the tool call.',
+    'Use a valid STRIDE category and a concrete attack action that directly causes the damage scenario.'
+  ].join('\n');
+}
+
+function extractToolUse(response) {
+  const content = response?.content || [];
+  const toolUse = content.find((item) => item.type === 'tool_use' && item.name === TOOL_NAME);
+  return toolUse?.input || null;
+}
+
+async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch, userMessage = buildUserMessage(damageScenario)) {
+  return callLLM({
+    model: MODEL,
+    max_tokens: 1024,
+    system: buildSystemPrompt(),
+    messages: [{ role: 'user', content: userMessage }],
+    tools: [buildThreatTool()],
+    tool_choice: { type: 'tool', name: TOOL_NAME },
+  }, fetchImpl);
+}
+
+async function generateThreatForDamageScenario(damageScenario, fetchImpl) {
+  let userMessage = buildUserMessage(damageScenario);
+  let lastValidationError = null;
+  let sawFreeText = false;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await callClaudeForDamageScenario(damageScenario, fetchImpl, userMessage);
+    const threat = extractToolUse(response);
+    if (!threat) {
+      sawFreeText = true;
+      userMessage = buildRepairUserMessage(damageScenario, `free text returned instead of ${TOOL_NAME} tool_use`);
+      continue;
+    }
+
+    const normalized = {
+      threat_id: 'TH_01',
+      damage_scenario_id: damageScenario.damage_id,
+      asset_id: damageScenario.asset_id,
+      asset_title: damageScenario.asset_title,
+      property: damageScenario.property,
+      stride_category: threat.stride_category,
+      threat_statement: threat.threat_statement,
+      derivation_note: threat.derivation_note,
+      owasp_reference: threat.owasp_reference ?? null,
+      created_timestamp: new Date().toISOString()
+    };
+
+    try {
+      validateThreats([normalized], [damageScenario]);
+      return threat;
+    } catch (error) {
+      lastValidationError = error;
+      userMessage = buildRepairUserMessage(damageScenario, error.message);
+    }
+  }
+
+  if (lastValidationError) {
+    throw lastValidationError;
+  }
+  if (sawFreeText) {
+    throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${damageScenario.damage_id}`);
+  }
+  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${damageScenario.damage_id}`);
+}
+
+async function buildThreatsWithClaude(damageScenarios, options = {}) {
+  ensureDamageScenarios(damageScenarios);
+
+  const threats = [];
+  const timestamp = options.timestamp || new Date().toISOString();
+  for (const scenario of damageScenarios) {
+    const threat = await generateThreatForDamageScenario(scenario, options.fetchImpl);
+    threats.push({
+      threat_id: formatId('TH', threats.length),
+      damage_scenario_id: scenario.damage_id,
+      asset_id: scenario.asset_id,
+      asset_title: scenario.asset_title,
+      property: scenario.property,
+      stride_category: threat.stride_category,
+      threat_statement: threat.threat_statement,
+      derivation_note: threat.derivation_note,
+      owasp_reference: threat.owasp_reference ?? null,
+      created_timestamp: timestamp
+    });
+  }
+
+  validateThreats(threats, damageScenarios);
+  return threats;
+}
+
+async function run(options) {
+  const damageScenarios = readJson(options.damageScenarios);
+  const threats = await buildThreatsWithClaude(damageScenarios, { fetchImpl: options.fetchImpl });
+  writeJson(options.out, threats);
+  await submitCheckpoint(options.assessmentId, {
+    stage_num: 3,
+    stage_name: 'threat-identification',
+    output_summary: {
+      total_threats: threats.length,
+      by_stride: countBy(threats, 'stride_category'),
+      by_owasp: countBy(threats, 'owasp_reference')
+    }
+  });
+  return threats;
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+  await run({
+    damageScenarios: requireFileArg(args, 'damage-scenarios'),
+    assessmentId: args['assessment-id'],
+    out: requireFileArg(args, 'out')
+  });
+}
+
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error.message);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  buildSystemPrompt,
+  buildThreatTool,
+  buildThreatsWithClaude,
+  buildUserMessage,
+  callClaudeForDamageScenario,
+  extractToolUse,
+  generateThreatForDamageScenario,
+  run,
+  validateThreats
+};

@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-05-impact-analysis.schema.json",
+  "title": "Stage 05 Impact Analysis",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "impact_id",
+      "threat_id",
+      "damage_scenario_id",
+      "asset_id",
+      "property",
+      "impact_narrative",
+      "tool_user",
+      "other_stakeholders",
+      "created_timestamp"
+    ],
+    "properties": {
+      "impact_id": { "type": "string", "pattern": "^IM_\\d{2,}$" },
+      "threat_id": { "type": "string", "pattern": "^TH_\\d{2,}$" },
+      "damage_scenario_id": { "type": "string", "pattern": "^DS_\\d{2,}$" },
+      "asset_id": { "type": "string", "pattern": "^AS_\\d{2,}$" },
+      "property": { "type": "string", "minLength": 1 },
+      "impact_narrative": { "type": "string", "minLength": 1 },
+      "tool_user": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "safety",
+          "privacy",
+          "financial",
+          "operational",
+          "rationale_safety",
+          "rationale_privacy",
+          "rationale_financial",
+          "rationale_operational"
+        ],
+        "properties": {
+          "safety": { "const": "Negligible" },
+          "privacy": { "$ref": "#/definitions/rating" },
+          "financial": { "const": "Negligible" },
+          "operational": { "$ref": "#/definitions/rating" },
+          "rationale_safety": { "type": "string", "minLength": 1 },
+          "rationale_privacy": { "type": "string", "minLength": 1 },
+          "rationale_financial": { "type": "string", "minLength": 1 },
+          "rationale_operational": { "type": "string", "minLength": 1 }
+        }
+      },
+      "other_stakeholders": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "legal",
+          "financial",
+          "business",
+          "rationale_legal",
+          "rationale_financial",
+          "rationale_business"
+        ],
+        "properties": {
+          "legal": { "$ref": "#/definitions/rating" },
+          "financial": { "$ref": "#/definitions/rating" },
+          "business": { "$ref": "#/definitions/rating" },
+          "rationale_legal": { "type": "string", "minLength": 1 },
+          "rationale_financial": { "type": "string", "minLength": 1 },
+          "rationale_business": { "type": "string", "minLength": 1 }
+        }
+      },
+      "created_timestamp": { "type": "string", "format": "date-time" }
+    }
+  },
+  "uniqueItemProperties": ["impact_id"],
+  "definitions": {
+    "rating": { "type": "string", "enum": ["Negligible", "Moderate", "Major", "Severe"] }
+  }
+}

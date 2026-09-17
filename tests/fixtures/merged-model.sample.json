@@ -1,0 +1,111 @@
+{
+  "model_id": "MM-TELE-001",
+  "item_name": "Telematics Cloud Backend",
+  "sources_used": ["architecture_diagram", "feature_function_list"],
+  "elements": [
+    {
+      "element_id": "COMP-001",
+      "type": "component",
+      "name": "Telematics Cloud Backend",
+      "component_type": "cloud_service",
+      "domain": "cloud",
+      "origin": "stated",
+      "confidence": "high",
+      "source_refs": ["arch-diagram-block-1"]
+    },
+    {
+      "element_id": "COMP-002",
+      "type": "component",
+      "name": "Vehicle Data Ingestion API",
+      "component_type": "api_endpoint",
+      "domain": "cloud",
+      "origin": "stated",
+      "confidence": "high",
+      "source_refs": ["arch-diagram-block-2"]
+    },
+    {
+      "element_id": "COMP-003",
+      "type": "component",
+      "name": "Body Control Module (BCM)",
+      "component_type": "ecu",
+      "domain": "vehicle",
+      "origin": "derived",
+      "confidence": "medium",
+      "source_refs": ["arch-diagram-block-5"],
+      "notes": "Appears at edge of architecture diagram; downstream of telematics gateway"
+    },
+    {
+      "element_id": "COMP-004",
+      "type": "component",
+      "name": "Technician Web Portal",
+      "component_type": "web_application",
+      "domain": "cloud",
+      "origin": "stated",
+      "confidence": "high",
+      "source_refs": ["arch-diagram-block-3"]
+    },
+    {
+      "element_id": "COMP-005",
+      "type": "component",
+      "name": "Authentication and Identity Service",
+      "component_type": "cloud_service",
+      "domain": "cloud",
+      "origin": "stated",
+      "confidence": "high",
+      "source_refs": ["arch-diagram-block-4"]
+    },
+    {
+      "element_id": "COMP-006",
+      "type": "component",
+      "name": "Diagnostic Command Log Store",
+      "component_type": "data_store",
+      "domain": "cloud",
+      "origin": "stated",
+      "confidence": "high",
+      "source_refs": ["arch-diagram-block-6"]
+    }
+  ],
+  "links": [
+    {
+      "link_id": "LNK-001",
+      "from": "COMP-004",
+      "to": "COMP-001",
+      "protocol": "HTTPS",
+      "direction": "bidirectional",
+      "confidence": "high"
+    },
+    {
+      "link_id": "LNK-002",
+      "from": "COMP-001",
+      "to": "COMP-002",
+      "protocol": "internal",
+      "direction": "bidirectional",
+      "confidence": "high"
+    },
+    {
+      "link_id": "LNK-003",
+      "from": "COMP-001",
+      "to": "COMP-005",
+      "protocol": "HTTPS",
+      "direction": "bidirectional",
+      "confidence": "high"
+    },
+    {
+      "link_id": "LNK-004",
+      "from": "COMP-001",
+      "to": "COMP-006",
+      "protocol": "internal",
+      "direction": "unidirectional",
+      "confidence": "high"
+    },
+    {
+      "link_id": "LNK-005",
+      "from": "COMP-002",
+      "to": "COMP-003",
+      "protocol": "CAN/HTTPS-bridge",
+      "direction": "bidirectional",
+      "confidence": "medium",
+      "notes": "Telematics gateway to vehicle CAN — edge of item boundary"
+    }
+  ]
+}

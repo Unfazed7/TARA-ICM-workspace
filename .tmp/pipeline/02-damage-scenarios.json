@@ -1,0 +1,227 @@
+[
+  {
+    "damage_id": "DS_01",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of Access Token (JWT) is compromised, sensitive diagnostic or vehicle data is exposed beyond its intended audience affecting tool_user in the context of Access Token (JWT) operations.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_02",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of Access Token (JWT) is compromised, diagnostic workflow decisions are based on untrusted or altered application behavior affecting organization in the context of Access Token (JWT) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_03",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "availability",
+    "damage_scenario": "If the Availability of Access Token (JWT) is compromised, required diagnostic workflows are interrupted or unavailable when service teams need them affecting organization in the context of Access Token (JWT) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_04",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of Access Token (JWT) is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting organization in the context of Access Token (JWT) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_05",
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of Access Token (JWT) is compromised, privileged diagnostic functionality is used outside the permitted access boundary affecting organization in the context of Access Token (JWT) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_06",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of Refresh Token is compromised, sensitive diagnostic or vehicle data is exposed beyond its intended audience affecting tool_user in the context of Refresh Token operations.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_07",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of Refresh Token is compromised, diagnostic workflow decisions are based on untrusted or altered application behavior affecting organization in the context of Refresh Token operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_08",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "availability",
+    "damage_scenario": "If the Availability of Refresh Token is compromised, required diagnostic workflows are interrupted or unavailable when service teams need them affecting organization in the context of Refresh Token operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_09",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of Refresh Token is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting organization in the context of Refresh Token operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_10",
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of Refresh Token is compromised, privileged diagnostic functionality is used outside the permitted access boundary affecting organization in the context of Refresh Token operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_11",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of ID Token (JWT claims) is compromised, sensitive diagnostic or vehicle data is exposed beyond its intended audience affecting tool_user in the context of ID Token (JWT claims) operations.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_12",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of ID Token (JWT claims) is compromised, diagnostic workflow decisions are based on untrusted or altered application behavior affecting organization in the context of ID Token (JWT claims) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_13",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "availability",
+    "damage_scenario": "If the Availability of ID Token (JWT claims) is compromised, required diagnostic workflows are interrupted or unavailable when service teams need them affecting organization in the context of ID Token (JWT claims) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_14",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of ID Token (JWT claims) is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting organization in the context of ID Token (JWT claims) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_15",
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of ID Token (JWT claims) is compromised, privileged diagnostic functionality is used outside the permitted access boundary affecting organization in the context of ID Token (JWT claims) operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_16",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of Django Session Cookie / Session State is compromised, sensitive diagnostic or vehicle data is exposed beyond its intended audience affecting tool_user in the context of Django Session Cookie / Session State operations.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_17",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of Django Session Cookie / Session State is compromised, diagnostic workflow decisions are based on untrusted or altered application behavior affecting organization in the context of Django Session Cookie / Session State operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_18",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "availability",
+    "damage_scenario": "If the Availability of Django Session Cookie / Session State is compromised, required diagnostic workflows are interrupted or unavailable when service teams need them affecting organization in the context of Django Session Cookie / Session State operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_19",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of Django Session Cookie / Session State is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting organization in the context of Django Session Cookie / Session State operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_20",
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of Django Session Cookie / Session State is compromised, privileged diagnostic functionality is used outside the permitted access boundary affecting organization in the context of Django Session Cookie / Session State operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_21",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "confidentiality",
+    "damage_scenario": "If the Confidentiality of OAuth Client Secret / OIDC Config is compromised, sensitive diagnostic or vehicle data is exposed beyond its intended audience affecting tool_user in the context of OAuth Client Secret / OIDC Config operations.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_22",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "integrity",
+    "damage_scenario": "If the Integrity of OAuth Client Secret / OIDC Config is compromised, diagnostic workflow decisions are based on untrusted or altered application behavior affecting organization in the context of OAuth Client Secret / OIDC Config operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_23",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "availability",
+    "damage_scenario": "If the Availability of OAuth Client Secret / OIDC Config is compromised, required diagnostic workflows are interrupted or unavailable when service teams need them affecting organization in the context of OAuth Client Secret / OIDC Config operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_24",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "authenticity",
+    "damage_scenario": "If the Authenticity of OAuth Client Secret / OIDC Config is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting organization in the context of OAuth Client Secret / OIDC Config operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  },
+  {
+    "damage_id": "DS_25",
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of OAuth Client Secret / OIDC Config is compromised, privileged diagnostic functionality is used outside the permitted access boundary affecting organization in the context of OAuth Client Secret / OIDC Config operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-06-03T11:34:14.865Z"
+  }
+]

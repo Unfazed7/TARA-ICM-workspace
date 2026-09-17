@@ -1,0 +1,82 @@
+[
+  {
+    "asset_id": "AS_01",
+    "asset_title": "Access Token (JWT)",
+    "asset_type": "auth_credential",
+    "asset_description": "Bearer token authorizing API access",
+    "ciaaan": {
+      "confidentiality": true,
+      "integrity": true,
+      "availability": true,
+      "authenticity": true,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "csv",
+    "created_timestamp": "2026-06-09T03:29:04.660Z"
+  },
+  {
+    "asset_id": "AS_02",
+    "asset_title": "Refresh Token",
+    "asset_type": "auth_credential",
+    "asset_description": "Token to obtain new access tokens",
+    "ciaaan": {
+      "confidentiality": true,
+      "integrity": true,
+      "availability": true,
+      "authenticity": true,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "csv",
+    "created_timestamp": "2026-06-09T03:29:04.663Z"
+  },
+  {
+    "asset_id": "AS_03",
+    "asset_title": "ID Token (JWT claims)",
+    "asset_type": "auth_credential",
+    "asset_description": "Identity claims from Identity Provider",
+    "ciaaan": {
+      "confidentiality": true,
+      "integrity": true,
+      "availability": true,
+      "authenticity": true,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "csv",
+    "created_timestamp": "2026-06-09T03:29:04.663Z"
+  },
+  {
+    "asset_id": "AS_04",
+    "asset_title": "Django Session Cookie / Session State",
+    "asset_type": "auth_credential",
+    "asset_description": "Session identifier and server-side state",
+    "ciaaan": {
+      "confidentiality": true,
+      "integrity": true,
+      "availability": true,
+      "authenticity": true,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "csv",
+    "created_timestamp": "2026-06-09T03:29:04.663Z"
+  },
+  {
+    "asset_id": "AS_05",
+    "asset_title": "OAuth Client Secret / OIDC Config",
+    "asset_type": "auth_credential",
+    "asset_description": "OIDC client credentials and configuration",
+    "ciaaan": {
+      "confidentiality": true,
+      "integrity": true,
+      "availability": true,
+      "authenticity": true,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "csv",
+    "created_timestamp": "2026-06-09T03:29:04.663Z"
+  }
+]
