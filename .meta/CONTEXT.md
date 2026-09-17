@@ -12,6 +12,7 @@ Architecture: Multi-TARA type isolation (web-based-tara/ | vehicle-domain-tara/ 
 
 | Stage | Name | Spec | Implementation | Notes |
 |-------|------|------|---------------|-------|
+| — | Item Definition (CP1) | ✅ Spec done: `item-definition-agent.md` | 🔄 In progress | Precedes Stage 01; `agent.js` was never committed by a prior session — rebuilding from spec |
 | — | JSON Schemas | ✅ Done (needs CIAAAN update) | 📋 Codex: `codex/schemas` | CIA → CIAAAN |
 | — | CVSS AFR Engine | 📋 Write next | 📋 After spec | No blockers |
 | — | Impact Rating Engine | 📋 Write next | 📋 After spec | No blockers |
