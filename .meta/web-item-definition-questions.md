@@ -1,6 +1,17 @@
 # Web Item Definition — Discovery Questions
 
 Purpose: everything I need to know to build the **Web Item Definition** agent properly (see `CONTEXT.md` for terms).
+
+Agreed flow these questions assume:
+
+```
+Client documents → [Input Normalization + Item Definition] → Item Definition review (CP1) → Asset identification → Damage scenarios → …
+```
+
+- **Input Normalization** reads every client document once and reconciles them into one consistent set of facts; it runs together with Item Definition as a single step.
+- Nothing after Item Definition review re-reads client documents.
+- **Asset identification** is a separate, later step built only from the finalized Item Definition.
+
 How to answer: write directly under each question, then commit and push. Where a question asks for examples or files, attach them under `.meta/item-definition-samples/` and reference the filename.
 
 Each question states the **answer level** I need:
@@ -28,9 +39,9 @@ Missed element · hallucinated element · wrong scope decision · wrong link/pro
 
 ---
 
-## B. Inputs
+## B. Client documents and Input Normalization
 
-**B1. Which input types actually arrive in practice, and how often?** — *List*
+**B1. Which client document types actually arrive in practice, and how often?** — *List*
 For each: format (PNG, PDF, draw.io, Visio, Lucidchart export, Terraform/CloudFormation, AWS Config export, Excel feature list, Word/PDF spec, plain text) · how common · typical size.
 
 **B2. What does a typical web architecture diagram look like?** — *Example + File*
@@ -44,6 +55,17 @@ Give a precedence order (e.g. existing item definition > network topology > arch
 
 **B5. For feature/function lists and topology exports: what are the exact columns/fields?** — *File*
 Attach one real sample of each.
+
+**B6. When a client sends an asset list (CSV/Excel), how should Input Normalization use it?** — *Rules*
+It is now just another client document, not a shortcut to rated assets. Should each row become a candidate **element**, a hint passed on to Asset identification, or both? Attach a sample.
+
+**B7. Should Input Normalization keep a document register?** — *List*
+i.e. a record of every client document used (id, title, version, date, owner) so each fact in the Item Definition can be traced to a specific document version. Which fields are needed?
+
+**B8. Besides elements and links, what else should Input Normalization extract from client documents?** — *List*
+Candidates: functions/use cases · stated assumptions · constraints · security requirements already stated by the client · open questions for the client (gaps the documents don't answer).
+
+**B9. When the documents leave a gap, should the tool generate a list of questions to send back to the client?** — *Short*
 
 ---
 
@@ -64,8 +86,8 @@ Which of these are mandatory, optional, or not needed: provider (AWS/Azure/GCP/o
 **C5. Are human actors part of the Item Definition?** — *Short + List*
 (technician, fleet operator, OEM admin, vehicle owner, developer). If yes, list the standard actor set.
 
-**C6. Are data assets (PII, VIN, credentials, firmware packages, logs) part of the Item Definition, or do they only appear later in asset identification (Stage 01)?** — *Rules*
-This decides the line between Item Definition and the existing Stage 01 asset register.
+**C6. What data information should the Item Definition record so Asset identification can derive data assets later?** — *Rules*
+Data assets (PII, VIN, credentials, firmware packages, logs) are now identified in the later Asset identification step, not in the Item Definition. But that step never re-reads client documents, so the Item Definition must already capture enough about data: e.g. "data stored" on each data store and "data carried" on each link. Which data details must be recorded, and at what level (category like "PII" vs specific like "vehicle owner name, email, VIN")?
 
 ---
 
@@ -111,7 +133,7 @@ Prefer the agent to flag more ambiguity (safer, more analyst work) or decide mor
 
 ---
 
-## F. Item Definition content beyond architecture (ISO/SAE 21434 clause 9.3 / §15.3)
+## F. Item Definition content beyond architecture (ISO/SAE 21434 clause 9.3)
 
 **F1. Which of these sections must the Web Item Definition contain?** — *List (mark each required / optional / not needed)*
 item boundary · functions / use cases · preliminary architecture · operational environment (deployment regions, tenants, environments like prod/staging) · interfaces to external systems · assumptions · constraints · applicable legal/regulatory requirements (R155/R156, GDPR…) · stakeholders.
@@ -125,18 +147,27 @@ JSON only · Excel in an OEM template · Word/PDF report · diagram. Attach any 
 
 ---
 
-## G. Downstream contract
+## G. Asset identification and downstream
 
-**G1. How should the finalized Web Item Definition feed Stage 01 (Input Normalization → asset register with CIAAAN)?** — *Rules*
-One in-scope element → one asset? Only certain element kinds become assets? Should the CSV upload path remain as an alternative, or be replaced by this?
+**G1. Element → asset rules for Asset identification (clause 15.3).** — *Rules*
+An element is something that exists in the system; an asset is something inside it worth protecting, with CIAAAN properties. One element can yield several assets or none. For each element kind in C1, which asset(s) does it typically produce, and which CIAAAN properties apply? Example of the expected level:
+- Firmware package store → *firmware packages* (Integrity, Authenticity), *signing metadata* (Integrity)
+- OTA update API → *update authorization function* (Authorization, Authenticity, Integrity), *API availability* (Availability)
+- VPC → no asset (container only)
 
-**G2. Do any later stages (damage, threats, attack paths) need anything from the Item Definition directly (e.g. trust boundaries, internet exposure, actors)?** — *List*
+**G2. Which scope statuses produce assets?** — *Rules*
+Only `in_scope` elements? Also `interface` elements (e.g. the link to a vehicle ECU)? Never `out_of_scope`?
+
+**G3. How much analyst review does Asset identification need?** — *Short*
+A full second review, or a light confirm-and-adjust of what the agent proposes?
+
+**G4. Do any later stages (damage, threats, attack paths) need anything from the Item Definition directly (e.g. trust boundaries, internet exposure, actors)?** — *List*
 
 ---
 
-## H. Analyst review (CP1)
+## H. Item Definition review (CP1)
 
-**H1. What must an analyst be able to do at review?** — *List*
+**H1. What must an analyst be able to do at Item Definition review?** — *List*
 Confirm/extend: change scope · add element · delete element · rename · edit attributes · add/delete link · resolve conflict · edit boundary statement · re-run with extra files · approve/finalize.
 
 **H2. Re-runs after finalize: new version, or merge with previous analyst edits?** — *Short*
