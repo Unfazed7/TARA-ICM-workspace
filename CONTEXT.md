@@ -30,10 +30,24 @@ _Avoid_: ECU item definition, hardware item definition
 An analyst-written sentence naming the **Item** and what sits at its edge.
 _Avoid_: scope statement, boundary prompt
 
+**Client documents**:
+The foundational material a client supplies for a TARA (architecture diagrams, functional documents, feature lists, topology exports, existing item definitions).
+_Avoid_: inputs, uploads, source files
+
+**Input Normalization**:
+Reading every **Client document** once and reconciling them into one consistent set of facts about the system; performed together with **Item Definition** as a single step.
+_Avoid_: ingestion, intake, parsing stage
+
+**Item Definition review**:
+The analyst checkpoint (CP1) where proposed scope decisions are confirmed, corrected, and finalized.
+_Avoid_: boundary review, CP1 screen
+
 ## Relationships
 
 - Every **TARA type** uses exactly one **Item Definition** variant: web-based uses the **Web Item Definition**; the other three share the **Vehicle Item Definition**.
 - An **Item Definition** describes exactly one **Item**, and is anchored by exactly one **Boundary statement**.
+- **Input Normalization** and **Item Definition** run as one step over the **Client documents**; its result goes to **Item Definition review** before anything downstream runs.
+- No step after **Item Definition review** re-reads **Client documents**.
 
 ## Example dialogue
 
@@ -42,4 +56,5 @@ _Avoid_: scope statement, boundary prompt
 
 ## Flagged ambiguities
 
+- "Input Normalization" previously meant a stage that turned a CSV or diagram directly into rated assets — resolved: it now means only reading and reconciling **Client documents**, done together with **Item Definition**.
 - "Item Definition" was used for both a single shared agent and a per-type agent — resolved: there are two variants (**Web** and **Vehicle**), never merged, so a web-based TARA of a system touching vehicle ECUs doesn't produce a blend of both.
