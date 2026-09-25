@@ -8,7 +8,7 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | A1 | done | 2026-09-25 | 7c8a9cb | `.meta/STALE-INVENTORY.md`: 70 files, 7 governance conflicts. Gate: analyst approved all proposed actions. Decisions: `vehicle_type` becomes optional (record in A3, apply in C3 and C7); `scripts/demo-run.js` path updated in A6, deleted in C14. |
 | A2 | done | 2026-09-25 | c2eb2e4, then the commit that adds this row | Gate: workbooks kept (open source), `taraAssets.ts` kept, lock file removed, placeholder emails moved to `example.com`. Test baseline recorded: `npm test` 61/66 (5 pre-existing failures: tests expect the old "ANTHROPIC_API_KEY is required" message, fixed with `llm-client.js` in C1); `pytest` 25/25 (run in a virtualenv, the system Python has a cryptography package conflict). |
 | A3 | done | 2026-09-25 | b106838, then the commit that adds this row | `.meta/DECISIONS.md`: D-01 to D-26, all accepted. Gate: D-14 approved; D-17 accepted with Qwen discarded (its docs and folder are removed in A5, not superseded). |
-| A4 | pending | | | |
+| A4 | done | 2026-09-25 | the commit that adds this row | Root `CONTEXT.md` rewritten: 26 terms (16 new, including Asset), new flow and no-re-reading rules in Relationships, history of the Input Normalization meaning in Flagged ambiguities. Also removed existing em dashes (W1) and corrected the Item clause reference from 15.3 to 9.3. |
 | A5 | pending | | | |
 | A6 | pending | | | |
 | A7 | pending | | | |
