@@ -5,7 +5,7 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | Task | Status | Date | Commit | Notes |
 |---|---|---|---|---|
 | A0 | done | 2026-09-25 | db847ec, then the commit that adds this row | Instructions and questions file replaced with the analyst's latest versions. Questions file now has sections A to O, including K. Local branch `claude-work` pushes to `claude` (accepted by analyst). Test dependencies to be installed before the first code task (accepted by analyst). |
-| A1 | pending | | | |
+| A1 | waiting-gate | 2026-09-25 | the commit that adds this row | `.meta/STALE-INVENTORY.md` written: 70 files, 7 governance conflicts, 2 decisions needed. Waiting for analyst approval of proposed actions. |
 | A2 | pending | | | |
 | A3 | pending | | | |
 | A4 | pending | | | |
