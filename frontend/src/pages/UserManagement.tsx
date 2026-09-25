@@ -315,7 +315,7 @@ export default function UserManagement() {
                                 <Input
                                     id="create-email"
                                     type="email"
-                                    placeholder="john@autotara.io"
+                                    placeholder="john@example.com"
                                     value={newEmail}
                                     onChange={(e) => setNewEmail(e.target.value)}
                                     className="bg-card/40 border-border/40"

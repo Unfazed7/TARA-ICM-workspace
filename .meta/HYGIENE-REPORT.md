@@ -52,8 +52,10 @@ If the workbooks are proprietary, the analyst chooses one or both of these:
 1. **Make the repo private** in GitHub settings. This is fast and hides the history immediately.
 2. **Rewrite history** to purge the files from every branch, then force-push. This changes every commit hash on those branches, so every clone (including a teammate's) must be re-cloned. Anyone who already cloned the repo keeps a copy.
 
-## 4. Decisions needed
+## 4. Decisions (analyst, 2026-09-25)
 
-1. Approve or change each proposed action in section 1.
-2. For the workbooks: are they proprietary to an employer or client (then also choose private repo, history rewrite, or both), or are they yours to publish?
-3. `taraAssets.ts`: approve replacing it with a small synthetic asset list built from public knowledge, so the frontend still builds.
+1. **Workbooks: keep.** The analyst confirmed they are open source. No history rewrite or private repo needed.
+2. **`frontend/src/data/taraAssets.ts`: keep as is.**
+3. **Excel lock file: removed.** It is not a workbook and held a local user name.
+4. **Placeholder emails: replaced** with `you@example.com` and `john@example.com`.
+5. All other rows: keep, as proposed.
