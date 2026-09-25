@@ -232,6 +232,15 @@ Measured per run against the expected output of a synthetic item. An element mat
 
 Also tracked: "Needs you" cards per run, analyst time, override rate, "why?" requests per card.
 
+### DR-17. Reading diagrams and documents
+Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
+- Parse source files directly with no model: draw.io XML (decompress if needed), Visio `.vsdx` page XML, Lucid CSV/JSON exports, Excel sheets, Word text and tables, known config export formats.
+- PNG/JPEG diagrams and diagram pages in PDFs go to an image-capable model in two passes (inventory with regions, then containment and arrows).
+- PDFs: text layer first; pages with little or no text go to the image model; method recorded per page.
+- Image-read labels are cross-checked with OCR; image-read links get confidence no higher than medium; unclear endpoints and unlabelled icons become questions.
+- A drawn box is a zone only if labelled as one or confirmed by text; sidebar managed services with one generic arrow produce no per-service links.
+- The document register records reading method per document and per page.
+
 ---
 
 ## PART 3. Tasks
@@ -354,7 +363,7 @@ Also tracked: "Needs you" cards per run, analyst time, override rate, "why?" req
    - 02 Item Definition: AI plus deterministic grouping; input = CP0-confirmed facts and answers (from API); output = `item-definition.json`, `questions.json`; checkpoint CP1.
    - 03 Asset Identification: AI; input = finalized Item Definition (from API); output = `asset-register.json`; checkpoint light review.
    - 04 to 10: existing stages with new numbers.
-   Update the Layer 3 loading map (01: `source-precedence.md`, `analyst-language.md`; 02: `element-kinds.md`, `scoping-facts.md`, `analyst-language.md`; 03: `web-asset-types.md`, `ciaaan-properties.md`) and ID conventions (DR-16 of task B1).
+   Update the Layer 3 loading map (01: `source-precedence.md`, `analyst-language.md`; 02: `element-kinds.md`, `scoping-facts.md`, `analyst-language.md`; 03: `web-asset-types.md`, `ciaaan-properties.md`) Leave the ID conventions table as it is for now, with a note that it is replaced in task B1, step 2, where the new ID conventions are defined.
 3. Rewrite `stages/01-input-normalization/CONTEXT.md`, `stages/02-item-definition/CONTEXT.md`, `stages/03-asset-identification/CONTEXT.md` (Layer 2). Each: Purpose, Input, Output, Process, Rules the API enforces (so the model knows them), Checkpoint, What the next stage receives. Stage 03 may be brief and marked "spec pending (C12)".
 4. Update `tara-workspace/CONTEXT.md` (Layer 1 dispatcher) only where it mentions stage names.
 **Do not:** write prompts yet; the Layer 2 files describe behaviour, the prompt text comes with the agent tasks.
@@ -399,7 +408,7 @@ Also tracked: "Needs you" cards per run, analyst time, override rate, "why?" req
    - any write to a confirmed checkpoint version (409);
    - Stage 02 writes that reference a fact not confirmed at CP0.
 5. Create JSON schemas in `src/schemas/`: `stage-01-document-register.schema.json`, `stage-01-facts.schema.json`, `stage-02-item-definition.schema.json`, `stage-02-questions.schema.json`. Add valid and invalid fixtures in `tests/fixtures/` (synthetic only) and schema tests in `tests/schemas.test.js`.
-**Acceptance:** schema tests pass; each refusal rule has an invalid fixture or an API test planned in C3; the analyst can hand-write a CP0 and a CP1 using only these fields (checked in B7 and B9).
+**Acceptance:** schema tests pass; each refusal rule has an invalid fixture or an API test planned in C3; the analyst can hand-write a CP0 and a CP1 using only these fields (checked in B4 and B6, the CP0 and CP1 paper prototypes).
 **HUMAN GATE:** analyst reviews the specs.
 **Commit:** `spec: item definition data contract and schemas`
 
@@ -495,7 +504,8 @@ Also tracked: "Needs you" cards per run, analyst time, override rate, "why?" req
 **Do:**
 1. Write a minimal Stage 01 per-document extraction prompt in `stages/01-input-normalization/prompts/extract-v1.md` (facts with source references only; no reconciliation).
 2. `scripts/model-trial.js`: for each candidate model in a list the analyst provides (open-weight, self-hostable size), run extraction on item-01, score facts against expected facts (recall and no-hallucination precision on facts), record cost and latency.
-3. Write `.meta/model-trial-results.md`: a table per model with the scores, cost, latency, and 3 examples of typical errors.
+3. Test image reading separately on item-01's PNG diagram (DR-17): element recall from the image alone and arrow correctness. If the best text model cannot read images, pick a second, image-capable model and pin both.
+4. Write `.meta/model-trial-results.md`: a table per model with the scores, cost, latency, and 3 examples of typical errors.
 **HUMAN GATE:** the analyst provides the candidate list before the run, and picks the model after it. Record the choice as a decision in `.meta/DECISIONS.md` and in `_config/models.json`.
 **Commit:** `chore: stage 01 model trial`
 
@@ -517,7 +527,7 @@ Also tracked: "Needs you" cards per run, analyst time, override rate, "why?" req
 #### C4. Stage 01 agent: per-document extraction and document register
 **Read first:** DR-4, DR-8, DR-9, stage 01 `CONTEXT.md`, C2 result.
 **Do:**
-1. `stages/01-input-normalization/agent.js`: check minimum input (DR-9) first; build the document register (hash, type detection, environment, read status); extract facts per document with the chosen model; one call per document (split large documents by page range with overlap, keep page references); write `output/document-register.json`, `output/facts.raw.json`.
+1. `stages/01-input-normalization/agent.js`: check minimum input (DR-9) first; implement the deterministic parsers and the image path from DR-17 before any model extraction; build the document register (hash, type detection, environment, read status); extract facts per document with the chosen model; one call per document (split large documents by page range with overlap, keep page references); write `output/document-register.json`, `output/facts.raw.json`.
 2. Add a redaction hook (no-op by default, config switch) that runs before any content leaves the machine: account IDs, hostnames, bucket names, IPs, personal names, with a reversible mapping stored locally.
 3. Seed the register and raw facts through the C3 seed endpoint; log refused items.
 **Acceptance:** on item-01, fact recall and precision meet the C2 numbers for the chosen model; no fact without a source reaches the API; partial-failure path tested with an unreadable file.

@@ -4,7 +4,7 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 
 | Task | Status | Date | Commit | Notes |
 |---|---|---|---|---|
-| A0 | blocked | 2026-09-25 | see git log | Steps 1 to 3 done. Step 4 failed: `.meta/web-item-definition-questions.md` has sections A to J only, no section K "Analyst dialogue design" on any branch. Waiting for the analyst's latest file. |
+| A0 | done | 2026-09-25 | db847ec, then the commit that adds this row | Instructions and questions file replaced with the analyst's latest versions. Questions file now has sections A to O, including K. Local branch `claude-work` pushes to `claude` (accepted by analyst). Test dependencies to be installed before the first code task (accepted by analyst). |
 | A1 | pending | | | |
 | A2 | pending | | | |
 | A3 | pending | | | |
