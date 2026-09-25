@@ -12,8 +12,8 @@ Calculate final risk scores for all threats by combining the Impact Rating (from
 
 ## Input
 
-- `stages/04-attack-path-modelling/output/attack-paths.json` (for `afr_value` per threat)
-- `stages/05-impact-analysis/output/impact-analysis.json` (for impact rating per threat)
+- `stages/06-attack-path-modelling/output/attack-paths.json` (for `afr_value` per threat)
+- `stages/07-impact-analysis/output/impact-analysis.json` (for impact rating per threat)
 
 ## Layer 3 Files Loaded
 

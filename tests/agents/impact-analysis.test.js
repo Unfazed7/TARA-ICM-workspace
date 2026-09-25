@@ -6,7 +6,7 @@ const {
   buildImpactAnalysisWithClaude,
   callClaudeForThreat,
   validateImpactAnalysis
-} = require('../../tara-workspace/web-based-tara/stages/05-impact-analysis/agent');
+} = require('../../tara-workspace/web-based-tara/stages/07-impact-analysis/agent');
 const { readJson, fixturePath, validateSchema, schemaPath } = require('../helpers/schema-validation');
 
 test.beforeEach(() => {
@@ -54,27 +54,27 @@ function mockClaudeFetch(inputs = [CLAUDE_IMPACT], captured = []) {
 }
 
 test('impact analysis creates exactly one impact per threat using Claude tool output', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const impacts = await buildImpactAnalysisWithClaude(threats, damage, {
     timestamp: '2026-06-01T10:04:00Z',
     fetchImpl: mockClaudeFetch()
   });
   assert.equal(impacts.length, threats.length);
-  assert.equal(validateSchema(impacts, readJson(schemaPath(5))).valid, true);
+  assert.equal(validateSchema(impacts, readJson(schemaPath(7))).valid, true);
 });
 
 test('domain constraints are always enforced after Claude output', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const impacts = await buildImpactAnalysisWithClaude(threats, damage, { fetchImpl: mockClaudeFetch() });
   assert.equal(impacts[0].tool_user.safety, 'Negligible');
   assert.equal(impacts[0].tool_user.financial, 'Negligible');
 });
 
 test('Claude request forces submit_impact_analysis tool without extended thinking', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const captured = [];
   process.env.ANTHROPIC_API_KEY = 'test-key';
   await callClaudeForThreat(threats[0], damage[0], mockClaudeFetch([CLAUDE_IMPACT], captured));
@@ -84,8 +84,8 @@ test('Claude request forces submit_impact_analysis tool without extended thinkin
 });
 
 test('impact analysis retries once after free text response', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json')).slice(0, 1);
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json')).slice(0, 1);
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const captured = [];
   const impacts = await buildImpactAnalysisWithClaude(threats, damage, {
     fetchImpl: mockClaudeFetch([null, CLAUDE_IMPACT], captured)
@@ -95,16 +95,16 @@ test('impact analysis retries once after free text response', async () => {
 });
 
 test('impact validation rejects non-negligible fixed dimensions', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const impacts = await buildImpactAnalysisWithClaude(threats, damage, { fetchImpl: mockClaudeFetch() });
   impacts[0].tool_user.safety = 'Major';
   assert.throws(() => validateImpactAnalysis(impacts, threats, damage), /safety must be Negligible/);
 });
 
 test('impact validation rejects invalid computed rating', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const badImpact = {
     ...CLAUDE_IMPACT,
     tool_user: { ...CLAUDE_IMPACT.tool_user, privacy: 'Critical' }
@@ -116,7 +116,7 @@ test('impact validation rejects invalid computed rating', async () => {
 });
 
 test('missing damage scenario fails clearly', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
   await assert.rejects(
     () => buildImpactAnalysisWithClaude(threats, [], { fetchImpl: mockClaudeFetch() }),
     /No damage scenario found/
@@ -124,8 +124,8 @@ test('missing damage scenario fails clearly', async () => {
 });
 
 test('missing API key fails clearly', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   delete process.env.ANTHROPIC_API_KEY;
   await assert.rejects(
     () => callClaudeForThreat(threats[0], damage[0], mockClaudeFetch()),

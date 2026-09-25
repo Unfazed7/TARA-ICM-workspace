@@ -10,7 +10,7 @@ const {
   callAnthropicVision,
   parseBoolean,
   validateAssets
-} = require('../../tara-workspace/web-based-tara/stages/01-input-normalization/agent');
+} = require('../../tara-workspace/web-based-tara/stages/01-input-normalization/legacy/agent.csv-mode');
 const { ROOT, readJson, schemaPath, validateSchema } = require('../helpers/schema-validation');
 
 function inputFixture(fileName) {
@@ -24,7 +24,7 @@ test('CSV input normalizes asset register', () => {
   assert.equal(assets[0].asset_id, 'AS_01');
   assert.equal(assets[0].input_mode, 'csv');
   assert.equal(assets[0].ciaaan.authorization, true);
-  const result = validateSchema(assets, readJson(schemaPath(1)));
+  const result = validateSchema(assets, readJson(schemaPath(3)));
   assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
 });
 

@@ -33,7 +33,7 @@ This stage cannot be specified until the following is received:
 
 ## Expected Input (once unblocked)
 
-- `stages/06-risk-scoring/output/risk-register.json`
+- `stages/08-risk-scoring/output/risk-register.json`
 - `_controls-db/controls-library.json` (schema TBD)
 
 ## Expected Output (schema TBD)

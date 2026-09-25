@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "stage-06-risk-register.schema.json",
+  "$id": "stage-08-risk-register.schema.json",
   "title": "Stage 06 Risk Register",
   "type": "array",
   "minItems": 1,

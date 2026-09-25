@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "stage-01-asset-register.schema.json",
+  "$id": "stage-03-asset-register.schema.json",
   "title": "Stage 01 Asset Register",
   "type": "array",
   "minItems": 1,

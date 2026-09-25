@@ -10,7 +10,7 @@
         "properties": {
           "assets": {
             "type": "array",
-            "items": { "$ref": "stage-01-asset-register.schema.json#/items" }
+            "items": { "$ref": "stage-03-asset-register.schema.json#/items" }
           }
         },
         "required": ["assets"]
@@ -25,7 +25,7 @@
         "properties": {
           "damage_scenarios": {
             "type": "array",
-            "items": { "$ref": "stage-02-damage-scenarios.schema.json#/items" }
+            "items": { "$ref": "stage-04-damage-scenarios.schema.json#/items" }
           }
         },
         "required": ["damage_scenarios"]
@@ -40,7 +40,7 @@
         "properties": {
           "threats": {
             "type": "array",
-            "items": { "$ref": "stage-03-threats.schema.json#/items" }
+            "items": { "$ref": "stage-05-threats.schema.json#/items" }
           }
         },
         "required": ["threats"]
@@ -55,7 +55,7 @@
         "properties": {
           "attack_paths": {
             "type": "array",
-            "items": { "$ref": "stage-04-attack-paths.schema.json#/items" }
+            "items": { "$ref": "stage-06-attack-paths.schema.json#/items" }
           }
         },
         "required": ["attack_paths"]
@@ -70,7 +70,7 @@
         "properties": {
           "impact_analysis": {
             "type": "array",
-            "items": { "$ref": "stage-05-impact-analysis.schema.json#/items" }
+            "items": { "$ref": "stage-07-impact-analysis.schema.json#/items" }
           }
         },
         "required": ["impact_analysis"]

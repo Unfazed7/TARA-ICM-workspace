@@ -12,7 +12,7 @@ For each asset × applicable CIAAAN property combination, derive one specific da
 
 ## Input
 
-`stages/01-input-normalization/output/asset-register.json`
+`stages/03-asset-identification/output/asset-register.json`
 
 ## Layer 3 Files Loaded
 
@@ -67,7 +67,7 @@ Each asset has a different role, location, and functional context — the damage
 ## Validation Rules
 
 - `damage_id` unique within array, DS_## format
-- `asset_id` must exist in Stage 01 output
+- `asset_id` must exist in Stage 03 output
 - `property` must be one of the 6 CIAAAN properties
 - No attacker language in `damage_scenario`
 - `stakeholder_affected` must be specific and correct

@@ -9,7 +9,7 @@ const {
   callClaudeForThreat,
   THINKING,
   validateAttackPaths
-} = require('../../tara-workspace/web-based-tara/stages/04-attack-path-modelling/agent');
+} = require('../../tara-workspace/web-based-tara/stages/06-attack-path-modelling/agent');
 const { calculateCVSSAFR } = require('../../tara-workspace/web-based-tara/_engines/cvss-afr-calc');
 const { readJson, fixturePath, validateSchema, schemaPath, ROOT } = require('../helpers/schema-validation');
 
@@ -47,7 +47,7 @@ function validToolResponse() {
 }
 
 async function buildWithMockedClaude(overrides = {}) {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
   const previousKey = process.env.ANTHROPIC_API_KEY;
   process.env.ANTHROPIC_API_KEY = 'test-key';
   let requestBody = null;
@@ -80,18 +80,18 @@ test('attack path modelling creates pre-engine paths with null AFR fields', asyn
   assert.deepEqual(requestBody.thinking, THINKING);
   assert.deepEqual(requestBody.tool_choice, { type: 'tool', name: 'submit_attack_path' });
   assert.equal(requestBody.tools[0].name, 'submit_attack_path');
-  assert.equal(validateSchema(paths, readJson(schemaPath(4))).valid, true);
+  assert.equal(validateSchema(paths, readJson(schemaPath(6))).valid, true);
 });
 
 test('invalid CVSS enum is rejected', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
   const { paths } = await buildWithMockedClaude();
   paths[0].cvss_metrics.attack_vector = 'Z';
   assert.throws(() => validateAttackPaths(paths, threats), /Invalid CVSS metric/);
 });
 
 test('empty attack step is rejected', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
   const { paths } = await buildWithMockedClaude();
   paths[0].attack_path.step_4_control_gap = '';
   assert.throws(() => validateAttackPaths(paths, threats), /Empty attack path step/);
@@ -106,8 +106,8 @@ test('CVSS engine fills AFR after Stage 04 output', async () => {
 
 test('CVSS engine CLI fills AFR fields', async () => {
   const tmpDir = fs.mkdtempSync(path.join(ROOT, 'tests', '.tmp-'));
-  const input = path.join(tmpDir, 'stage-04-attack-paths.json');
-  const output = path.join(tmpDir, 'stage-04-attack-paths.json');
+  const input = path.join(tmpDir, 'stage-06-attack-paths.json');
+  const output = path.join(tmpDir, 'stage-06-attack-paths.json');
   const { paths } = await buildWithMockedClaude();
   fs.writeFileSync(input, JSON.stringify(paths));
   require('child_process').execFileSync('node', [
@@ -127,7 +127,7 @@ test('attack path modelling fails without API key', async () => {
   delete process.env.ANTHROPIC_API_KEY;
   await assert.rejects(
     () => callClaudeForThreat(
-      readJson(fixturePath('valid', 'stage-03-threats.json'))[0],
+      readJson(fixturePath('valid', 'stage-05-threats.json'))[0],
       async () => { throw new Error('not called'); }
     ),
     /ANTHROPIC_API_KEY is required/
@@ -136,7 +136,7 @@ test('attack path modelling fails without API key', async () => {
 });
 
 test('attack path modelling retries once on free text before accepting tool_use', async () => {
-  const threats = readJson(fixturePath('valid', 'stage-03-threats.json'));
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
   const previousKey = process.env.ANTHROPIC_API_KEY;
   process.env.ANTHROPIC_API_KEY = 'test-key';
   let calls = 0;

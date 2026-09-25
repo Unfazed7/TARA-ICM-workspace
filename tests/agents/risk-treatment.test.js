@@ -12,7 +12,7 @@ const {
   deriveCAL,
   parseControlsCatalogue,
   validateTreatments
-} = require('../../tara-workspace/web-based-tara/stages/07-risk-treatment/agent');
+} = require('../../tara-workspace/web-based-tara/stages/09-risk-treatment/agent');
 const { fixturePath, readJson, schemaPath, validateSchema } = require('../helpers/schema-validation');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -24,7 +24,7 @@ const WEB_CONSTRAINTS = fs.readFileSync(
   path.join(ROOT, 'tara-workspace/web-based-tara/_config/web-tara-constraints.md'),
   'utf8'
 );
-const SCHEMA = readJson(path.join(ROOT, 'src/schemas/stage-07-risk-treatment.schema.json'));
+const SCHEMA = readJson(path.join(ROOT, 'src/schemas/stage-09-risk-treatment.schema.json'));
 
 test.beforeEach(() => {
   process.env.ANTHROPIC_API_KEY = 'test-key';
@@ -36,12 +36,12 @@ function clone(value) {
 
 function baseFixtures() {
   return {
-    riskRegister: readJson(fixturePath('valid', 'stage-06-risk-register.json')),
-    threats: readJson(fixturePath('valid', 'stage-03-threats.json')),
-    damageScenarios: readJson(fixturePath('valid', 'stage-02-damage-scenarios.json')),
-    attacks: readJson(fixturePath('valid', 'stage-04-attack-paths-post-engine.json')),
-    impacts: readJson(fixturePath('valid', 'stage-05-impact-analysis.json')),
-    assets: readJson(fixturePath('valid', 'stage-01-asset-register.json'))
+    riskRegister: readJson(fixturePath('valid', 'stage-08-risk-register.json')),
+    threats: readJson(fixturePath('valid', 'stage-05-threats.json')),
+    damageScenarios: readJson(fixturePath('valid', 'stage-04-damage-scenarios.json')),
+    attacks: readJson(fixturePath('valid', 'stage-06-attack-paths-post-engine.json')),
+    impacts: readJson(fixturePath('valid', 'stage-07-impact-analysis.json')),
+    assets: readJson(fixturePath('valid', 'stage-03-asset-register.json'))
   };
 }
 

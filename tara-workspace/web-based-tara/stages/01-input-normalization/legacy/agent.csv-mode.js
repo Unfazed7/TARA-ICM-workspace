@@ -1,3 +1,5 @@
+// SUPERSEDED on 2026-09-25: legacy CSV/diagram mode of Stage 01, kept for reference until C14.
+// Stage 01 is now Input Normalization (reads documents into facts); assets come from Stage 03.
 'use strict';
 
 const fs = require('fs');
@@ -147,7 +149,7 @@ function validateAssets(assets) {
 }
 
 function loadSubmitAssetRegisterTool() {
-  const toolSchemasPath = path.resolve(__dirname, '../../../../src/schemas/tool-use-schemas.json');
+  const toolSchemasPath = path.resolve(__dirname, '../../../../../src/schemas/tool-use-schemas.json');
   const toolSchemas = JSON.parse(fs.readFileSync(toolSchemasPath, 'utf8'));
   const tool = toolSchemas.tools.find((item) => item.name === 'submit_asset_register');
   if (!tool) throw new Error('Tool schema submit_asset_register not found');
@@ -155,7 +157,7 @@ function loadSubmitAssetRegisterTool() {
 }
 
 function buildDiagramPrompt() {
-  const configDir = path.resolve(__dirname, '../../_config');
+  const configDir = path.resolve(__dirname, '../../../_config');
   const assetTypes = fs.readFileSync(path.join(configDir, 'web-asset-types.md'), 'utf8');
   const ciaaanProperties = fs.readFileSync(path.join(configDir, 'ciaaan-properties.md'), 'utf8');
   return [

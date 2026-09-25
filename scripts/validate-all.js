@@ -5,12 +5,12 @@ const path = require('path');
 const { readJson, schemaPath, validateSchema } = require('../tests/helpers/schema-validation');
 
 const stageByName = [
-  [/stage-01/, 1],
-  [/stage-02/, 2],
   [/stage-03/, 3],
   [/stage-04/, 4],
   [/stage-05/, 5],
-  [/stage-06/, 6]
+  [/stage-06/, 6],
+  [/stage-07/, 7],
+  [/stage-08/, 8]
 ];
 
 function filesFrom(target) {

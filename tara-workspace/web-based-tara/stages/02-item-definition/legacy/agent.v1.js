@@ -1,8 +1,10 @@
+// SUPERSEDED on 2026-09-25: v1 Item Definition agent, reference only, not wired. Kept until C14.
+// Replaced by the Stage 02 agent built in C8.
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
-const { callLLM } = require('../../web-based-tara/stages/llm-client');
+const { callLLM } = require('../../llm-client');
 
 const MODEL = 'claude-opus-4-8';
 const EXTRACT_TOOL = 'submit_extracted_elements';

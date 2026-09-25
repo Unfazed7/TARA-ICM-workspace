@@ -12,7 +12,7 @@ Derive exactly one threat per damage scenario. Threats are the direct cause of t
 
 ## Input
 
-`stages/02-damage-analysis/output/damage-scenarios.json`
+`stages/04-damage-analysis/output/damage-scenarios.json`
 
 ## Layer 3 Files Loaded
 

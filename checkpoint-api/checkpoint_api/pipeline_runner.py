@@ -16,15 +16,21 @@ LLM_API_KEY = os.getenv("LLM_API_KEY", ANTHROPIC_API_KEY)
 LLM_MODEL = os.getenv("LLM_MODEL", "")
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")
 
+# Keys are API stage numbers, unchanged until C13; values are the renumbered folders.
 STAGE_DIRS = {
     1: "01-input-normalization",
-    2: "02-damage-analysis",
-    3: "03-threat-identification",
-    4: "04-attack-path-modelling",
-    5: "05-impact-analysis",
-    6: "06-risk-scoring",
-    7: "07-risk-treatment",
+    2: "04-damage-analysis",
+    3: "05-threat-identification",
+    4: "06-attack-path-modelling",
+    5: "07-impact-analysis",
+    6: "08-risk-scoring",
+    7: "09-risk-treatment",
 }
+
+# API stage 1 still runs the legacy CSV agent, which writes the asset register
+# where Stage 04 now reads it: Stage 03's output folder.
+AGENT_FILES = {1: os.path.join("legacy", "agent.csv-mode.js")}
+OUTPUT_DIRS = {1: "03-asset-identification"}
 
 STAGE_OUTPUT_FILES = {
     1: "asset-register.json",
@@ -42,7 +48,7 @@ def utc_now():
 
 
 def get_output_path(stage_num: int) -> str:
-    stage_dir = STAGE_DIRS[stage_num]
+    stage_dir = OUTPUT_DIRS.get(stage_num, STAGE_DIRS[stage_num])
     output_file = STAGE_OUTPUT_FILES[stage_num]
     return os.path.join(
         WORKSPACE_ROOT,
@@ -63,7 +69,7 @@ def get_agent_path(stage_num: int) -> str:
         "web-based-tara",
         "stages",
         stage_dir,
-        "agent.js",
+        AGENT_FILES.get(stage_num, "agent.js"),
     )
 
 

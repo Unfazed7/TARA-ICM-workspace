@@ -6,7 +6,7 @@ const {
   buildThreatsWithClaude,
   callClaudeForDamageScenario,
   validateThreats
-} = require('../../tara-workspace/web-based-tara/stages/03-threat-identification/agent');
+} = require('../../tara-workspace/web-based-tara/stages/05-threat-identification/agent');
 const { readJson, fixturePath, validateSchema, schemaPath } = require('../helpers/schema-validation');
 
 function restoreEnv(name, previousValue) {
@@ -18,7 +18,7 @@ function restoreEnv(name, previousValue) {
 }
 
 test('threat identification creates exactly one threat per damage scenario via Claude tool_use', async () => {
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const previousKey = process.env.ANTHROPIC_API_KEY;
   process.env.ANTHROPIC_API_KEY = 'test-key';
   let requestBody = null;
@@ -50,11 +50,11 @@ test('threat identification creates exactly one threat per damage scenario via C
   assert.deepEqual(requestBody.tool_choice, { type: 'tool', name: 'submit_threat' });
   assert.equal(requestBody.tools[0].name, 'submit_threat');
   assert.equal(threats.length, damage.length);
-  assert.equal(validateSchema(threats, readJson(schemaPath(3))).valid, true);
+  assert.equal(validateSchema(threats, readJson(schemaPath(5))).valid, true);
 });
 
 test('generic threat without asset title is rejected', () => {
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const threats = [{
     threat_id: 'TH_01',
     damage_scenario_id: 'DS_01',
@@ -72,7 +72,7 @@ test('generic threat without asset title is rejected', () => {
 });
 
 test('invalid stride category is rejected', () => {
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const threats = [{
     threat_id: 'TH_01',
     damage_scenario_id: 'DS_01',
@@ -93,7 +93,7 @@ test('empty damage input fails', async () => {
 });
 
 test('threat identification retries once on free text before accepting tool_use', async () => {
-  const damage = readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'));
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const previousKey = process.env.ANTHROPIC_API_KEY;
   process.env.ANTHROPIC_API_KEY = 'test-key';
   let calls = 0;
@@ -129,7 +129,7 @@ test('threat identification Claude path fails without API key', async () => {
   delete process.env.ANTHROPIC_API_KEY;
   await assert.rejects(
     () => callClaudeForDamageScenario(
-      readJson(fixturePath('valid', 'stage-02-damage-scenarios.json'))[0],
+      readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'))[0],
       async () => { throw new Error('not called'); }
     ),
     /ANTHROPIC_API_KEY is required/

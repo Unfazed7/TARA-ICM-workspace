@@ -37,12 +37,12 @@ function readJson(filePath) {
 
 function schemaPath(stage) {
   const files = {
-    1: 'stage-01-asset-register.schema.json',
-    2: 'stage-02-damage-scenarios.schema.json',
-    3: 'stage-03-threats.schema.json',
-    4: 'stage-04-attack-paths.schema.json',
-    5: 'stage-05-impact-analysis.schema.json',
-    6: 'stage-06-risk-register.schema.json'
+    3: 'stage-03-asset-register.schema.json',
+    4: 'stage-04-damage-scenarios.schema.json',
+    5: 'stage-05-threats.schema.json',
+    6: 'stage-06-attack-paths.schema.json',
+    7: 'stage-07-impact-analysis.schema.json',
+    8: 'stage-08-risk-register.schema.json'
   };
   return path.join(ROOT, 'src', 'schemas', files[stage]);
 }

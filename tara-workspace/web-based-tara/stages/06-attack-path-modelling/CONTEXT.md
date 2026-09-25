@@ -12,7 +12,7 @@ For each threat, model the most feasible attack path (exactly 5 steps), assign C
 
 ## Input
 
-`stages/03-threat-identification/output/threats.json`
+`stages/05-threat-identification/output/threats.json`
 
 ## Layer 3 Files Loaded
 

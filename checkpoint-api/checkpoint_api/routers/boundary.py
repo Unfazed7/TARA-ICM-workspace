@@ -4,7 +4,7 @@ Deliberately separate from the checkpoints router. Checkpoints remain a
 whole-stage approve/reject gate; this resource handles the element-by-element
 editing an analyst performs *before* approving the Stage 1 checkpoint.
 
-Invariants enforced here (mirroring tara-workspace/stages/01-item-definition):
+Invariants enforced here (mirroring tara-workspace/web-based-tara/stages/02-item-definition):
   - A boundary cannot be finalized while any decision is still 'ambiguous'.
   - Every mutation appends an immutable BoundaryEdit row. No edit is silent.
   - Once phase='final', the boundary is frozen; further edits are rejected.

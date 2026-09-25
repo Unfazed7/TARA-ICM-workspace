@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "stage-05-impact-analysis.schema.json",
+  "$id": "stage-07-impact-analysis.schema.json",
   "title": "Stage 05 Impact Analysis",
   "type": "array",
   "minItems": 1,

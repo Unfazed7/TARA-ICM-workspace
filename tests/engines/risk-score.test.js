@@ -7,11 +7,11 @@ const {
   computeRiskScore,
   getRiskLevel
 } = require('../../tara-workspace/web-based-tara/_engines/risk-score');
-const { buildRiskRegister } = require('../../tara-workspace/web-based-tara/stages/06-risk-scoring/agent');
+const { buildRiskRegister } = require('../../tara-workspace/web-based-tara/stages/08-risk-scoring/agent');
 const { fixturePath, readJson } = require('../helpers/schema-validation');
 
 test('impact rating is the max of applicable Stage 05 dimensions', () => {
-  const impact = readJson(fixturePath('valid', 'stage-05-impact-analysis.json'))[0];
+  const impact = readJson(fixturePath('valid', 'stage-07-impact-analysis.json'))[0];
   assert.equal(computeImpactRatingValue(impact), 2);
 });
 
@@ -27,8 +27,8 @@ test('risk level boundaries match spec 06', () => {
 });
 
 test('risk score combines impact and AFR', () => {
-  const impact = readJson(fixturePath('valid', 'stage-05-impact-analysis.json'))[0];
-  const attack = readJson(fixturePath('valid', 'stage-04-attack-paths-post-engine.json'))[0];
+  const impact = readJson(fixturePath('valid', 'stage-07-impact-analysis.json'))[0];
+  const attack = readJson(fixturePath('valid', 'stage-06-attack-paths-post-engine.json'))[0];
   assert.deepEqual(computeRiskScore(impact, attack), {
     impact_rating_value: 2,
     impact_rating_label: 'Major',
@@ -40,8 +40,8 @@ test('risk score combines impact and AFR', () => {
 });
 
 test('risk ranking sorts by score then higher AFR', () => {
-  const impactTemplate = readJson(fixturePath('valid', 'stage-05-impact-analysis.json'))[0];
-  const attackTemplate = readJson(fixturePath('valid', 'stage-04-attack-paths-post-engine.json'))[0];
+  const impactTemplate = readJson(fixturePath('valid', 'stage-07-impact-analysis.json'))[0];
+  const attackTemplate = readJson(fixturePath('valid', 'stage-06-attack-paths-post-engine.json'))[0];
   const impacts = [
     { ...impactTemplate, impact_id: 'IM_01', threat_id: 'TH_01' },
     { ...impactTemplate, impact_id: 'IM_02', threat_id: 'TH_02' },
@@ -63,8 +63,8 @@ test('risk ranking sorts by score then higher AFR', () => {
 });
 
 test('Stage 06 runner builds the golden risk register', () => {
-  const impact = readJson(fixturePath('valid', 'stage-05-impact-analysis.json'));
-  const attacks = readJson(fixturePath('valid', 'stage-04-attack-paths-post-engine.json'));
+  const impact = readJson(fixturePath('valid', 'stage-07-impact-analysis.json'));
+  const attacks = readJson(fixturePath('valid', 'stage-06-attack-paths-post-engine.json'));
   const result = buildRiskRegister(impact, attacks, '2026-06-01T10:05:00.000Z');
   assert.equal(result.length, 1);
   assert.equal(result[0].risk_score, 8);
@@ -72,7 +72,7 @@ test('Stage 06 runner builds the golden risk register', () => {
 });
 
 test('missing AFR fails before scoring', () => {
-  const impact = readJson(fixturePath('valid', 'stage-05-impact-analysis.json'))[0];
-  const attack = readJson(fixturePath('valid', 'stage-04-attack-paths.json'))[0];
+  const impact = readJson(fixturePath('valid', 'stage-07-impact-analysis.json'))[0];
+  const attack = readJson(fixturePath('valid', 'stage-06-attack-paths.json'))[0];
   assert.throws(() => computeRiskScore(impact, attack), /afr_value not computed/);
 });

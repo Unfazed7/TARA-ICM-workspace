@@ -12,8 +12,8 @@ For each threat, derive a 7-dimension impact rating. Impact narrative comes from
 
 ## Input
 
-- `stages/03-threat-identification/output/threats.json`
-- `stages/02-damage-analysis/output/damage-scenarios.json`
+- `stages/05-threat-identification/output/threats.json`
+- `stages/04-damage-analysis/output/damage-scenarios.json`
 
 ## Layer 3 Files Loaded
 

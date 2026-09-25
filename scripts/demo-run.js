@@ -185,7 +185,7 @@ async function runFixtureMode(assessmentId) {
 }
 
 async function runLiveMode(args, assessmentId) {
-  const agent = require(path.join(__dirname, '..', 'tara-workspace', 'stages', '01-item-definition', 'agent.js'));
+  const agent = require(path.join(__dirname, '..', 'tara-workspace', 'web-based-tara', 'stages', '02-item-definition', 'legacy', 'agent.v1.js'));
   const archPath = args.arch;
   const topoPath = args.topo;
   const boundaryStatement = args.boundary;
@@ -216,7 +216,7 @@ async function runLiveMode(args, assessmentId) {
   console.log(`\nResolve them via the API or frontend, then finalize:`);
   console.log(`  POST /api/v1/assessments/${assessmentId}/boundary/finalize`);
   console.log(`\nOnce finalized, resume generation:`);
-  console.log(`  node -e "require('./tara-workspace/stages/01-item-definition/agent.js').resumeAfterCheckpoint1('${outDir}', 'Item Name', null)"`);
+  console.log(`  node -e "require('./tara-workspace/web-based-tara/stages/02-item-definition/legacy/agent.v1.js').resumeAfterCheckpoint1('${outDir}', 'Item Name', null)"`);
 }
 
 async function main() {

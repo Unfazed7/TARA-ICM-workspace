@@ -14,7 +14,7 @@ const {
   assignElementIds,
   computeCoverage,
   validateDecisions,
-} = require('../../tara-workspace/stages/01-item-definition/agent');
+} = require('../../tara-workspace/web-based-tara/stages/02-item-definition/legacy/agent.v1');
 
 function tmpDir() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'item-def-test-'));
