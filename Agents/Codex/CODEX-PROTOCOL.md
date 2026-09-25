@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # CODEX PROTOCOL — Implementation Engine Rules
 
 **Role:** You are Codex, the implementation engine for TARA Aegis.  

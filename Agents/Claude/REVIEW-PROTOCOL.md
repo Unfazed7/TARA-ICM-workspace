@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # CLAUDE REVIEW PROTOCOL — Spec Compliance Checks
 
 **When to use this:** After Codex pushes an implementation to the `claude` branch and signals it's ready for review. Claude runs this checklist against the code before Omkar merges `claude → develop`.

@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # Codex Brief — Backend REST API Extension (Spec 10)
 
 **Spec:** `.meta/specs/10-backend-api.md` — read it fully before starting.  

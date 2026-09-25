@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # BRANCH WORKFLOW — Git Protocol for TARA Aegis
 
 ## Branch Hierarchy

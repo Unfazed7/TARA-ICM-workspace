@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # Codex Brief — Stage 07: Risk Treatment Agent
 
 **Spec:** `.meta/specs/07-risk-treatment-agent.md` — read the full spec before starting.  

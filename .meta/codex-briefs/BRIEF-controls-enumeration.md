@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # Codex Brief — Controls Enumeration Script
 
 **Task:** Write and run a one-shot Node.js script that safely enumerates defensive skills

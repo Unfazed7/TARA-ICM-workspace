@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # Codex Brief — Stage 06: Risk Scoring Engine
 
 **Spec:** `.meta/specs/06-risk-scoring-engine.md` — read the full spec before starting.  

@@ -1,83 +1,34 @@
-# TARA ICM Workspace — Module Status & Routing
+# TARA ICM Workspace: Routing
 
-Last updated: 2026-05-31  
-Scope: Web-Based Automotive Application TARA, MVP Phase  
-Architecture: Multi-TARA type isolation (web-based-tara/ | vehicle-domain-tara/ | ecu-component-tara/)
+Layer 1 routing for the meta-workspace (`.meta/`). It points to the right file; it does not track status. Task status lives only in `.meta/REBUILD-PROGRESS.md`.
 
----
-
-## Quick Status
-
-**Web-Based TARA MVP — 8-Stage Pipeline**
-
-| Stage | Name | Spec | Implementation | Notes |
-|-------|------|------|---------------|-------|
-| — | Item Definition (CP1) | ✅ Spec done: `item-definition-agent.md` | 🔄 In progress | Precedes Stage 01; `agent.js` was never committed by a prior session — rebuilding from spec |
-| — | JSON Schemas | ✅ Done (needs CIAAAN update) | 📋 Codex: `codex/schemas` | CIA → CIAAAN |
-| — | CVSS AFR Engine | 📋 Write next | 📋 After spec | No blockers |
-| — | Impact Rating Engine | 📋 Write next | 📋 After spec | No blockers |
-| — | Risk Score Engine | 📋 Write next | 📋 After spec | No blockers |
-| 01 | Input Normalization | ⏸ Blocked | ⏸ Blocked | Checkpoint API |
-| 02 | Damage Analysis | ⏸ Blocked | ⏸ Blocked | Checkpoint API |
-| 03 | Threat Identification | ⏸ Blocked | ⏸ Blocked | Checkpoint API |
-| 04 | Attack Path Modelling | ⏸ Blocked | ⏸ Blocked | Checkpoint API |
-| 05 | Impact Analysis | 📋 Write next | 📋 After spec | No blockers |
-| 06 | Risk Scoring | 📋 Write next | 📋 After spec | Wraps risk-score.js |
-| 07 | Risk Treatment | ⏸ Blocked | ⏸ Blocked | Controls DB schema |
-| 08 | Residual Risk | ⏸ Blocked | ⏸ Blocked | Custom logic needed |
-| — | Orchestrator | ⏸ Blocked | ⏸ Blocked | All stages + checkpoint API |
-| — | Excel Formatter | ⏸ Blocked | ⏸ Blocked | Needs stage 07 |
-| — | Audit Trail | ⏸ Blocked | ⏸ Blocked | Needs all AI stages |
+Scope: Web-Based Automotive Application TARA, MVP phase.
+Architecture: one folder per TARA type (`web-based-tara/`, `vehicle-domain-tara/`, `ecu-component-tara/`).
 
 ---
 
-## Blocked Items (From Omkar)
+## If you want to...
 
-| Item | Unblocks | Status |
-|------|----------|--------|
-| Checkpoint API contract (URL, auth, req/res format) | Stage 01-04 specs, orchestrator | ⏸ PENDING |
-| Controls DB schema (structure, access method, fields) | Stage 07 spec | ⏸ PENDING |
-| Residual risk calculation logic | Stage 08 spec | ⏸ PENDING |
-| Frontend repo URL | UI integration | ⏸ PENDING |
-
----
-
-## What Codex Can Start Today
-
-1. **`codex/schemas`** — Read `00-json-schema-contracts.md`, create all stage JSON schema files in `src/schemas/`
-   - Note: Schema spec needs CIAAAN update before Codex touches Stage 01 schema
-2. **`codex/engines`** — CVSS AFR + Impact Rating + Risk Score engine specs coming soon. Implement once specs are merged.
+| Want to | Go to |
+|---|---|
+| Know the rules, roles and where specs live | `.meta/CLAUDE.md` |
+| Know what to do next | `.meta/REBUILD-PROGRESS.md`, then the task in `.meta/CLAUDE-CODE-INSTRUCTIONS.md` |
+| Understand why something was decided | `.meta/DECISIONS.md` |
+| Look up a term | `CONTEXT.md` (repo root) |
+| Read the analyst's answers on the Web Item Definition | `.meta/web-item-definition-questions.md` |
+| Read or write a spec | `.meta/specs/` (register in `.meta/CLAUDE.md`) |
+| See which files still describe the old flow | `.meta/STALE-INVENTORY.md` |
+| Check public repo hygiene findings | `.meta/HYGIENE-REPORT.md` |
 
 ---
 
-## Module Routing
+## Runtime workspace
 
-| Request | Module | Spec file | Codex branch |
-|---------|--------|-----------|--------------|
-| Implement JSON schemas | JSON Schemas | `00-json-schema-contracts.md` | `codex/schemas` |
-| Implement CVSS AFR calculator | CVSS AFR Engine | `05-cvss-afr-engine.md` (TODO) | `codex/engines` |
-| Implement impact rater | Impact Engine | `05-impact-engine.md` (TODO) | `codex/engines` |
-| Implement risk scorer | Risk Engine | `05-risk-engine.md` (TODO) | `codex/engines` |
-| Implement Stage 01 agent | Input Normalization | `01-input-normalization-agent.md` (TODO) | `codex/stage-01` |
-| Implement Stage 02 agent | Damage Analysis | `02-damage-analysis-agent.md` (TODO) | `codex/stage-02` |
-| Implement Stage 03 agent | Threat Identification | `03-threat-identification-agent.md` (TODO) | `codex/stage-03` |
-| Implement Stage 04 agent | Attack Path Modelling | `04-attack-path-agent.md` (TODO) | `codex/stage-04` |
-| Implement Stage 05 agent | Impact Analysis | `05-impact-analysis-agent.md` (TODO) | `codex/stage-05` |
-| Implement Stage 06 runner | Risk Scoring | `06-risk-scoring-engine.md` (TODO) | `codex/stage-06` |
-| Implement Stage 07 agent | Risk Treatment | `07-risk-treatment-agent.md` (TODO) | `codex/stage-07` |
-| Implement Stage 08 runner | Residual Risk | `08-residual-risk-engine.md` (TODO) | `codex/stage-08` |
-| Implement orchestrator | Orchestrator | `09-orchestrator.md` (TODO) | `codex/orchestrator` |
-| Implement Excel output | Excel Formatter | `10-excel-formatter.md` (TODO) | `codex/output-formatters` |
-| Implement audit trail | Audit Trail | `11-audit-trail.md` (TODO) | `codex/output-formatters` |
-
----
-
-## Architecture Reference
-
-Full architecture: `.meta/specs/WEB-TARA-MVP-ARCHITECTURE.md`  
-JSON schemas: `.meta/specs/00-json-schema-contracts.md`  
-Git workflow: `Agents/Codex/BRANCH-WORKFLOW.md`  
-Codex rules: `Agents/Codex/CODEX-PROTOCOL.md`
-
-Web TARA identity: `tara-workspace/web-based-tara/CLAUDE.md`  
-Web TARA stage routing: `tara-workspace/web-based-tara/CONTEXT.md`
+| Want to | Go to |
+|---|---|
+| Web TARA identity and rules (Layer 0) | `tara-workspace/web-based-tara/CLAUDE.md` |
+| Web TARA stage routing (Layer 1) | `tara-workspace/web-based-tara/CONTEXT.md` |
+| A stage's instructions (Layer 2) | `tara-workspace/web-based-tara/stages/<NN>-<name>/CONTEXT.md` |
+| Domain knowledge (Layer 3) | `tara-workspace/web-based-tara/_config/` |
+| Model access | `tara-workspace/web-based-tara/stages/llm-client.js` |
+| Store and API | `checkpoint-api/` |

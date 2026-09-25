@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # Codex Brief — Frontend Integration (Spec 11)
 
 **Spec:** `.meta/specs/11-frontend-integration.md` — read it fully before starting.  
