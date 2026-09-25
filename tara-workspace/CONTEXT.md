@@ -8,7 +8,7 @@ Loaded by top-level orchestrator. Routes each assessment to the correct TARA typ
 
 | Type | Folder | Stage Count | Standards |
 |------|--------|------------|-----------|
-| `web-based` | `web-based-tara/` | 8 stages | ISO 21434 + ISO 27001 + OWASP + CVSS v3.1 |
+| `web-based` | `web-based-tara/` | 10 stages | ISO 21434 + ISO 27001 + OWASP + CVSS v3.1 |
 | `vehicle-domain` | `vehicle-domain-tara/` | TBD | ISO 21434 §15 + UNECE WP.29/R155 |
 | `ecu-component` | `ecu-component-tara/` | TBD | ISO 21434 §15 + AUTOSAR + UDS |
 

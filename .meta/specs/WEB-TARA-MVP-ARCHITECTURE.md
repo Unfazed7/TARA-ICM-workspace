@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by tara-workspace/web-based-tara/CONTEXT.md and .meta/CLAUDE-CODE-INSTRUCTIONS.md. Kept for history. Do not use for new work.
+
 # WEB-TARA MVP ARCHITECTURE
 
 **Status:** ACTIVE  

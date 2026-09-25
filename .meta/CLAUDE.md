@@ -150,7 +150,7 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `09-checkpoint-api.md` | Checkpoint API | in force; blob parts replaced in C3 and C9 |
 | `10-backend-api.md` | Backend REST API | in force; `vehicle_type` made optional in C3 |
 | `11-frontend-integration.md` | Frontend integration | in force; `vehicle_type` made optional in C7 |
-| `WEB-TARA-MVP-ARCHITECTURE.md` | Old flow overview | to be superseded in A7 |
+| `WEB-TARA-MVP-ARCHITECTURE.md` | Old flow overview | superseded (A7) |
 | `12a` to `12d` | Data contract and refusal rules | planned, B1 |
 | `13-cp0-reading-review.md` | CP0 | planned, B5 |
 | `14-cp1-item-definition-review.md` | CP1 | planned, B6 |
