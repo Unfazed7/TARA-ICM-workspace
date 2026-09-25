@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/specs/12a-document-register-and-facts.md. Kept for history. Do not use for new work.
+
 # Spec 01 — Input Normalization Agent (Stage 01)
 
 **Module:** `tara-workspace/web-based-tara/stages/01-input-normalization/agent.js`  

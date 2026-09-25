@@ -1,0 +1,61 @@
+[
+  {
+    "doc_id": "DOC-01",
+    "title": "Fleet update portal architecture",
+    "client_doc_ref": "ARCH-v2",
+    "date_on_document": "2026-03-02",
+    "date_received": "2026-03-10",
+    "owner": "client",
+    "environment": "prod",
+    "doc_type": "diagram",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "reader_version": "drawio-parser 1.0",
+    "precedence_rank": 5,
+    "used_for": "Components, containers and arrows",
+    "ignored_and_why": "Legend and title block ignored, not part of the system"
+  },
+  {
+    "doc_id": "DOC-02",
+    "title": "Client answers to intake questions",
+    "date_on_document": "2026-03-08",
+    "date_received": "2026-03-10",
+    "owner": "client",
+    "environment": "prod",
+    "doc_type": "qa",
+    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "precedence_rank": 3,
+    "used_for": "Entry points, sign-in and data stored",
+    "ignored_and_why": "Pricing questions ignored, not relevant to security"
+  },
+  {
+    "doc_id": "DOC-03",
+    "title": "Functional description",
+    "date_received": "2026-03-10",
+    "owner": "client",
+    "environment": "unknown",
+    "doc_type": "functional",
+    "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "read_status": "partial",
+    "reading_method": "mixed",
+    "page_methods": [
+      {
+        "page": 1,
+        "method": "text_layer"
+      },
+      {
+        "page": 7,
+        "method": "image_model"
+      }
+    ],
+    "unread_parts": [
+      "Page 9 table, image too blurred"
+    ],
+    "precedence_rank": 7,
+    "used_for": "Functions and actors",
+    "ignored_and_why": ""
+  }
+]

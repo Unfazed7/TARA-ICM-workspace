@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by .meta/specs/12b-item-definition-model.md and .meta/specs/12c-questions-scope-and-analyst-decisions.md. Kept for history. Do not use for new work.
+
 # Spec — Item Definition Agent (CP1 Boundary Proposal)
 
 **Module:** `tara-workspace/stages/01-item-definition/agent.js`

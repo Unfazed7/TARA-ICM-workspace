@@ -1,12 +1,15 @@
 'use strict';
 
+const path = require('path');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
+  ROOT,
   assertValidChain,
   readJson,
   fixturePath,
-  validateFixture
+  validateFixture,
+  validateSchema
 } = require('./helpers/schema-validation');
 
 const validFixtures = [
@@ -66,3 +69,35 @@ test('risk score mismatch is caught by chain validation', () => {
     });
   }, /score mismatch/);
 });
+
+const itemDefinitionContract = [
+  ['stage-01-document-register.schema.json', 'stage-01-document-register.json', ['stage-01-bad-failed-read-no-reason.json']],
+  ['stage-01-facts.schema.json', 'stage-01-facts.json', ['stage-01-bad-fact-no-source.json', 'stage-01-bad-auto-resolved-exposure.json']],
+  [
+    'stage-02-item-definition.schema.json',
+    'stage-02-item-definition.json',
+    [
+      'stage-02-bad-element-no-fact.json',
+      'stage-02-bad-scope-no-reason.json',
+      'stage-02-bad-auth-as-protocol.json',
+      'stage-02-bad-exposed-no-auth.json'
+    ]
+  ],
+  ['stage-02-questions.schema.json', 'stage-02-questions.json', ['stage-02-bad-question-no-fact-type.json']]
+];
+
+for (const [schemaFile, validFile, invalidFiles] of itemDefinitionContract) {
+  const schema = readJson(path.join(ROOT, 'src', 'schemas', schemaFile));
+
+  test(`valid fixture passes schema: ${validFile}`, () => {
+    const result = validateSchema(readJson(fixturePath('valid', validFile)), schema);
+    assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
+  });
+
+  for (const invalidFile of invalidFiles) {
+    test(`invalid fixture fails schema: ${invalidFile}`, () => {
+      const result = validateSchema(readJson(fixturePath('invalid', invalidFile)), schema);
+      assert.equal(result.valid, false);
+    });
+  }
+}

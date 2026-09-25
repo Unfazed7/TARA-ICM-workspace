@@ -137,9 +137,9 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 
 | Spec | Covers (stage after A6) | Status |
 |---|---|---|
-| `00-json-schema-contracts.md` | Schemas for stages 04 onwards; old Stage 01 section replaced in B1 | in force, partly stale |
-| `01-input-normalization-agent.md` | Old Stage 01 meaning | to be superseded in B1 |
-| `item-definition-agent.md` | v1 Item Definition agent | to be superseded in B1 |
+| `00-json-schema-contracts.md` | Schemas for stages 03 onwards (old numbering, see its note) | in force |
+| `01-input-normalization-agent.md` | Old Stage 01 meaning | superseded (B1) |
+| `item-definition-agent.md` | v1 Item Definition agent | superseded (B1) |
 | `02-damage-analysis-agent.md` | Stage 04 | in force (paths in A6, model in C1) |
 | `03-threat-identification-agent.md` | Stage 05 | in force (model in C1) |
 | `04-attack-path-agent.md` | Stage 06 | in force (model in C1) |
@@ -151,7 +151,10 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `10-backend-api.md` | Backend REST API | in force; `vehicle_type` made optional in C3 |
 | `11-frontend-integration.md` | Frontend integration | in force; `vehicle_type` made optional in C7 |
 | `WEB-TARA-MVP-ARCHITECTURE.md` | Old flow overview | superseded (A7) |
-| `12a` to `12d` | Data contract and refusal rules | planned, B1 |
+| `12a-document-register-and-facts.md` | Stage 01 register, facts, conflicts | draft, waiting for analyst review |
+| `12b-item-definition-model.md` | Stage 02 containers, zones, elements, links, functions | draft, waiting for analyst review |
+| `12c-questions-scope-and-analyst-decisions.md` | Questions, scope and analyst decisions, checkpoints | draft, waiting for analyst review |
+| `12d-refusal-rules.md` | API refusal rules and messages | draft, waiting for analyst review |
 | `13-cp0-reading-review.md` | CP0 | planned, B5 |
 | `14-cp1-item-definition-review.md` | CP1 | planned, B6 |
 | `15-evaluation.md` | Evaluation scorer | planned, B7 |

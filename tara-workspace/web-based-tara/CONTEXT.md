@@ -46,7 +46,24 @@ Model settings for every stage come from `_config/models.json` (created in B2, f
 
 ## ID Conventions (Cross-Resolved Across ALL Outputs)
 
-> This table is replaced in task B1, step 2, which defines the ID conventions for stages 01 to 03 (documents, facts, elements, links, questions and more). The IDs below stay valid for stages 03 onwards until then.
+Stages 01 and 02 (from spec 12a to 12c):
+
+| Entity | Format | Example |
+|--------|--------|---------|
+| Documents | DOC-## | DOC-01 |
+| Facts | FCT-### | FCT-001 |
+| Conflicts | CNF-### | CNF-001 |
+| Containers | CTR-## | CTR-01 |
+| Zones | ZN-## | ZN-01 |
+| Elements | EL-### | EL-001 |
+| Links (data flows and exposures) | IF-## | IF-01 |
+| Functions | FN-### | FN-001 |
+| Questions | Q-### | Q-001 |
+| Scope decisions | SD-### | SD-001 |
+| Analyst decisions | AD-### | AD-001 |
+| Assumptions | ASM-## | ASM-01 |
+
+Stages 03 onwards:
 
 | Entity | Format | Example |
 |--------|--------|---------|
@@ -58,7 +75,7 @@ Model settings for every stage come from `_config/models.json` (created in B2, f
 | Risks | RSK_## | RSK_01, RSK_02 |
 | Treatments | TRT_## | TRT_01, TRT_02 |
 
-**No orphan IDs permitted.** Every DS_## must have a TH_##. Every TH_## must have an AT_## and an IM_##. Every AT_## must have a RSK_##.
+**No orphan IDs permitted.** Every fact points to a registered document. Every element, link, container, zone and function points to confirmed facts. Every DS_## must have a TH_##. Every TH_## must have an AT_## and an IM_##. Every AT_## must have a RSK_##.
 
 ---
 

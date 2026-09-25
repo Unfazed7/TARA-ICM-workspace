@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-02-questions.schema.json",
+  "title": "Stage 02 Questions",
+  "description": "Open questions tied to one element and one fact type. Spec: .meta/specs/12c-questions-scope-and-analyst-decisions.md. Duplicate (element_id, fact_type) pairs and the per-element cap are enforced by the API.",
+  "type": "array",
+  "uniqueItemProperties": [
+    "question_id"
+  ],
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "question_id",
+      "element_id",
+      "fact_type",
+      "text",
+      "why_it_matters",
+      "default_if_unanswered",
+      "origin",
+      "status"
+    ],
+    "properties": {
+      "question_id": {
+        "type": "string",
+        "pattern": "^Q-\\d{3,}$"
+      },
+      "element_id": {
+        "type": "string",
+        "pattern": "^EL-\\d{3,}$"
+      },
+      "fact_type": {
+        "type": "string",
+        "enum": [
+          "FT-01",
+          "FT-02",
+          "FT-03",
+          "FT-04",
+          "FT-05",
+          "FT-06",
+          "FT-07",
+          "generic"
+        ]
+      },
+      "text": {
+        "type": "string",
+        "minLength": 5
+      },
+      "why_it_matters": {
+        "type": "string",
+        "minLength": 5
+      },
+      "default_if_unanswered": {
+        "type": "string",
+        "minLength": 1
+      },
+      "origin": {
+        "type": "string",
+        "enum": [
+          "starter",
+          "generated"
+        ]
+      },
+      "answer": {
+        "type": "string",
+        "minLength": 1
+      },
+      "answered_by": {
+        "type": "string",
+        "enum": [
+          "analyst",
+          "client"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "open",
+          "answered",
+          "sent_to_client",
+          "dropped_answered_by_docs"
+        ]
+      }
+    },
+    "if": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "const": "answered"
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "then": {
+      "type": "object",
+      "required": [
+        "answer",
+        "answered_by"
+      ],
+      "properties": {
+        "answer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "answered_by": {
+          "type": "string",
+          "enum": [
+            "analyst",
+            "client"
+          ]
+        }
+      }
+    }
+  }
+}

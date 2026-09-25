@@ -1,5 +1,7 @@
 # Spec 00 — JSON Schema Contracts (All 8 Stages)
 
+> **Updated 2026-09-25 (task B1).** Stage numbers in this spec are the old ones. Add 2 to get the current stage and schema file: old "Stage 01 Asset Register" is now Stage 03 (`stage-03-asset-register.schema.json`), old Stage 02 is now Stage 04, and so on up to old Stage 08, now Stage 10. The `input_mode` field of the asset register is stale and is removed in C12. The contracts for the new Stages 01 and 02 are in specs 12a to 12d.
+
 **Status:** ✅ Ready for implementation  
 **Owner:** Claude (design) → Codex (implementation)  
 **Depends on:** Nothing — foundational  
