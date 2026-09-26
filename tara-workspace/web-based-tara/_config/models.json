@@ -1,0 +1,65 @@
+{
+  "_note": "Placeholder created in task B2. Filled in C1 (provider pinning) and C2 (model trial, analyst picks). OpenRouter only, open-weight models only (DR-11, D-10). llm-client.js must fail loudly while any value is UNSET.",
+  "provider_routing": {
+    "service": "openrouter",
+    "allow_fallbacks": false
+  },
+  "stages": {
+    "01-extract-text": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 8000,
+      "prompt_version": "UNSET"
+    },
+    "01-extract-image": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 8000,
+      "prompt_version": "UNSET"
+    },
+    "01-reconcile-leftovers": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 4000,
+      "prompt_version": "UNSET"
+    },
+    "02-build": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 16000,
+      "prompt_version": "UNSET"
+    },
+    "02-generate-questions": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 8000,
+      "prompt_version": "UNSET"
+    },
+    "02-answer-check": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 4000,
+      "prompt_version": "UNSET"
+    },
+    "03-assets": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 8000,
+      "prompt_version": "UNSET"
+    },
+    "review-assistant": {
+      "model": "UNSET",
+      "provider": "UNSET",
+      "temperature": 0,
+      "max_tokens": 2000,
+      "prompt_version": "UNSET"
+    }
+  }
+}
