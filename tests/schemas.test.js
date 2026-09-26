@@ -71,8 +71,21 @@ test('risk score mismatch is caught by chain validation', () => {
 });
 
 const itemDefinitionContract = [
-  ['stage-01-document-register.schema.json', 'stage-01-document-register.json', ['stage-01-bad-failed-read-no-reason.json']],
-  ['stage-01-facts.schema.json', 'stage-01-facts.json', ['stage-01-bad-fact-no-source.json', 'stage-01-bad-auto-resolved-exposure.json']],
+  [
+    'stage-01-document-register.schema.json',
+    'stage-01-document-register.json',
+    ['stage-01-bad-failed-read-no-reason.json', 'stage-01-bad-other-doc-no-label.json', 'stage-01-bad-rank-not-default.json']
+  ],
+  [
+    'stage-01-facts.schema.json',
+    'stage-01-facts.json',
+    [
+      'stage-01-bad-fact-no-source.json',
+      'stage-01-bad-auto-resolved-exposure.json',
+      'stage-01-bad-other-conflict-no-description.json',
+      'stage-01-bad-other-conflict-auto-resolved.json'
+    ]
+  ],
   [
     'stage-02-item-definition.schema.json',
     'stage-02-item-definition.json',
@@ -80,10 +93,20 @@ const itemDefinitionContract = [
       'stage-02-bad-element-no-fact.json',
       'stage-02-bad-scope-no-reason.json',
       'stage-02-bad-auth-as-protocol.json',
-      'stage-02-bad-exposed-no-auth.json'
+      'stage-02-bad-exposed-no-auth.json',
+      'stage-02-bad-assumed-no-question.json',
+      'stage-02-bad-protocol-with-encryption.json'
     ]
   ],
-  ['stage-02-questions.schema.json', 'stage-02-questions.json', ['stage-02-bad-question-no-fact-type.json']]
+  [
+    'stage-02-questions.schema.json',
+    'stage-02-questions.json',
+    [
+      'stage-02-bad-question-no-fact-type.json',
+      'stage-02-bad-generic-question-no-topic.json',
+      'stage-02-bad-question-target-not-element-or-link.json'
+    ]
+  ]
 ];
 
 for (const [schemaFile, validFile, invalidFiles] of itemDefinitionContract) {

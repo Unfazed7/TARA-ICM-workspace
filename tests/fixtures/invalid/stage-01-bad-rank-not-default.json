@@ -27,7 +27,7 @@
     "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "read_status": "parsed",
     "reading_method": "parsed",
-    "precedence_rank": 3,
+    "precedence_rank": 5,
     "used_for": "Entry points, sign-in and data stored",
     "ignored_and_why": "Pricing questions ignored, not relevant to security"
   },

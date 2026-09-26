@@ -110,9 +110,9 @@ Every fact or proposal is sorted by the server (never by the model) into three g
 - A fixed starter set of fact types (DR-7) exists in `_config/scoping-facts.md`.
 - A thinking model generates additional questions after looking at the elements and checking whether the documents already answer them.
 - Guards, all enforced by the server:
-  1. Every question must reference one element ID and one fact type from the catalogue. Otherwise refused.
+  1. Every question must reference one target (an element or a link) and one fact type from the catalogue; a `generic` question also needs a short topic. Otherwise refused.
   2. A separate model call tries to answer each generated question from the confirmed facts and documents. If it finds an answer with a quote, the question is dropped before the analyst sees it.
-  3. Deduplicate by (element ID, fact type). Cap questions per element (default 3).
+  3. Deduplicate by (target, fact type), or (target, topic) for `generic` questions. Cap visible questions per target (configurable, default 3; up to 7 for unknown element kinds); dropped questions do not count.
 - Questions go to the analyst first. Only the ones the analyst cannot answer go to the client question list.
 
 ### DR-7. Scoping: internal defaults confirmed through factual questions
@@ -199,7 +199,7 @@ Auto-resolved (loser kept in the conflict log): naming differences, instance siz
 - AD-6. The existing boundary blob model (`BoundaryState.merged_model`, `decisions`) is replaced by per-item tables. Its finalize, freeze (409) and edit-log behaviour is kept.
 
 ### DR-13. Element model (for Stage 02)
-- Containers, not elements: cloud account, region, VPC, subnet, availability zone, namespace. Nested tree: account > region > VPC > subnet (zone) > cluster > namespace > workload. Every element has exactly one parent container. Managed services outside the VPC sit in an "account-level managed services" container.
+- Containers, not elements: cloud account, region, VPC, subnet, availability zone, namespace. Nested tree: account > region > VPC > subnet (zone) > cluster > namespace > workload. Every element inside the item's accounts has exactly one parent container; external elements (zones internet, corporate IT, third-party SaaS, vehicle or field device) have a zone and no parent. Managed services outside the VPC sit in an "account-level managed services" container.
 - Each VPC also gets one element "network boundary configuration" (security groups, NACLs, routes, endpoints).
 - A Kubernetes or ECS cluster is a container and the parent of real elements (control plane, nodes, runtime).
 - Element kinds: cluster control plane, worker nodes, pod runtime, ECS service, microservice/workload, serverless function (including authorizers), API gateway, load balancer, WAF, CDN, database (logical), object storage bucket, cache, queue/stream, identity provider, secrets store, KMS key, certificate authority, monitoring/logging, audit trail/config recorder, security detection tooling, landing zone/governance (only if documented), CI/CD pipeline, IaC runner, container registry, NAT gateway, internet gateway, VPC endpoint, transit gateway/peering/VPN/direct connect, DNS, bastion/session manager, in-cluster platform components, workflow engine, IoT device gateway, device provisioning service, signing service, data warehouse, stream processing/ETL, backup store, file storage, notification gateway, payment gateway, mapping provider, third-party SaaS, partner/OEM backend, web frontend, mobile app, admin portal, field device, external vehicle system, human actor, system-to-system client.
@@ -211,7 +211,7 @@ Auto-resolved (loser kept in the conflict log): naming differences, instance siz
 ### DR-14. Link model
 - Two link types: data flow (intended exchange) and exposure (reachability without intended flow). Both get IF-## IDs.
 - Mandatory link attributes: IF-## ID, type, source, destination, direction, protocol and port if known, usage/function at destination, authentication mechanism (named, or "unknown"), encryption (named, or "unknown"), data carried (DR-13 format), crosses trust boundary (derived from zones), remark (security-relevant observation), source refs plus confidence. Optional: sync/async, rate limiting, volume.
-- Protocols are transport/application only (HTTPS/REST, GraphQL, gRPC, WebSocket, EV charging protocols such as OCPP, MQTT over TLS, AMQP, Kafka, Kinesis/SQS/SNS API, SQL wire protocols, Redis, S3 API and presigned URLs, SigV4-signed cloud service API calls, IMDS, NFS, SMTP, SMS gateway API, payment gateway API and webhooks, JWKS fetch, DNS, SSH, session manager, SFTP, VPN/IPsec, direct connect). OAuth2, OIDC, SAML, TLS, mTLS, API keys, JWT, X.509, IAM roles and session cookies are authentication or encryption attributes, not protocols.
+- Protocols are transport/application only (HTTP, HTTPS/REST, GraphQL, gRPC, WebSocket, EV charging protocols such as OCPP, MQTT, AMQP, Kafka, Kinesis/SQS/SNS API, SQL wire protocols, Redis, S3 API and presigned URLs, SigV4-signed cloud service API calls, IMDS, NFS, SMTP, SMS gateway API, payment gateway API and webhooks, JWKS fetch, DNS, SSH, session manager, SFTP, VPN/IPsec, direct connect). OAuth2, OIDC, SAML, TLS, mTLS, API keys, JWT, X.509, IAM roles and session cookies are authentication or encryption attributes, not protocols.
 - Zones: internet/external; edge/public subnet; private application subnet; data subnet (only if a separate subnet group is documented); account-level managed services; control/management plane; governance account (only if documented); corporate IT; third-party SaaS; vehicle/field device. The agent never invents a zone the documents do not show.
 
 ### DR-15. Asset Identification rules (for Stage 03, later)

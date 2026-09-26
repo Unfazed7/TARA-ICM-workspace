@@ -151,10 +151,11 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `10-backend-api.md` | Backend REST API | in force; `vehicle_type` made optional in C3 |
 | `11-frontend-integration.md` | Frontend integration | in force; `vehicle_type` made optional in C7 |
 | `WEB-TARA-MVP-ARCHITECTURE.md` | Old flow overview | superseded (A7) |
-| `12a-document-register-and-facts.md` | Stage 01 register, facts, conflicts | draft, waiting for analyst review |
-| `12b-item-definition-model.md` | Stage 02 containers, zones, elements, links, functions | draft, waiting for analyst review |
-| `12c-questions-scope-and-analyst-decisions.md` | Questions, scope and analyst decisions, checkpoints | draft, waiting for analyst review |
-| `12d-refusal-rules.md` | API refusal rules and messages | draft, waiting for analyst review |
+| `12a-document-register-and-facts.md` | Stage 01 register, facts, conflicts | revised, waiting for analyst review |
+| `12b-item-definition-model.md` | Stage 02 containers, zones, elements, links, functions | revised, waiting for analyst review |
+| `12c-questions-scope-and-analyst-decisions.md` | Questions, scope and analyst decisions, checkpoints | revised, waiting for analyst review |
+| `12d-refusal-rules.md` | API refusals for stored items | revised, waiting for analyst review |
+| `12e-checkpoint-and-rerun-rules.md` | API refusals for checkpoint state and re-runs, shared response format | revised, waiting for analyst review |
 | `13-cp0-reading-review.md` | CP0 | planned, B5 |
 | `14-cp1-item-definition-review.md` | CP1 | planned, B6 |
 | `15-evaluation.md` | Evaluation scorer | planned, B7 |

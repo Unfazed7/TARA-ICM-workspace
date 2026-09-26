@@ -32,8 +32,12 @@ Status values: `accepted` (in force), `proposed` (waiting for the analyst).
 | D-24 | Reading documents: source files (draw.io, Visio, Lucid exports, Excel, Word, config exports) are parsed directly without a model. Images and image-only PDF pages go to an image-capable model in two passes, cross-checked with OCR; image-read links are at most medium confidence. The register records the reading method per document and page (DR-17). | Parsing where possible is exact and cheap; images are where reading errors come from, so they get extra checks and lower confidence. | 2026-09-25 | accepted |
 | D-25 | `vehicle_type` on assessments becomes optional. Applied in C3 (API) and C7 (frontend). | A web-based TARA has no vehicle type; forcing one invents data. Decided by the analyst at the A1 gate. | 2026-09-25 | accepted |
 | D-26 | The workbooks in `frontend/database/` and `frontend/src/data/taraAssets.ts` stay in the repo. | The analyst confirmed they are open source. Decided at the A2 gate. | 2026-09-25 | accepted |
+| D-27 | The zone decides the parent container: elements in the external zones (internet, corporate IT, third-party SaaS, vehicle or field device) have no parent; elements in every other zone have exactly one. No "external" container kind. | A plain optional parent would let a missing parent pass silently; containers must describe real cloud structure because the account rule (S1) depends on it. Analyst, B1 gate. | 2026-09-26 | accepted |
+| D-28 | Each document type has a default precedence rank (table in spec 12a; `asset_list` 7, `other` 8); the analyst can override a rank at CP0 as an analyst decision; within a rank the newer document wins. | Makes DR-8 precedence mechanical and still lets a newer design document win when the analyst says so. Analyst, B1 gate. | 2026-09-26 | accepted |
+| D-29 | Questions target an element or a link; `generic` questions need a topic; duplicates are checked per (target, fact type) or (target, topic); visible questions are capped per target (default 3, configurable, up to 7 for unknown element kinds). | Link gaps (unknown authentication or encryption) need questions too, and the cap must not block the full fact set for unknown kinds or be bypassed by `generic`. Analyst, B1 gate. | 2026-09-26 | accepted |
+| D-30 | Facts carry no element id; the element points to its facts. CP1 records `based_on_cp0_version`. Refusal responses carry a `details` field with the ids involved; checkpoint-state refusals return 409. | Writing into frozen CP0 facts would break the freeze rule; the version link shows which reading review an Item Definition used. Analyst, B1 gate. | 2026-09-26 | accepted |
 
-Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are added so every Design Reference section is covered, plus decisions made at the A1 and A2 gates.
+Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are added so every Design Reference section is covered, plus decisions made at the A1, A2 and B1 gates.
 
 ## Coverage check
 
@@ -44,14 +48,14 @@ Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are
 | DR-3 Review by exception | D-04 |
 | DR-4 CP0 content | D-18 |
 | DR-5 CP1 content | D-19 |
-| DR-6 Question generation | D-06 |
+| DR-6 Question generation | D-06, D-29 |
 | DR-7 Scoping | D-05, D-14 |
-| DR-8 Precedence | D-07 |
+| DR-8 Precedence | D-07, D-28 |
 | DR-9 Minimum input | D-08 |
 | DR-10 Data policy | D-09, D-26 |
 | DR-11 Model policy | D-10 |
-| DR-12 Architecture | D-11, D-12, D-13 |
-| DR-13 Element model | D-20, D-25 |
+| DR-12 Architecture | D-11, D-12, D-13, D-30 |
+| DR-13 Element model | D-20, D-25, D-27 |
 | DR-14 Link model | D-21 |
 | DR-15 Asset Identification | D-16, D-22 |
 | DR-16 Evaluation | D-23 |

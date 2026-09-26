@@ -32,16 +32,17 @@ The confirmed version lives in `checkpoint-api` once seeded.
 ## Process
 
 1. **Build the structure.**
-   - Containers are not elements: cloud account, region, VPC, subnet, availability zone, namespace, cluster. Every element has exactly one parent container. Managed services outside a VPC sit in an "account-level managed services" container. Each VPC also gets one element for its network boundary configuration.
+   - Containers are not elements: cloud account, region, VPC, subnet, availability zone, namespace, cluster. Every element inside the item's accounts has exactly one parent container. Elements in the external zones (internet, corporate IT, third-party SaaS, vehicle or field device) have a zone and no parent container. Managed services outside a VPC sit in an "account-level managed services" container. Each VPC also gets one element for its network boundary configuration.
    - One element per independently deployed or configured unit with its own identity, access policy or distinct data content. Never one per pod, table, endpoint, storage prefix or security group. Never one "backend" or one "database" covering parts with different data.
-   - Links are data flows (intended exchange) or exposures (reachability without intended exchange), each with protocol, authentication, encryption, data carried and whether it crosses a trust boundary. OAuth2, OIDC, SAML, TLS, mTLS, API keys, JWT, X.509, IAM roles and session cookies are authentication or encryption attributes, not protocols. If no diagram was supplied, every link is marked "inferred from text".
+   - Links are data flows (intended exchange) or exposures (reachability without intended exchange), each with protocol, authentication, encryption, data carried and whether it crosses a trust boundary. OAuth2, OIDC, SAML, TLS, mTLS, API keys, JWT, X.509, IAM roles and session cookies are authentication or encryption attributes, not protocols: record `mqtt` with TLS as encryption, and plain `http` as `http`. If no diagram was supplied, every link is marked "inferred from text".
    - Never invent a zone the confirmed facts do not show. Components mentioned nowhere in the confirmed facts become questions, never elements. Stated absences ("no WAF") are recorded as facts.
    - A vehicle or ECU the item talks to is one external element at the edge, never broken down.
 2. **Generate questions.**
    - Start from the fact types each element kind needs, as listed in `scoping-facts.md`.
    - A reasoning model may add questions after looking at the elements.
    - A separate model call tries to answer each question from the confirmed facts; a question that can be answered with a quote is dropped before the analyst sees it.
-   - Every question names one element and one fact type. Duplicates by (element, fact type) are removed. At most 3 questions per element by default.
+   - Every question names one target (an element, or a link when its authentication or encryption is unknown) and one fact type. A `generic` question also needs a short topic.
+   - Duplicates by (target, fact type), or (target, topic) for `generic`, are removed. Visible questions are capped per target: 3 by default (configurable), up to 7 for `unknown_kind` elements. Dropped questions do not count.
    - Questions go to the analyst first; only the ones the analyst cannot answer go to the client question list.
 3. **Decide scope.** Apply the internal mapping in `scoping-facts.md` only when the facts it needs are known. Otherwise propose the default, mark it "assumed" and link the question that would settle it. Nothing is scoped out silently: every out-of-scope element has a recorded reason.
 4. **Unknown element kinds:** ask the full fact set FT-01 to FT-07 and log the kind in `output/new-kinds.log`. Only a human adds new rules.
@@ -54,12 +55,15 @@ The confirmed version lives in `checkpoint-api` once seeded.
 The API refuses, item by item, and says why:
 - an element without at least one supporting fact;
 - a link whose source or destination element does not exist;
-- a question without an element and a fact type, or a duplicate (element, fact type);
-- more questions for one element than the cap;
+- a question without a target and a fact type (or a `generic` one without a topic), or a duplicate;
+- more visible questions for one target than the cap;
+- an element whose container does not match its zone;
+- an assumed scope decision that names no question;
 - a scope decision without a reason;
 - any write that references a fact not confirmed at CP0;
 - any confirm call that does not come from the analyst;
-- confirming CP1 while a "Needs you" card is unanswered (unless the analyst marked it "send to client");
+- confirming CP1 while CP0 is not confirmed, while a "Needs you" card is unanswered (unless marked "send to client"), or while a failed spot check has not been re-reviewed;
+- accepting a re-run while a locked analyst decision points to something that no longer exists;
 - any write to a confirmed CP1 version (409).
 
 The server, not the model, computes groups, counts, coverage and trust-boundary crossings.

@@ -151,34 +151,457 @@
       },
       "ignored_and_why": {
         "type": "string"
+      },
+      "doc_type_label": {
+        "type": "string",
+        "minLength": 1
+      },
+      "rank_override_decision_id": {
+        "type": "string",
+        "pattern": "^AD-\\d{3,}$"
       }
     },
-    "if": {
-      "type": "object",
-      "properties": {
-        "read_status": {
-          "type": "string",
-          "enum": [
-            "partial",
-            "failed"
+    "allOf": [
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "read_status": {
+              "type": "string",
+              "enum": [
+                "partial",
+                "failed"
+              ]
+            }
+          },
+          "required": [
+            "read_status"
           ]
+        },
+        "then": {
+          "type": "object",
+          "required": [
+            "read_status_reason"
+          ],
+          "properties": {
+            "read_status_reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       },
-      "required": [
-        "read_status"
-      ]
-    },
-    "then": {
-      "type": "object",
-      "required": [
-        "read_status_reason"
-      ],
-      "properties": {
-        "read_status_reason": {
-          "type": "string",
-          "minLength": 1
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "other"
+            }
+          },
+          "required": [
+            "doc_type"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "required": [
+            "doc_type_label"
+          ],
+          "properties": {
+            "doc_type_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "config_export"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 2
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "qa"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 3
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "existing_item_definition"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 4
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "diagram"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 5
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "infra"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 6
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "functional"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "srs"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "api_spec"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "asset_list"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "manual"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 8
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "other"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 8
+            }
+          }
         }
       }
-    }
+    ]
   }
 }

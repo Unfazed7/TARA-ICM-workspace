@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "stage-02-questions.schema.json",
   "title": "Stage 02 Questions",
-  "description": "Open questions tied to one element and one fact type. Spec: .meta/specs/12c-questions-scope-and-analyst-decisions.md. Duplicate (element_id, fact_type) pairs and the per-element cap are enforced by the API.",
+  "description": "Open questions tied to one target (element or link) and one fact type. Spec: .meta/specs/12c-questions-scope-and-analyst-decisions.md. Duplicates per (target, fact type) or (target, topic) and the per-target cap are enforced by the API.",
   "type": "array",
   "uniqueItemProperties": [
     "question_id"
@@ -12,7 +12,7 @@
     "additionalProperties": false,
     "required": [
       "question_id",
-      "element_id",
+      "target_id",
       "fact_type",
       "text",
       "why_it_matters",
@@ -25,9 +25,9 @@
         "type": "string",
         "pattern": "^Q-\\d{3,}$"
       },
-      "element_id": {
+      "target_id": {
         "type": "string",
-        "pattern": "^EL-\\d{3,}$"
+        "pattern": "^(EL-\\d{3,}|IF-\\d{2,})$"
       },
       "fact_type": {
         "type": "string",
@@ -41,6 +41,11 @@
           "FT-07",
           "generic"
         ]
+      },
+      "topic": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 80
       },
       "text": {
         "type": "string",
@@ -82,37 +87,68 @@
         ]
       }
     },
-    "if": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "const": "answered"
+    "allOf": [
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "const": "answered"
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "required": [
+            "answer",
+            "answered_by"
+          ],
+          "properties": {
+            "answer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "answered_by": {
+              "type": "string",
+              "enum": [
+                "analyst",
+                "client"
+              ]
+            }
+          }
         }
       },
-      "required": [
-        "status"
-      ]
-    },
-    "then": {
-      "type": "object",
-      "required": [
-        "answer",
-        "answered_by"
-      ],
-      "properties": {
-        "answer": {
-          "type": "string",
-          "minLength": 1
-        },
-        "answered_by": {
-          "type": "string",
-          "enum": [
-            "analyst",
-            "client"
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "fact_type": {
+              "type": "string",
+              "const": "generic"
+            }
+          },
+          "required": [
+            "fact_type"
           ]
+        },
+        "then": {
+          "type": "object",
+          "required": [
+            "topic"
+          ],
+          "properties": {
+            "topic": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 80
+            }
+          }
         }
       }
-    }
+    ]
   }
 }

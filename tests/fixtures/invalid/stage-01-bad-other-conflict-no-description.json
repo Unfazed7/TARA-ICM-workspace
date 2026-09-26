@@ -150,7 +150,6 @@
         "FCT-006"
       ],
       "kind": "other",
-      "description": "Documents disagree on whether the update service can write to the firmware bucket",
       "proposed_resolution": "Ask the analyst which access the service has",
       "auto_resolved": false,
       "loser_fact_ids": []

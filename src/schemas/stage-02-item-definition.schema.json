@@ -500,12 +500,13 @@
           "protocol": {
             "type": "string",
             "enum": [
+              "http",
               "https_rest",
               "graphql",
               "grpc",
               "websocket",
               "ocpp",
-              "mqtt_tls",
+              "mqtt",
               "amqp",
               "kafka",
               "cloud_messaging_api",
@@ -715,6 +716,31 @@
           },
           "assumed": {
             "type": "boolean"
+          }
+        },
+        "if": {
+          "type": "object",
+          "properties": {
+            "assumed": {
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "required": [
+            "assumed"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "based_on_question_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^Q-\\d{3,}$"
+              }
+            }
           }
         }
       }

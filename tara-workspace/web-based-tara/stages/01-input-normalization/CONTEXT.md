@@ -39,6 +39,8 @@ The confirmed version of both lives in `checkpoint-api` once seeded.
 
 ## Source precedence (highest wins)
 
+Each document gets the rank for its type (table in spec 12a); the analyst can change a document's rank at CP0. Within a rank, the newer document wins (date on the document, else date received).
+
 1. Analyst decision at a checkpoint
 2. Cloud configuration export
 3. Written client answers (newest first)
@@ -53,6 +55,8 @@ The confirmed version of both lives in `checkpoint-api` once seeded.
 
 **Auto-resolved, with the losing value kept in the conflict log:** naming differences, instance sizes, counts, versions.
 
+**Conflicts that fit none of the named kinds** are recorded as `other` with a short description of what disagrees. They are never auto-resolved and are logged to `output/new-conflict-kinds.log` for human review. A document of type `other` needs a short label.
+
 ## Rules the API enforces
 
 The API refuses, item by item, and says why:
@@ -60,6 +64,7 @@ The API refuses, item by item, and says why:
 - a source reference to a document that is not in the register;
 - any confirm call that does not come from the analyst;
 - confirming CP0 while a "Needs you" card is unanswered (unless the analyst marked it "send to client");
+- confirming CP0 while a failed spot check has not been re-reviewed;
 - any write to a confirmed CP0 version.
 
 The server, not the model, computes groups, counts, coverage and conflicts.
