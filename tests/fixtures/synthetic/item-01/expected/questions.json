@@ -1,0 +1,179 @@
+[
+  {
+    "question_id": "Q-001",
+    "target_id": "EL-009",
+    "fact_type": "FT-01",
+    "text": "Is the API gateway a service your cloud provider runs, or something your team installed and runs itself?",
+    "why_it_matters": "If your team runs it, everything inside it is part of the assessment, not only its settings.",
+    "default_if_unanswered": "Run by the cloud provider; only its settings are assessed",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-002",
+    "target_id": "EL-011",
+    "fact_type": "generic",
+    "topic": "does it act on requests",
+    "text": "Does the load balancer do anything with requests, such as checking sign-in, filtering or ending encrypted connections, or does it only pass them on?",
+    "why_it_matters": "If it acts on requests, it needs the same attention as the API gateway.",
+    "default_if_unanswered": "It only passes requests on",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-003",
+    "target_id": "EL-017",
+    "fact_type": "FT-05",
+    "text": "What data does the cache hold? Does it include certificates, keys or sign-in tokens?",
+    "why_it_matters": "The cache is in the diagram but no document describes it, so its protection needs are unknown.",
+    "default_if_unanswered": "It holds certificate data",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-004",
+    "target_id": "EL-017",
+    "fact_type": "FT-01",
+    "text": "Is the cache a service your cloud provider runs, or something your team installed and runs itself?",
+    "why_it_matters": "If your team runs it, its software and settings are part of the assessment.",
+    "default_if_unanswered": "Run by the cloud provider",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-005",
+    "target_id": "EL-018",
+    "fact_type": "FT-02",
+    "text": "Who decides who can read the certificate database and who changes its settings?",
+    "why_it_matters": "The database holds every certificate request and the audit history.",
+    "default_if_unanswered": "Only the platform team",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-006",
+    "target_id": "EL-006",
+    "fact_type": "FT-04",
+    "text": "Can the portal UI bucket be reached directly from the internet, or only through the CDN?",
+    "why_it_matters": "Direct access would let anyone read or, with a wrong setting, change the portal pages.",
+    "default_if_unanswered": "Only through the CDN",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-007",
+    "target_id": "EL-007",
+    "fact_type": "FT-04",
+    "text": "Can the revocation list bucket be reached directly from the internet, or only through the CDN?",
+    "why_it_matters": "Anyone who can change the revocation list can make revoked certificates look valid.",
+    "default_if_unanswered": "Only through the CDN",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-008",
+    "target_id": "EL-020",
+    "fact_type": "FT-02",
+    "text": "Who decides who can read the secrets store and who changes its settings?",
+    "why_it_matters": "The secrets store holds the database password and the notification API key.",
+    "default_if_unanswered": "Only the portal services and the platform team",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-009",
+    "target_id": "EL-022",
+    "fact_type": "generic",
+    "topic": "who can read or delete the records",
+    "text": "Who can read or delete the audit trail records?",
+    "why_it_matters": "Anyone who can delete audit records can hide changes to the portal.",
+    "default_if_unanswered": "Only the platform team, recorded as an assumption",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-010",
+    "target_id": "EL-023",
+    "fact_type": "generic",
+    "topic": "who can read or delete the logs",
+    "text": "Who can read or delete the application logs?",
+    "why_it_matters": "Logs can show certificate requests and errors; deleting them hides activity.",
+    "default_if_unanswered": "Only the platform team, recorded as an assumption",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-011",
+    "target_id": "EL-025",
+    "fact_type": "FT-07",
+    "text": "Where does the pipeline keep the credentials for the deploy role?",
+    "why_it_matters": "Whoever holds these credentials can deploy any code to the portal.",
+    "default_if_unanswered": "Kept in the hosted CI service's secret settings",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-012",
+    "target_id": "EL-002",
+    "fact_type": "generic",
+    "topic": "are admin machines managed",
+    "text": "Do security admins use company-managed computers to reach the portal?",
+    "why_it_matters": "Admins can approve and revoke certificates and rotate the CA signing key.",
+    "default_if_unanswered": "Company-managed computers",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-013",
+    "target_id": "EL-001",
+    "fact_type": "generic",
+    "topic": "who uses it and from which devices",
+    "text": "From which devices do operators use the portal?",
+    "why_it_matters": "Personal devices would widen who could misuse a signed-in session.",
+    "default_if_unanswered": "Company-managed computers",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-014",
+    "target_id": "IF-08",
+    "fact_type": "generic",
+    "topic": "authentication between gateway and certificate service",
+    "text": "How does the certificate service check that a request really comes from the API gateway?",
+    "why_it_matters": "Without a check, anything inside the network could request certificates.",
+    "default_if_unanswered": "No check, recorded as an assumption",
+    "origin": "generated",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-015",
+    "target_id": "IF-09",
+    "fact_type": "generic",
+    "topic": "authentication between load balancer and certificate service",
+    "text": "Does the certificate service check the sign-in token on requests that arrive through the load balancer?",
+    "why_it_matters": "If not, a public load balancer is a way around the gateway's sign-in check.",
+    "default_if_unanswered": "No check, recorded as an assumption",
+    "origin": "generated",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-016",
+    "target_id": "EL-004",
+    "fact_type": "FT-03",
+    "text": "Is the corporate SSO used only by the portal, or also by other company applications?",
+    "why_it_matters": "A shared sign-in stays outside the assessment; a dedicated one is inside.",
+    "default_if_unanswered": "Shared company sign-in, treated as an interface",
+    "origin": "starter",
+    "status": "dropped_answered_by_docs"
+  },
+  {
+    "question_id": "Q-017",
+    "target_id": "EL-009",
+    "fact_type": "FT-04",
+    "text": "Can the API gateway be reached from the internet, or only from inside the network?",
+    "why_it_matters": "An internet-facing gateway is an entry point.",
+    "default_if_unanswered": "Reachable from the internet",
+    "origin": "starter",
+    "status": "dropped_answered_by_docs"
+  }
+]

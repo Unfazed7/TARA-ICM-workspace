@@ -1,0 +1,1 @@
+The key and certificate management portal lets operators, security admins and internal services request, approve, issue, download and revoke X.509 certificates, and covers everything the platform team deploys in the portal's cloud account.

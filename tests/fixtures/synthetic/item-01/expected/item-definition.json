@@ -1,0 +1,1829 @@
+{
+  "item_name": "Key and certificate management portal",
+  "boundary_statement": {
+    "text": "The key and certificate management portal lets operators, security admins and internal services request, approve, issue, download and revoke X.509 certificates, and covers everything the platform team deploys in the portal's cloud account.",
+    "proposed": false
+  },
+  "containers": [
+    {
+      "container_id": "CTR-01",
+      "kind": "cloud_account",
+      "name": "Portal cloud account",
+      "fact_ids": [
+        "FCT-020"
+      ]
+    },
+    {
+      "container_id": "CTR-02",
+      "kind": "vpc",
+      "name": "VPC",
+      "parent_id": "CTR-01",
+      "fact_ids": [
+        "FCT-021"
+      ]
+    },
+    {
+      "container_id": "CTR-03",
+      "kind": "subnet",
+      "name": "Public subnet",
+      "parent_id": "CTR-02",
+      "zone_id": "ZN-02",
+      "fact_ids": [
+        "FCT-022"
+      ]
+    },
+    {
+      "container_id": "CTR-04",
+      "kind": "subnet",
+      "name": "Private subnet",
+      "parent_id": "CTR-02",
+      "zone_id": "ZN-03",
+      "fact_ids": [
+        "FCT-023"
+      ]
+    },
+    {
+      "container_id": "CTR-05",
+      "kind": "cluster",
+      "name": "ECS cluster",
+      "parent_id": "CTR-04",
+      "zone_id": "ZN-03",
+      "fact_ids": [
+        "FCT-026"
+      ]
+    },
+    {
+      "container_id": "CTR-06",
+      "kind": "account_level_managed_services",
+      "name": "Account-level managed services",
+      "parent_id": "CTR-01",
+      "zone_id": "ZN-04",
+      "fact_ids": [
+        "FCT-036"
+      ]
+    }
+  ],
+  "zones": [
+    {
+      "zone_id": "ZN-01",
+      "kind": "internet_external",
+      "name": "Internet",
+      "fact_ids": [
+        "FCT-005"
+      ]
+    },
+    {
+      "zone_id": "ZN-02",
+      "kind": "edge_public_subnet",
+      "name": "Public subnet",
+      "fact_ids": [
+        "FCT-022"
+      ]
+    },
+    {
+      "zone_id": "ZN-03",
+      "kind": "private_application_subnet",
+      "name": "Private subnet",
+      "fact_ids": [
+        "FCT-023"
+      ]
+    },
+    {
+      "zone_id": "ZN-04",
+      "kind": "account_managed_services",
+      "name": "Account-level managed services",
+      "fact_ids": [
+        "FCT-036"
+      ]
+    },
+    {
+      "zone_id": "ZN-05",
+      "kind": "corporate_it",
+      "name": "Corporate IT",
+      "fact_ids": [
+        "FCT-007"
+      ]
+    },
+    {
+      "zone_id": "ZN-06",
+      "kind": "third_party_saas",
+      "name": "Third-party services",
+      "fact_ids": [
+        "FCT-044",
+        "FCT-046"
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "element_id": "EL-001",
+      "name": "Operators",
+      "kind": "human_actor",
+      "zone_id": "ZN-01",
+      "provider": "not applicable",
+      "hosting_type": "unknown",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "company staff",
+      "fact_ids": [
+        "FCT-001",
+        "FCT-004"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-002",
+      "name": "Security admins",
+      "kind": "human_actor",
+      "zone_id": "ZN-01",
+      "provider": "not applicable",
+      "hosting_type": "unknown",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "company security team",
+      "fact_ids": [
+        "FCT-002",
+        "FCT-004"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-003",
+      "name": "Internal services",
+      "kind": "system_to_system_client",
+      "zone_id": "ZN-05",
+      "provider": "company",
+      "hosting_type": "unknown",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "other company teams",
+      "fact_ids": [
+        "FCT-003",
+        "FCT-048"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-004",
+      "name": "Corporate SSO",
+      "kind": "identity_provider",
+      "zone_id": "ZN-05",
+      "provider": "central IT",
+      "hosting_type": "unknown",
+      "internet_exposed": {
+        "value": "unknown",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "central IT",
+      "fact_ids": [
+        "FCT-006",
+        "FCT-007"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-005",
+      "name": "CDN",
+      "kind": "cdn",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "yes",
+        "evidence_fact_ids": [
+          "FCT-015"
+        ]
+      },
+      "is_entry_point": true,
+      "auth_method": "unknown",
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Portal web pages",
+          "category": "firmware_software_artifacts"
+        },
+        {
+          "item": "Certificate revocation list",
+          "category": "signed_metadata"
+        }
+      ],
+      "fact_ids": [
+        "FCT-014",
+        "FCT-015"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "element_id": "EL-006",
+      "name": "Portal UI bucket",
+      "kind": "object_storage_bucket",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "unknown",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Portal web pages",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "fact_ids": [
+        "FCT-016",
+        "FCT-055"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-007",
+      "name": "Revocation list bucket",
+      "kind": "object_storage_bucket",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "unknown",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Certificate revocation list",
+          "category": "signed_metadata"
+        }
+      ],
+      "fact_ids": [
+        "FCT-032"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-008",
+      "name": "CRL publisher",
+      "kind": "serverless_function",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Certificate revocation list",
+          "category": "signed_metadata"
+        }
+      ],
+      "fact_ids": [
+        "FCT-031",
+        "FCT-063"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-009",
+      "name": "API gateway",
+      "kind": "api_gateway",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "unknown",
+      "internet_exposed": {
+        "value": "yes",
+        "evidence_fact_ids": [
+          "FCT-010"
+        ]
+      },
+      "is_entry_point": true,
+      "auth_method": "SSO token checked by the token authorizer; client certificate for internal services",
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "SSO tokens",
+          "category": "credentials_and_session_tokens"
+        },
+        {
+          "item": "Certificate requests",
+          "category": "business_transactions"
+        }
+      ],
+      "fact_ids": [
+        "FCT-009",
+        "FCT-010"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-010",
+      "name": "Token authorizer",
+      "kind": "serverless_function",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "SSO tokens",
+          "category": "credentials_and_session_tokens"
+        }
+      ],
+      "fact_ids": [
+        "FCT-008",
+        "FCT-049"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-011",
+      "name": "Load balancer",
+      "kind": "load_balancer",
+      "parent_container_id": "CTR-03",
+      "zone_id": "ZN-02",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "yes",
+        "evidence_fact_ids": [
+          "FCT-013"
+        ]
+      },
+      "is_entry_point": true,
+      "auth_method": "unknown",
+      "owner_operator": "platform team",
+      "fact_ids": [
+        "FCT-012",
+        "FCT-013"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "element_id": "EL-012",
+      "name": "NAT gateway",
+      "kind": "nat_gateway",
+      "parent_container_id": "CTR-03",
+      "zone_id": "ZN-02",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "fact_ids": [
+        "FCT-024"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-013",
+      "name": "Internet gateway",
+      "kind": "internet_gateway",
+      "parent_container_id": "CTR-02",
+      "zone_id": "ZN-02",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "fact_ids": [
+        "FCT-025"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-014",
+      "name": "Network boundary configuration",
+      "kind": "network_boundary_configuration",
+      "parent_container_id": "CTR-02",
+      "zone_id": "ZN-03",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "fact_ids": [
+        "FCT-021",
+        "FCT-022",
+        "FCT-023"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-015",
+      "name": "Certificate service",
+      "kind": "ecs_service",
+      "parent_container_id": "CTR-05",
+      "zone_id": "ZN-03",
+      "provider": "platform team",
+      "hosting_type": "self_hosted",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        },
+        {
+          "item": "Database password",
+          "category": "credentials_and_session_tokens",
+          "purpose": "Connect to the certificate database",
+          "held_where": "Secrets store",
+          "usable_by": "Portal services"
+        },
+        {
+          "item": "Notification service API key",
+          "category": "credentials_and_session_tokens",
+          "purpose": "Send expiry reminder emails",
+          "held_where": "Secrets store",
+          "usable_by": "Portal services"
+        }
+      ],
+      "fact_ids": [
+        "FCT-027",
+        "FCT-054",
+        "FCT-058"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-016",
+      "name": "Key service",
+      "kind": "ecs_service",
+      "parent_container_id": "CTR-05",
+      "zone_id": "ZN-03",
+      "provider": "platform team",
+      "hosting_type": "self_hosted",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Certificates to sign",
+          "category": "certificates"
+        }
+      ],
+      "fact_ids": [
+        "FCT-028",
+        "FCT-060"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-017",
+      "name": "Cache",
+      "kind": "cache",
+      "parent_container_id": "CTR-04",
+      "zone_id": "ZN-03",
+      "provider": "public cloud provider",
+      "hosting_type": "unknown",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "category": "unspecified"
+        }
+      ],
+      "fact_ids": [
+        "FCT-030"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "element_id": "EL-018",
+      "name": "Certificate database",
+      "kind": "database",
+      "parent_container_id": "CTR-04",
+      "zone_id": "ZN-03",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Certificate requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificate records",
+          "category": "certificates"
+        },
+        {
+          "item": "Audit history of requests, approvals, issuing and revocations",
+          "category": "audit_record_data"
+        }
+      ],
+      "fact_ids": [
+        "FCT-033",
+        "FCT-034",
+        "FCT-035"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-019",
+      "name": "CA signing key",
+      "kind": "kms_key",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "CA signing key",
+          "category": "cryptographic_keys",
+          "purpose": "Signs issued certificates",
+          "held_where": "Cloud key management service",
+          "usable_by": "Key service role for signing; security-admin role for policy changes and deletion"
+        }
+      ],
+      "stated_security_config": [
+        "Key policy: only the key service role can sign; only the security-admin role can change the policy or schedule deletion"
+      ],
+      "fact_ids": [
+        "FCT-037",
+        "FCT-038"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-020",
+      "name": "Secrets store",
+      "kind": "secrets_store",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Database password",
+          "category": "credentials_and_session_tokens",
+          "purpose": "Connect to the certificate database",
+          "held_where": "Secrets store",
+          "usable_by": "Portal services"
+        },
+        {
+          "item": "Notification service API key",
+          "category": "credentials_and_session_tokens",
+          "purpose": "Send expiry reminder emails",
+          "held_where": "Secrets store",
+          "usable_by": "Portal services"
+        }
+      ],
+      "fact_ids": [
+        "FCT-039",
+        "FCT-040"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-021",
+      "name": "Container registry",
+      "kind": "container_registry",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "fact_ids": [
+        "FCT-041",
+        "FCT-047"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-022",
+      "name": "Audit trail",
+      "kind": "audit_trail_config_recorder",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Record of API calls in the cloud account",
+          "category": "audit_record_data"
+        }
+      ],
+      "fact_ids": [
+        "FCT-042"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-023",
+      "name": "Logs and metrics",
+      "kind": "monitoring_logging",
+      "parent_container_id": "CTR-06",
+      "zone_id": "ZN-04",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Application logs and metrics",
+          "category": "logs_and_telemetry"
+        }
+      ],
+      "fact_ids": [
+        "FCT-043"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-024",
+      "name": "Notification service",
+      "kind": "notification_gateway",
+      "zone_id": "ZN-06",
+      "provider": "third-party provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "unknown",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "third-party provider",
+      "data_handled": [
+        {
+          "item": "Expiry reminder emails",
+          "category": "business_transactions"
+        }
+      ],
+      "fact_ids": [
+        "FCT-044",
+        "FCT-045"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-025",
+      "name": "CI/CD pipeline",
+      "kind": "ci_cd_pipeline",
+      "zone_id": "ZN-06",
+      "provider": "hosted CI service",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "unknown",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "data_handled": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        },
+        {
+          "item": "Deploy role credentials",
+          "category": "credentials_and_session_tokens",
+          "purpose": "Deploy to the cluster",
+          "held_where": "not documented",
+          "usable_by": "CI/CD pipeline"
+        }
+      ],
+      "fact_ids": [
+        "FCT-046",
+        "FCT-047",
+        "FCT-056"
+      ],
+      "confidence": "high"
+    }
+  ],
+  "links": [
+    {
+      "link_id": "IF-01",
+      "type": "data_flow",
+      "source_id": "EL-001",
+      "destination_id": "EL-009",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Request and download certificates",
+      "authentication": "SSO token",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "SSO token",
+          "category": "credentials_and_session_tokens"
+        },
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-004",
+        "FCT-010",
+        "FCT-057"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-02",
+      "type": "data_flow",
+      "source_id": "EL-002",
+      "destination_id": "EL-009",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Approve, revoke, rotate the CA key, view audit history",
+      "authentication": "SSO token",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "SSO token",
+          "category": "credentials_and_session_tokens"
+        },
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Audit history",
+          "category": "audit_record_data"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "Carries privileged admin actions.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-004",
+        "FCT-010",
+        "FCT-059"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-03",
+      "type": "data_flow",
+      "source_id": "EL-001",
+      "destination_id": "EL-005",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "Load the portal web pages",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Portal web pages",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-004",
+        "FCT-014",
+        "FCT-015"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-04",
+      "type": "data_flow",
+      "source_id": "EL-002",
+      "destination_id": "EL-005",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "Load the portal web pages",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Portal web pages",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-004",
+        "FCT-014",
+        "FCT-015"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-05",
+      "type": "data_flow",
+      "source_id": "EL-001",
+      "destination_id": "EL-004",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "Sign in",
+      "authentication": "Corporate SSO sign-in",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "SSO token",
+          "category": "credentials_and_session_tokens"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "Only operators are drawn with an arrow to the SSO; security admins sign in the same way according to the answers.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-006",
+        "FCT-057"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-06",
+      "type": "data_flow",
+      "source_id": "EL-003",
+      "destination_id": "EL-009",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Request and download certificates",
+      "authentication": "Client certificate issued by the portal",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "The portal issues the certificates its own clients use to authenticate.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-003",
+        "FCT-048"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-07",
+      "type": "data_flow",
+      "source_id": "EL-009",
+      "destination_id": "EL-010",
+      "direction": "unidirectional",
+      "protocol": "other",
+      "usage_at_destination": "Check the SSO token on every request",
+      "authentication": "cloud provider integration",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "SSO token",
+          "category": "credentials_and_session_tokens"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "Protocol: the gateway invokes the authorizer function directly.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-008",
+        "FCT-049"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-08",
+      "type": "data_flow",
+      "source_id": "EL-009",
+      "destination_id": "EL-015",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "Handle certificate requests",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "SSO token",
+          "category": "credentials_and_session_tokens"
+        },
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "Authentication between the gateway and the service is not documented.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-050"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-09",
+      "type": "data_flow",
+      "source_id": "EL-011",
+      "destination_id": "EL-015",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "Handle certificate requests",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "If the load balancer is public, this path reaches the certificate service without passing the gateway's token check.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-051",
+        "FCT-013"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-10",
+      "type": "data_flow",
+      "source_id": "EL-015",
+      "destination_id": "EL-016",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "Sign approved certificates",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-052",
+        "FCT-060"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-11",
+      "type": "data_flow",
+      "source_id": "EL-015",
+      "destination_id": "EL-017",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "unknown",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "category": "unspecified"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "No document describes the cache or what it holds.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-053"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-12",
+      "type": "data_flow",
+      "source_id": "EL-015",
+      "destination_id": "EL-018",
+      "direction": "unidirectional",
+      "protocol": "sql_wire",
+      "usage_at_destination": "Store and read requests, certificates and audit history",
+      "authentication": "Database password from the secrets store",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        },
+        {
+          "item": "Audit history",
+          "category": "audit_record_data"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-054",
+        "FCT-033",
+        "FCT-040"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-13",
+      "type": "data_flow",
+      "source_id": "EL-016",
+      "destination_id": "EL-019",
+      "direction": "unidirectional",
+      "protocol": "sigv4_service_api",
+      "usage_at_destination": "Sign certificates with the CA signing key",
+      "authentication": "Key service role",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "Read from the answers; the diagram shows only one arrow to the managed services group.",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-038",
+        "FCT-060"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-14",
+      "type": "data_flow",
+      "source_id": "EL-015",
+      "destination_id": "EL-020",
+      "direction": "unidirectional",
+      "protocol": "sigv4_service_api",
+      "usage_at_destination": "Read the database password and notification API key at start-up",
+      "authentication": "unknown",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Database password",
+          "category": "credentials_and_session_tokens"
+        },
+        {
+          "item": "Notification service API key",
+          "category": "credentials_and_session_tokens"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "Which role reads the secrets is not documented.",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-040"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-15",
+      "type": "data_flow",
+      "source_id": "EL-015",
+      "destination_id": "EL-024",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Email expiry reminders to owning teams",
+      "authentication": "API key",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Owning team email address",
+          "category": "pii_direct"
+        },
+        {
+          "item": "Certificate expiry details",
+          "category": "business_transactions"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-045",
+        "FCT-064"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-16",
+      "type": "data_flow",
+      "source_id": "EL-005",
+      "destination_id": "EL-006",
+      "direction": "unidirectional",
+      "protocol": "s3_api",
+      "usage_at_destination": "Serve the portal web pages",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Portal web pages",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-055"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-17",
+      "type": "data_flow",
+      "source_id": "EL-005",
+      "destination_id": "EL-007",
+      "direction": "unidirectional",
+      "protocol": "s3_api",
+      "usage_at_destination": "Serve the revocation list",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Certificate revocation list",
+          "category": "signed_metadata"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-032",
+        "FCT-063"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-18",
+      "type": "data_flow",
+      "source_id": "EL-008",
+      "destination_id": "EL-007",
+      "direction": "unidirectional",
+      "protocol": "s3_api",
+      "usage_at_destination": "Write the revocation list every hour",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "Certificate revocation list",
+          "category": "signed_metadata"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-031",
+        "FCT-063"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-19",
+      "type": "data_flow",
+      "source_id": "EL-025",
+      "destination_id": "EL-021",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Push new container images",
+      "authentication": "Deploy role",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "Where the pipeline keeps the deploy role credentials is not documented.",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-047"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-20",
+      "type": "data_flow",
+      "source_id": "EL-025",
+      "destination_id": "EL-015",
+      "direction": "unidirectional",
+      "protocol": "sigv4_service_api",
+      "usage_at_destination": "Deploy a new version",
+      "authentication": "Deploy role",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "The diagram arrow points at the cluster as a whole.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-056",
+        "FCT-067"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-21",
+      "type": "data_flow",
+      "source_id": "EL-025",
+      "destination_id": "EL-016",
+      "direction": "unidirectional",
+      "protocol": "sigv4_service_api",
+      "usage_at_destination": "Deploy a new version",
+      "authentication": "Deploy role",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "The diagram arrow points at the cluster as a whole.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-056",
+        "FCT-067"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-22",
+      "type": "data_flow",
+      "source_id": "EL-015",
+      "destination_id": "EL-023",
+      "direction": "unidirectional",
+      "protocol": "sigv4_service_api",
+      "usage_at_destination": "Store application logs and metrics",
+      "authentication": "unknown",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Application logs and metrics",
+          "category": "logs_and_telemetry"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-043"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-23",
+      "type": "data_flow",
+      "source_id": "EL-016",
+      "destination_id": "EL-023",
+      "direction": "unidirectional",
+      "protocol": "sigv4_service_api",
+      "usage_at_destination": "Store application logs and metrics",
+      "authentication": "unknown",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Application logs and metrics",
+          "category": "logs_and_telemetry"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-043"
+      ],
+      "confidence": "high"
+    },
+    {
+      "link_id": "IF-24",
+      "type": "data_flow",
+      "source_id": "EL-012",
+      "destination_id": "EL-013",
+      "direction": "unidirectional",
+      "protocol": "other",
+      "usage_at_destination": "Outbound traffic to the internet",
+      "authentication": "not applicable",
+      "encryption": "not applicable",
+      "data_carried": [],
+      "crosses_trust_boundary": false,
+      "remark": "Protocol: network routing, no application protocol.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-024",
+        "FCT-025"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "functions": [
+    {
+      "function_id": "FN-001",
+      "name": "Sign in",
+      "description": "Operators and security admins sign in through the corporate SSO. The portal sends the token with every API call.",
+      "actor_ids": [
+        "EL-001",
+        "EL-002"
+      ],
+      "element_ids": [
+        "EL-004",
+        "EL-009",
+        "EL-010"
+      ],
+      "data_read": [
+        {
+          "item": "SSO token",
+          "category": "credentials_and_session_tokens"
+        }
+      ],
+      "privileged": false,
+      "fact_ids": [
+        "FCT-057"
+      ]
+    },
+    {
+      "function_id": "FN-002",
+      "name": "Request a certificate",
+      "description": "An operator or an internal service submits a certificate signing request. The certificate service stores it.",
+      "actor_ids": [
+        "EL-001",
+        "EL-003"
+      ],
+      "element_ids": [
+        "EL-009",
+        "EL-015",
+        "EL-018"
+      ],
+      "endpoints": [
+        "POST /certificates/requests"
+      ],
+      "data_written": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        }
+      ],
+      "privileged": false,
+      "fact_ids": [
+        "FCT-058"
+      ]
+    },
+    {
+      "function_id": "FN-003",
+      "name": "Approve a request",
+      "description": "A security admin approves or rejects a pending request.",
+      "actor_ids": [
+        "EL-002"
+      ],
+      "element_ids": [
+        "EL-009",
+        "EL-015",
+        "EL-018"
+      ],
+      "endpoints": [
+        "POST /certificates/requests/{id}/decision"
+      ],
+      "data_read": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        }
+      ],
+      "data_written": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        }
+      ],
+      "privileged": true,
+      "fact_ids": [
+        "FCT-059"
+      ]
+    },
+    {
+      "function_id": "FN-004",
+      "name": "Issue a certificate",
+      "description": "After approval, the key service signs the certificate with the CA signing key. The certificate is stored with the request.",
+      "actor_ids": [],
+      "element_ids": [
+        "EL-015",
+        "EL-016",
+        "EL-019",
+        "EL-018"
+      ],
+      "data_read": [
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        }
+      ],
+      "data_written": [
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "privileged": true,
+      "fact_ids": [
+        "FCT-060"
+      ]
+    },
+    {
+      "function_id": "FN-005",
+      "name": "Download a certificate",
+      "description": "An operator or an internal service downloads an issued certificate and its chain.",
+      "actor_ids": [
+        "EL-001",
+        "EL-003"
+      ],
+      "element_ids": [
+        "EL-009",
+        "EL-015",
+        "EL-018"
+      ],
+      "endpoints": [
+        "GET /certificates/{id}"
+      ],
+      "data_read": [
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "privileged": false,
+      "fact_ids": [
+        "FCT-061"
+      ]
+    },
+    {
+      "function_id": "FN-006",
+      "name": "Revoke a certificate",
+      "description": "A security admin revokes a certificate and records the reason.",
+      "actor_ids": [
+        "EL-002"
+      ],
+      "element_ids": [
+        "EL-009",
+        "EL-015",
+        "EL-018"
+      ],
+      "endpoints": [
+        "POST /certificates/{id}/revoke"
+      ],
+      "data_read": [
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "data_written": [
+        {
+          "item": "Revocation reason",
+          "category": "audit_record_data"
+        }
+      ],
+      "privileged": true,
+      "fact_ids": [
+        "FCT-062"
+      ]
+    },
+    {
+      "function_id": "FN-007",
+      "name": "Publish the revocation list",
+      "description": "Every hour the CRL publisher builds the revocation list and writes it to the revocation list bucket. Relying services download it through the CDN.",
+      "actor_ids": [],
+      "element_ids": [
+        "EL-008",
+        "EL-007",
+        "EL-005"
+      ],
+      "data_written": [
+        {
+          "item": "Certificate revocation list",
+          "category": "signed_metadata"
+        }
+      ],
+      "privileged": false,
+      "fact_ids": [
+        "FCT-063"
+      ]
+    },
+    {
+      "function_id": "FN-008",
+      "name": "Send expiry reminders",
+      "description": "Every day the certificate service finds certificates expiring within 30 days and emails the owning team.",
+      "actor_ids": [],
+      "element_ids": [
+        "EL-015",
+        "EL-018",
+        "EL-024"
+      ],
+      "data_read": [
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "data_written": [
+        {
+          "item": "Owning team email address",
+          "category": "pii_direct"
+        }
+      ],
+      "privileged": false,
+      "fact_ids": [
+        "FCT-064"
+      ]
+    },
+    {
+      "function_id": "FN-009",
+      "name": "Rotate the CA signing key",
+      "description": "A security admin starts a rotation. A new key version is created and used for new certificates.",
+      "actor_ids": [
+        "EL-002"
+      ],
+      "element_ids": [
+        "EL-009",
+        "EL-019"
+      ],
+      "endpoints": [
+        "POST /admin/ca-key/rotate"
+      ],
+      "data_written": [
+        {
+          "item": "New CA signing key version",
+          "category": "cryptographic_keys"
+        }
+      ],
+      "privileged": true,
+      "fact_ids": [
+        "FCT-065"
+      ]
+    },
+    {
+      "function_id": "FN-010",
+      "name": "View audit history",
+      "description": "A security admin views who requested, approved, issued and revoked each certificate.",
+      "actor_ids": [
+        "EL-002"
+      ],
+      "element_ids": [
+        "EL-009",
+        "EL-015",
+        "EL-018"
+      ],
+      "endpoints": [
+        "GET /admin/audit"
+      ],
+      "data_read": [
+        {
+          "item": "Audit history",
+          "category": "audit_record_data"
+        }
+      ],
+      "privileged": true,
+      "fact_ids": [
+        "FCT-066"
+      ]
+    },
+    {
+      "function_id": "FN-011",
+      "name": "Deploy a new version",
+      "description": "The deploy pipeline builds a new container image and rolls it out to the cluster.",
+      "actor_ids": [],
+      "element_ids": [
+        "EL-025",
+        "EL-021",
+        "EL-015",
+        "EL-016"
+      ],
+      "data_written": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "privileged": true,
+      "fact_ids": [
+        "FCT-067",
+        "FCT-047"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "assumption_id": "ASM-01",
+      "text": "The load balancer is reachable from the internet, so it is a second entry point next to the API gateway, until the client confirms otherwise.",
+      "based_on": [
+        "FCT-013",
+        "FCT-011"
+      ]
+    },
+    {
+      "assumption_id": "ASM-02",
+      "text": "The CDN is reachable from the internet. It serves the portal pages and the revocation list.",
+      "based_on": [
+        "FCT-015",
+        "FCT-011"
+      ]
+    },
+    {
+      "assumption_id": "ASM-03",
+      "text": "The assessed environment is production. The written answers describe the dev environment and are assumed to hold for production, because the client says production follows the same design.",
+      "based_on": [
+        "FCT-018",
+        "FCT-019"
+      ]
+    },
+    {
+      "assumption_id": "ASM-04",
+      "text": "The cloud provider protects the inside of its managed services: key management, secrets store, database, storage, CDN, logging and audit trail.",
+      "based_on": [
+        "FCT-037",
+        "FCT-039",
+        "FCT-033",
+        "FCT-036"
+      ]
+    },
+    {
+      "assumption_id": "ASM-05",
+      "text": "The cache holds certificate data until the client says what it holds.",
+      "based_on": [
+        "FCT-030",
+        "Q-003"
+      ]
+    },
+    {
+      "assumption_id": "ASM-06",
+      "text": "Nothing checks that requests reaching the certificate service come from the API gateway.",
+      "based_on": [
+        "FCT-050",
+        "Q-014"
+      ]
+    }
+  ],
+  "responsibility_split": [
+    {
+      "element_id": "EL-019",
+      "provider_side": "Key storage hardware and key service internals",
+      "customer_side": "Key policy, rotation, deletion settings, which role may sign"
+    },
+    {
+      "element_id": "EL-020",
+      "provider_side": "Secrets store internals and encryption at rest",
+      "customer_side": "Access policy, which secrets are stored, rotation"
+    },
+    {
+      "element_id": "EL-018",
+      "provider_side": "Database engine patching and host",
+      "customer_side": "Users and passwords, network access, encryption and backup settings"
+    },
+    {
+      "element_id": "EL-006",
+      "provider_side": "Storage service internals",
+      "customer_side": "Bucket policy and public access settings"
+    },
+    {
+      "element_id": "EL-007",
+      "provider_side": "Storage service internals",
+      "customer_side": "Bucket policy and who may write the revocation list"
+    },
+    {
+      "element_id": "EL-005",
+      "provider_side": "CDN network internals",
+      "customer_side": "Origins, allowed protocols and caching settings"
+    }
+  ],
+  "stated_control_fact_ids": [
+    "FCT-008",
+    "FCT-003",
+    "FCT-038",
+    "FCT-040"
+  ],
+  "stated_absence_fact_ids": [
+    "FCT-017"
+  ],
+  "stakeholders": [
+    {
+      "role": "Platform team",
+      "interest": "Runs the portal and its cloud account"
+    },
+    {
+      "role": "Security admins",
+      "interest": "Approve, revoke and control the CA signing key"
+    },
+    {
+      "role": "Operators",
+      "interest": "Get certificates for their services"
+    },
+    {
+      "role": "Central IT",
+      "interest": "Runs the corporate SSO the portal relies on"
+    }
+  ]
+}
