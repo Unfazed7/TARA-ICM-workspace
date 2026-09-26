@@ -1,0 +1,3 @@
+asset_title,asset_type,asset_description,confidentiality,integrity,availability,authenticity,authorization,non_repudiation
+Diagnostic API Endpoint,api_endpoint,Backend endpoint that accepts diagnostic requests,yes,yes,yes,yes,yes,no
+Audit Event Log,data_store,Repository of diagnostic command audit events,no,yes,no,no,no,yes

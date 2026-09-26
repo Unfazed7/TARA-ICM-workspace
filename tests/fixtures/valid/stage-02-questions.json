@@ -1,0 +1,35 @@
+[
+  {
+    "question_id": "Q-001",
+    "target_id": "EL-004",
+    "fact_type": "FT-03",
+    "text": "Is this sign-in used only by the portal, or also by other company applications?",
+    "why_it_matters": "A shared sign-in stays outside the assessment; a dedicated one is inside.",
+    "default_if_unanswered": "Shared company sign-in, treated as an interface",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-002",
+    "target_id": "EL-003",
+    "fact_type": "FT-05",
+    "text": "What data is stored in the firmware bucket besides signed packages?",
+    "why_it_matters": "Other data may need its own protection.",
+    "default_if_unanswered": "Signed firmware packages only",
+    "origin": "generated",
+    "answer": "Only signed packages and their manifests",
+    "answered_by": "analyst",
+    "status": "answered"
+  },
+  {
+    "question_id": "Q-003",
+    "target_id": "IF-01",
+    "fact_type": "generic",
+    "topic": "authentication between gateway and update service",
+    "text": "How does the update service check that a request really comes from the API gateway?",
+    "why_it_matters": "Without a check, anything inside the network could start a rollout.",
+    "default_if_unanswered": "No check, recorded as an assumption",
+    "origin": "generated",
+    "status": "open"
+  }
+]

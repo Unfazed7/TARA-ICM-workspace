@@ -1,0 +1,14 @@
+[
+  {
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "asset_id": "AS_01",
+    "asset_title": "Diagnostic API Endpoint",
+    "property": "authorization",
+    "stride_category": "elevation_of_privilege",
+    "threat_statement": "Diagnostic API Endpoint authorization checks may be bypassed to invoke privileged diagnostic actions.",
+    "derivation_note": "The damage scenario concerns authorization failure, which maps to elevation of privilege.",
+    "owasp_reference": "A01",
+    "created_timestamp": "2026-06-01T10:02:00Z"
+  }
+]

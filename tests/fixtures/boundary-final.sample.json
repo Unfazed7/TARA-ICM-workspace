@@ -1,0 +1,47 @@
+{
+  "boundary_statement": "The item is the Telematics Cloud Backend — comprising the cloud backend services, Vehicle Data Ingestion API, Authentication and Identity Service, Diagnostic Command Log Store, and Technician Web Portal. The item boundary ends at the telematics-to-vehicle gateway interface; in-vehicle ECUs (including the BCM) are outside this item's scope.",
+  "decisions": [
+    {
+      "element_id": "COMP-001",
+      "status": "in_scope",
+      "rationale": "Core cloud backend — explicitly named in the boundary statement as the primary item.",
+      "decided_by": "agent",
+      "escalation_reason": null
+    },
+    {
+      "element_id": "COMP-002",
+      "status": "in_scope",
+      "rationale": "Vehicle Data Ingestion API is part of the cloud backend and sits within the item boundary.",
+      "decided_by": "agent",
+      "escalation_reason": null
+    },
+    {
+      "element_id": "COMP-003",
+      "status": "out_of_scope",
+      "rationale": "BCM is a vehicle ECU downstream of the telematics gateway — outside the cloud item boundary per the boundary statement.",
+      "decided_by": "analyst",
+      "escalation_reason": null
+    },
+    {
+      "element_id": "COMP-004",
+      "status": "in_scope",
+      "rationale": "Technician Web Portal is explicitly named in the boundary statement.",
+      "decided_by": "agent",
+      "escalation_reason": null
+    },
+    {
+      "element_id": "COMP-005",
+      "status": "in_scope",
+      "rationale": "Authentication and Identity Service is explicitly named in the boundary statement.",
+      "decided_by": "agent",
+      "escalation_reason": null
+    },
+    {
+      "element_id": "COMP-006",
+      "status": "in_scope",
+      "rationale": "Diagnostic Command Log Store is explicitly named in the boundary statement.",
+      "decided_by": "agent",
+      "escalation_reason": null
+    }
+  ]
+}

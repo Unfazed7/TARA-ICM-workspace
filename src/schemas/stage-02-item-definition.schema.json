@@ -1,0 +1,843 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-02-item-definition.schema.json",
+  "title": "Stage 02 Web Item Definition",
+  "description": "Containers, zones, elements, links, functions and scope decisions built from CP0-confirmed facts. Specs: .meta/specs/12b-item-definition-model.md, .meta/specs/12c-questions-scope-and-analyst-decisions.md",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_name",
+    "boundary_statement",
+    "containers",
+    "zones",
+    "elements",
+    "links",
+    "functions",
+    "scope_decisions",
+    "assumptions"
+  ],
+  "definitions": {
+    "fact_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^FCT-\\d{3,}$"
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "data_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "category"
+      ],
+      "properties": {
+        "item": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "pii_direct",
+            "vehicle_linked_pii",
+            "credentials_and_session_tokens",
+            "cryptographic_keys",
+            "certificates",
+            "firmware_software_artifacts",
+            "signed_metadata",
+            "configuration",
+            "logs_and_telemetry",
+            "audit_record_data",
+            "business_transactions",
+            "payment_data",
+            "backups",
+            "unspecified"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "held_where": {
+          "type": "string",
+          "minLength": 1
+        },
+        "usable_by": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "properties": {
+    "item_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "boundary_statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "proposed"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 10
+        },
+        "proposed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "containers": {
+      "type": "array",
+      "uniqueItemProperties": [
+        "container_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "container_id",
+          "kind",
+          "name",
+          "fact_ids"
+        ],
+        "properties": {
+          "container_id": {
+            "type": "string",
+            "pattern": "^CTR-\\d{2,}$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "cloud_account",
+              "region",
+              "vpc",
+              "subnet",
+              "availability_zone",
+              "cluster",
+              "namespace",
+              "account_level_managed_services"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "parent_id": {
+            "type": "string",
+            "pattern": "^CTR-\\d{2,}$"
+          },
+          "zone_id": {
+            "type": "string",
+            "pattern": "^ZN-\\d{2,}$"
+          },
+          "fact_ids": {
+            "$ref": "#/definitions/fact_ids"
+          }
+        }
+      }
+    },
+    "zones": {
+      "type": "array",
+      "uniqueItemProperties": [
+        "zone_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "zone_id",
+          "kind",
+          "name",
+          "fact_ids"
+        ],
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "pattern": "^ZN-\\d{2,}$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "internet_external",
+              "edge_public_subnet",
+              "private_application_subnet",
+              "data_subnet",
+              "account_managed_services",
+              "control_management_plane",
+              "governance_account",
+              "corporate_it",
+              "third_party_saas",
+              "vehicle_field_device"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fact_ids": {
+            "$ref": "#/definitions/fact_ids"
+          }
+        }
+      }
+    },
+    "elements": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItemProperties": [
+        "element_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element_id",
+          "name",
+          "kind",
+          "zone_id",
+          "provider",
+          "hosting_type",
+          "internet_exposed",
+          "is_entry_point",
+          "owner_operator",
+          "fact_ids",
+          "confidence"
+        ],
+        "properties": {
+          "element_id": {
+            "type": "string",
+            "pattern": "^EL-\\d{3,}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "cluster_control_plane",
+              "worker_nodes",
+              "pod_runtime",
+              "ecs_service",
+              "microservice_workload",
+              "serverless_function",
+              "api_gateway",
+              "load_balancer",
+              "waf",
+              "cdn",
+              "database",
+              "object_storage_bucket",
+              "cache",
+              "queue_stream",
+              "identity_provider",
+              "secrets_store",
+              "kms_key",
+              "certificate_authority",
+              "monitoring_logging",
+              "audit_trail_config_recorder",
+              "security_detection_tooling",
+              "landing_zone_governance",
+              "ci_cd_pipeline",
+              "iac_runner",
+              "container_registry",
+              "nat_gateway",
+              "internet_gateway",
+              "vpc_endpoint",
+              "network_interconnect",
+              "network_boundary_configuration",
+              "dns",
+              "bastion_session_manager",
+              "in_cluster_platform_component",
+              "workflow_engine",
+              "iot_device_gateway",
+              "device_provisioning_service",
+              "signing_service",
+              "data_warehouse",
+              "stream_processing_etl",
+              "backup_store",
+              "file_storage",
+              "notification_gateway",
+              "payment_gateway",
+              "mapping_provider",
+              "third_party_saas",
+              "partner_oem_backend",
+              "web_frontend",
+              "mobile_app",
+              "admin_portal",
+              "field_device",
+              "external_vehicle_system",
+              "human_actor",
+              "system_to_system_client",
+              "unknown_kind"
+            ]
+          },
+          "kind_label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "parent_container_id": {
+            "type": "string",
+            "pattern": "^CTR-\\d{2,}$"
+          },
+          "zone_id": {
+            "type": "string",
+            "pattern": "^ZN-\\d{2,}$"
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1
+          },
+          "hosting_type": {
+            "type": "string",
+            "enum": [
+              "managed",
+              "self_hosted",
+              "unknown"
+            ]
+          },
+          "internet_exposed": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "evidence_fact_ids"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "enum": [
+                  "yes",
+                  "no",
+                  "unknown"
+                ]
+              },
+              "evidence_fact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^FCT-\\d{3,}$"
+                }
+              }
+            }
+          },
+          "is_entry_point": {
+            "type": "boolean"
+          },
+          "auth_method": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner_operator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "data_handled": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/data_item"
+            }
+          },
+          "stated_security_config": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "fact_ids": {
+            "$ref": "#/definitions/fact_ids"
+          },
+          "confidence": {
+            "$ref": "#/definitions/confidence"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "unknown_kind"
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "type": "object",
+              "required": [
+                "kind_label"
+              ],
+              "properties": {
+                "kind_label": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "is_entry_point": {
+                      "type": "boolean",
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "is_entry_point"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "internet_exposed": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "const": "yes"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "internet_exposed"
+                  ]
+                }
+              ]
+            },
+            "then": {
+              "type": "object",
+              "required": [
+                "auth_method"
+              ],
+              "properties": {
+                "auth_method": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": {
+      "type": "array",
+      "uniqueItemProperties": [
+        "link_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "link_id",
+          "type",
+          "source_id",
+          "destination_id",
+          "direction",
+          "protocol",
+          "usage_at_destination",
+          "authentication",
+          "encryption",
+          "data_carried",
+          "crosses_trust_boundary",
+          "remark",
+          "inferred_from_text",
+          "fact_ids",
+          "confidence"
+        ],
+        "properties": {
+          "link_id": {
+            "type": "string",
+            "pattern": "^IF-\\d{2,}$"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "data_flow",
+              "exposure"
+            ]
+          },
+          "source_id": {
+            "type": "string",
+            "pattern": "^EL-\\d{3,}$"
+          },
+          "destination_id": {
+            "type": "string",
+            "pattern": "^EL-\\d{3,}$"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "unidirectional",
+              "bidirectional"
+            ]
+          },
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "http",
+              "https_rest",
+              "graphql",
+              "grpc",
+              "websocket",
+              "ocpp",
+              "mqtt",
+              "amqp",
+              "kafka",
+              "cloud_messaging_api",
+              "sql_wire",
+              "redis",
+              "s3_api",
+              "presigned_url",
+              "sigv4_service_api",
+              "imds",
+              "nfs",
+              "smtp",
+              "sms_gateway_api",
+              "payment_gateway_api",
+              "webhook",
+              "jwks_fetch",
+              "dns",
+              "ssh",
+              "session_manager",
+              "sftp",
+              "vpn_ipsec",
+              "direct_connect",
+              "other",
+              "unknown"
+            ]
+          },
+          "port": {
+            "type": "string",
+            "minLength": 1
+          },
+          "usage_at_destination": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authentication": {
+            "type": "string",
+            "minLength": 1
+          },
+          "encryption": {
+            "type": "string",
+            "minLength": 1
+          },
+          "data_carried": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/data_item"
+            }
+          },
+          "crosses_trust_boundary": {
+            "type": "boolean"
+          },
+          "remark": {
+            "type": "string"
+          },
+          "sync_async": {
+            "type": "string",
+            "enum": [
+              "sync",
+              "async"
+            ]
+          },
+          "rate_limiting": {
+            "type": "string",
+            "minLength": 1
+          },
+          "volume": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inferred_from_text": {
+            "type": "boolean"
+          },
+          "fact_ids": {
+            "$ref": "#/definitions/fact_ids"
+          },
+          "confidence": {
+            "$ref": "#/definitions/confidence"
+          }
+        }
+      }
+    },
+    "functions": {
+      "type": "array",
+      "uniqueItemProperties": [
+        "function_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "function_id",
+          "name",
+          "description",
+          "actor_ids",
+          "element_ids",
+          "privileged",
+          "fact_ids"
+        ],
+        "properties": {
+          "function_id": {
+            "type": "string",
+            "pattern": "^FN-\\d{3,}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actor_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^EL-\\d{3,}$"
+            }
+          },
+          "element_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^EL-\\d{3,}$"
+            }
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "data_read": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/data_item"
+            }
+          },
+          "data_written": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/data_item"
+            }
+          },
+          "privileged": {
+            "type": "boolean"
+          },
+          "fact_ids": {
+            "$ref": "#/definitions/fact_ids"
+          }
+        }
+      }
+    },
+    "scope_decisions": {
+      "type": "array",
+      "uniqueItemProperties": [
+        "decision_id",
+        "element_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "decision_id",
+          "element_id",
+          "status",
+          "reason",
+          "based_on_fact_ids",
+          "based_on_question_ids",
+          "assumed"
+        ],
+        "properties": {
+          "decision_id": {
+            "type": "string",
+            "pattern": "^SD-\\d{3,}$"
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^EL-\\d{3,}$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in_scope",
+              "interface",
+              "out_of_scope",
+              "ambiguous"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10
+          },
+          "based_on_fact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^FCT-\\d{3,}$"
+            }
+          },
+          "based_on_question_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^Q-\\d{3,}$"
+            }
+          },
+          "assumed": {
+            "type": "boolean"
+          }
+        },
+        "if": {
+          "type": "object",
+          "properties": {
+            "assumed": {
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "required": [
+            "assumed"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "based_on_question_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^Q-\\d{3,}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "uniqueItemProperties": [
+        "assumption_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assumption_id",
+          "text",
+          "based_on"
+        ],
+        "properties": {
+          "assumption_id": {
+            "type": "string",
+            "pattern": "^ASM-\\d{2,}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "based_on": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(FCT|Q)-\\d{3,}$"
+            }
+          }
+        }
+      }
+    },
+    "responsibility_split": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element_id",
+          "provider_side",
+          "customer_side"
+        ],
+        "properties": {
+          "element_id": {
+            "type": "string",
+            "pattern": "^EL-\\d{3,}$"
+          },
+          "provider_side": {
+            "type": "string",
+            "minLength": 1
+          },
+          "customer_side": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "stated_control_fact_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^FCT-\\d{3,}$"
+      }
+    },
+    "stated_absence_fact_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^FCT-\\d{3,}$"
+      }
+    },
+    "stakeholders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "interest"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "interest": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

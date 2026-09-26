@@ -1,0 +1,301 @@
+[
+  {
+    "decision_id": "SD-001",
+    "element_id": "EL-001",
+    "status": "interface",
+    "reason": "Operators are people who use the portal. They are shown as users, not broken down.",
+    "based_on_fact_ids": [
+      "FCT-001"
+    ],
+    "based_on_question_ids": [
+      "Q-013"
+    ],
+    "assumed": true
+  },
+  {
+    "decision_id": "SD-002",
+    "element_id": "EL-002",
+    "status": "interface",
+    "reason": "Security admins are people who use the portal. Their access path through the API gateway is inside the assessment.",
+    "based_on_fact_ids": [
+      "FCT-002"
+    ],
+    "based_on_question_ids": [
+      "Q-012"
+    ],
+    "assumed": true
+  },
+  {
+    "decision_id": "SD-003",
+    "element_id": "EL-003",
+    "status": "interface",
+    "reason": "Internal services are other company systems that call the portal. The link and the client certificate they use are inside the assessment.",
+    "based_on_fact_ids": [
+      "FCT-003",
+      "FCT-048"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-004",
+    "element_id": "EL-004",
+    "status": "interface",
+    "reason": "The answers say the corporate SSO is run by central IT and used by other company applications. The token check on the API gateway is inside the assessment.",
+    "based_on_fact_ids": [
+      "FCT-007",
+      "FCT-008"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-005",
+    "element_id": "EL-005",
+    "status": "in_scope",
+    "reason": "It is deployed in the portal's account and serves the portal pages and the revocation list.",
+    "based_on_fact_ids": [
+      "FCT-014",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-006",
+    "element_id": "EL-006",
+    "status": "in_scope",
+    "reason": "It is in the portal's account and holds the portal web pages.",
+    "based_on_fact_ids": [
+      "FCT-016",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-007",
+    "element_id": "EL-007",
+    "status": "in_scope",
+    "reason": "It is in the portal's account and holds the revocation list.",
+    "based_on_fact_ids": [
+      "FCT-032",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-008",
+    "element_id": "EL-008",
+    "status": "in_scope",
+    "reason": "It is in the portal's account and builds the revocation list.",
+    "based_on_fact_ids": [
+      "FCT-031",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-009",
+    "element_id": "EL-009",
+    "status": "in_scope",
+    "reason": "It is the documented public entry point of the portal.",
+    "based_on_fact_ids": [
+      "FCT-009",
+      "FCT-010"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-010",
+    "element_id": "EL-010",
+    "status": "in_scope",
+    "reason": "It checks the sign-in token on every request.",
+    "based_on_fact_ids": [
+      "FCT-008"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-011",
+    "element_id": "EL-011",
+    "status": "in_scope",
+    "reason": "It is in the portal's network and the diagram shows it reachable from the internet.",
+    "based_on_fact_ids": [
+      "FCT-012",
+      "FCT-013"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-012",
+    "element_id": "EL-012",
+    "status": "in_scope",
+    "reason": "It is part of the portal's network.",
+    "based_on_fact_ids": [
+      "FCT-024",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-013",
+    "element_id": "EL-013",
+    "status": "in_scope",
+    "reason": "It is the portal network's route to the internet.",
+    "based_on_fact_ids": [
+      "FCT-025",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-014",
+    "element_id": "EL-014",
+    "status": "in_scope",
+    "reason": "It is the configuration of the portal's own network.",
+    "based_on_fact_ids": [
+      "FCT-021",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-015",
+    "element_id": "EL-015",
+    "status": "in_scope",
+    "reason": "It is the portal's own service and handles all certificate requests.",
+    "based_on_fact_ids": [
+      "FCT-027"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-016",
+    "element_id": "EL-016",
+    "status": "in_scope",
+    "reason": "It is the portal's own service and signs certificates.",
+    "based_on_fact_ids": [
+      "FCT-028",
+      "FCT-060"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-017",
+    "element_id": "EL-017",
+    "status": "in_scope",
+    "reason": "It is in the portal's network, next to the certificate service.",
+    "based_on_fact_ids": [
+      "FCT-030",
+      "FCT-020"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-018",
+    "element_id": "EL-018",
+    "status": "in_scope",
+    "reason": "It holds all certificate requests, issued certificates and the audit history.",
+    "based_on_fact_ids": [
+      "FCT-033",
+      "FCT-034",
+      "FCT-035"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-019",
+    "element_id": "EL-019",
+    "status": "in_scope",
+    "reason": "The key is the portal's CA signing key. The cloud provider runs the key service; the key policy the platform team sets is inside the assessment.",
+    "based_on_fact_ids": [
+      "FCT-037",
+      "FCT-038"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-020",
+    "element_id": "EL-020",
+    "status": "in_scope",
+    "reason": "It holds the portal's database password and notification API key.",
+    "based_on_fact_ids": [
+      "FCT-039",
+      "FCT-040"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-021",
+    "element_id": "EL-021",
+    "status": "in_scope",
+    "reason": "It holds the container images that are deployed to the portal.",
+    "based_on_fact_ids": [
+      "FCT-041",
+      "FCT-047"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-022",
+    "element_id": "EL-022",
+    "status": "in_scope",
+    "reason": "It records API calls in the portal's account.",
+    "based_on_fact_ids": [
+      "FCT-042"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-023",
+    "element_id": "EL-023",
+    "status": "in_scope",
+    "reason": "It holds the portal's application logs and metrics.",
+    "based_on_fact_ids": [
+      "FCT-043"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-024",
+    "element_id": "EL-024",
+    "status": "interface",
+    "reason": "It is an outside service. The link to it, the data sent and the API key the portal holds are inside the assessment.",
+    "based_on_fact_ids": [
+      "FCT-044",
+      "FCT-045"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-025",
+    "element_id": "EL-025",
+    "status": "in_scope",
+    "reason": "It can deploy code to the portal, so it is inside the assessment even though it runs outside the portal's account.",
+    "based_on_fact_ids": [
+      "FCT-046",
+      "FCT-047"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "attack_id": "AT_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "asset_id": "AS_01",
+    "attack_description": "A remote caller abuses a weak authorization boundary.",
+    "attack_path": {
+      "step_1_initial_precondition": "The API is reachable.",
+      "step_2_abuse_technique": "A weak session is reused.",
+      "step_3_exploit_effect": "The request is accepted.",
+      "step_4_control_gap": "Authorization is not operation-bound.",
+      "step_5_threat_realization": "Privileged functionality is invoked."
+    },
+    "cvss_metrics": {
+      "attack_vector": "Z",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": null,
+    "afr_label": null,
+    "justifications": {
+      "attack_vector": "Network reachable.",
+      "attack_complexity": "Direct authorization gap.",
+      "privileges_required": "Low privilege needed.",
+      "user_interaction": "No user action."
+    },
+    "created_timestamp": "2026-06-01T10:03:00Z"
+  }
+]

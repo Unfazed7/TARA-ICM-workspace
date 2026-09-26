@@ -1,0 +1,1234 @@
+[
+  {
+    "fact_id": "FCT-001",
+    "subject": "Operators",
+    "fact_type": "actor",
+    "value": "Operators request certificates for their services and download issued certificates",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Operators'",
+        "quote": "Operators"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 2",
+        "quote": "Request certificates for their services and download issued certificates"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-002",
+    "subject": "Security admins",
+    "fact_type": "actor",
+    "value": "Security admins approve and revoke certificates, rotate the CA signing key and read the audit history",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Security admins'",
+        "quote": "Security admins"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 2",
+        "quote": "Approve and revoke certificates, rotate the CA signing key, read the audit history"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-003",
+    "subject": "Internal services",
+    "fact_type": "actor",
+    "value": "Internal services request and download certificates through the API, using a client certificate issued by the portal",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Internal services'",
+        "quote": "Internal services"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 2",
+        "quote": "They call the API with a client certificate issued by the portal"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-004",
+    "subject": "Operators and security admins",
+    "fact_type": "link_exists",
+    "value": "Operators and security admins reach the portal over the internet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Operators' to 'Internet'",
+        "quote": "Operators -> Internet (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Security admins' to 'Internet'",
+        "quote": "Security admins -> Internet (unlabelled arrow)"
+      }
+    ],
+    "confidence": "medium",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-005",
+    "subject": "Internet",
+    "fact_type": "component_exists",
+    "value": "The internet is shown as the source of outside traffic",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Internet'",
+        "quote": "Internet"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-006",
+    "subject": "Corporate SSO",
+    "fact_type": "component_exists",
+    "value": "Operators and security admins sign in with the corporate SSO",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Corporate SSO'",
+        "quote": "Corporate SSO"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 5",
+        "quote": "Operators and security admins sign in with the corporate SSO"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-007",
+    "subject": "Corporate SSO",
+    "fact_type": "responsibility",
+    "value": "The corporate SSO is run by central IT and shared with other company applications",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 5",
+        "quote": "It is run by central IT and is also used by other company applications"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-008",
+    "subject": "Token authorizer",
+    "fact_type": "component_exists",
+    "value": "A token authorizer on the API gateway checks the SSO token on every request",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Token authorizer'",
+        "quote": "Token authorizer"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 5",
+        "quote": "A token authorizer on the API gateway checks the SSO token on every request"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-009",
+    "subject": "API gateway",
+    "fact_type": "component_exists",
+    "value": "An API gateway receives portal API calls",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'API Gateway'",
+        "quote": "API Gateway"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 3",
+        "quote": "The API gateway is the only public entry point"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-010",
+    "subject": "API gateway",
+    "fact_type": "attribute",
+    "value": "The API gateway is reachable from the internet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 3",
+        "quote": "The API gateway is the only public entry point"
+      },
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Internet' to 'API Gateway'",
+        "quote": "Internet -> API Gateway (unlabelled arrow)"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-011",
+    "subject": "Portal",
+    "fact_type": "attribute",
+    "value": "Nothing except the API gateway is reachable from the internet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 3",
+        "quote": "Everything else is only reachable from inside the network"
+      }
+    ],
+    "confidence": "high",
+    "group": "needs_you",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-012",
+    "subject": "Load balancer",
+    "fact_type": "component_exists",
+    "value": "A load balancer sits in the public subnet in front of the certificate service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'public ALB'",
+        "quote": "public ALB"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-013",
+    "subject": "Load balancer",
+    "fact_type": "attribute",
+    "value": "The load balancer is internet-facing and receives traffic from the internet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'public ALB'",
+        "quote": "public ALB"
+      },
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Internet' to 'public ALB'",
+        "quote": "Internet -> public ALB (unlabelled arrow)"
+      }
+    ],
+    "confidence": "medium",
+    "group": "needs_you",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-014",
+    "subject": "CDN",
+    "fact_type": "component_exists",
+    "value": "A CDN serves the portal web pages",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'CDN'",
+        "quote": "CDN"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 1",
+        "quote": "The portal web pages are served from a storage bucket through the CDN"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-015",
+    "subject": "CDN",
+    "fact_type": "attribute",
+    "value": "The CDN receives traffic from the internet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Internet' to 'CDN'",
+        "quote": "Internet -> CDN (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.7",
+        "quote": "Relying services download the list through the CDN"
+      }
+    ],
+    "confidence": "medium",
+    "group": "needs_you",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-016",
+    "subject": "Portal UI bucket",
+    "fact_type": "component_exists",
+    "value": "A storage bucket holds the portal web pages",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Portal UI bucket'",
+        "quote": "Portal UI bucket"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 1",
+        "quote": "The portal web pages are served from a storage bucket through the CDN"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-017",
+    "subject": "Web application firewall",
+    "fact_type": "absence_stated",
+    "value": "No web application firewall is used",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 4",
+        "quote": "We do not use a WAF at the moment"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-018",
+    "subject": "Environment",
+    "fact_type": "environment",
+    "value": "The written answers describe the dev environment kcp-dev",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 2",
+        "quote": "These answers describe `kcp-dev`. We are onboarding the dev environment first."
+      }
+    ],
+    "confidence": "high",
+    "group": "needs_you",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-019",
+    "subject": "Environment",
+    "fact_type": "environment",
+    "value": "The diagram describes the production environment",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, title",
+        "quote": "Key & Certificate Portal - Production Architecture"
+      }
+    ],
+    "confidence": "high",
+    "group": "needs_you",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-020",
+    "subject": "Cloud account",
+    "fact_type": "responsibility",
+    "value": "The portal runs in a dedicated cloud account run by the platform team",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 1",
+        "quote": "It runs in a dedicated cloud account, which our platform team runs"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-021",
+    "subject": "VPC",
+    "fact_type": "component_exists",
+    "value": "The portal has one virtual network",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'VPC'",
+        "quote": "VPC"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-022",
+    "subject": "Public subnet",
+    "fact_type": "component_exists",
+    "value": "The virtual network has a public subnet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Public subnet'",
+        "quote": "Public subnet"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-023",
+    "subject": "Private subnet",
+    "fact_type": "component_exists",
+    "value": "The virtual network has a private subnet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Private subnet'",
+        "quote": "Private subnet"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-024",
+    "subject": "NAT gateway",
+    "fact_type": "component_exists",
+    "value": "A NAT gateway sits in the public subnet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'NAT gateway'",
+        "quote": "NAT gateway"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-025",
+    "subject": "Internet gateway",
+    "fact_type": "component_exists",
+    "value": "The virtual network has an internet gateway",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Internet gateway'",
+        "quote": "Internet gateway"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-026",
+    "subject": "ECS cluster",
+    "fact_type": "component_exists",
+    "value": "Portal services run in an ECS cluster in the private subnet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'ECS cluster'",
+        "quote": "ECS cluster"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 9",
+        "quote": "deploys them to the cluster"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-027",
+    "subject": "Certificate service",
+    "fact_type": "component_exists",
+    "value": "The certificate service handles certificate requests",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Cert Service'",
+        "quote": "Cert Service"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 1",
+        "quote": "Requests are handled by the certificate service"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-028",
+    "subject": "Key Service",
+    "fact_type": "component_exists",
+    "value": "A key service runs in the ECS cluster",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Key Service'",
+        "quote": "Key Service"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-029",
+    "subject": "Signing service",
+    "fact_type": "component_exists",
+    "value": "A signing service signs certificates with the CA signing key",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 1",
+        "quote": "Certificates are signed by the signing service, which uses the CA signing key"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "rejected"
+  },
+  {
+    "fact_id": "FCT-030",
+    "subject": "Cache",
+    "fact_type": "component_exists",
+    "value": "A cache sits in the private subnet next to the certificate service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Cache'",
+        "quote": "Cache"
+      }
+    ],
+    "confidence": "medium",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-031",
+    "subject": "CRL publisher",
+    "fact_type": "component_exists",
+    "value": "A scheduled function, the CRL publisher, builds the certificate revocation list every hour",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.7",
+        "quote": "Every hour, the CRL publisher, a scheduled function, builds the certificate revocation list"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-032",
+    "subject": "Revocation list bucket",
+    "fact_type": "component_exists",
+    "value": "The revocation list is written to a revocation list bucket and downloaded through the CDN",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.7",
+        "quote": "writes it to the revocation list bucket. Relying services download the list through the CDN"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-033",
+    "subject": "Certificate database",
+    "fact_type": "component_exists",
+    "value": "Certificate data is stored in a managed PostgreSQL database",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Cert DB'",
+        "quote": "Cert DB"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 11",
+        "quote": "stored in a managed PostgreSQL database"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-034",
+    "subject": "Certificate database",
+    "fact_type": "data",
+    "value": "The database holds certificate requests and issued certificate records",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 11",
+        "quote": "Certificate requests and issued certificate records are stored in a managed PostgreSQL database"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.4",
+        "quote": "The issued certificate is stored with the request"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-035",
+    "subject": "Certificate database",
+    "fact_type": "data",
+    "value": "The audit history is kept in an audit table in the certificate database",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.10",
+        "quote": "The history is kept in an audit table in the certificate database"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-036",
+    "subject": "Managed services",
+    "fact_type": "component_exists",
+    "value": "Managed services are drawn outside the network, with one arrow from the ECS cluster to the whole group",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Managed services'",
+        "quote": "Managed services"
+      },
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'ECS cluster' to 'Managed services'",
+        "quote": "ECS cluster -> Managed services (unlabelled arrow)"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-037",
+    "subject": "CA signing key",
+    "fact_type": "component_exists",
+    "value": "The CA signing key is held in the cloud key management service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'KMS'",
+        "quote": "KMS"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 6",
+        "quote": "The CA signing key is held in the cloud key management service"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-038",
+    "subject": "CA signing key",
+    "fact_type": "control_stated",
+    "value": "The key policy lets only the key service role sign with the key, and only the security-admin role change the policy or schedule deletion",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 6",
+        "quote": "Its key policy lets only the key service role use the key for signing, and only the security-admin role change the policy or schedule the key for deletion"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-039",
+    "subject": "Secrets store",
+    "fact_type": "component_exists",
+    "value": "Passwords and API keys are kept in a secrets store",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Secrets store'",
+        "quote": "Secrets store"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 7",
+        "quote": "kept in the secrets store"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-040",
+    "subject": "Secrets store",
+    "fact_type": "data",
+    "value": "The secrets store holds the database password and the notification service API key; the services read them at start-up",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 7",
+        "quote": "The database password and the notification service API key are kept in the secrets store. The services read them at start-up."
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-041",
+    "subject": "Container registry",
+    "fact_type": "component_exists",
+    "value": "Container images are kept in a container registry",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Container registry'",
+        "quote": "Container registry"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 9",
+        "quote": "pushes them to the container registry"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-042",
+    "subject": "Audit trail",
+    "fact_type": "component_exists",
+    "value": "API calls in the cloud account are recorded by the audit trail",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Audit trail'",
+        "quote": "Audit trail"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 10",
+        "quote": "API calls in the cloud account are recorded by the audit trail"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-043",
+    "subject": "Logs and metrics",
+    "fact_type": "component_exists",
+    "value": "Application logs and metrics go to the cloud logging service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Logs & metrics'",
+        "quote": "Logs & metrics"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 10",
+        "quote": "Application logs and metrics go to the cloud logging service"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-044",
+    "subject": "Notification service",
+    "fact_type": "component_exists",
+    "value": "Expiry reminders are emailed through an external notification service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'Notification service'",
+        "quote": "Notification service"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 8",
+        "quote": "Expiry reminders are emailed through an external notification service"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-045",
+    "subject": "Notification service",
+    "fact_type": "link_exists",
+    "value": "The certificate service calls the notification service HTTPS API with an API key to email expiry reminders",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 8",
+        "quote": "We call its HTTPS API with an API key"
+      },
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Cert Service' to 'Notification service'",
+        "quote": "Cert Service -> Notification service (unlabelled arrow)"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-046",
+    "subject": "CI/CD pipeline",
+    "fact_type": "component_exists",
+    "value": "A CI/CD pipeline runs in a hosted CI service the company subscribes to",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'CI/CD'",
+        "quote": "CI/CD"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 9",
+        "quote": "Our CI/CD pipeline runs in a hosted CI service the company subscribes to"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-047",
+    "subject": "CI/CD pipeline",
+    "fact_type": "link_exists",
+    "value": "The pipeline builds container images, pushes them to the container registry and deploys them to the cluster using a deploy role",
+    "source_refs": [
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 9",
+        "quote": "It builds container images, pushes them to the container registry and deploys them to the cluster using a deploy role"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-048",
+    "subject": "Internal services",
+    "fact_type": "link_exists",
+    "value": "Internal services call the API gateway",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Internal services' to 'API Gateway'",
+        "quote": "Internal services -> API Gateway (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 2",
+        "quote": "Request and download certificates through the API"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-049",
+    "subject": "API gateway",
+    "fact_type": "link_exists",
+    "value": "The API gateway calls the token authorizer",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'API Gateway' to 'Token authorizer'",
+        "quote": "API Gateway -> Token authorizer (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 5",
+        "quote": "A token authorizer on the API gateway checks the SSO token"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-050",
+    "subject": "API gateway",
+    "fact_type": "link_exists",
+    "value": "The API gateway forwards requests to the certificate service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'API Gateway' to 'Cert Service'",
+        "quote": "API Gateway -> Cert Service (unlabelled arrow)"
+      }
+    ],
+    "confidence": "medium",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-051",
+    "subject": "Load balancer",
+    "fact_type": "link_exists",
+    "value": "The load balancer forwards traffic to the certificate service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'public ALB' to 'Cert Service'",
+        "quote": "public ALB -> Cert Service (unlabelled arrow)"
+      }
+    ],
+    "confidence": "medium",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-052",
+    "subject": "Certificate service",
+    "fact_type": "link_exists",
+    "value": "The certificate service calls the key service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Cert Service' to 'Key Service'",
+        "quote": "Cert Service -> Key Service (unlabelled arrow)"
+      }
+    ],
+    "confidence": "medium",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-053",
+    "subject": "Certificate service",
+    "fact_type": "link_exists",
+    "value": "The certificate service uses the cache",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Cert Service' to 'Cache'",
+        "quote": "Cert Service -> Cache (unlabelled arrow)"
+      }
+    ],
+    "confidence": "medium",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-054",
+    "subject": "Certificate service",
+    "fact_type": "link_exists",
+    "value": "The certificate service stores requests in the certificate database",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'Cert Service' to 'Cert DB'",
+        "quote": "Cert Service -> Cert DB (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.2",
+        "quote": "The certificate service stores the request"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-055",
+    "subject": "CDN",
+    "fact_type": "link_exists",
+    "value": "The CDN serves the portal pages from the portal UI bucket",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'CDN' to 'Portal UI bucket'",
+        "quote": "CDN -> Portal UI bucket (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-04",
+        "location": "section 1",
+        "quote": "served from a storage bucket through the CDN"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-056",
+    "subject": "CI/CD pipeline",
+    "fact_type": "link_exists",
+    "value": "The CI/CD pipeline deploys to the ECS cluster",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'CI/CD' to 'ECS cluster'",
+        "quote": "CI/CD -> ECS cluster (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 9",
+        "quote": "deploys them to the cluster using a deploy role"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-057",
+    "subject": "Sign in",
+    "fact_type": "function",
+    "value": "Operators and security admins sign in through the corporate SSO; the portal sends the token with every API call",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.1",
+        "quote": "Operators and security admins sign in through the corporate SSO"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 5",
+        "quote": "checks the SSO token on every request"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-058",
+    "subject": "Request a certificate",
+    "fact_type": "function",
+    "value": "An operator or internal service submits a certificate signing request; the certificate service stores it",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.2",
+        "quote": "An operator or an internal service submits a certificate signing request"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-059",
+    "subject": "Approve a request",
+    "fact_type": "function",
+    "value": "A security admin approves or rejects a pending request",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.3",
+        "quote": "A security admin reviews a pending request and approves or rejects it"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-060",
+    "subject": "Issue a certificate",
+    "fact_type": "function",
+    "value": "After approval, the signing service signs the certificate with the CA signing key and stores it with the request",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.4",
+        "quote": "After approval, the signing service signs the certificate with the CA signing key"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-061",
+    "subject": "Download a certificate",
+    "fact_type": "function",
+    "value": "An operator or internal service downloads an issued certificate and its chain",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.5",
+        "quote": "An operator or an internal service downloads an issued certificate and its chain"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-062",
+    "subject": "Revoke a certificate",
+    "fact_type": "function",
+    "value": "A security admin revokes a certificate and records the reason",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.6",
+        "quote": "A security admin revokes a certificate and records the reason"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-063",
+    "subject": "Publish the revocation list",
+    "fact_type": "function",
+    "value": "Every hour the CRL publisher writes the revocation list to the revocation list bucket, served through the CDN",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.7",
+        "quote": "builds the certificate revocation list and writes it to the revocation list bucket"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-064",
+    "subject": "Send expiry reminders",
+    "fact_type": "function",
+    "value": "Every day the certificate service emails owning teams about certificates expiring within 30 days",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.8",
+        "quote": "emails the owning team through the notification service"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-065",
+    "subject": "Rotate the CA signing key",
+    "fact_type": "function",
+    "value": "A security admin starts a rotation; a new key version is created in the key management service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.9",
+        "quote": "A new key version is created in the key management service and used for new certificates"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-066",
+    "subject": "View audit history",
+    "fact_type": "function",
+    "value": "A security admin views who requested, approved, issued and revoked each certificate",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.10",
+        "quote": "A security admin views who requested, approved, issued and revoked each certificate"
+      }
+    ],
+    "confidence": "high",
+    "group": "single_source",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-067",
+    "subject": "Deploy a new version",
+    "fact_type": "function",
+    "value": "The deploy pipeline builds a new container image and rolls it out to the cluster",
+    "source_refs": [
+      {
+        "doc_id": "DOC-04",
+        "location": "section 3.11",
+        "quote": "The deploy pipeline builds a new container image and rolls it out to the cluster"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 9",
+        "quote": "It builds container images"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  }
+]

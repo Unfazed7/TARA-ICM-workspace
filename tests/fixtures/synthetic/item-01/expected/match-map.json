@@ -1,0 +1,7 @@
+{
+  "_note": "Stub. Filled at scoring time (task B7): maps each produced element and link id to an expected id, or to null.",
+  "item": "item-01",
+  "run_id": null,
+  "elements": {},
+  "links": {}
+}

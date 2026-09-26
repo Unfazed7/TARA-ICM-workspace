@@ -1,166 +1,163 @@
-# TARA ICM Workspace — Claude Architectural Spec Engine
+# TARA ICM Workspace: Governance
 
-## Identity
-Claude operates as the **specification & design authority** for the TARA (Threat Analysis & Risk Assessment) ICM pipeline. Every component Qwen Coder implements must trace back to a Claude-authored specification in `/Agents/Claude/SPECIFICATIONS.md`.
-
-## Core Responsibility
-1. **Read ambiguity, write clarity.** Translate vague requirements into testable, measurable specifications.
-2. **No code, only contracts.** Specifications define what the code must do; Qwen implements what the spec says.
-3. **Verify before handing off.** Each spec includes success criteria and verification steps Qwen must confirm.
-
-## Workspace Layers (ICM Model)
-
-### Layer 0: CLAUDE.md (this file)
-- Workspace identity, role, routing rules
-- Always loaded; ~600 tokens
-- Defines how Claude and Qwen collaborate
-
-### Layer 1: CONTEXT.md (in /Agents/Claude/)
-- Workspace routing table: "user asks X, go to Y"
-- Lists all active modules and their status
-- ~300 tokens
-
-### Layer 2: SPECIFICATIONS.md (per-module)
-- Located: `/Agents/Claude/SPECIFICATIONS/{module}.md`
-- Format: Goal | File Ownership | Interfaces | Dependencies | Assumptions | Implementation Order
-- One spec per deliverable (stage agent, deterministic engine, output formatter, etc.)
-- Max 800 tokens per spec (keep it surgical)
-
-### Layer 3: Reference Material (static, never changes)
-- Located: `/Agents/Claude/references/`
-- Examples: `iso-21434-risk-matrix.json`, `stride-taxonomy.md`, `feasibility-formula.md`
-- These are the "rules of the game" — loaded selectively by Qwen during implementation
-
-### Layer 4: Working Artifacts
-- Located: `/src/`, `/tests/`
-- Implementation code (Qwen's work)
-- Test files (Qwen's validation)
-
-## Decision Framework
-
-### When to write a spec
-- **Trigger:** A new module, stage, or feature needs building
-- **Input:** Vague requirement, architecture diagram, or handoff from previous stage
-- **Output:** Spec in `SPECIFICATIONS/{module}.md`
-- **Time:** 15–20 minutes
-- **Verification:** Qwen reads spec and can list all assumptions without asking clarification
-
-### When NOT to write a spec
-- Bug fix with clear cause and solution → Qwen handles directly (with VERIFY.md checklist)
-- Code cleanup → Qwen handles (no spec needed)
-- Ambiguity or multi-stage coupling → STOP, write spec first
-
-## Qwen Protocol Integration
-Qwen Coder follows:
-- `QWEN_PROTOCOL.md` (execution discipline)
-- `VERIFY.md` (post-implementation checklist)
-- `simplicity.md` (no over-engineering)
-
-Before Qwen writes code, they MUST:
-1. State explicit assumptions about data flow
-2. Identify scope boundaries (what files they WILL and WON'T touch)
-3. Ask for clarification on any ambiguity in the spec
-
-## File Ownership Map
-
-```
-/Agents/claude/
-├── CLAUDE.md              (this file — workspace identity)
-├── CONTEXT.md             (routing table — keep updated after each spec)
-├── SPECIFICATIONS/        (all architectural specs — Claude writes, Qwen implements)
-│   ├── 01-item-definition-agent.md
-│   ├── 02-asset-analysis-agent.md
-│   ├── 03-impact-analysis-agent.md
-│   ├── 04-threat-analysis-agent.md  ← extended thinking, highest complexity
-│   ├── 05-risk-determination-engine.md
-│   ├── 06-risk-treatment-agent.md
-│   ├── 07-residual-risk-engine.md
-│   ├── orchestrator.md     (Claude Code runner)
-│   ├── output-formatter-excel.md
-│   └── json-schema-contracts.md  (all 7 stage schemas in one place)
-└── references/            (static domain knowledge — read-only)
-    ├── iso-21434-risk-matrix.json
-    ├── stride-taxonomy.md
-    ├── feasibility-formula.md
-    ├── sfop-scale.md
-    ├── rise-autoISAC-summary.md
-    └── iso27001-controls.md
-
-/Agents/Qwen/
-├── QWEN_PROTOCOL.md       (execution rules — Qwen owns, Claude reviews)
-├── VERIFY.md              (post-code checklist)
-└── simplicity.md          (the golden rule)
-
-/src/
-├── stages/                (Agent implementations)
-│   ├── 01-item-definition/
-│   ├── 02-asset-analysis/
-│   ├── ... (7 stages)
-├── engines/               (Deterministic calculators)
-│   ├── feasibility-calc.js
-│   ├── impact-rating.js
-│   └── risk-score.js
-├── orchestrator/          (Claude Code pipeline runner)
-├── output-formatters/     (Excel, UI, user-template)
-└── schemas/               (JSON schema definitions)
-
-/tests/
-├── unit/                  (per-module tests)
-├── integration/           (stage-to-stage handoffs)
-└── fixtures/              (test data)
-```
-
-## Communication Protocol
-
-### Claude → Qwen
-1. Spec written in `/Agents/Claude/SPECIFICATIONS/{module}.md`
-2. Claude adds entry to `/Agents/Claude/CONTEXT.md` (routing table)
-3. Qwen reads spec and confirms: "Assumptions listed, scope clear, ready to code"
-
-### Qwen → Claude
-1. Code written in `/src/`
-2. Qwen runs `/Agents/Qwen/VERIFY.md` checklist
-3. Qwen submits PR with: spec reference, assumptions confirmed, verification results
-4. Claude reviews: spec compliance, coverage, interface correctness
-
-## Assumptions
-- **Node.js runtime** for all code (stages, engines, orchestrator)
-- **JSON I/O** for all inter-stage contracts (no XML, YAML, or CSV)
-- **Filesystem-based** staging (no database, ICM architecture principle)
-- **Extended thinking budget** for Stage 4 only (8000 tokens max)
-- **Claude API direct** (no LangChain, no frameworks)
-- **No UI yet** (Excel + audit trail in Phase 1–3, UI deferred)
-
-## Success Criteria (for this workspace)
-- ✅ All 7 stage specifications written and reviewed by Week 2
-- ✅ All JSON schema contracts defined and frozen before any implementation
-- ✅ Deterministic engines (3 functions) written and unit-tested by Week 3
-- ✅ All 4 AI agents working end-to-end by Week 5
-- ✅ Orchestrator running full pipeline with checkpoints by Week 6
-- ✅ Excel output working by Week 7
-- ✅ Audit trail JSON complete by Week 8
-
-## Status Tracker
-Last updated: 2026-05-09
-
-| Phase | Status | Spec | Owner | Target |
-|-------|--------|------|-------|--------|
-| Foundation | 🔄 In progress | CLAUDE.md | Claude | Today |
-| Specs | 🔄 In progress | CONTEXT.md + 10 specs | Claude | Week 2 |
-| Engines | 📋 Pending | feasibility / impact / risk-score specs | Claude | Week 2–3 |
-| Agents | 📋 Pending | 4 AI agent specs + orchestrator | Claude | Week 3–5 |
-| Integration | 📋 Pending | E2E pipeline + checkpoint UX | Qwen | Week 6 |
-| Output | 📋 Pending | Excel + audit trail specs | Claude | Week 7–8 |
-
-## Rules for Claude (this engine)
-1. **Specs are contracts.** Once written and approved, they don't change mid-implementation.
-2. **Assumptions must be explicit.** If Qwen's implementation doesn't match your assumption, that's a spec bug, not a code bug.
-3. **Keep specs under 800 tokens.** If you exceed 800, you're not being concise enough.
-4. **Never assume Qwen will "just know" how something works.** Write it down.
-5. **Success = verifiable.** Every spec ends with "VERIFICATION STEPS: Run test X, check output Y."
+This is the one current governance document for building TARA Aegis. It says who does what, where specs live, and how work flows. The work plan itself is `.meta/CLAUDE-CODE-INSTRUCTIONS.md`.
 
 ---
 
-**FOUNDATION COMPLETE.** This workspace is now ready for specification generation.
+## Roles
 
-Next step: Claude writes `/Agents/Claude/CONTEXT.md` (routing table) and begins writing module specs.
+- **The analyst** (repo owner) decides. Every HUMAN GATE in the instructions stops for the analyst's go-ahead, and only the analyst confirms checkpoints in the running tool.
+- **Claude Code** writes specs and implements them, one task at a time, following `.meta/CLAUDE-CODE-INSTRUCTIONS.md`.
+
+No other implementer is used. Earlier Codex and Qwen documents are superseded or removed (decision D-17 in `.meta/DECISIONS.md`).
+
+---
+
+## Where things live
+
+| What | Where |
+|---|---|
+| Work plan, rules and design reference | `.meta/CLAUDE-CODE-INSTRUCTIONS.md` |
+| Task progress (the only status tracker) | `.meta/REBUILD-PROGRESS.md` |
+| Decisions | `.meta/DECISIONS.md` |
+| Domain glossary | `CONTEXT.md` (repo root) |
+| Analyst answers on the Web Item Definition | `.meta/web-item-definition-questions.md` |
+| Specs (the only spec location) | `.meta/specs/` |
+| Routing for this meta-workspace | `.meta/CONTEXT.md` |
+
+---
+
+## ICM Architecture (5 Layers)
+
+```
+Layer 0: tara-workspace/web-based-tara/CLAUDE.md            Runtime identity. Always loaded.
+Layer 1: tara-workspace/web-based-tara/CONTEXT.md           Stage routing. Loaded by orchestrator.
+Layer 2: web-based-tara/stages/*/CONTEXT.md                 Per-stage instructions. Loaded per stage.
+Layer 3: web-based-tara/_config/                            Static domain knowledge. Loaded selectively.
+Layer 4: web-based-tara/stages/*/output/                    Runtime artifacts. Written/read per stage.
+```
+
+Multi-TARA type structure:
+- `tara-workspace/web-based-tara/`: Web TARA module (MVP, active)
+- `tara-workspace/vehicle-domain-tara/`: Vehicle/Domain TARA (future)
+- `tara-workspace/ecu-component-tara/`: ECU/Component TARA (future)
+
+Two ICM workspaces in this repo:
+- `.meta/`: meta-workspace, how the tool is built
+- `tara-workspace/`: runtime workspace, the TARA tool itself
+
+---
+
+## Spec Format
+
+Every spec in `.meta/specs/` must include:
+
+| Section | Content |
+|---------|---------|
+| Goal | What this module does in 1-2 sentences |
+| Success Criteria | Verifiable: "run test X, check output Y" |
+| File Ownership | Exact files the implementation WILL and WON'T touch |
+| Input/Output | JSON schema references or schema inline |
+| Process | Step-by-step what the implementation does |
+| Validation Rules | What makes output valid/invalid |
+| Error Conditions | What happens when input is bad |
+| Verification Steps | How the implementation proves it works |
+
+Max 800 tokens per spec. If longer, the spec covers too much: split it into several numbered specs.
+
+---
+
+## File Ownership
+
+Claude Code may edit any file a task names; the task's "Do" list and rule R3 decide what is touched.
+
+| Area | Path |
+|---|---|
+| Governance, specs, decisions | `.meta/` |
+| Runtime identity and routing (Layers 0 and 1) | `tara-workspace/CLAUDE.md`, `tara-workspace/CONTEXT.md`, `tara-workspace/web-based-tara/CLAUDE.md`, `tara-workspace/web-based-tara/CONTEXT.md` |
+| Stage instructions and agents (Layer 2) | `tara-workspace/web-based-tara/stages/<NN>-<name>/` |
+| Domain knowledge (Layer 3) | `tara-workspace/web-based-tara/_config/` |
+| Deterministic engines | `tara-workspace/web-based-tara/_engines/` |
+| Model access (the only path to a model) | `tara-workspace/web-based-tara/stages/llm-client.js` |
+| Store and API | `checkpoint-api/` |
+| Screens | `frontend/` |
+| Shared JSON contract | `src/schemas/` |
+| Tests and fixtures | `tests/`, `checkpoint-api/tests/` |
+
+Web stage folders after task A6:
+
+| Stage | Folder |
+|---|---|
+| 01 Input Normalization | `stages/01-input-normalization/` |
+| 02 Item Definition | `stages/02-item-definition/` |
+| 03 Asset Identification | `stages/03-asset-identification/` |
+| 04 Damage Analysis | `stages/04-damage-analysis/` |
+| 05 Threat Identification | `stages/05-threat-identification/` |
+| 06 Attack Path Modelling | `stages/06-attack-path-modelling/` |
+| 07 Impact Analysis | `stages/07-impact-analysis/` |
+| 08 Risk Scoring | `stages/08-risk-scoring/` |
+| 09 Risk Treatment | `stages/09-risk-treatment/` |
+| 10 Residual Risk | `stages/10-residual-risk/` |
+
+---
+
+## Workflow
+
+```
+Analyst names the next task
+    ↓
+Claude Code reads PART 1 and the task's Design Reference sections
+    ↓
+Spec first (Phase C tasks need an approved spec)
+    ↓
+Implement, run npm test and pytest
+    ↓
+One commit per task on the claude branch, pushed
+    ↓
+Update .meta/REBUILD-PROGRESS.md
+    ↓
+HUMAN GATE tasks stop for the analyst's go-ahead
+```
+
+---
+
+## Spec Writing Rules
+
+1. Specs are contracts. Once approved, they do not change mid-implementation.
+2. If a schema must change, update the spec, all test fixtures and the decisions log together.
+3. Never assume the implementation will "just know". Write it down.
+4. Success criteria must be executable commands, not prose.
+5. Keep specs under 800 tokens.
+
+---
+
+## Spec Register
+
+Spec numbers are file IDs, not stage numbers. Two existing specs share number 05; they keep their names so existing references stay valid. Task progress lives in `.meta/REBUILD-PROGRESS.md`, not here.
+
+| Spec | Covers (stage after A6) | Status |
+|---|---|---|
+| `00-json-schema-contracts.md` | Schemas for stages 03 onwards (old numbering, see its note) | in force |
+| `01-input-normalization-agent.md` | Old Stage 01 meaning | superseded (B1) |
+| `item-definition-agent.md` | v1 Item Definition agent | superseded (B1) |
+| `02-damage-analysis-agent.md` | Stage 04 | in force (paths in A6, model in C1) |
+| `03-threat-identification-agent.md` | Stage 05 | in force (model in C1) |
+| `04-attack-path-agent.md` | Stage 06 | in force (model in C1) |
+| `05-cvss-afr-engine.md` | CVSS engine used by stages 06 and 08 | in force |
+| `05-impact-analysis-agent.md` | Stage 07 | in force (model in C1) |
+| `06-risk-scoring-engine.md` | Stage 08 | in force |
+| `07-risk-treatment-agent.md` | Stage 09 | in force (paths in A6, model in C1) |
+| `09-checkpoint-api.md` | Checkpoint API | in force; blob parts replaced in C3 and C9 |
+| `10-backend-api.md` | Backend REST API | in force; `vehicle_type` made optional in C3 |
+| `11-frontend-integration.md` | Frontend integration | in force; `vehicle_type` made optional in C7 |
+| `WEB-TARA-MVP-ARCHITECTURE.md` | Old flow overview | superseded (A7) |
+| `12a-document-register-and-facts.md` | Stage 01 register, facts, conflicts | revised, waiting for analyst review |
+| `12b-item-definition-model.md` | Stage 02 containers, zones, elements, links, functions | revised, waiting for analyst review |
+| `12c-questions-scope-and-analyst-decisions.md` | Questions, scope and analyst decisions, checkpoints | revised, waiting for analyst review |
+| `12d-refusal-rules.md` | API refusals for stored items | revised, waiting for analyst review |
+| `12e-checkpoint-and-rerun-rules.md` | API refusals for checkpoint state and re-runs, shared response format | revised, waiting for analyst review |
+| `13-cp0-reading-review.md` | CP0 | planned, B5 |
+| `14-cp1-item-definition-review.md` | CP1 | planned, B6 |
+| `15-evaluation.md` | Evaluation scorer | planned, B7 |
+| `16-asset-identification.md` | Stage 03 | planned, C12 |
+| none | Stage 10 Residual Risk and the orchestrator | no spec; outside this rebuild |

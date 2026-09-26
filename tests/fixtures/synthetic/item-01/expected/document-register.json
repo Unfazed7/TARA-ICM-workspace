@@ -1,0 +1,75 @@
+[
+  {
+    "doc_id": "DOC-01",
+    "title": "Key and certificate portal architecture diagram (draw.io source)",
+    "client_doc_ref": "architecture.drawio",
+    "date_received": "2026-09-18",
+    "owner": "client",
+    "environment": "prod",
+    "doc_type": "diagram",
+    "sha256": "e9b8f97d21e1aa63fbcd5c3cdd150175b65ba24714ad551c3540fc3ce59a971e",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "page_methods": [
+      {
+        "page": 1,
+        "method": "parsed"
+      }
+    ],
+    "precedence_rank": 5,
+    "used_for": "Components, containers, subnets and arrows",
+    "ignored_and_why": "The unlabelled dashed box around the CDN, portal UI bucket, API gateway and token authorizer is not used as a zone: it has no label and no text confirms it. Arrows have no labels, so no protocol was read from them."
+  },
+  {
+    "doc_id": "DOC-02",
+    "title": "Key and certificate portal architecture diagram (image export)",
+    "client_doc_ref": "architecture.png",
+    "date_received": "2026-09-18",
+    "owner": "client",
+    "environment": "prod",
+    "doc_type": "diagram",
+    "sha256": "561b46d0ac65b374b6e2fab521ea6fe23a5c100e5491345ddad76b8aca1172d3",
+    "read_status": "parsed",
+    "reading_method": "image_model",
+    "page_methods": [
+      {
+        "page": 1,
+        "method": "image_model"
+      }
+    ],
+    "precedence_rank": 5,
+    "used_for": "Cross-check of the labels and arrows read from DOC-01",
+    "ignored_and_why": "No facts taken from it: it is an image export of DOC-01, whose source file was read directly."
+  },
+  {
+    "doc_id": "DOC-03",
+    "title": "Answers to intake questions",
+    "client_doc_ref": "client-answers.md",
+    "date_on_document": "2026-09-15",
+    "date_received": "2026-09-18",
+    "owner": "client",
+    "environment": "dev",
+    "doc_type": "qa",
+    "sha256": "d59c2d637a2338319e648d8329ec2f7c3d48ca27d142bfbb4f79f98b7a81bedf",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "precedence_rank": 3,
+    "used_for": "Entry points, sign-in, keys, secrets, notifications, deployment, logging and stored data",
+    "ignored_and_why": "Answer 12 (monthly running cost) ignored, not relevant to security."
+  },
+  {
+    "doc_id": "DOC-04",
+    "title": "Functional description, version 0.3",
+    "client_doc_ref": "functional.md",
+    "date_received": "2026-09-18",
+    "owner": "client",
+    "environment": "unknown",
+    "doc_type": "functional",
+    "sha256": "59857567efddbee858b1ff9c1824014cb7d0f38c3338f6fa8137f4c4652e83ae",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "precedence_rank": 7,
+    "used_for": "Actors, functions, endpoints and the revocation list publisher",
+    "ignored_and_why": ""
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "doc_id": "DOC-01",
+    "title": "Fleet update portal architecture",
+    "client_doc_ref": "ARCH-v2",
+    "date_on_document": "2026-03-02",
+    "date_received": "2026-03-10",
+    "owner": "client",
+    "environment": "prod",
+    "doc_type": "diagram",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "reader_version": "drawio-parser 1.0",
+    "precedence_rank": 5,
+    "used_for": "Components, containers and arrows",
+    "ignored_and_why": "Legend and title block ignored, not part of the system"
+  },
+  {
+    "doc_id": "DOC-02",
+    "title": "Client answers to intake questions",
+    "date_on_document": "2026-03-08",
+    "date_received": "2026-03-10",
+    "owner": "client",
+    "environment": "prod",
+    "doc_type": "qa",
+    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "precedence_rank": 3,
+    "used_for": "Entry points, sign-in and data stored",
+    "ignored_and_why": "Pricing questions ignored, not relevant to security"
+  },
+  {
+    "doc_id": "DOC-03",
+    "title": "Functional description",
+    "date_received": "2026-03-10",
+    "owner": "client",
+    "environment": "unknown",
+    "doc_type": "functional",
+    "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "read_status": "partial",
+    "read_status_reason": "Pages 7 to 9 are scanned images with no text layer",
+    "reading_method": "mixed",
+    "page_methods": [
+      {
+        "page": 1,
+        "method": "text_layer"
+      },
+      {
+        "page": 7,
+        "method": "image_model"
+      }
+    ],
+    "unread_parts": [
+      "Page 9 table, image too blurred"
+    ],
+    "precedence_rank": 7,
+    "used_for": "Functions and actors",
+    "ignored_and_why": ""
+  },
+  {
+    "doc_id": "DOC-04",
+    "title": "Kick-off meeting notes",
+    "date_received": "2026-03-11",
+    "owner": "assessor",
+    "environment": "unknown",
+    "doc_type": "other",
+    "doc_type_label": "meeting notes",
+    "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "read_status": "parsed",
+    "reading_method": "parsed",
+    "precedence_rank": 8,
+    "used_for": "Stakeholders and open points",
+    "ignored_and_why": "Scheduling details ignored, not relevant to security"
+  },
+  {
+    "doc_id": "DOC-05",
+    "title": "Updated rollout design",
+    "date_on_document": "2026-03-12",
+    "date_received": "2026-03-12",
+    "owner": "client",
+    "environment": "prod",
+    "doc_type": "functional",
+    "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "read_status": "parsed",
+    "reading_method": "text_layer",
+    "precedence_rank": 4,
+    "rank_override_decision_id": "AD-001",
+    "used_for": "Newer rollout flow, ranked up by the analyst at CP0",
+    "ignored_and_why": ""
+  }
+]
