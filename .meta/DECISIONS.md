@@ -37,6 +37,7 @@ Status values: `accepted` (in force), `proposed` (waiting for the analyst).
 | D-29 | (Targets extended to containers by D-31.) Questions target an element or a link; `generic` questions need a topic; duplicates are checked per (target, fact type) or (target, topic); visible questions are capped per target (default 3, configurable, up to 7 for unknown element kinds). | Link gaps (unknown authentication or encryption) need questions too, and the cap must not block the full fact set for unknown kinds or be bypassed by `generic`. Analyst, B1 gate. | 2026-09-26 | accepted |
 | D-30 | Facts carry no element id; the element points to its facts. CP1 records `based_on_cp0_version`. Refusal responses carry a `details` field with the ids involved; checkpoint-state refusals return 409. | Writing into frozen CP0 facts would break the freeze rule; the version link shows which reading review an Item Definition used. Analyst, B1 gate. | 2026-09-26 | accepted |
 | D-31 | A question may target a container (`CTR-##`) as well as an element or link. Used for account-level facts: who runs the account, whether it is shared, and whether other environments share accounts, keys, databases or credentials. The cap and duplicate rules apply per container as per element. | The scoping rules ask these facts about the cloud account, which is a container; without this they had nowhere to be stored. Analyst, B3 gate (option a of three). | 2026-09-27 | accepted |
+| D-32 | Supply chain (S7): CI/CD pipelines, IaC runners and container registries are part of the operational environment, outside the item, even when hosted in the item's account. They are `interface` elements. In scope: the link where built content enters the item (image pull or deploy), the credentials and roles the item holds for it, and the item's settings that control what it accepts. Replaces the earlier S7 rule "anything that can push code is in scope, wherever hosted" (DR-7 and `.meta/web-item-definition-questions.md` section on S7, kept for history). | Matches the analyst's established TARA practice and the ISO/SAE 21434 split between item and operational environment; keeps the item smaller while the entry point of external content stays assessed. Analyst, B3 gate. | 2026-09-27 | accepted |
 
 Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are added so every Design Reference section is covered, plus decisions made at the A1, A2 and B1 gates.
 
@@ -50,7 +51,7 @@ Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are
 | DR-4 CP0 content | D-18 |
 | DR-5 CP1 content | D-19 |
 | DR-6 Question generation | D-06, D-29, D-31 |
-| DR-7 Scoping | D-05, D-14 |
+| DR-7 Scoping | D-05, D-14, D-32 |
 | DR-8 Precedence | D-07, D-28 |
 | DR-9 Minimum input | D-08 |
 | DR-10 Data policy | D-09, D-26 |

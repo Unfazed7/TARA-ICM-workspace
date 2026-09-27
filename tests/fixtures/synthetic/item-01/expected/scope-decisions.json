@@ -243,8 +243,8 @@
   {
     "decision_id": "SD-021",
     "element_id": "EL-021",
-    "status": "in_scope",
-    "reason": "It holds the container images that are deployed to the portal.",
+    "status": "interface",
+    "reason": "It is part of the build and release chain, outside the portal, even though it sits in the portal's account. The image pull into the portal's services, and what the services accept, are inside the assessment.",
     "based_on_fact_ids": [
       "FCT-041",
       "FCT-047"
@@ -289,8 +289,8 @@
   {
     "decision_id": "SD-025",
     "element_id": "EL-025",
-    "status": "in_scope",
-    "reason": "It can deploy code to the portal, so it is inside the assessment even though it runs outside the portal's account.",
+    "status": "interface",
+    "reason": "It is part of the build and release chain, outside the portal. The deploy into the portal and the deploy role it uses are inside the assessment.",
     "based_on_fact_ids": [
       "FCT-046",
       "FCT-047"

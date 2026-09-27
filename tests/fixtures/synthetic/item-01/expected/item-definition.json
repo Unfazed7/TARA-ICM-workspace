@@ -1419,6 +1419,54 @@
         "FCT-025"
       ],
       "confidence": "medium"
+    },
+    {
+      "link_id": "IF-25",
+      "type": "data_flow",
+      "source_id": "EL-021",
+      "destination_id": "EL-015",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Pull the container image at deploy and scale-out",
+      "authentication": "unknown",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "The point where built code enters the portal. Whether images are signed or checked before they run is not documented.",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-047"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-26",
+      "type": "data_flow",
+      "source_id": "EL-021",
+      "destination_id": "EL-016",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Pull the container image at deploy and scale-out",
+      "authentication": "unknown",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Portal container images",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "The point where built code enters the portal. Whether images are signed or checked before they run is not documented.",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-047"
+      ],
+      "confidence": "medium"
     }
   ],
   "functions": [

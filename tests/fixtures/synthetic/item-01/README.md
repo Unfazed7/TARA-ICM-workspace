@@ -21,7 +21,7 @@ A fictional portal on a public cloud that issues and revokes X.509 certificates.
 | `expected/document-register.json` | Stage 01 register, 4 documents |
 | `expected/facts.json` | Stage 01 facts, 67 (as proposed before CP0) |
 | `expected/conflicts.json` | Stage 01 conflicts, 4 |
-| `expected/item-definition.json` | Stage 02 item definition: 6 containers, 6 zones, 25 elements, 24 links, 11 functions, 6 assumptions |
+| `expected/item-definition.json` | Stage 02 item definition: 6 containers, 6 zones, 25 elements, 26 links, 11 functions, 6 assumptions |
 | `expected/scope-decisions.json` | Stage 02 scope decisions, one per element |
 | `expected/questions.json` | Stage 02 questions, 19 (16 open, 3 dropped because the documents answer them) |
 | `expected/match-map.json` | Stub, filled at scoring time (task B7) |
@@ -45,7 +45,7 @@ If you edit an input file, update its `sha256` in `document-register.json`.
 | 7 | Managed key service with a customer key policy | Answer 6 | FCT-037, FCT-038 (`control_stated`); EL-019 with key purpose, where held, who can use it; responsibility split |
 | 8 | Secrets store | Answer 7 | FCT-039, FCT-040; EL-020; IF-14 |
 | 9 | Third-party notification service | Answer 8; diagram "Notification service" | EL-024 `interface` in the third-party zone; IF-15 with the API key and an email address (personal data) |
-| 10 | CI/CD path into the item | Answer 9; diagram "CI/CD" arrow to the cluster | EL-025 `in_scope` although outside the account; IF-19 to IF-21; Q-011 on where its credentials are kept |
+| 10 | CI/CD path into the item | Answer 9; diagram "CI/CD" arrow to the cluster | EL-025 (CI/CD) and EL-021 (registry) are `interface`: operational environment, outside the item even though the registry is in the portal's account (D-32). The entry points are in scope: IF-20, IF-21 (deploy) and IF-25, IF-26 (image pull, inferred from text). Q-011 on where the deploy credentials are kept |
 | 11 | Unanswerable fact that must become a question | No document says who can read or delete audit records | Q-009 on EL-022 (and Q-010 on EL-023 for the logs) |
 | 12 | Managed services drawn as a sidebar with one generic arrow | Diagram "Managed services" group, one arrow from "ECS cluster" | FCT-036; no link read from that arrow; links to the key, secrets store and logs (IF-13, IF-14, IF-22, IF-23) come from text and are marked inferred |
 | 13 | Unlabelled grouping box that is not a subnet | Dashed box around CDN, portal UI bucket, API gateway and token authorizer | No zone or container for it; reason in DOC-01 `ignored_and_why` |

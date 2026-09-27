@@ -125,7 +125,7 @@ Internal defaults:
 - S4 Identity provider: a shared company-wide IdP is an interface and only the item's token check is in scope; an IdP instance dedicated to and configured for the item is in scope as configuration.
 - S5 Vehicle: vehicle and ECUs out of scope; the cloud endpoint of each vehicle channel in scope; one vehicle/TCU interactor per vehicle-side identity.
 - S6 Third-party SaaS: interface; the outbound link, the data it carries and the credentials the item holds are in scope.
-- S7 Supply chain: anything that can push code or infrastructure into the item is in scope, wherever hosted.
+- S7 Supply chain: build pipelines, IaC runners and container registries belong to the operational environment, outside the item, even when hosted in the item's account. They are interface elements. The point where built content enters the item (image pull or deploy into the item), the credentials and roles the item holds for it, and the item's own settings that control what it accepts are in scope (D-32).
 - S8 Monitoring and audit: in scope.
 - S9 Environments: only the assessed environment; others flagged if they share credentials, networks or data.
 - S10 Actors and user devices: interactors, never broken down; admin access paths in scope.
@@ -156,7 +156,7 @@ Mapping table (internal, lives in `_config/scoping-facts.md`):
 | S4 | FT-03, FT-02, token check location | Shared and central IT -> interface, token check in scope. Dedicated and product team -> in scope as configuration. Mixed -> ambiguous with both options |
 | S5 | talks to vehicles, through which unit, in-vehicle assessed elsewhere | Yes -> one interactor per counterpart. In-vehicle in scope here -> flag, separate vehicle TARA |
 | S6 | which services receive data, what data, how the item authenticates | Interface element plus in-scope link and credential |
-| S7 | FT-07 | Each such tool is an in-scope element |
+| S7 | FT-07 | Each such tool is an interface element; the link where its output enters the item is in scope |
 | S8 | where logs go, who can read or delete, personal data | In scope; data category recorded |
 | S9 | FT-06 | Nothing shared -> other environments out. Shared -> ambiguous |
 | S10 | who uses it, from which devices, admin machines managed | Interactors; admin access path in scope |
