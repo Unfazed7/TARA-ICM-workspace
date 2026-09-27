@@ -106,7 +106,7 @@ Which fact types each kind needs. "S1 only" means the kind sits inside the item'
 
 Only ask a fact the confirmed facts do not already answer (DR-6, guard 2). At most 3 visible questions per target, 7 for `unknown_kind`.
 
-Container triggers: `cloud_account` gets FT-01 and FT-03 (S1) and FT-06 once per item (S9). Other containers need no question.
+Container triggers: `cloud_account` gets FT-01 and FT-03 (S1) and FT-06 once per item (S9). These questions target the account container (`CTR-##`, D-31). Other containers need no question.
 
 ---
 

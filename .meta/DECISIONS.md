@@ -34,8 +34,9 @@ Status values: `accepted` (in force), `proposed` (waiting for the analyst).
 | D-26 | The workbooks in `frontend/database/` and `frontend/src/data/taraAssets.ts` stay in the repo. | The analyst confirmed they are open source. Decided at the A2 gate. | 2026-09-25 | accepted |
 | D-27 | The zone decides the parent container: elements in the external zones (internet, corporate IT, third-party SaaS, vehicle or field device) have no parent; elements in every other zone have exactly one. No "external" container kind. | A plain optional parent would let a missing parent pass silently; containers must describe real cloud structure because the account rule (S1) depends on it. Analyst, B1 gate. | 2026-09-26 | accepted |
 | D-28 | Each document type has a default precedence rank (table in spec 12a; `asset_list` 7, `other` 8); the analyst can override a rank at CP0 as an analyst decision; within a rank the newer document wins. | Makes DR-8 precedence mechanical and still lets a newer design document win when the analyst says so. Analyst, B1 gate. | 2026-09-26 | accepted |
-| D-29 | Questions target an element or a link; `generic` questions need a topic; duplicates are checked per (target, fact type) or (target, topic); visible questions are capped per target (default 3, configurable, up to 7 for unknown element kinds). | Link gaps (unknown authentication or encryption) need questions too, and the cap must not block the full fact set for unknown kinds or be bypassed by `generic`. Analyst, B1 gate. | 2026-09-26 | accepted |
+| D-29 | (Targets extended to containers by D-31.) Questions target an element or a link; `generic` questions need a topic; duplicates are checked per (target, fact type) or (target, topic); visible questions are capped per target (default 3, configurable, up to 7 for unknown element kinds). | Link gaps (unknown authentication or encryption) need questions too, and the cap must not block the full fact set for unknown kinds or be bypassed by `generic`. Analyst, B1 gate. | 2026-09-26 | accepted |
 | D-30 | Facts carry no element id; the element points to its facts. CP1 records `based_on_cp0_version`. Refusal responses carry a `details` field with the ids involved; checkpoint-state refusals return 409. | Writing into frozen CP0 facts would break the freeze rule; the version link shows which reading review an Item Definition used. Analyst, B1 gate. | 2026-09-26 | accepted |
+| D-31 | A question may target a container (`CTR-##`) as well as an element or link. Used for account-level facts: who runs the account, whether it is shared, and whether other environments share accounts, keys, databases or credentials. The cap and duplicate rules apply per container as per element. | The scoping rules ask these facts about the cloud account, which is a container; without this they had nowhere to be stored. Analyst, B3 gate (option a of three). | 2026-09-27 | accepted |
 
 Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are added so every Design Reference section is covered, plus decisions made at the A1, A2 and B1 gates.
 
@@ -48,7 +49,7 @@ Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are
 | DR-3 Review by exception | D-04 |
 | DR-4 CP0 content | D-18 |
 | DR-5 CP1 content | D-19 |
-| DR-6 Question generation | D-06, D-29 |
+| DR-6 Question generation | D-06, D-29, D-31 |
 | DR-7 Scoping | D-05, D-14 |
 | DR-8 Precedence | D-07, D-28 |
 | DR-9 Minimum input | D-08 |

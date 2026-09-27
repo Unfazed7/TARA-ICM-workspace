@@ -110,7 +110,7 @@ Every fact or proposal is sorted by the server (never by the model) into three g
 - A fixed starter set of fact types (DR-7) exists in `_config/scoping-facts.md`.
 - A thinking model generates additional questions after looking at the elements and checking whether the documents already answer them.
 - Guards, all enforced by the server:
-  1. Every question must reference one target (an element or a link) and one fact type from the catalogue; a `generic` question also needs a short topic. Otherwise refused.
+  1. Every question must reference one target (an element, a link, or a container for account-level facts) and one fact type from the catalogue; a `generic` question also needs a short topic. Otherwise refused.
   2. A separate model call tries to answer each generated question from the confirmed facts and documents. If it finds an answer with a quote, the question is dropped before the analyst sees it.
   3. Deduplicate by (target, fact type), or (target, topic) for `generic` questions. Cap visible questions per target (configurable, default 3; up to 7 for unknown element kinds); dropped questions do not count.
 - Questions go to the analyst first. Only the ones the analyst cannot answer go to the client question list.

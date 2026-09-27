@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "stage-02-questions.schema.json",
   "title": "Stage 02 Questions",
-  "description": "Open questions tied to one target (element or link) and one fact type. Spec: .meta/specs/12c-questions-scope-and-analyst-decisions.md. Duplicates per (target, fact type) or (target, topic) and the per-target cap are enforced by the API.",
+  "description": "Open questions tied to one target (element, link or container) and one fact type. Spec: .meta/specs/12c-questions-scope-and-analyst-decisions.md. Duplicates per (target, fact type) or (target, topic) and the per-target cap are enforced by the API.",
   "type": "array",
   "uniqueItemProperties": [
     "question_id"
@@ -27,7 +27,7 @@
       },
       "target_id": {
         "type": "string",
-        "pattern": "^(EL-\\d{3,}|IF-\\d{2,})$"
+        "pattern": "^(EL-\\d{3,}|IF-\\d{2,}|CTR-\\d{2,})$"
       },
       "fact_type": {
         "type": "string",

@@ -23,7 +23,7 @@ A fictional portal on a public cloud that issues and revokes X.509 certificates.
 | `expected/conflicts.json` | Stage 01 conflicts, 4 |
 | `expected/item-definition.json` | Stage 02 item definition: 6 containers, 6 zones, 25 elements, 24 links, 11 functions, 6 assumptions |
 | `expected/scope-decisions.json` | Stage 02 scope decisions, one per element |
-| `expected/questions.json` | Stage 02 questions, 17 (15 open, 2 dropped because the documents answer them) |
+| `expected/questions.json` | Stage 02 questions, 19 (16 open, 3 dropped because the documents answer them) |
 | `expected/match-map.json` | Stub, filled at scoring time (task B7) |
 
 The expected files are split for review. `tests/synthetic-items.test.js` joins `facts.json` with `conflicts.json`, and `item-definition.json` with `scope-decisions.json`, before checking them against the B1 schemas. It also checks the register hashes, every id reference, the parent rule by zone, one scope decision per element, question targets, duplicates and the cap, and em dashes.
@@ -37,11 +37,11 @@ If you edit an input file, update its `sha256` in `document-register.json`.
 | # | Difficulty | Where it is planted | Where the expected output shows it |
 |---|---|---|---|
 | 1 | Only public entry per the answers, but the diagram shows a public load balancer | Answer 3; diagram "public ALB" with an arrow from "Internet" | FCT-011, FCT-013, CNF-001 (not auto-resolved); EL-011 marked internet exposed; ASM-01; Q-002 on the load balancer; Q-015 on IF-09 |
-| 2 | Answers describe the dev environment, the diagram title says production | Answer 2 (`kcp-dev`); diagram title | FCT-018, FCT-019, CNF-003 (not auto-resolved); ASM-03; DOC-01 `prod`, DOC-03 `dev` |
+| 2 | Answers describe the dev environment, the diagram title says production | Answer 2 (`kcp-dev`); diagram title | FCT-018, FCT-019, CNF-003 (not auto-resolved); ASM-03; Q-016 on the account (CTR-01) asks whether dev and production share anything; DOC-01 `prod`, DOC-03 `dev` |
 | 3 | Component in text but not in the diagram | Functional section 3.7: CRL publisher and revocation list bucket | FCT-031, FCT-032; EL-007, EL-008; IF-17, IF-18 marked inferred from text |
 | 4 | Component in the diagram but not in any text | Diagram "Cache" | FCT-030 (medium confidence); EL-017 with data `unspecified`; Q-003, Q-004; ASM-05 |
 | 5 | Stated absence | Answer 4: no WAF | FCT-017 (`absence_stated`); `stated_absence_fact_ids`; no WAF element |
-| 6 | Shared company identity provider | Answer 5: corporate SSO run by central IT, used by other applications | FCT-007; EL-004 `interface` in the corporate IT zone with no container; token check (EL-010) in scope; Q-016 dropped because answer 5 settles it |
+| 6 | Shared company identity provider | Answer 5: corporate SSO run by central IT, used by other applications | FCT-007; EL-004 `interface` in the corporate IT zone with no container; token check (EL-010) in scope; Q-017 dropped because answer 5 settles it |
 | 7 | Managed key service with a customer key policy | Answer 6 | FCT-037, FCT-038 (`control_stated`); EL-019 with key purpose, where held, who can use it; responsibility split |
 | 8 | Secrets store | Answer 7 | FCT-039, FCT-040; EL-020; IF-14 |
 | 9 | Third-party notification service | Answer 8; diagram "Notification service" | EL-024 `interface` in the third-party zone; IF-15 with the API key and an email address (personal data) |
@@ -68,12 +68,10 @@ These are choices I made where the design reference does not settle the answer. 
 6. **Network boundary configuration.** EL-014 is placed in the private subnet zone with the network as its parent. No document assigns it a zone.
 7. **Internet gateway.** Its parent is the network, not the public subnet, although the diagram draws it inside the subnet.
 8. **Protocols inferred from public knowledge.** API gateway calls are `https_rest`, PostgreSQL is `sql_wire`, bucket reads and writes are `s3_api`, and calls to managed services are `sigv4_service_api`. Protocols on unlabelled arrows with no supporting text stay `unknown`.
-9. **Question set.** 15 open questions. You may want to drop some before this becomes ground truth.
+9. **Question set.** 16 open questions. You may want to drop some before this becomes ground truth.
 
 ---
 
-## Contradiction found (not resolved here)
+## Contradiction resolved at the gate
 
-`_config/scoping-facts.md` (B2) says the cloud account container gets questions FT-01, FT-03 and FT-06 (the account and environment rules). The B1 questions schema only allows an element (`EL-###`) or link (`IF-##`) as a target, so these questions cannot be stored. For that reason the expected output has no question on the account or on shared environments, although the dev and production mismatch makes the FT-06 question important here.
-
-Options: (a) allow container ids (`CTR-##`) as question targets in the schema, spec 12c and refusal R-05; (b) attach account-level questions to a named element; (c) move them into CP0 conflicts only. Waiting for the analyst's decision; nothing has been changed.
+`_config/scoping-facts.md` asks account-level questions (who runs the account, whether it is shared, whether environments share anything), but the B1 questions schema only allowed elements and links as targets. The analyst chose to let questions target containers (decision D-31). Item-01 now has Q-016 (do dev and production share anything, open) and Q-018 (is the account shared, dropped because answer 1 says it is dedicated), both on CTR-01.

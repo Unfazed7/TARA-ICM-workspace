@@ -1734,10 +1734,11 @@
     },
     {
       "assumption_id": "ASM-03",
-      "text": "The assessed environment is production. The written answers describe the dev environment and are assumed to hold for production, because the client says production follows the same design.",
+      "text": "The assessed environment is production. The written answers describe the dev environment and are assumed to hold for production, because the client says production follows the same design. Nothing is shared between dev and production until the client answers.",
       "based_on": [
         "FCT-018",
-        "FCT-019"
+        "FCT-019",
+        "Q-016"
       ]
     },
     {

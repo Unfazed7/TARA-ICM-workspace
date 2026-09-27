@@ -28,9 +28,9 @@ Response format and HTTP status codes: spec 12e. Bulk seeds store valid items an
 | R-02 | A source points to a document not in the register | "This source points to a document that is not in the document register." | document id |
 | R-03 | An element has no supporting fact | "This element has no supporting fact. Every element must come from at least one confirmed fact." | element id |
 | R-04 | A link's source or destination does not exist | "This link connects to an element that does not exist." | missing element id |
-| R-05 | A question has no target or no fact type, or a `generic` one has no topic | "This question must name one element or link and one fact type." | question id |
-| R-06 | A question repeats (target, fact type), or (target, topic) for `generic` | "This question is already asked for this element or link." | existing question id |
-| R-07 | The target already has its maximum of visible questions | "This element already has 3 questions. Merge this into one of them or drop it." (the number follows the configured cap) | target id, existing question ids |
+| R-05 | A question has no target or no fact type, or a `generic` one has no topic | "This question must name one element, link or container and one fact type." | question id |
+| R-06 | A question repeats (target, fact type), or (target, topic) for `generic` | "This question is already asked for this element, link or container." | existing question id |
+| R-07 | The target already has its maximum of visible questions | "This item already has 3 questions. Merge this into one of them or drop it." (the number follows the configured cap) | target id, existing question ids |
 | R-08 | A scope decision has no reason | "This scope decision needs a reason the analyst can read." | element id |
 | R-12 | Stage 02 writes anything based on a fact not confirmed at CP0 | "This refers to a fact that was not confirmed at the reading review." | fact id |
 | R-13 | An element in an external zone has a parent container, or an element in any other zone has none | "This element's container does not match its zone. Elements outside the item's accounts have no container; elements inside have exactly one." | element id, zone id |

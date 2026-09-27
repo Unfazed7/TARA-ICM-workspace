@@ -158,6 +158,16 @@
   },
   {
     "question_id": "Q-016",
+    "target_id": "CTR-01",
+    "fact_type": "FT-06",
+    "text": "Do the dev and production environments share cloud accounts, keys, databases or credentials?",
+    "why_it_matters": "The answers describe dev and the diagram describes production. Anything they share lets a weakness in dev reach production certificates.",
+    "default_if_unanswered": "Nothing is shared, recorded as an assumption",
+    "origin": "starter",
+    "status": "open"
+  },
+  {
+    "question_id": "Q-017",
     "target_id": "EL-004",
     "fact_type": "FT-03",
     "text": "Is the corporate SSO used only by the portal, or also by other company applications?",
@@ -167,7 +177,17 @@
     "status": "dropped_answered_by_docs"
   },
   {
-    "question_id": "Q-017",
+    "question_id": "Q-018",
+    "target_id": "CTR-01",
+    "fact_type": "FT-03",
+    "text": "Is the portal's cloud account used only by the portal, or also by other systems?",
+    "why_it_matters": "In a shared account, only the portal's own resources are part of the assessment.",
+    "default_if_unanswered": "Used only by the portal",
+    "origin": "starter",
+    "status": "dropped_answered_by_docs"
+  },
+  {
+    "question_id": "Q-019",
     "target_id": "EL-009",
     "fact_type": "FT-04",
     "text": "Can the API gateway be reached from the internet, or only from inside the network?",

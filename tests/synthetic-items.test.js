@@ -137,10 +137,11 @@ for (const item of items) {
   test(`${item}: questions have known targets, no duplicates and respect the cap`, () => {
     const kinds = new Map(itemDefinition.elements.map((e) => [e.element_id, e.kind]));
     const linkIds = new Set(itemDefinition.links.map((l) => l.link_id));
+    const containerIds = new Set(itemDefinition.containers.map((c) => c.container_id));
     const seen = new Set();
     const visible = new Map();
     for (const q of questions) {
-      assert.ok(kinds.has(q.target_id) || linkIds.has(q.target_id), `${q.question_id}: unknown target (R-05)`);
+      assert.ok(kinds.has(q.target_id) || linkIds.has(q.target_id) || containerIds.has(q.target_id), `${q.question_id}: unknown target (R-05)`);
       const key = `${q.target_id}|${q.fact_type === 'generic' ? q.topic : q.fact_type}`;
       assert.ok(!seen.has(key), `${q.question_id}: duplicate question (R-06)`);
       seen.add(key);

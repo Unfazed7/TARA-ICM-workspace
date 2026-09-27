@@ -20,7 +20,7 @@ WILL touch: the questions schema and fixtures, `tests/schemas.test.js`. WON'T to
 
 ## Input/Output
 
-- **Question** (`Q-###`): target (an element `EL-###` or a link `IF-##`), fact type (FT-01 to FT-07, or `generic`), topic (required for `generic`, a few words), plain text, why it matters, default if unanswered, origin (starter, generated), answer and who gave it, status (open, answered, sent to client, dropped because the documents answer it).
+- **Question** (`Q-###`): target (an element `EL-###`, a link `IF-##`, or a container `CTR-##` for account-level facts such as sharing and environments, D-31), fact type (FT-01 to FT-07, or `generic`), topic (required for `generic`, a few words), plain text, why it matters, default if unanswered, origin (starter, generated), answer and who gave it, status (open, answered, sent to client, dropped because the documents answer it).
 - **Scope decision** (`SD-###`): element, status (in scope, interface, out of scope, ambiguous), plain reason, facts and questions it rests on, assumed flag. One per element. An assumed decision names the question that would settle it.
 - **Analyst decision** (`AD-###`): target (any id), action, before, after, rationale, actor, timestamp, locked flag. Locked decisions are re-applied on every re-run.
 - **Checkpoint:** assessment, kind (CP0, CP1), version, status (open, confirmed), confirmed by, confirmed at. A CP1 also records `based_on_cp0_version`, so it is always clear which reading review the Item Definition was built from.
@@ -37,7 +37,7 @@ WILL touch: the questions schema and fixtures, `tests/schemas.test.js`. WON'T to
 
 ## Validation Rules
 
-1. A question has a target (element or link) and a fact type; `generic` also needs a topic.
+1. A question has a target (element, link or container) and a fact type; `generic` also needs a topic.
 2. An answered question has an answer and who gave it.
 3. A scope decision has a reason of at least 10 characters; an assumed one names at least one question.
 4. Each element has at most one scope decision.

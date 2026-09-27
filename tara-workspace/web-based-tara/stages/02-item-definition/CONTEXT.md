@@ -41,7 +41,7 @@ The confirmed version lives in `checkpoint-api` once seeded.
    - Start from the fact types each element kind needs, as listed in `scoping-facts.md`.
    - A reasoning model may add questions after looking at the elements.
    - A separate model call tries to answer each question from the confirmed facts; a question that can be answered with a quote is dropped before the analyst sees it.
-   - Every question names one target (an element, or a link when its authentication or encryption is unknown) and one fact type. A `generic` question also needs a short topic.
+   - Every question names one target (an element; a link when its authentication or encryption is unknown; or the cloud account container for sharing and environment facts) and one fact type. A `generic` question also needs a short topic.
    - Duplicates by (target, fact type), or (target, topic) for `generic`, are removed. Visible questions are capped per target: 3 by default (configurable), up to 7 for `unknown_kind` elements. Dropped questions do not count.
    - Questions go to the analyst first; only the ones the analyst cannot answer go to the client question list.
 3. **Decide scope.** Apply the internal mapping in `scoping-facts.md` only when the facts it needs are known. Otherwise propose the default, mark it "assumed" and link the question that would settle it. Nothing is scoped out silently: every out-of-scope element has a recorded reason.

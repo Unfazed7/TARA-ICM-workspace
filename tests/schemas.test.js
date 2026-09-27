@@ -104,7 +104,7 @@ const itemDefinitionContract = [
     [
       'stage-02-bad-question-no-fact-type.json',
       'stage-02-bad-generic-question-no-topic.json',
-      'stage-02-bad-question-target-not-element-or-link.json'
+      'stage-02-bad-question-target-zone.json'
     ]
   ]
 ];
