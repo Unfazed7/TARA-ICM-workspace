@@ -288,6 +288,18 @@
   },
   {
     "decision_id": "SD-025",
+    "element_id": "EL-026",
+    "status": "in_scope",
+    "reason": "It is in the portal's private network and passes requests from the gateway and the internet-facing load balancer to the services.",
+    "based_on_fact_ids": [
+      "FCT-068",
+      "FCT-069"
+    ],
+    "based_on_question_ids": [],
+    "assumed": false
+  },
+  {
+    "decision_id": "SD-026",
     "element_id": "EL-025",
     "status": "interface",
     "reason": "It is part of the build and release chain, outside the portal. The deploy into the portal and the deploy role it uses are inside the assessment.",

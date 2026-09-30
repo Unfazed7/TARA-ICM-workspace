@@ -14,14 +14,14 @@ A fictional portal on a public cloud that issues and revokes X.509 certificates.
 | Path | What it is |
 |---|---|
 | `inputs/boundary.txt` | One-sentence boundary statement |
-| `inputs/architecture.drawio` | The diagram source: one page, 23 icons, 18 arrows, all unlabelled |
+| `inputs/architecture.drawio` | The diagram source: one page, 24 icons, 19 arrows, all unlabelled |
 | `inputs/architecture.png` | Image export of the same diagram |
 | `inputs/client-answers.md` | Client answers to 12 intake questions |
 | `inputs/functional.md` | Functional description: 4 actors, 11 functions |
 | `expected/document-register.json` | Stage 01 register, 4 documents |
-| `expected/facts.json` | Stage 01 facts, 67 (as proposed before CP0) |
+| `expected/facts.json` | Stage 01 facts, 70 (as proposed before CP0) |
 | `expected/conflicts.json` | Stage 01 conflicts, 4 |
-| `expected/item-definition.json` | Stage 02 item definition: 6 containers, 6 zones, 25 elements, 26 links, 11 functions, 6 assumptions |
+| `expected/item-definition.json` | Stage 02 item definition: 6 containers, 6 zones, 26 elements, 27 links, 11 functions, 6 assumptions |
 | `expected/scope-decisions.json` | Stage 02 scope decisions, one per element |
 | `expected/questions.json` | Stage 02 questions, 19 (16 open, 3 dropped because the documents answer them) |
 | `expected/match-map.json` | Stub, filled at scoring time (task B7) |
@@ -53,6 +53,7 @@ If you edit an input file, update its `sha256` in `document-register.json`.
 | 15 | Same service, two names | Diagram "Key Service", functional "signing service" | CNF-004 `naming`, auto-resolved; FCT-029 rejected and not used by Stage 02 |
 | 16 | Duplicate document | `architecture.png` is an export of `architecture.drawio` | DOC-02 registered, read with the image model, used only as a cross-check; no facts cite it |
 | 17 | Irrelevant content | Answer 12: running cost | DOC-03 `ignored_and_why` |
+| 18 | Two load balancers, one internet-facing and one internal (D-33) | Diagram "public ALB" in the public subnet and "internal ALB" in the private subnet; answer 3 names the internal one and the private link from the gateway | Two separate elements: EL-011 (internet-facing, exposed, in conflict) and EL-026 (internal, not exposed, FCT-069). IF-08 gateway to internal load balancer, IF-09 internet-facing to internal (bypass remark), IF-27 internal load balancer to the certificate service |
 
 ---
 
@@ -60,9 +61,9 @@ If you edit an input file, update its `sha256` in `document-register.json`.
 
 These are choices I made where the design reference does not settle the answer. Please confirm or correct each one.
 
-1. **Defaults after CP0.** The expected item definition assumes the analyst sent the three open conflicts to the client and kept the proposed defaults: the load balancer and the CDN are public, and production is assessed with the written answers assumed to hold for it.
+1. **Defaults after CP0 (confirmed by the analyst, round 1).** The expected item definition assumes the analyst sent the three open conflicts to the client and kept the proposed defaults: the internet-facing load balancer and the CDN are public, and production is assessed with the written answers assumed to hold for it.
 2. **Facts status.** Expected facts are the Stage 01 output before CP0: all `proposed`, except the auto-resolved naming loser, which is `rejected`. The `group` values are what the server should compute.
-3. **Human actors.** The schema requires provider, hosting type and internet exposure on every element. For people I used provider "not applicable", hosting `unknown` and exposure `no`. A later schema change could make these fields optional for actors.
+3. **Human actors (settled, D-34).** People and calling systems have no provider, hosting type or internet exposure fields.
 4. **Scope status for actors and internal services.** Set to `interface`, the closest status to "interactor". Operators and security admins are marked assumed because the device questions (Q-013, Q-012) are open.
 5. **Team-run services on a managed cluster.** The certificate and key services are `self_hosted` (the team runs the code), while the database, storage and key service are `managed`. The API gateway and cache are `unknown` until Q-001 and Q-004 are answered.
 6. **Network boundary configuration.** EL-014 is placed in the private subnet zone with the network as its parent. No document assigns it a zone.

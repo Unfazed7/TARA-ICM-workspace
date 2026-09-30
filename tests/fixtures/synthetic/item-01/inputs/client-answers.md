@@ -17,7 +17,7 @@ These answers describe `kcp-dev`. We are onboarding the dev environment first. P
 
 **3. How is the portal reached from the internet?**
 
-The API gateway is the only public entry point. Everything else is only reachable from inside the network.
+The API gateway is the only public entry point. It forwards requests over a private link to an internal load balancer in front of our services. Everything else is only reachable from inside the network.
 
 **4. Do you use a web application firewall?**
 

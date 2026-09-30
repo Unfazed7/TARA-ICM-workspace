@@ -99,9 +99,17 @@ One element per independently deployed or configured unit with its own identity,
 
 ---
 
+## 3a. Internet exposure (load balancers and other entry candidates, D-33)
+
+1. One element per load balancer. An internet-facing and an internal load balancer are never merged, even with similar names.
+2. Exposure comes from evidence, highest first: the analyst's answer at CP0; the client's written answers; the diagram label ("internet-facing", "public" or "external" means exposed; "internal" or "private" means not exposed); its position (in a public subnet with an arrow from the internet).
+3. No evidence: exposure `unknown` and one reachability question (FT-04) on that element. Never infer exposure from the kind alone.
+4. Sources disagree: a "Needs you" card. Until the analyst answers, the element is treated as exposed and the choice is recorded as an assumption.
+5. A path that reaches a service through an exposed load balancer without passing the documented sign-in check gets a remark on the link that ends at the service side.
+
 ## 4. Required attributes
 
-ID, name, kind, parent container (unless in an external zone), zone, provider, hosting type (managed, self-hosted, unknown), internet exposed (yes, no, unknown, with evidence), owner or operator, supporting facts, confidence, and data handled for stores and processes. An authentication method is required for entry points and anything exposed to the internet. Stated security configuration is optional but wanted. No criticality field.
+ID, name, kind, parent container (unless in an external zone), zone, provider, hosting type (managed, self-hosted, unknown), internet exposed (yes, no, unknown, with evidence; provider, hosting type and internet exposed are left out for `human_actor` and `system_to_system_client`, D-34), owner or operator, supporting facts, confidence, and data handled for stores and processes. An authentication method is required for entry points and anything exposed to the internet. Stated security configuration is optional but wanted. No criticality field.
 
 ---
 

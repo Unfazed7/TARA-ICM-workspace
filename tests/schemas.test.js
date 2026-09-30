@@ -95,7 +95,9 @@ const itemDefinitionContract = [
       'stage-02-bad-auth-as-protocol.json',
       'stage-02-bad-exposed-no-auth.json',
       'stage-02-bad-assumed-no-question.json',
-      'stage-02-bad-protocol-with-encryption.json'
+      'stage-02-bad-protocol-with-encryption.json',
+      'stage-02-bad-component-no-provider.json',
+      'stage-02-bad-actor-with-provider.json'
     ]
   ],
   [

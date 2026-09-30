@@ -90,7 +90,7 @@ for (const item of items) {
     }
     for (const z of itemDefinition.zones) factRefs.push([z.zone_id, z.fact_ids]);
     for (const e of itemDefinition.elements) {
-      factRefs.push([e.element_id, [...e.fact_ids, ...e.internet_exposed.evidence_fact_ids]]);
+      factRefs.push([e.element_id, [...e.fact_ids, ...(e.internet_exposed ? e.internet_exposed.evidence_fact_ids : [])]]);
       assert.ok(zones.has(e.zone_id), `${e.element_id}: unknown zone`);
       const external = EXTERNAL_ZONES.has(zones.get(e.zone_id).kind);
       if (external) {

@@ -120,12 +120,6 @@
       "name": "Operators",
       "kind": "human_actor",
       "zone_id": "ZN-01",
-      "provider": "not applicable",
-      "hosting_type": "unknown",
-      "internet_exposed": {
-        "value": "no",
-        "evidence_fact_ids": []
-      },
       "is_entry_point": false,
       "owner_operator": "company staff",
       "fact_ids": [
@@ -139,12 +133,6 @@
       "name": "Security admins",
       "kind": "human_actor",
       "zone_id": "ZN-01",
-      "provider": "not applicable",
-      "hosting_type": "unknown",
-      "internet_exposed": {
-        "value": "no",
-        "evidence_fact_ids": []
-      },
       "is_entry_point": false,
       "owner_operator": "company security team",
       "fact_ids": [
@@ -158,12 +146,6 @@
       "name": "Internal services",
       "kind": "system_to_system_client",
       "zone_id": "ZN-05",
-      "provider": "company",
-      "hosting_type": "unknown",
-      "internet_exposed": {
-        "value": "no",
-        "evidence_fact_ids": []
-      },
       "is_entry_point": false,
       "owner_operator": "other company teams",
       "fact_ids": [
@@ -362,7 +344,7 @@
     },
     {
       "element_id": "EL-011",
-      "name": "Load balancer",
+      "name": "Internet-facing load balancer",
       "kind": "load_balancer",
       "parent_container_id": "CTR-03",
       "zone_id": "ZN-02",
@@ -773,6 +755,28 @@
         "FCT-056"
       ],
       "confidence": "high"
+    },
+    {
+      "element_id": "EL-026",
+      "name": "Internal load balancer",
+      "kind": "load_balancer",
+      "parent_container_id": "CTR-04",
+      "zone_id": "ZN-03",
+      "provider": "public cloud provider",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": [
+          "FCT-069"
+        ]
+      },
+      "is_entry_point": false,
+      "owner_operator": "platform team",
+      "fact_ids": [
+        "FCT-068",
+        "FCT-069"
+      ],
+      "confidence": "high"
     }
   ],
   "links": [
@@ -979,10 +983,10 @@
       "link_id": "IF-08",
       "type": "data_flow",
       "source_id": "EL-009",
-      "destination_id": "EL-015",
+      "destination_id": "EL-026",
       "direction": "unidirectional",
       "protocol": "unknown",
-      "usage_at_destination": "Handle certificate requests",
+      "usage_at_destination": "Pass API requests to the portal services",
       "authentication": "unknown",
       "encryption": "unknown",
       "data_carried": [
@@ -1000,21 +1004,21 @@
         }
       ],
       "crosses_trust_boundary": true,
-      "remark": "Authentication between the gateway and the service is not documented.",
+      "remark": "Private link, according to the answers.",
       "inferred_from_text": false,
       "fact_ids": [
         "FCT-050"
       ],
-      "confidence": "medium"
+      "confidence": "high"
     },
     {
       "link_id": "IF-09",
       "type": "data_flow",
       "source_id": "EL-011",
-      "destination_id": "EL-015",
+      "destination_id": "EL-026",
       "direction": "unidirectional",
       "protocol": "unknown",
-      "usage_at_destination": "Handle certificate requests",
+      "usage_at_destination": "Pass internet traffic to the portal services",
       "authentication": "unknown",
       "encryption": "unknown",
       "data_carried": [
@@ -1028,7 +1032,7 @@
         }
       ],
       "crosses_trust_boundary": true,
-      "remark": "If the load balancer is public, this path reaches the certificate service without passing the gateway's token check.",
+      "remark": "If the internet-facing load balancer is public, requests reach the services without passing the gateway's token check.",
       "inferred_from_text": false,
       "fact_ids": [
         "FCT-051",
@@ -1467,6 +1471,38 @@
         "FCT-047"
       ],
       "confidence": "medium"
+    },
+    {
+      "link_id": "IF-27",
+      "type": "data_flow",
+      "source_id": "EL-026",
+      "destination_id": "EL-015",
+      "direction": "unidirectional",
+      "protocol": "unknown",
+      "usage_at_destination": "Handle certificate requests",
+      "authentication": "unknown",
+      "encryption": "unknown",
+      "data_carried": [
+        {
+          "item": "SSO token",
+          "category": "credentials_and_session_tokens"
+        },
+        {
+          "item": "Certificate signing requests",
+          "category": "business_transactions"
+        },
+        {
+          "item": "Issued certificates",
+          "category": "certificates"
+        }
+      ],
+      "crosses_trust_boundary": false,
+      "remark": "How the service checks that a request came through the gateway is not documented.",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-070"
+      ],
+      "confidence": "medium"
     }
   ],
   "functions": [
@@ -1811,7 +1847,7 @@
       "assumption_id": "ASM-06",
       "text": "Nothing checks that requests reaching the certificate service come from the API gateway.",
       "based_on": [
-        "FCT-050",
+        "FCT-070",
         "Q-014"
       ]
     }

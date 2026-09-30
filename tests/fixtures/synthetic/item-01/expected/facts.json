@@ -217,9 +217,9 @@
   },
   {
     "fact_id": "FCT-012",
-    "subject": "Load balancer",
+    "subject": "Internet-facing load balancer",
     "fact_type": "component_exists",
-    "value": "A load balancer sits in the public subnet in front of the certificate service",
+    "value": "A load balancer sits in the public subnet in front of the internal load balancer",
     "source_refs": [
       {
         "doc_id": "DOC-01",
@@ -233,7 +233,7 @@
   },
   {
     "fact_id": "FCT-013",
-    "subject": "Load balancer",
+    "subject": "Internet-facing load balancer",
     "fact_type": "attribute",
     "value": "The load balancer is internet-facing and receives traffic from the internet",
     "source_refs": [
@@ -922,28 +922,33 @@
     "fact_id": "FCT-050",
     "subject": "API gateway",
     "fact_type": "link_exists",
-    "value": "The API gateway forwards requests to the certificate service",
+    "value": "The API gateway forwards requests over a private link to the internal load balancer",
     "source_refs": [
       {
         "doc_id": "DOC-01",
-        "location": "page 1, arrow from 'API Gateway' to 'Cert Service'",
-        "quote": "API Gateway -> Cert Service (unlabelled arrow)"
+        "location": "page 1, arrow from 'API Gateway' to 'internal ALB'",
+        "quote": "API Gateway -> internal ALB (unlabelled arrow)"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 3",
+        "quote": "It forwards requests over a private link to an internal load balancer"
       }
     ],
-    "confidence": "medium",
-    "group": "single_source",
+    "confidence": "high",
+    "group": "agreed",
     "status": "proposed"
   },
   {
     "fact_id": "FCT-051",
-    "subject": "Load balancer",
+    "subject": "Internet-facing load balancer",
     "fact_type": "link_exists",
-    "value": "The load balancer forwards traffic to the certificate service",
+    "value": "The internet-facing load balancer forwards traffic to the internal load balancer",
     "source_refs": [
       {
         "doc_id": "DOC-01",
-        "location": "page 1, arrow from 'public ALB' to 'Cert Service'",
-        "quote": "public ALB -> Cert Service (unlabelled arrow)"
+        "location": "page 1, arrow from 'public ALB' to 'internal ALB'",
+        "quote": "public ALB -> internal ALB (unlabelled arrow)"
       }
     ],
     "confidence": "medium",
@@ -1229,6 +1234,64 @@
     ],
     "confidence": "high",
     "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-068",
+    "subject": "Internal load balancer",
+    "fact_type": "component_exists",
+    "value": "An internal load balancer sits in front of the portal services",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'internal ALB'",
+        "quote": "internal ALB"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 3",
+        "quote": "an internal load balancer in front of our services"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-069",
+    "subject": "Internal load balancer",
+    "fact_type": "attribute",
+    "value": "The internal load balancer is not reachable from the internet",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, shape 'internal ALB'",
+        "quote": "internal ALB"
+      },
+      {
+        "doc_id": "DOC-03",
+        "location": "answer 3",
+        "quote": "Everything else is only reachable from inside the network"
+      }
+    ],
+    "confidence": "high",
+    "group": "agreed",
+    "status": "proposed"
+  },
+  {
+    "fact_id": "FCT-070",
+    "subject": "Internal load balancer",
+    "fact_type": "link_exists",
+    "value": "The internal load balancer forwards requests to the certificate service",
+    "source_refs": [
+      {
+        "doc_id": "DOC-01",
+        "location": "page 1, arrow from 'internal ALB' to 'Cert Service'",
+        "quote": "internal ALB -> Cert Service (unlabelled arrow)"
+      }
+    ],
+    "confidence": "medium",
+    "group": "single_source",
     "status": "proposed"
   }
 ]

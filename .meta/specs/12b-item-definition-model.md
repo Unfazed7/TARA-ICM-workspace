@@ -23,7 +23,7 @@ WON'T touch: agents, API code (C3, C8).
 
 - **Item:** item name; boundary statement with a `proposed` flag (true when the agent wrote it).
 - **Container** (`CTR-##`) and **Zone** (`ZN-##`): kind, name, supporting facts; containers also have a parent and a zone. Kinds are listed in the schema (from DR-13 and DR-14).
-- **Element** (`EL-###`): name, kind (`unknown_kind` needs a `kind_label`), parent container, zone, provider, hosting type, internet exposed (yes, no, unknown, with evidence), entry-point flag, authentication method, owner or operator, data handled, stated security configuration, supporting facts, confidence.
+- **Element** (`EL-###`): name, kind (`unknown_kind` needs a `kind_label`), parent container, zone, provider, hosting type, internet exposed (yes, no, unknown, with evidence), entry-point flag, authentication method, owner or operator, data handled, stated security configuration, supporting facts, confidence. Provider, hosting type and internet exposed are required except for `human_actor` and `system_to_system_client`, which leave them out (D-34).
 - **Data item:** specific item if known, one category (`unspecified` if only a category is known); for keys and credentials also purpose, where held, who can use it.
 - **Link** (`IF-##`): type (data flow, exposure), source, destination, direction, protocol (transport or application only), port, usage at destination, authentication and encryption (named or "unknown"), data carried, crosses trust boundary, remark, inferred-from-text flag, supporting facts, confidence; optional sync/async, rate limiting, volume.
 - **Function** (`FN-###`): name, plain description, actors, elements involved, endpoints, data read, data written, privileged flag, supporting facts.

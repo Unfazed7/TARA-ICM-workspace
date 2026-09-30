@@ -208,9 +208,6 @@
           "name",
           "kind",
           "zone_id",
-          "provider",
-          "hosting_type",
-          "internet_exposed",
           "is_entry_point",
           "owner_operator",
           "fact_ids",
@@ -365,6 +362,139 @@
           }
         },
         "allOf": [
+          {
+            "if": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "human_actor",
+                    "system_to_system_client"
+                  ]
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "type": "object",
+              "not": {
+                "type": "object",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "provider"
+                    ],
+                    "properties": {
+                      "provider": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "hosting_type"
+                    ],
+                    "properties": {
+                      "hosting_type": {
+                        "type": "string",
+                        "enum": [
+                          "managed",
+                          "self_hosted",
+                          "unknown"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "internet_exposed"
+                    ],
+                    "properties": {
+                      "internet_exposed": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "value",
+                          "evidence_fact_ids"
+                        ],
+                        "properties": {
+                          "value": {
+                            "type": "string",
+                            "enum": [
+                              "yes",
+                              "no",
+                              "unknown"
+                            ]
+                          },
+                          "evidence_fact_ids": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^FCT-\\d{3,}$"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "else": {
+              "type": "object",
+              "required": [
+                "provider",
+                "hosting_type",
+                "internet_exposed"
+              ],
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "hosting_type": {
+                  "type": "string",
+                  "enum": [
+                    "managed",
+                    "self_hosted",
+                    "unknown"
+                  ]
+                },
+                "internet_exposed": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "value",
+                    "evidence_fact_ids"
+                  ],
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "enum": [
+                        "yes",
+                        "no",
+                        "unknown"
+                      ]
+                    },
+                    "evidence_fact_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^FCT-\\d{3,}$"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           {
             "if": {
               "type": "object",

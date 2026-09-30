@@ -136,7 +136,7 @@
   },
   {
     "question_id": "Q-014",
-    "target_id": "IF-08",
+    "target_id": "IF-27",
     "fact_type": "generic",
     "topic": "authentication between gateway and certificate service",
     "text": "How does the certificate service check that a request really comes from the API gateway?",
@@ -150,7 +150,7 @@
     "target_id": "IF-09",
     "fact_type": "generic",
     "topic": "authentication between load balancer and certificate service",
-    "text": "Does the certificate service check the sign-in token on requests that arrive through the load balancer?",
+    "text": "Does the certificate service check the sign-in token on requests that arrive through the internet-facing load balancer?",
     "why_it_matters": "If not, a public load balancer is a way around the gateway's sign-in check.",
     "default_if_unanswered": "No check, recorded as an assumption",
     "origin": "generated",

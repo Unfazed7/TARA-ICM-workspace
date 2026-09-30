@@ -24,7 +24,7 @@ Used by: Stage 01 (Input Normalization) and the reconciliation engine (C5). Sour
 
 ## 2. Always sent to the analyst ("Needs you"), never auto-resolved
 
-- Internet exposure or the ingress path
+- Internet exposure or the ingress path (until answered, the more exposed option is assumed and recorded as an assumption, D-33)
 - Which environment a document describes
 - Whether a component exists
 - Who owns or operates a component
