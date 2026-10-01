@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-10-01 by `.meta/DECISIONS.md` D-36 and D-37 (no blocking checkpoints; Rationale per stage, spec 13 in B5). Kept for history. Do not use for new work.
+
 # Spec 12e: Checkpoint and Re-run Rules
 
 **Status:** Revised after analyst review round 1 (B1 gate), split from 12d

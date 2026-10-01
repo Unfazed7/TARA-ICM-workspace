@@ -13,7 +13,7 @@ Derive the assets worth protecting, and their CIAAAN properties, from the finali
 
 ## Input
 
-From the API only: the Item Definition confirmed at CP1. Never client documents.
+From the API only: the stored Item Definition (D-36). Never client documents.
 
 ## Output (Layer 4)
 

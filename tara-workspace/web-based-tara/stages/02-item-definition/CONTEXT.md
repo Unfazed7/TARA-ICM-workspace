@@ -1,7 +1,7 @@
 # Stage 02: Item Definition (Layer 2)
 
 **Type:** AI plus deterministic grouping
-**Checkpoint:** CP1 Item Definition review (analyst only)
+**Review:** Rationale section on the stage page, never blocking (D-36, D-37)
 **Spec:** `.meta/specs/12b-item-definition-model.md` and `.meta/specs/12c-questions-scope-and-analyst-decisions.md` (written in B1)
 **Load from `_config/`:** `element-kinds.md`, `scoping-facts.md`, `analyst-language.md`
 **Variant:** Web Item Definition only. Never blend in the vehicle variant.
@@ -10,13 +10,13 @@
 
 ## Purpose
 
-Build the Web Item Definition from the facts confirmed at CP0: containers, zones, elements, links, functions, scope decisions, and the questions still needed to decide scope. Then discuss it with the analyst at CP1.
+Build the Web Item Definition from the Stage 01 facts: containers, zones, elements, links, functions, scope decisions, and the questions still needed to decide scope. Explain every judgement in the Rationale.
 
 ## Input
 
 From the API only:
-- facts confirmed at CP0;
-- the analyst's answers and decisions;
+- Stage 01 facts that are not rejected, and the conflicts with the defaults applied;
+- any analyst decisions recorded so far;
 - the boundary statement.
 
 Never read client documents. If a needed fact is missing, it becomes a question, not a guess.
@@ -27,7 +27,9 @@ Never read client documents. If a needed fact is missing, it becomes a question,
 - `output/questions.json`: open questions, each tied to one element and one fact type.
 - `output/new-kinds.log`: element kinds not in `element-kinds.md`, for later human review.
 
-The confirmed version lives in `checkpoint-api` once seeded.
+- `output/rationale.json`: one item per assumption, conflict, ambiguity and gap (see Rationale below).
+
+The stored version lives in `checkpoint-api` once seeded.
 
 ## Process
 
@@ -35,12 +37,12 @@ The confirmed version lives in `checkpoint-api` once seeded.
    - Containers are not elements: cloud account, region, VPC, subnet, availability zone, namespace, cluster. Every element inside the item's accounts has exactly one parent container. Elements in the external zones (internet, corporate IT, third-party SaaS, vehicle or field device) have a zone and no parent container. Managed services outside a VPC sit in an "account-level managed services" container. Each VPC also gets one element for its network boundary configuration.
    - One element per independently deployed or configured unit with its own identity, access policy or distinct data content. Never one per pod, table, endpoint, storage prefix or security group. Never one "backend" or one "database" covering parts with different data.
    - Links are data flows (intended exchange) or exposures (reachability without intended exchange), each with protocol, authentication, encryption, data carried and whether it crosses a trust boundary. OAuth2, OIDC, SAML, TLS, mTLS, API keys, JWT, X.509, IAM roles and session cookies are authentication or encryption attributes, not protocols: record `mqtt` with TLS as encryption, and plain `http` as `http`. If no diagram was supplied, every link is marked "inferred from text".
-   - Never invent a zone the confirmed facts do not show. Components mentioned nowhere in the confirmed facts become questions, never elements. Stated absences ("no WAF") are recorded as facts.
+   - Never invent a zone the facts do not show. Components mentioned nowhere in the facts become questions, never elements. Stated absences ("no WAF") are recorded as facts.
    - A vehicle or ECU the item talks to is one external element at the edge, never broken down.
 2. **Generate questions.**
    - Start from the fact types each element kind needs, as listed in `scoping-facts.md`.
    - A reasoning model may add questions after looking at the elements.
-   - A separate model call tries to answer each question from the confirmed facts; a question that can be answered with a quote is dropped before the analyst sees it.
+   - A separate model call tries to answer each question from the facts; a question that can be answered with a quote is dropped before the analyst sees it.
    - Every question names one target (an element; a link when its authentication or encryption is unknown; or the cloud account container for sharing and environment facts) and one fact type. A `generic` question also needs a short topic.
    - Duplicates by (target, fact type), or (target, topic) for `generic`, are removed. Visible questions are capped per target: 3 by default (configurable), up to 7 for `unknown_kind` elements. Dropped questions do not count.
    - Questions go to the analyst first; only the ones the analyst cannot answer go to the client question list.
@@ -60,30 +62,25 @@ The API refuses, item by item, and says why:
 - an element whose container does not match its zone;
 - an assumed scope decision that names no question;
 - a scope decision without a reason;
-- any write that references a fact not confirmed at CP0;
-- any confirm call that does not come from the analyst;
-- confirming CP1 while CP0 is not confirmed, while a "Needs you" card is unanswered (unless marked "send to client"), or while a failed spot check has not been re-reviewed;
-- accepting a re-run while a locked analyst decision points to something that no longer exists;
-- any write to a confirmed CP1 version (409).
+- any write that references a rejected fact;
 
 The server, not the model, computes groups, counts, coverage and trust-boundary crossings.
 
-## Checkpoint: CP1 Item Definition review
+## Rationale (D-37)
 
-Same review by exception as CP0: Agreed, Single source and Needs you groups computed by the server, four-part "Needs you" cards (What I concluded, Why, What I assumed, What would change it), 3 to 5 spot-checked Agreed items, and no confirm while a "Needs you" card is open. Target: 10 to 25 "Needs you" cards.
+The pipeline never waits for the analyst. Every judgement goes into `output/rationale.json`, shown on the Item Definition page below the output. The page above it shows the boundary statement (marked "proposed" if the agent wrote it), the container tree and zones, elements, the Data Flow Inventory (links) and trust boundaries, scope decisions with plain reasons, assumptions, responsibility split, stated controls and absences, stakeholders and open questions.
 
-CP1 shows:
-- the boundary statement, marked "proposed" if the agent wrote it;
-- the container tree and zones, elements, the Data Flow Inventory (links) and trust boundaries;
-- each element's scope decision with a plain reason;
-- assumptions, responsibility split, stated controls and stated absences, stakeholders and open questions.
+Rationale items for this stage include:
+- every scope decision marked assumed, with the question that would settle it;
+- every open question, with the default used meanwhile;
+- every assumption (`ASM-##`);
+- ambiguities met while building, such as an element kind that does not fit, a link with an unclear end, or an unknown authentication or encryption on a link;
+- conflicts carried over from Stage 01, only where they changed an element, link or scope decision.
 
-The analyst can change scope, add, delete, rename, merge or split an element, change its kind, move it to another zone, edit attributes, add or delete a link, resolve a conflict, edit the boundary statement, answer questions, attach a new document and re-run, lock items, export client questions, and ask "why?".
+Each item uses the same four parts and review status as in Stage 01: `unreviewed`, `confirmed`, or `disputed` with a note. A dispute is recorded; nothing re-runs (D-36).
 
-Re-runs create a new version. Analyst edits are stored as locked overrides and re-applied, and a diff is shown before the new version is accepted. An analyst edit is never silently overwritten.
-
-**Writing to the analyst:** conclusion first, then reason, then source. One idea per sentence. One question per card. No rule IDs, scores or internal labels. "Why?" answers come only from stored sources and decisions; if nothing is stored, say it is an open question.
+**Writing in the Rationale:** conclusion first, then reason, then source. One idea per sentence. No rule IDs, scores or internal labels. When the analyst asks "why?", answer only from stored sources and decisions; if nothing is stored, say it is an open question.
 
 ## What the next stage receives
 
-Stage 03 receives, from the API, only the finalized Item Definition (CP1 confirmed). Out-of-scope elements stay listed but produce no assets.
+Stage 03 (when it is rebuilt) receives, from the API, only the stored Item Definition. Out-of-scope elements stay listed but produce no assets.

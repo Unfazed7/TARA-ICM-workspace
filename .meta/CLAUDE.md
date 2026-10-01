@@ -6,7 +6,7 @@ This is the one current governance document for building TARA Aegis. It says who
 
 ## Roles
 
-- **The analyst** (repo owner) decides. Every HUMAN GATE in the instructions stops for the analyst's go-ahead, and only the analyst confirms checkpoints in the running tool.
+- **The analyst** (repo owner) decides. Every HUMAN GATE in the instructions stops for the analyst's go-ahead, and only the analyst sets the review status of Rationale items in the running tool (D-37).
 - **Claude Code** writes specs and implements them, one task at a time, following `.meta/CLAUDE-CODE-INSTRUCTIONS.md`.
 
 No other implementer is used. Earlier Codex and Qwen documents are superseded or removed (decision D-17 in `.meta/DECISIONS.md`).
@@ -147,17 +147,16 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `05-impact-analysis-agent.md` | Stage 07 | in force (model in C1) |
 | `06-risk-scoring-engine.md` | Stage 08 | in force |
 | `07-risk-treatment-agent.md` | Stage 09 | in force (paths in A6, model in C1) |
-| `09-checkpoint-api.md` | Checkpoint API | in force; blob parts replaced in C3 and C9 |
+| `09-checkpoint-api.md` | Checkpoint API | in force; blob parts replaced in C3 and C7 |
 | `10-backend-api.md` | Backend REST API | in force; `vehicle_type` made optional in C3 |
 | `11-frontend-integration.md` | Frontend integration | in force; `vehicle_type` made optional in C7 |
 | `WEB-TARA-MVP-ARCHITECTURE.md` | Old flow overview | superseded (A7) |
 | `12a-document-register-and-facts.md` | Stage 01 register, facts, conflicts | approved (B1 gate) |
 | `12b-item-definition-model.md` | Stage 02 containers, zones, elements, links, functions | approved (B1 gate) |
-| `12c-questions-scope-and-analyst-decisions.md` | Questions, scope and analyst decisions, checkpoints | approved (B1 gate) |
+| `12c-questions-scope-and-analyst-decisions.md` | Questions, scope and analyst decisions (checkpoint part dropped, D-36) | approved (B1 gate) |
 | `12d-refusal-rules.md` | API refusals for stored items | approved (B1 gate) |
-| `12e-checkpoint-and-rerun-rules.md` | API refusals for checkpoint state and re-runs, shared response format | approved (B1 gate) |
-| `13-cp0-reading-review.md` | CP0 | planned, B5 |
-| `14-cp1-item-definition-review.md` | CP1 | planned, B6 |
+| `12e-checkpoint-and-rerun-rules.md` | API refusals for checkpoint state and re-runs | superseded (D-36) |
+| `13-rationale.md` | Rationale section per stage (replaces CP0 and CP1 specs) | planned, B5 |
 | `15-evaluation.md` | Evaluation scorer | planned, B7 |
 | `16-asset-identification.md` | Stage 03 | planned, C12 |
 | none | Stage 10 Residual Risk and the orchestrator | no spec; outside this rebuild |

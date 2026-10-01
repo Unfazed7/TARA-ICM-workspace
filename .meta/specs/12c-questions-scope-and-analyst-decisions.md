@@ -23,17 +23,17 @@ WILL touch: the questions schema and fixtures, `tests/schemas.test.js`. WON'T to
 - **Question** (`Q-###`): target (an element `EL-###`, a link `IF-##`, or a container `CTR-##` for account-level facts such as sharing and environments, D-31), fact type (FT-01 to FT-07, or `generic`), topic (required for `generic`, a few words), plain text, why it matters, default if unanswered, origin (starter, generated), answer and who gave it, status (open, answered, sent to client, dropped because the documents answer it).
 - **Scope decision** (`SD-###`): element, status (in scope, interface, out of scope, ambiguous), plain reason, facts and questions it rests on, assumed flag. One per element. An assumed decision names the question that would settle it.
 - **Analyst decision** (`AD-###`): target (any id), action, before, after, rationale, actor, timestamp, locked flag. Locked decisions are re-applied on every re-run.
-- **Checkpoint:** assessment, kind (CP0, CP1), version, status (open, confirmed), confirmed by, confirmed at. A CP1 also records `based_on_cp0_version`, so it is always clear which reading review the Item Definition was built from.
+- **Checkpoint:** dropped (D-36). Review now happens in the Rationale section of each stage page, which never blocks (spec 13, D-37). An open question appears there as a Rationale item with its default.
 
 ## Process
 
 1. Stage 02 proposes questions: starter fact types per element kind, plus generated ones. Link gaps (unknown authentication or encryption) are questions on the link.
-2. A separate model call drops questions the confirmed facts already answer.
+2. A separate model call drops questions the Stage 01 facts already answer.
 3. The server removes duplicates per (target, fact type), or per (target, topic) for `generic` questions.
 4. The server caps questions per target. The cap is configurable, default 3. Elements of `unknown_kind` get up to 7 (the full fact set). Only questions the analyst will see count; dropped ones do not. `generic` questions count toward the cap.
-5. The analyst answers, or marks a question "send to client"; the default is then recorded as an assumption.
+5. The default is applied straight away and recorded as an assumption; the analyst can answer later or mark the question "send to client" without stopping the pipeline.
 6. On a re-run, locked analyst decisions are re-applied. A locked decision whose target no longer exists is reported to the analyst, never dropped (R-17).
-7. Only the analyst confirms a checkpoint; confirming freezes that version.
+7. Only the analyst answers questions and sets Rationale review status.
 
 ## Validation Rules
 

@@ -37,7 +37,7 @@ The foundational material a client supplies for a TARA (architecture diagrams, f
 _Avoid_: inputs, uploads, source files
 
 **Input Normalization**:
-Stage 01, which reads every **Client document** once and turns it into **Facts** with **Source references** and a **Document register**, followed by **CP0**.
+Stage 01, which reads every **Client document** once and turns it into **Facts** with **Source references** and a **Document register**, then hands over to **Item Definition** automatically.
 _Avoid_: ingestion, intake, parsing stage
 
 **Document register**:
@@ -52,26 +52,26 @@ _Avoid_: finding, observation, extracted data
 A pointer from a **Fact** to one document in the **Document register**: the location (page, sheet, section or diagram region) and a short quote.
 _Avoid_: citation, provenance, evidence link
 
-### Checkpoints
+### Review
 
-**CP0 / Reading review**:
-The analyst checkpoint after **Input Normalization** where the analyst confirms what was read and how, before anything is built from it.
-_Avoid_: document review, intake check
+**Rationale**:
+The section below each stage's output that lists every assumption, conflict, ambiguity and gap the stage met, each with what was concluded, why (sources with quotes), what was assumed and what would change it. The analyst can mark each item confirmed or disputed at any time; this never stops or re-runs the pipeline.
+_Avoid_: checkpoint, review gate, flags, warnings
 
-**CP1 / Item Definition review**:
-The analyst checkpoint after **Item Definition** where scope, boundary and assumptions are confirmed, corrected and finalized.
-_Avoid_: boundary review, CP1 screen
+**Review status**:
+The analyst's mark on a **Rationale** item: unreviewed, confirmed, or disputed with a note.
+_Avoid_: approval, sign-off
 
 **Agreed**:
-The checkpoint group for items stated by two or more documents with no conflict; shown collapsed and checked by spot check.
+The label for items stated by two or more documents with no conflict; listed last in the **Rationale**.
 _Avoid_: confirmed, verified, green
 
 **Single source**:
-The checkpoint group for items stated by only one document; the analyst skims them and can accept all at once.
+The label for items stated by only one document.
 _Avoid_: unverified, weak
 
 **Needs you**:
-The checkpoint group for conflicts, gaps, assumptions, scope questions and low-confidence reads; each one must be answered before the checkpoint can be confirmed.
+The label for conflicts, gaps, assumptions, scope questions and low-confidence reads; listed first in the **Rationale**, never blocking.
 _Avoid_: flagged, warnings, issues
 
 **Open question**:
@@ -83,7 +83,7 @@ One of the fixed kinds of fact the tool asks about to decide scope, such as who 
 _Avoid_: question category, scoping criterion
 
 **Analyst decision**:
-A recorded change or answer made by the analyst at a checkpoint; it outranks every document and is re-applied on re-runs.
+A recorded change or answer made by the analyst on a stage page; it outranks every document and is re-applied on re-runs.
 _Avoid_: override, manual edit, correction
 
 ### Item Definition content (Stage 02)
@@ -122,25 +122,26 @@ _Avoid_: element, component, resource
 
 - Every **TARA type** uses exactly one **Item Definition** variant: web-based uses the **Web Item Definition**; the other three share the **Vehicle Item Definition**.
 - An **Item Definition** describes exactly one **Item**, and is anchored by exactly one **Boundary statement**.
-- The flow is: **Input Normalization** (Stage 01), **CP0 / Reading review**, **Item Definition** (Stage 02), **CP1 / Item Definition review**, **Asset Identification** (Stage 03).
-- No stage after **CP0** re-reads **Client documents**; **Item Definition** is built only from **Facts** confirmed at **CP0** and **Analyst decisions**.
-- No stage after **CP1** reads anything except the finalized **Item Definition** and later stage outputs.
+- The flow is: **Input Normalization** (Stage 01), then **Item Definition** (Stage 02) automatically, then **Asset Identification** (Stage 03). Each stage shows its output with its **Rationale** below.
+- Only **Input Normalization** reads **Client documents**; **Item Definition** is built only from **Facts** that are not rejected and **Analyst decisions**.
+- **Asset Identification** onwards reads only the stored **Item Definition** and later stage outputs.
 - Every **Fact** has one or more **Source references**, and each **Source reference** points to one entry in the **Document register**.
 - Every **Element** sits in exactly one **Container**, has one **Scope decision**, and is supported by at least one **Fact**.
 - A **Link** joins exactly two **Elements**; it crosses a trust boundary when they sit in different **Zones**.
 - One **Element** yields zero or more **Assets**; a **Container** never yields an **Asset**.
-- At each checkpoint every item is in exactly one of **Agreed**, **Single source** or **Needs you**.
+- Every **Fact** carries exactly one of the labels **Agreed**, **Single source** or **Needs you**.
 
 ## Example dialogue
 
 > **Dev:** "The OTA backend diagram shows a telematics ECU. Do we run the **Vehicle Item Definition** too?"
 > **Domain expert:** "No. It's a web-based TARA, so only the **Web Item Definition** runs, and the ECU is one external **Element** at the edge. The two variants never blend in one assessment."
 > **Dev:** "The diagram also shows a load balancer the client's written answers never mention. Is that an **Element** now?"
-> **Domain expert:** "Not yet. It's a **Fact** from one document that conflicts with another, so it goes to **Needs you** at **CP0**. Only after the analyst confirms it does **Item Definition** turn it into an **Element**."
+> **Domain expert:** "Yes, but it is flagged. It's a **Fact** from one document that conflicts with another, so **Item Definition** applies the safer default, treats it as public, and writes a **Rationale** item explaining both sides. The analyst can confirm or dispute that later without stopping the run."
 
 ## Flagged ambiguities
 
-- "Input Normalization" originally meant a stage that turned a CSV or diagram directly into rated assets. Later it was briefly defined as running together with **Item Definition** as one step. Resolved: they are two stages separated by **CP0**. Input Normalization only reads **Client documents** into **Facts**; **Item Definition** builds from confirmed **Facts**.
+- "Input Normalization" originally meant a stage that turned a CSV or diagram directly into rated assets. Later it was briefly defined as running together with **Item Definition** as one step. Resolved: they are two stages that run one after the other. Input Normalization only reads **Client documents** into **Facts**; **Item Definition** builds from those **Facts**.
 - "Item Definition" was used for both a single shared agent and a per-type agent. Resolved: there are two variants (**Web** and **Vehicle**), never merged, so a web-based TARA of a system touching vehicle ECUs does not produce a blend of both.
 - "Interface" was used both for a connection and for a scope status. Resolved: a connection is a **Link**; "interface" is only a **Scope decision** status.
 - **Element** and **Asset** were used interchangeably. Resolved: an **Element** is a part of the system; an **Asset** is something inside an **Element** worth protecting. One **Element** can yield several **Assets** or none.
+- "CP0" and "CP1" were analyst checkpoints that stopped the pipeline after Stages 01 and 02. Replaced by the **Rationale** section on each stage page, which never blocks (D-36, D-37).

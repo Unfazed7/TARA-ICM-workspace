@@ -1,6 +1,8 @@
 # Rebuild Progress
 
-Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`, `done`, `blocked`, `waiting-gate`.
+Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`, `done`, `blocked`, `waiting-gate`, `dropped`.
+
+**Order of work after B3 (D-36, D-37):** B4, B5, B7, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards.
 
 | Task | Status | Date | Commit | Notes |
 |---|---|---|---|---|
@@ -15,19 +17,19 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | B1 | done | 2026-09-26 | 8d898ec (draft), then the commit that adds this row (review round 1) | Round 1 review applied: parent container decided by zone (R-13, DR-13 updated); precedence rank table per document type with analyst override and newer-wins tie-break; `other` documents need a label, `other` conflicts a description and never auto-resolve; `element_id` removed from facts; questions target elements or links, `generic` needs a topic, cap configurable (3, up to 7 for unknown kinds, dropped ones not counted); protocols `mqtt` and `http`; new refusals R-13 to R-17; `details` field and 409 for checkpoint-state refusals; CP1 records `based_on_cp0_version`. 12d split into 12d (stored items) and 12e (checkpoints and re-runs) to stay under 800 tokens. DR-6 and DR-14 wording aligned; decisions D-27 to D-30 added. Schema tests: 16 invalid fixtures, each failing for exactly its intended reason. `npm test` 100 tests, 95 pass (same 5 known failures); `pytest` 25/25. Gate: approved by analyst after round 1. |
 | B2 | done | 2026-09-26 | the commit that adds this row | Created in `web-based-tara/_config/`: `scoping-facts.md` (INTERNAL header; FT-01 to FT-07 with question templates; S1 to S14 mapping with defaults; trigger row for all 54 element kinds, 2 marked no question with a reason; container triggers; unknown-kind rule), `element-kinds.md` (containers, 54 kinds, granularity table, required attributes, actors, data categories, synonym table for C5), `link-model.md`, `source-precedence.md` (rank table from D-28, escalation, minimum input, partial failure), `analyst-language.md` (rules, four-part card, 3 synthetic worked cards, banned phrasings), `models.json` placeholder (8 stage entries, all UNSET until C1/C2). Acceptance checked by script. Note: pre-existing `_config` files (for stages 03 onwards) still contain em dashes; not touched. |
 | B3 | done | 2026-10-01 | a311035, e8b9c34, ab47363, a62d0e1, then the commit that adds this row | Synthetic item-01 (key and certificate portal, diagram contradicts answers). Review round 1 decisions: D-31 questions may target containers; D-32 CI/CD and registries are operational environment (interface); D-33 load balancer and exposure rules, internal load balancer added to item-01; D-34 no provider, hosting or exposure fields for actors; D-35 item-01 becomes the public smoke test, the main evaluation moves to the analyst's past TARAs in `/private-eval/` (C11 rewritten, definition of done updated). Final counts: 4 documents, 70 facts, 4 conflicts, 26 elements, 27 links, 19 questions. Gate: approved by analyst 2026-10-01. Spec register: 12a to 12e marked approved (B1 gate). `npm test` 108/113 (same 5 known failures); `pytest` 25/25. |
-| B4 | pending | | | |
-| B5 | pending | | | |
-| B6 | pending | | | |
+| B4 | pending | | | Redefined by D-36/D-37: Rationale paper prototype (was CP0 prototype). |
+| B5 | pending | | | Redefined by D-36/D-37: Rationale spec and schema (was CP0 spec). |
+| B6 | dropped | 2026-10-01 | | D-36: CP1 prototype and spec folded into B4 and B5. |
 | B7 | pending | | | |
 | C1 | pending | | | |
 | C2 | pending | | | |
 | C3 | pending | | | |
 | C4 | pending | | | |
 | C5 | pending | | | |
-| C6 | pending | | | |
-| C7 | pending | | | |
+| C6 | pending | | | Redefined by D-36: pipeline orchestration, auto-run 01 then 02 (was CP0 endpoints). |
+| C7 | pending | | | Redefined by D-36/D-37: stage pages with output and Rationale (was CP0 screen). |
 | C8 | pending | | | |
-| C9 | pending | | | |
+| C9 | dropped | 2026-10-01 | | D-36: CP1 endpoints and screen folded into C7. |
 | C10 | pending | | | |
 | C11 | pending | | | |
 | C12 | pending | | | |

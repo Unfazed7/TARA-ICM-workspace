@@ -6,11 +6,11 @@ Loaded by `run-web-tara.js` at the start of each assessment. The flow and its ru
 
 ## Stage Routing Table
 
-| Stage | Dir | Type | Input | Output | Checkpoint |
+| Stage | Dir | Type | Input | Output | Review |
 |-------|-----|------|-------|--------|-----------|
-| 01 Input Normalization | `stages/01-input-normalization/` | AI plus deterministic reconciliation | Client documents plus boundary statement | `document-register.json`, `facts.json` | CP0 Reading review |
-| 02 Item Definition | `stages/02-item-definition/` | AI plus deterministic grouping | CP0-confirmed facts and answers (from API) | `item-definition.json`, `questions.json` | CP1 Item Definition review |
-| 03 Asset Identification | `stages/03-asset-identification/` | AI | Finalized Item Definition (from API) | `asset-register.json` | Light review (full review of the CIAAAN column) |
+| 01 Input Normalization | `stages/01-input-normalization/` | AI plus deterministic reconciliation | Client documents plus boundary statement | `document-register.json`, `facts.json`, `rationale.json` | Rationale section, never blocking |
+| 02 Item Definition | `stages/02-item-definition/` | AI plus deterministic grouping | Stage 01 facts, not rejected (from API) | `item-definition.json`, `questions.json`, `rationale.json` | Rationale section, never blocking |
+| 03 Asset Identification | `stages/03-asset-identification/` | AI | Stored Item Definition (from API) | `asset-register.json` | Light review (full review of the CIAAAN column) |
 | 04 Damage Analysis | `stages/04-damage-analysis/` | AI | `asset-register.json` | `damage-scenarios.json` | Required |
 | 05 Threat Identification | `stages/05-threat-identification/` | AI | `damage-scenarios.json` | `threats.json` | Required |
 | 06 Attack Path Modelling | `stages/06-attack-path-modelling/` | AI (deeper reasoning) plus CVSS engine | `threats.json` | `attack-paths.json` | Required |
@@ -19,7 +19,7 @@ Loaded by `run-web-tara.js` at the start of each assessment. The flow and its ru
 | 09 Risk Treatment | `stages/09-risk-treatment/` | AI | `risk-register.json` | `risk-treatment.json` | Optional |
 | 10 Residual Risk | `stages/10-residual-risk/` | Deterministic | `risk-register.json` plus `risk-treatment.json` | `residual-risk.json` | None |
 
-No stage after CP0 re-reads client documents. No stage after CP1 reads anything except the finalized Item Definition and later stage outputs.
+Stages 01 and 02 run automatically one after the other; each stage's output and Rationale appear on its page as soon as it finishes (D-36, D-37). Stages 03 onwards are started by hand until they are rebuilt. Only Stage 01 reads client documents. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
 
 ---
 
@@ -88,10 +88,9 @@ Written to: `outputs/json/assessment-state.json`
   "assessment_id": "WEB-TARA-2026-001",
   "tara_type": "web-based",
   "item_name": "string",
-  "status": "in_progress | awaiting_checkpoint | completed | failed",
+  "status": "in_progress | completed | failed",
   "current_stage": "02-item-definition",
   "stages_completed": ["01-input-normalization"],
-  "checkpoints_confirmed": ["CP0"],
   "started_at": "ISO 8601",
   "updated_at": "ISO 8601"
 }
@@ -107,6 +106,7 @@ Written to: `outputs/json/assessment-state.json`
 | `facts.json` | 01 | Stage 01 agent plus reconciliation engine |
 | `item-definition.json` | 02 | Stage 02 agent plus deterministic grouping |
 | `questions.json` | 02 | Stage 02 agent, filtered by the server |
+| `rationale.json` | 01, 02 | Each stage agent: assumptions, conflicts, ambiguities and gaps with the four-part explanation (D-37) |
 | `asset-register.json` | 03 | Stage 03 agent |
 | `damage-scenarios.json` | 04 | AI agent |
 | `threats.json` | 05 | AI agent |
@@ -119,4 +119,4 @@ Written to: `outputs/json/assessment-state.json`
 | `TARA_Report_YYYY-MM-DD.xlsm` | After 10 | Excel formatter |
 | `audit-trail.json` | Ongoing | Audit logger (model, provider and prompt version per call) |
 
-Outputs of stages 01 to 03 are raw machine output for debugging and audit. The confirmed state lives in `checkpoint-api`.
+Outputs of stages 01 to 03 are raw machine output for debugging and audit. The stored state, including the analyst's review of Rationale items, lives in `checkpoint-api`.

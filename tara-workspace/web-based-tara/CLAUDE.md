@@ -9,12 +9,12 @@
 
 ## What This Module Does
 
-Runs a 10-stage TARA on a web-based automotive application. Stages 01 to 03 build an agreed picture of the system with the analyst before any risk work starts.
+Runs a 10-stage TARA on a web-based automotive application. Stages 01 and 02 run automatically one after the other. Each stage shows its output, and below it a Rationale explaining every assumption, conflict and ambiguity. The analyst reviews it whenever they like, without stopping the pipeline (D-36, D-37).
 
-| Stage | Name | Type | Output | Checkpoint |
+| Stage | Name | Type | Output | Review |
 |-------|------|------|--------|------------|
-| 01 | Input Normalization | AI plus deterministic reconciliation | `document-register.json`, `facts.json` | CP0 Reading review |
-| 02 | Item Definition | AI plus deterministic grouping | `item-definition.json`, `questions.json` | CP1 Item Definition review |
+| 01 | Input Normalization | AI plus deterministic reconciliation | `document-register.json`, `facts.json`, `rationale.json` | Rationale, never blocking |
+| 02 | Item Definition | AI plus deterministic grouping | `item-definition.json`, `questions.json`, `rationale.json` | Rationale, never blocking |
 | 03 | Asset Identification | AI | `asset-register.json` (CIAAAN) | light asset review |
 | 04 | Damage Analysis | AI | `damage-scenarios.json` (DS_##) | required |
 | 05 | Threat Identification | AI | `threats.json` (TH_##) | required |
@@ -28,8 +28,8 @@ Runs a 10-stage TARA on a web-based automotive application. Stages 01 to 03 buil
 
 ## Rules for Stages 01 to 03
 
-1. **Read client documents once.** Only Stage 01 reads client documents. No stage after CP0 re-reads them. Stage 02 works only from facts confirmed at CP0 and the analyst's answers. No stage after CP1 reads anything except the finalized Item Definition and later stage outputs.
-2. **Only the analyst confirms.** Only the analyst can confirm CP0 and CP1. No model-facing code path calls a confirm endpoint.
+1. **Read client documents once.** Only Stage 01 reads client documents. Stage 02 works only from Stage 01 facts that are not rejected, plus any analyst decisions recorded so far. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
+2. **Nothing judged silently.** Every conflict, ambiguity, gap and assumption becomes a Rationale item with the default applied. The pipeline never waits for review. Only the analyst can mark a Rationale item confirmed or disputed; no model-facing code path does.
 3. **Sources on every fact.** Every fact carries at least one source reference (document, location, short quote). The API refuses anything without one.
 4. **Plain language to the analyst.** Conclusion first, then reason, then source. One idea per sentence, one question per card. Never show rule IDs, scores or internal labels.
 5. **Say what you do not know.** If nothing stored supports an answer, say it is an open question. Never guess.
@@ -87,7 +87,7 @@ Layer 3: web-based-tara/_config/                <- Domain knowledge (read-only)
 Layer 4: web-based-tara/stages/*/output/        <- Runtime artifacts
 ```
 
-Once a stage's output is seeded into `checkpoint-api`, later stages read the confirmed state from the API, not from these output files.
+Once a stage's output is seeded into `checkpoint-api`, later stages read the stored state from the API, not from these output files.
 
 ---
 

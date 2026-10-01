@@ -1,4 +1,4 @@
-# TARA Aegis: Rebuild Plan for Input Normalization, CP0, Item Definition, CP1 and Asset Identification
+# TARA Aegis: Rebuild Plan for Input Normalization, Item Definition and Asset Identification
 
 **Audience:** Claude Code, working in the `TARA-ICM-workspace` repository.
 **Suggested location in repo:** `.meta/CLAUDE-CODE-INSTRUCTIONS.md`
@@ -43,7 +43,7 @@ Suggested prompt to start each session:
 - W3. No client names, engagement names, company names, personal names, account IDs, bucket names or hostnames anywhere in the repo.
 
 ### 1.3 Safety rules for the running tool
-- S1. Only the analyst can confirm CP0 and CP1. No model-facing code path may call a confirm endpoint.
+- S1. No stage resolves a conflict, ambiguity or gap silently: each one becomes a Rationale item with the default applied (D-37). Only the analyst can mark a Rationale item confirmed or disputed; no model-facing code path may call that endpoint. (Replaces "only the analyst confirms CP0 and CP1", D-36.)
 - S2. Every stored fact must carry a source reference. The API refuses anything without one.
 - S3. Model access only through `tara-workspace/web-based-tara/stages/llm-client.js`, using `LLM_PROVIDER=openrouter`, with the model and provider taken from `_config/models.json` (task C1). No direct provider calls anywhere else.
 
@@ -57,18 +57,16 @@ These sections are the source of truth for every task. Tasks refer to them by ID
 
 ```
 Client documents
-  -> Stage 01 Input Normalization      (reads every client document once, produces facts)
-  -> CP0 Reading review                (analyst confirms what was read and how)
-  -> Stage 02 Item Definition          (builds elements, links, zones, scope from confirmed facts only)
-  -> CP1 Item Definition review        (analyst confirms scope, boundary, assumptions)
-  -> Stage 03 Asset Identification     (derives assets from the finalized Item Definition only)
+  -> Stage 01 Input Normalization      (reads every client document once, produces facts and a Rationale)
+  -> Stage 02 Item Definition          (starts automatically; builds elements, links, zones, scope from Stage 01 facts, plus a Rationale)
+  -> Stage 03 Asset Identification     (derives assets from the stored Item Definition only; started by hand until rebuilt)
   -> light asset review (full review of the CIAAAN column)
   -> Stage 04 Damage Analysis and onwards (existing stages, renumbered +2 where needed)
 ```
 
 Rules:
-- No stage after CP0 re-reads client documents. Stage 02 works only from CP0-confirmed facts and analyst answers.
-- No stage after CP1 reads anything except the finalized Item Definition and later stage outputs.
+- The pipeline never stops for the analyst (D-36). Stages 01 and 02 run one after the other; each stage page shows its output as soon as it finishes, with the Rationale below (D-37). Analyst edits are saved but do not re-run later stages for now.
+- Only Stage 01 reads client documents. Stage 02 works only from Stage 01 facts that are not rejected and any analyst decisions. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
 - The web and vehicle Item Definition variants never blend. A web TARA that touches vehicles models the vehicle as one external interactor.
 
 ### DR-2. Core principle: discussion, not hand-over
@@ -76,35 +74,22 @@ Rules:
 - The analyst can ask "why?" on any item. The answer is built only from stored sources and stored decisions. If nothing is stored, the answer is "I don't know, this is an open question", never a guess.
 - Plain-language rules for analyst-facing text: conclusion first, then reason, then source. One idea per sentence. One question per card. No rule IDs, scores or internal labels.
 
-### DR-3. Review by exception (CP0 and CP1)
-Every fact or proposal is sorted by the server (never by the model) into three groups:
+### DR-3. Rationale (replaces review by exception at CP0 and CP1, D-36, D-37)
+Every stage writes a Rationale next to its output: one item per conflict, ambiguity, gap and assumption. The pipeline never waits for it.
 
-| Group | Contents | Analyst action |
-|---|---|---|
-| Agreed | Stated by two or more documents with no conflict | None required; shown collapsed as a count, can be opened |
-| Single source | Stated by one document only | Skim; accept all with one click, or open any item |
-| Needs you | Conflicts, gaps, assumptions, scope questions, low-confidence reads | Must answer each card |
+- Each item has four parts: **What I concluded** (or both options for a conflict), **Why** (sources with a short quote), **What I assumed** (the default applied), **What would change it** (the one fact that would flip it). It also lists the ids it affects.
+- The server, never the model, labels facts **Agreed** (two or more documents, no conflict), **Single source** or **Needs you** (conflicts, gaps, assumptions, scope questions, low-confidence reads). Needs you items are listed first.
+- Review status per item, set by the analyst at any time: unreviewed, confirmed, or disputed with a note. A dispute is recorded and shown; nothing re-runs.
+- If more than about 20% of elements are flagged, the stage says the documents are too weak and lists the questions for the client.
 
-- Target: 10 to 25 "Needs you" cards per run. If more than about 20% of elements are flagged, the run reports that the documents are too weak and produces the client question list instead.
-- Every "Needs you" card has four parts: **What I concluded** (or both options for a conflict), **Why** (sources with a short quote), **What I assumed** (the default if unanswered), **What would change it** (the one fact that would flip it).
-- Spot check: at each checkpoint the server picks 3 to 5 random "Agreed" items for the analyst to verify. If any is wrong, the whole "Agreed" group is reopened for review.
-- A checkpoint cannot be confirmed while any "Needs you" card is unanswered, unless the analyst explicitly marks it "send to client" (then the default is recorded as an assumption).
+### DR-4. Stage 01 page
+- One-paragraph summary of the system as understood; the document register view (per document: what it was used for, what was ignored and why, read status); the facts.
+- Rationale: conflicts between documents, failed or partial reads (each with a request to resend), facts the agent could not find (gaps), ambiguous reads, defaults applied.
 
-### DR-4. CP0 content (Reading review)
-- One-paragraph summary of the system as understood.
-- Document register view: per document, what it was used for, what was ignored and why (for example "pricing figures ignored, not relevant to security"), read status.
-- Unreadable or partially read files, each with a resend question.
-- Conflicts between documents (always "Needs you").
-- Facts the agent could not find (gaps), as questions.
-- The three groups from DR-3.
-
-### DR-5. CP1 content (Item Definition review)
-- Proposed boundary statement (marked "proposed" if the agent wrote it).
-- Container tree and zones, elements, links (Data Flow Inventory), trust boundaries.
-- Scope decision per element with a plain reason (see DR-7 example).
-- Assumptions, responsibility split, stated controls and stated absences, stakeholders, open questions.
-- Analyst actions: change scope, add/delete/rename element, change kind, merge/split, move zone, edit attributes, add/delete link, resolve conflict, edit boundary statement, answer questions, attach a new document and re-run, lock items, export client questions, ask "why".
-- Re-runs create a new version; analyst edits are stored as locked overrides and re-applied; a diff is shown before acceptance. Never silently overwrite an analyst edit.
+### DR-5. Stage 02 page
+- Boundary statement (marked "proposed" if the agent wrote it); container tree and zones, elements, links (Data Flow Inventory), trust boundaries; scope decision per element with a plain reason (see DR-7 example); assumptions, responsibility split, stated controls and stated absences, stakeholders, open questions.
+- Rationale: assumed scope decisions with the question that would settle them, open questions with the default used, assumptions, ambiguities met while building, and Stage 01 conflicts that changed an element, link or scope decision.
+- Analyst edits on this page (scope, elements, links, boundary) are stored as analyst decisions and never silently overwritten. They do not re-run later stages for now. Re-run, diff and lock behaviour comes later.
 
 ### DR-6. Question generation
 - A fixed starter set of fact types (DR-7) exists in `_config/scoping-facts.md`.
@@ -176,7 +161,7 @@ Auto-resolved (loser kept in the conflict log): naming differences, instance siz
 - Mandatory: a boundary statement (or at least item name plus one sentence); at least one document describing components (diagram, infra/sizing, config export, or an architecture section); at least one document describing behaviour (functional doc, API spec, user manual, SRS, Q&A).
 - If a mandatory input is missing: stop and list what is missing.
 - A diagram is not mandatory. Without one, every link is marked "inferred from text".
-- If one file cannot be read but the minimum is still met: continue, mark the file "failed" with the reason in the document register, show it at CP0, and add a resend question.
+- If one file cannot be read but the minimum is still met: continue, mark the file "failed" with the reason in the document register, list it in the Rationale, and add a resend question.
 
 ### DR-10. Data policy (legal)
 - The repo is public. Nothing client-derived goes into it: no client documents, workbooks, diagrams, names, account IDs, component lists, counts or findings, even renamed.
@@ -244,6 +229,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 ## PART 3. Tasks
+
+> **Order of work after B3 (D-36, D-37):** B4, B5, B7, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards. B6 and C9 are dropped (folded into B4, B5 and C7).
 
 ### Phase A. Lock decisions and make the repo tell the truth
 
@@ -443,31 +430,26 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 ---
 
-#### B4. CP0 paper prototype
-**Read first:** DR-2 to DR-4, DR-8, `_config/analyst-language.md`, item-01.
+#### B4. Rationale paper prototype (stages 01 and 02)
+**Read first:** DR-2 to DR-5, DR-8, `_config/analyst-language.md`, item-01.
 **Do:**
-1. Write `.meta/prototypes/cp0-item-01.md`: exactly what CP0 would show for item-01, as if the agent had produced it: system summary, document register view, failed reads, conflicts, gaps, three groups with counts, every "Needs you" card in the four-part format, the spot-check items, and the confirm-blocking message.
-2. Write `.meta/prototypes/cp0-test-script.md`: instructions for a colleague reviewing it cold (no briefing), and a findings table: card id, confusion, "why?" asked, override, time spent.
-**Acceptance:** 10 to 25 "Needs you" cards; every card traces to facts in `expected/facts.json`; no rule IDs or internal labels in the text; no em dashes.
-**HUMAN GATE:** the analyst runs the test with a colleague and fills `.meta/prototypes/cp0-findings-round-1.md`. Claude Code then revises the prototype from the findings. Repeat until the analyst declares it approved. Record each round.
-**Commit:** `design: CP0 paper prototype round <n>`
+1. Write `.meta/prototypes/rationale-item-01.md`: exactly what the Stage 01 and Stage 02 pages would show for item-01 if the agents had produced the expected output: the output summary on top, then the Rationale items in the four-part format, ordered Needs you first, each with its review status controls (confirm, dispute with a note).
+2. Write `.meta/prototypes/rationale-test-script.md`: instructions for a colleague reading it cold (no briefing), and a findings table: item id, confusion, "why?" asked, would dispute, time spent.
+**Acceptance:** every Rationale item traces to ids in item-01 `expected/`; no rule IDs or internal labels; no em dashes.
+**HUMAN GATE:** the analyst runs the test with a colleague (or reads it alone) and records findings in `.meta/prototypes/rationale-findings-round-1.md`. Claude Code revises until the analyst approves.
+**Commit:** `design: rationale paper prototype round <n>`
 
 ---
 
-#### B5. CP0 spec
-**Read first:** approved CP0 prototype and findings.
-**Do:** Write `.meta/specs/13-cp0-reading-review.md` (split if needed): screen sections, data each section needs (by B1 entity), grouping and spot-check logic (server-side), card format, analyst actions (answer, accept group, open item, mark sent to client, attach document, ask why), confirm conditions, API endpoints needed.
-**Acceptance:** everything in the approved prototype is covered; nothing in the spec is absent from the prototype without a reason.
-**Commit:** `spec: CP0 reading review`
+#### B5. Rationale spec and schema
+**Read first:** approved Rationale prototype and findings.
+**Do:** Write `.meta/specs/13-rationale.md` (split if needed): the item fields (id, stage, kind, four parts, source references, affected ids, label, review status and note), how each stage fills it, the exact default per conflict kind and gap, ordering, and the API endpoints (list per stage, set review status). Add `src/schemas/rationale.schema.json` with valid and invalid fixtures in `tests/schemas.test.js`.
+**Acceptance:** everything in the approved prototype is covered; schema tests pass.
+**Commit:** `spec: rationale`
 
 ---
 
-#### B6. CP1 paper prototype and spec
-**Read first:** DR-5, DR-7, approved CP0 spec, item-01 expected Item Definition.
-**Do:** Same method as B4 and B5 for CP1: `.meta/prototypes/cp1-item-01.md`, test script, findings rounds, then `.meta/specs/14-cp1-item-definition-review.md`. Include how scope decisions and reasons read, how the boundary statement proposal reads, the Data Flow Inventory table, the re-run diff view, and the Excel and diagram exports.
-**Acceptance:** as B4 and B5.
-**HUMAN GATE:** as B4.
-**Commit:** `design: CP1 paper prototype round <n>` and `spec: CP1 item definition review`
+#### B6. Dropped (D-36): CP1 prototype and spec, folded into B4 and B5.
 
 ---
 
@@ -518,7 +500,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 1. Add SQLAlchemy models for every B1 entity. Keep existing models; do not drop `BoundaryState` yet.
 2. Implement write endpoints with the refusal rules from spec 12d. Error messages exactly as written in the spec.
 3. Implement a bulk seed endpoint per stage that validates item by item and returns accepted ids plus refused items with reasons (partial acceptance is allowed; nothing refused is stored).
-4. Role check: add an `analyst` role; confirm endpoints require it; model-facing service tokens never have it.
+4. Rationale table and endpoints per spec 13: list per stage, set review status. Add an `analyst` role; only it can set review status; model-facing service tokens never have it. No checkpoint confirm endpoints (D-36).
 5. Tests: one test per refusal rule, plus seed partial-acceptance, plus role enforcement. Existing 12 tests must still pass.
 **Acceptance:** all tests pass; every refusal rule in spec 12d has a test.
 **Commit:** `feat: item definition store with refusal rules`
@@ -539,35 +521,38 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 #### C5. Reconciliation and grouping engine (deterministic)
 **Read first:** DR-3, DR-8, spec 12a.
 **Do:**
-1. `tara-workspace/web-based-tara/_engines/fact-reconcile.js`: match facts that describe the same thing (normalised names plus a small synonym table in `_config/element-kinds.md`; a model call is allowed only for semantic matching of leftovers, recorded in audit); detect conflicts; apply precedence; auto-resolve only the DR-8 auto list; compute groups agreed/single_source/needs_you; pick spot-check items.
+1. `tara-workspace/web-based-tara/_engines/fact-reconcile.js`: match facts that describe the same thing (normalised names plus a small synonym table in `_config/element-kinds.md`; a model call is allowed only for semantic matching of leftovers, recorded in audit); detect conflicts; apply precedence; auto-resolve only the DR-8 auto list; compute labels agreed/single_source/needs_you; write a Rationale item per conflict (D-37).
 2. Server exposes the grouped view (the grouping is computed in the API from stored facts, reusing the same rules; the engine is used by the pipeline and by tests).
 3. Tests with item-01: expected conflicts found; the ingress conflict and environment conflict land in "Needs you".
-**Acceptance:** tests pass; "Needs you" count on item-01 within 10 to 25.
+**Acceptance:** tests pass; Needs you count on item-01 within 10 to 25.
 **Commit:** `feat: fact reconciliation and grouping engine`
 
 ---
 
-#### C6. CP0 API endpoints
-**Read first:** spec 13.
-**Do:** Endpoints for: grouped view, card detail with sources, answer card, accept group, mark sent to client, spot-check result (wrong reopens the "Agreed" group), attach document and re-run stage 01, ask why (returns stored reasons and sources only), export client questions, confirm (analyst only, blocked per spec). Versioning: confirm freezes the version.
-**Acceptance:** tests for each endpoint including every blocked-confirm case.
-**Commit:** `feat: CP0 endpoints`
+#### C6. Pipeline orchestration: auto-run 01 then 02 (D-36)
+**Read first:** DR-1, `checkpoint-api/checkpoint_api/routers/pipeline.py`, `pipeline_runner.py`, `frontend/src/contexts/TaraContext.tsx`.
+**Do:**
+1. One "run" call per assessment starts Stage 01 and, when it completes, Stage 02. Reuse `run_stage_subprocess`, `STAGE_DEPS` and the status and output endpoints.
+2. Per-assessment output folders (today every assessment shares the same output files).
+3. Replace the legacy stage 1 launch (it passes `--csv`, the legacy agent expects `--input`/`--mode`) with the new Stage 01 agent; agents must not fail when no checkpoint token is set.
+4. Status per stage (pending, running, complete, failed) with the error message shown; frontend polls while any stage is pending or running.
+**Acceptance:** API test runs a fake two-stage chain end to end; a failed Stage 01 leaves Stage 02 not started with the error visible; two assessments do not share outputs.
+**Commit:** `feat: auto-run stages 01 and 02`
 
 ---
 
-#### C7. CP0 screen
-**Read first:** spec 13, approved CP0 prototype, `frontend/src/components/workspace/BoundaryReview.tsx` pattern.
-**Do:** Build `frontend/src/components/workspace/ReadingReview.tsx` as a functional screen matching the approved prototype, nothing more. Wire to C6 endpoints through `frontend/src/lib/api.ts`. Add it to the workspace stage tabs before Item Definition. Review assistant ("why?") uses the C6 endpoint only.
-**Do not:** add canvas, animations or features not in the prototype.
-**Acceptance:** `tsc --noEmit` clean, `npm run build` succeeds, manual walk-through of item-01 CP0 end to end recorded in `.meta/REBUILD-PROGRESS.md`.
-**Commit:** `feat: CP0 reading review screen`
+#### C7. Stage pages: output and Rationale
+**Read first:** spec 13, approved Rationale prototype, `frontend/src/pages/ProjectWorkspace.tsx`.
+**Do:** Input Normalization page and Item Definition page, each showing the stage output (read-only, as in DR-4 and DR-5) with the Rationale section below it: items ordered Needs you first, four parts each, confirm or dispute with a note. "Why?" answers come only from stored sources. No canvas or animations.
+**Acceptance:** `tsc --noEmit` clean, `npm run build` succeeds, manual walk-through of item-01 recorded in `.meta/REBUILD-PROGRESS.md`.
+**Commit:** `feat: stage pages with rationale`
 
 ---
 
 #### C8. Stage 02 agent: Item Definition, questions and scope
 **Read first:** DR-5 to DR-7, DR-13, DR-14, stage 02 `CONTEXT.md`, `_config/scoping-facts.md`, `_config/element-kinds.md`, `_config/link-model.md`.
 **Do:**
-1. Input: CP0-confirmed facts and answers from the API only. Never read client documents.
+1. Input: Stage 01 facts that are not rejected, and analyst decisions, from the API only. Never read client documents.
 2. Build containers, zones, elements, links, functions, assumptions, responsibility split, stated controls and absences, stakeholders, proposed boundary statement (if the analyst left it blank).
 3. Questions: take starter fact types triggered per element kind; ask a thinking model for additional questions per element; send each question through a separate answer-checker call against confirmed facts; drop answered ones; dedupe and cap (server also enforces).
 4. Scope: apply the internal mapping only when the needed facts are known; otherwise propose the default and mark it "assumed" with the linked question.
@@ -578,20 +563,12 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 ---
 
-#### C9. CP1 endpoints and screen
-**Read first:** spec 14, approved CP1 prototype, existing `routers/boundary.py`.
-**Do:**
-1. Endpoints per spec 14, reusing the finalize/freeze/edit-log behaviour from the boundary router, now over per-item tables.
-2. Re-run creates a new version; analyst overrides re-applied; diff endpoint.
-3. Screen `frontend/src/components/workspace/ItemDefinitionReview.tsx` per the approved prototype; replace the `BoundaryReview` usage in `ItemDefinition.tsx`.
-4. After this task passes, mark the old boundary blob endpoints superseded (do not delete until C14).
-**Acceptance:** tests for finalize, freeze (409), override re-application, diff; manual walk-through of item-01 CP1.
-**Commit:** `feat: CP1 item definition review`
+#### C9. Dropped (D-36): CP1 endpoints and screen, folded into C7. Re-run, diff and override re-application come later.
 
 ---
 
 #### C10. Exports
-**Read first:** spec 14 export section.
+**Read first:** DR-5, item-01 expected output.
 **Do:**
 1. Excel export in the reference layout: an "Assumptions & Scope" sheet (general assumptions; scope with IN SCOPE, OUT OF SCOPE, BOUNDARY blocks) and an "Item Definition" sheet (Step 1 diagram placeholder, Step 2 Data Flow Inventory with columns DATA SOURCE, DATA DESTINATION, INTERFACE, PROTOCOL, USAGE/FUNCTION AT DESTINATION, DETAILS, Remark; Step 3 asset table left empty until Stage 03).
 2. draw.io export of the zone diagram: nested containers, elements inside zones, links labelled with IF-## ids.
@@ -650,7 +627,7 @@ Do not start any of these, even if they look easy:
 ## PART 5. Definition of done for the whole rebuild
 
 - The flow in DR-1 runs end to end on item-01 and on at least two private past cases.
-- CP0 and CP1 are confirmed only by an analyst, and only when no "Needs you" card is open.
+- Stages 01 and 02 run end to end without stopping; every conflict, ambiguity, gap and assumption appears in a Rationale, and only the analyst sets review status (D-36, D-37).
 - Every fact, element, link, question and scope decision traces to a source or an analyst decision.
 - Item-01 and the private past cases meet the DR-16 targets; scores are recorded without client content (D-35).
 - `.meta/DECISIONS.md`, the glossary, and all Layer 0 to 2 docs agree with each other and with the code.

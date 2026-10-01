@@ -6,7 +6,7 @@
 
 ## Goal
 
-Define the Web Item Definition built from CP0-confirmed facts.
+Define the Web Item Definition built from Stage 01 facts that are not rejected (D-36).
 
 ## Success Criteria
 
@@ -31,7 +31,7 @@ WON'T touch: agents, API code (C3, C8).
 
 ## Process
 
-Stage 02 (C8) builds these from confirmed facts only; the server checks every reference before storing.
+Stage 02 (C8) builds these from Stage 01 facts that are not rejected; the server checks every reference before storing.
 
 ## Validation Rules
 

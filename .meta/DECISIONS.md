@@ -7,7 +7,7 @@ Status values: `accepted` (in force), `proposed` (waiting for the analyst).
 | ID | Decision | Reason | Date | Status |
 |---|---|---|---|---|
 | D-01 | The web-based TARA flow is: Stage 01 Input Normalization, CP0 Reading review, Stage 02 Item Definition, CP1 Item Definition review, Stage 03 Asset Identification, then the existing stages renumbered from 04 (DR-1). | Reading documents, defining the item and identifying assets are different jobs. Separating them lets the analyst check each one before the next builds on it. | 2026-09-25 | accepted |
-| D-02 | No stage after CP0 re-reads client documents. Stage 02 uses only CP0-confirmed facts and analyst answers. No stage after CP1 reads anything except the finalized Item Definition and later stage outputs (DR-1). | Documents are read once, so there is one agreed set of facts and no second reading that can disagree with the first. | 2026-09-25 | accepted |
+| D-02 | (Checkpoint parts replaced by D-36: only Stage 01 reads documents; Stage 02 uses non-rejected Stage 01 facts.) No stage after CP0 re-reads client documents. Stage 02 uses only CP0-confirmed facts and analyst answers. No stage after CP1 reads anything except the finalized Item Definition and later stage outputs (DR-1). | Documents are read once, so there is one agreed set of facts and no second reading that can disagree with the first. | 2026-09-25 | accepted |
 | D-03 | The agent discusses, it does not hand over. It shows what it concluded, why and what it assumed. It never shows its internal method, rule IDs or scores. "Why?" answers come only from stored sources and decisions; if nothing is stored, it says the point is an open question (DR-2). | The analyst must be able to trust and challenge every conclusion without learning the tool's internals. | 2026-09-25 | accepted |
 | D-04 | Review by exception. The server sorts every fact or proposal into Agreed, Single source and Needs you. Each Needs you card has four parts. The server picks 3 to 5 Agreed items as a spot check; one wrong item reopens the whole Agreed group. A checkpoint cannot be confirmed while a Needs you card is open, unless the analyst sends it to the client (DR-3). | Keeps review to 10 to 25 real questions per run while still catching silent errors in the easy items. | 2026-09-25 | accepted |
 | D-05 | Scoping rules are internal defaults. The agent asks plain factual questions (fact types FT-01 to FT-07), maps the answers to scope decisions and shows each decision with a plain reason. Unanswered questions go to the client list and the default is marked "assumed" (DR-7). | Analysts answer facts about their system reliably; they should not have to learn or argue with scoping rules. | 2026-09-25 | accepted |
@@ -41,6 +41,8 @@ Status values: `accepted` (in force), `proposed` (waiting for the analyst).
 | D-33 | Load balancers and internet exposure: one element per load balancer, never merged; exposure only from evidence (CP0 answer, client answers, diagram label such as internet-facing or internal, then position); no evidence means `unknown` plus one reachability question; disputed exposure is a "Needs you" card and the more exposed option is assumed until answered; a path that bypasses the documented sign-in check through an exposed load balancer is flagged on the link. | Real items often have an internet-facing and an internal load balancer; merging them, or copying one's exposure to the other, hides the real entry points. Analyst, B3 gate. | 2026-09-30 | accepted |
 | D-34 | Provider, hosting type and internet exposed are not recorded for `human_actor` and `system_to_system_client` elements; they stay required for every other kind. | The fields describe components, not people or calling systems; placeholders would look like gaps and trigger pointless questions. Analyst, B3 gate (option b). | 2026-09-30 | accepted |
 | D-35 | Item-01 is the public smoke test (regression, teammate runs, demos). The main quality measure is the analyst's own past TARAs: the tool runs locally on a past case's documents and is scored against the analyst's past Item Definition in `/private-eval/`. Synthetic items 02 and 03 are dropped; C11 becomes the private evaluation; the definition of done requires item-01 plus at least two private cases. Only labels and metrics are recorded in the repo. | The analyst already has expert answer keys for real cases, which measure real-world quality better than made-up items, at less cost. Analyst, B3 gate. | 2026-10-01 | accepted |
+| D-36 | No blocking checkpoints. Stages 01 and 02 run automatically one after the other per assessment; each stage's output is shown as soon as it finishes. CP0 and CP1 are dropped as gates (tasks B6 and C9 dropped, B4, B5, C6 and C7 redefined; spec 12e superseded). Stage 02 uses every Stage 01 fact that is not rejected. Analyst edits are saved but do not re-run later stages for now. Stage 03 onwards stays manual until rebuilt. | Constant confirmation made the tool depend on human review instead of its own output; the analyst wants the pipeline to run smoothly and review afterwards. Analyst, after B3. | 2026-10-01 | accepted |
+| D-37 | Every stage writes a Rationale next to its output: one item per conflict, ambiguity, gap and assumption, each with What I concluded, Why (sources with quotes), What I assumed, What would change it, the affected ids, a label (Agreed, Single source, Needs you) and a review status (unreviewed, confirmed, disputed with a note) that only the analyst sets. Review never blocks or re-runs anything. The exact default per conflict kind is fixed in the Rationale spec (B5). | Keeps the reasoning visible and reviewable after the run, which is what the checkpoints were for, without stopping the pipeline. Analyst, after B3. | 2026-10-01 | accepted |
 
 Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are added so every Design Reference section is covered, plus decisions made at the A1, A2 and B1 gates.
 
@@ -48,11 +50,11 @@ Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are
 
 | DR section | Covered by |
 |---|---|
-| DR-1 Flow | D-01, D-02, D-15 |
+| DR-1 Flow | D-01, D-02, D-15, D-36 |
 | DR-2 Discussion | D-03 |
-| DR-3 Review by exception | D-04 |
-| DR-4 CP0 content | D-18 |
-| DR-5 CP1 content | D-19 |
+| DR-3 Rationale (was review by exception) | D-04, D-37 |
+| DR-4 Stage 01 page (was CP0 content) | D-18, D-37 |
+| DR-5 Stage 02 page (was CP1 content) | D-19, D-37 |
 | DR-6 Question generation | D-06, D-29, D-31 |
 | DR-7 Scoping | D-05, D-14, D-32 |
 | DR-8 Precedence | D-07, D-28, D-33 |

@@ -1,7 +1,7 @@
 # Stage 01: Input Normalization (Layer 2)
 
 **Type:** AI plus deterministic reconciliation
-**Checkpoint:** CP0 Reading review (analyst only)
+**Review:** Rationale section on the stage page, never blocking (D-36, D-37)
 **Spec:** `.meta/specs/12a-document-register-and-facts.md` (written in B1)
 **Load from `_config/`:** `source-precedence.md`, `analyst-language.md`
 
@@ -21,7 +21,9 @@ Read every client document once and turn it into facts, each with a source refer
 - `output/document-register.json`: one entry per document with title, version and date as printed, date received, owner, environment described (prod, staging, dev or unknown), type, SHA-256 hash, read status (parsed, partial or failed) with reason, precedence rank, what it was used for, and what was ignored and why. Reading method is recorded per document and per page.
 - `output/facts.json`: one entry per fact with subject, fact type, value, one or more source references (document, location, short quote) and confidence.
 
-The confirmed version of both lives in `checkpoint-api` once seeded.
+- `output/rationale.json`: one item per conflict, ambiguity, gap and assumption (see Rationale below).
+
+The stored version lives in `checkpoint-api` once seeded.
 
 ## Process
 
@@ -34,14 +36,14 @@ The confirmed version of both lives in `checkpoint-api` once seeded.
    - Cross-check image-read labels with OCR. Image-read links get confidence no higher than medium. Unclear endpoints and unlabelled icons become questions, not facts.
    - A drawn box is a zone only if it is labelled as one or confirmed by text. Managed services drawn as a sidebar with one generic arrow produce no per-service links.
 4. **Extract facts per document**, one model call per document (large documents split by page range with overlap, keeping page references). Every fact carries at least one source reference.
-5. **If one file cannot be read but the minimum is still met,** continue. Mark the file "failed" with the reason in the register, show it at CP0, and add a resend question.
-6. **Reconcile** (deterministic engine, `_engines/fact-reconcile.js`, built in C5): match facts that describe the same thing, detect conflicts, apply source precedence, and group everything for CP0.
+5. **If one file cannot be read but the minimum is still met,** continue. Mark the file "failed" with the reason in the register, list it in the Rationale, and add a resend question.
+6. **Reconcile** (deterministic engine, `_engines/fact-reconcile.js`, built in C5): match facts that describe the same thing, detect conflicts, apply source precedence, label each fact Agreed, Single source or Needs you, and write a Rationale item for every conflict.
 
 ## Source precedence (highest wins)
 
-Each document gets the rank for its type (table in spec 12a); the analyst can change a document's rank at CP0. Within a rank, the newer document wins (date on the document, else date received).
+Each document gets the rank for its type (table in spec 12a); the analyst can change a document's rank later, as a recorded analyst decision. Within a rank, the newer document wins (date on the document, else date received).
 
-1. Analyst decision at a checkpoint
+1. Analyst decision (recorded on a stage page)
 2. Cloud configuration export
 3. Written client answers (newest first)
 4. Existing client item definition
@@ -62,30 +64,28 @@ Each document gets the rank for its type (table in spec 12a); the analyst can ch
 The API refuses, item by item, and says why:
 - a fact without at least one source reference;
 - a source reference to a document that is not in the register;
-- any confirm call that does not come from the analyst;
-- confirming CP0 while a "Needs you" card is unanswered (unless the analyst marked it "send to client");
-- confirming CP0 while a failed spot check has not been re-reviewed;
-- any write to a confirmed CP0 version.
 
 The server, not the model, computes groups, counts, coverage and conflicts.
 
-## Checkpoint: CP0 Reading review
+## Rationale (D-37)
 
-Review by exception. The server sorts every fact into three groups:
+The pipeline never waits for the analyst. Instead, every point where the agent had to judge goes into `output/rationale.json`, shown on the Input Normalization page below the output:
 
-| Group | Contents | Analyst action |
-|---|---|---|
-| Agreed | Stated by two or more documents with no conflict | None required; shown collapsed as a count |
-| Single source | Stated by one document only | Skim; accept all with one click, or open any item |
-| Needs you | Conflicts, gaps, assumptions, low-confidence reads | Must answer each card |
+| Kind | When |
+|---|---|
+| `conflict` | Two documents disagree. Auto-resolved kinds (naming, sizes, counts, versions) are listed too, marked auto-resolved |
+| `ambiguity` | A read that can mean two things: an unclear label, an arrow whose end is unclear, a low-confidence image read |
+| `gap` | Something the documents should say but do not, including a failed read (with a request to resend the file) |
+| `assumption` | A default the stage applied to keep going |
 
-- Target: 10 to 25 "Needs you" cards. If more than about 20% of elements would be flagged, the run reports that the documents are too weak and produces the client question list instead.
-- Every "Needs you" card has four parts: **What I concluded** (or both options for a conflict), **Why** (sources with a short quote), **What I assumed** (the default if unanswered), **What would change it** (the one fact that would flip it).
-- Spot check: the server picks 3 to 5 random "Agreed" items for the analyst to verify. If any is wrong, the whole "Agreed" group is reopened.
-- CP0 also shows a one-paragraph summary of the system as understood, the document register view, failed or partial reads with a resend question each, and gaps as questions.
+Each item has the four parts: **What I concluded** (or both options for a conflict), **Why** (sources with a short quote), **What I assumed** (the default applied), **What would change it**. It also lists the ids it affects and a review status the analyst sets whenever they like: `unreviewed`, `confirmed`, or `disputed` with a note. A dispute is recorded; nothing re-runs.
 
-**Writing to the analyst:** conclusion first, then reason, then source. One idea per sentence. One question per card. No rule IDs, scores or internal labels. When the analyst asks "why?", answer only from stored sources and decisions; if nothing is stored, say it is an open question.
+Defaults when sources disagree follow `_config/source-precedence.md` (higher rank wins; disputed internet exposure assumes the more exposed option, D-33). The exact default per conflict kind is fixed in the Rationale spec (task B5).
+
+The groups Agreed, Single source and Needs you are kept as labels to order the list: Needs you items first. The page above the Rationale shows a one-paragraph summary of the system as understood, the document register and the facts.
+
+**Writing in the Rationale:** conclusion first, then reason, then source. One idea per sentence. No rule IDs, scores or internal labels. When the analyst asks "why?", answer only from stored sources and decisions; if nothing is stored, say it is an open question.
 
 ## What the next stage receives
 
-Stage 02 receives, from the API, only the facts confirmed at CP0 and the analyst's answers and decisions. It never receives or re-reads client documents.
+Stage 02 starts automatically when Stage 01 finishes (D-36). It receives, from the API, the Stage 01 facts that are not rejected, the conflicts with the defaults applied, and any analyst decisions recorded so far. It never receives or re-reads client documents.
