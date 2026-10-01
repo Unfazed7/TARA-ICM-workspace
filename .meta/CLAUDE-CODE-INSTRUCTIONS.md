@@ -206,7 +206,7 @@ Auto-resolved (loser kept in the conflict log): naming differences, instance siz
 - Default property table per element kind: see `.meta/web-item-definition-questions.md`, answer G1.
 
 ### DR-16. Evaluation metrics
-Measured per run against the expected output of a synthetic item (item-01, the public smoke test) or of a private past case: the analyst's own past Item Definition for a TARA-1 to TARA-4 case, kept in `/private-eval/` (D-35). An element matches if it refers to the same real component regardless of name (a hand-made match map per item).
+Measured per run against the expected output of a synthetic item (item-01, the public smoke test) or of a private past case: the analyst's own past Item Definition for a TARA-1 to TARA-4 case, kept in `/private-eval/` (D-35). An element matches if it refers to the same real component regardless of name (a hand-made match map per item). Until a scorer exists (B7, deferred by D-39), these targets guide the analyst's manual check.
 
 | Metric | Definition | Target (v1) |
 |---|---|---|
@@ -230,7 +230,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 ## PART 3. Tasks
 
-> **Order of work after B3 (D-36, D-37):** B4, B5, B7, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards. B6 and C9 are dropped (folded into B4, B5 and C7).
+> **Order of work after B3 (D-36, D-37):** B4, B5, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards. B6 and C9 are dropped (folded into B4, B5 and C7). B7 is deferred (D-39): the analyst checks outputs by hand.
 
 ### Phase A. Lock decisions and make the repo tell the truth
 
@@ -454,6 +454,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### B7. Evaluation spec and scorer
+> **Deferred (D-39).** The analyst checks outputs by hand for now. Resume this task when the production feedback loop (PART 6) needs automated regression checks.
+
 **Read first:** DR-16, item-01.
 **Do:**
 1. `.meta/specs/15-evaluation.md`: how a run is scored against an item, how the match map is made, the four metrics and their targets, and the secondary tracking (cards per run, overrides, "why?" requests).
@@ -483,12 +485,12 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C2. Model trial (Stage 01 extraction only)
-**Read first:** DR-11, B1, B7, item-01.
+**Read first:** DR-11, B1, item-01.
 **Do:**
 1. Write a minimal Stage 01 per-document extraction prompt in `stages/01-input-normalization/prompts/extract-v1.md` (facts with source references only; no reconciliation).
-2. `scripts/model-trial.js`: for each candidate model in a list the analyst provides (open-weight, self-hostable size), run extraction on item-01, score facts against expected facts (recall and no-hallucination precision on facts), record cost and latency.
+2. `scripts/model-trial.js`: for each candidate model in a list the analyst provides (open-weight, self-hostable size), run extraction on item-01, print a per-model difference listing against item-01 expected facts (missing, extra, misquoted) for the analyst to judge by hand (D-39); record cost and latency.
 3. Test image reading separately on item-01's PNG diagram (DR-17): element recall from the image alone and arrow correctness. If the best text model cannot read images, pick a second, image-capable model and pin both.
-4. Write `.meta/model-trial-results.md`: a table per model with the scores, cost, latency, and 3 examples of typical errors.
+4. Write `.meta/model-trial-results.md`: per model, the analyst's judgement from the difference listing, cost, latency, and 3 examples of typical errors.
 **HUMAN GATE:** the analyst provides the candidate list before the run, and picks the model after it. Record the choice as a decision in `.meta/DECISIONS.md` and in `_config/models.json`.
 **Commit:** `chore: stage 01 model trial`
 
@@ -558,7 +560,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 4. Scope: apply the internal mapping only when the needed facts are known; otherwise propose the default and mark it "assumed" with the linked question.
 5. Log unknown element kinds to `output/new-kinds.log`.
 6. Seed through the API; log refusals.
-**Acceptance (on item-01 via B7 scorer):** element recall >= 80%, no-hallucination precision >= 95%, scope agreement >= 85%, link correctness >= 70%; no question without element id and fact type; no rule IDs in any analyst-facing text.
+**Acceptance (on item-01, checked by hand by the analyst, D-39; DR-16 targets as guidance):** element recall about 80% or better, no invented elements, scope and links mostly matching; no question without element id and fact type; no rule IDs in any analyst-facing text.
 **Commit:** `feat: stage 02 item definition with generated questions`
 
 ---
@@ -578,10 +580,10 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C11. Private evaluation on past cases (replaces synthetic items 02 and 03, D-35)
-**Read first:** DR-10, DR-16, B7.
-**Do:** Locally, on approved infrastructure and with a model the client data may reach, run stages 01 and 02 on the documents of at least two past cases (TARA-1 to TARA-4) in `/private-eval/`. The analyst converts each past Item Definition into the expected format (a helper script may do the mechanical part) and checks the match map. Score each case with the B7 scorer, and re-score item-01.
-**HUMAN GATE:** the analyst prepares the expected files and approves each match map before scoring.
-**Acceptance:** `.meta/evaluation-results.md` holds only case labels (TARA-1 to TARA-4), the four metrics and short generic notes; no names, components, counts or findings from client material. Regressions on item-01 explained.
+**Read first:** DR-10, DR-16.
+**Do:** Locally, on approved infrastructure and with a model the client data may reach, run stages 01 and 02 on the documents of at least two past cases (TARA-1 to TARA-4) in `/private-eval/`. The analyst converts each past Item Definition into the expected format (a helper script may do the mechanical part) and compares the tool's output with it by hand (D-39); item-01 is re-checked the same way.
+**HUMAN GATE:** the analyst prepares the expected files and records the comparison.
+**Acceptance:** `.meta/evaluation-results.md` holds only case labels (TARA-1 to TARA-4), the analyst's estimate of the four DR-16 measures and short generic notes; no names, components, counts or findings from client material. Regressions on item-01 explained.
 **Commit:** `test: private evaluation results`
 
 ---
@@ -632,3 +634,23 @@ Do not start any of these, even if they look easy:
 - Item-01 and the private past cases meet the DR-16 targets; scores are recorded without client content (D-35).
 - `.meta/DECISIONS.md`, the glossary, and all Layer 0 to 2 docs agree with each other and with the code.
 - No client-derived material in the repo.
+
+## PART 6. Future: production feedback loop and guardrails (D-39)
+
+Not started in this rebuild. Written down so the production version can grow from it.
+
+**Feedback captured from use.** Every Rationale review (confirmed, or disputed with a note) and every analyst edit is stored with the run id, model, prompt version and the facts involved.
+
+**Learning from it, without retraining a model.**
+- Repeated disputes of the same kind point to a rule or prompt to change; a human makes the change.
+- A settled `other` conflict can become a named conflict kind with its default (spec 13b).
+- Confirmed outputs build a regression set from real use, kept privately when they come from client work.
+
+**Guardrails before anything is stored** (most already planned): schema validation, refusal rules, exact-quote check against the source document, no rule IDs in analyst-facing text, question caps per target, pinned models, and a run-twice consistency check.
+
+**Guardrails on change.** A prompt, rule or model change ships only if it does not make item-01 and the regression set worse. This is where the B7 scorer is built.
+
+**Monitoring per run.** Share of Rationale items disputed, items needing attention, refused items and unknown kinds, tracked over time.
+
+**Machine learning.** Fine-tuning or learned ranking only later, on a self-hosted model, with client consent (D-35 discussion).
+

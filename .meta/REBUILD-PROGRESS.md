@@ -2,7 +2,7 @@
 
 Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`, `done`, `blocked`, `waiting-gate`, `dropped`.
 
-**Order of work after B3 (D-36, D-37):** B4, B5, B7, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards.
+**Order of work after B3 (D-36, D-37, D-39):** B4, B5, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards.
 
 | Task | Status | Date | Commit | Notes |
 |---|---|---|---|---|
@@ -20,7 +20,7 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | B4 | done | 2026-10-01 | 6945bc9 | Rationale paper prototype round 1: `.meta/prototypes/rationale-item-01.md` (Input Normalization page: 9 Rationale items, 5 needing attention; Item Definition page: 19 items, 11 needing attention; every open question appears once) and `.meta/prototypes/rationale-test-script.md` (cold read, findings table). Checked by script: every cited id exists in item-01 expected files, ids only on "Affects" lines, no rule ids, no em dashes. Gate: approved by analyst after round 1 ("everything looks perfect"). Follow-up proposal "AI reads, code decides" saved in `.meta/proposals/ai-reads-code-decides.md`, on hold. |
 | B5 | done | 2026-10-01 | 916543c, then the commit that adds this row | Specs `13a-rationale-items.md` (fields, process, validation) and `13b-rationale-defaults-and-api.md` (default per conflict kind, gap and ambiguity defaults, attention rule set by code, page order, GET and PATCH endpoints, analyst-only review). Schema `src/schemas/rationale.schema.json`; valid fixture with 4 items from the B4 prototype; 6 invalid fixtures, each failing for its intended reason. `npm test` 115/120 (same 5 known failures). Gate: approved by analyst after round 1, with one change: defaults now follow a general principle (assume the option that means more security work), named kinds are its common cases, and an unrecognised disagreement is always "needs attention" with both sides shown (recorded in D-37, `_config/source-precedence.md`). |
 | B6 | dropped | 2026-10-01 | | D-36: CP1 prototype and spec folded into B4 and B5. |
-| B7 | pending | | | |
+| B7 | deferred | 2026-10-01 | | D-39: analyst checks outputs by hand; resume when the production feedback loop needs automated regression checks. |
 | C1 | pending | | | |
 | C2 | pending | | | |
 | C3 | pending | | | |
@@ -35,3 +35,4 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | C12 | pending | | | |
 | C13 | pending | | | |
 | C14 | pending | | | |
+| D1 (future) | not started | | | Production feedback loop and guardrails, PART 6 of the instructions (D-39). |

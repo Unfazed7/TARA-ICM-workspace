@@ -158,6 +158,6 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `12e-checkpoint-and-rerun-rules.md` | API refusals for checkpoint state and re-runs | superseded (D-36) |
 | `13a-rationale-items.md` | Rationale item fields (replaces CP0 and CP1 specs) | approved (B5 gate) |
 | `13b-rationale-defaults-and-api.md` | Rationale defaults (general principle plus named kinds), attention rule, review API | approved (B5 gate) |
-| `15-evaluation.md` | Evaluation scorer | planned, B7 |
+| `15-evaluation.md` | Evaluation scorer | deferred (D-39) |
 | `16-asset-identification.md` | Stage 03 | planned, C12 |
 | none | Stage 10 Residual Risk and the orchestrator | no spec; outside this rebuild |
