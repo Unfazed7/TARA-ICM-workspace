@@ -1,0 +1,306 @@
+{
+  "item_name": "Fleet update portal",
+  "boundary_statement": {
+    "text": "The item is the fleet update portal backend in its production cloud account, up to the vehicles it serves.",
+    "proposed": false
+  },
+  "containers": [
+    {
+      "container_id": "CTR-01",
+      "kind": "cloud_account",
+      "name": "Production account",
+      "fact_ids": [
+        "FCT-001"
+      ]
+    },
+    {
+      "container_id": "CTR-02",
+      "kind": "vpc",
+      "name": "Portal network",
+      "parent_id": "CTR-01",
+      "fact_ids": [
+        "FCT-006"
+      ]
+    },
+    {
+      "container_id": "CTR-03",
+      "kind": "account_level_managed_services",
+      "name": "Account-level managed services",
+      "parent_id": "CTR-01",
+      "fact_ids": [
+        "FCT-004"
+      ]
+    }
+  ],
+  "zones": [
+    {
+      "zone_id": "ZN-01",
+      "kind": "internet_external",
+      "name": "Internet",
+      "fact_ids": [
+        "FCT-002"
+      ]
+    },
+    {
+      "zone_id": "ZN-02",
+      "kind": "private_application_subnet",
+      "name": "Application subnet",
+      "fact_ids": [
+        "FCT-006"
+      ]
+    },
+    {
+      "zone_id": "ZN-03",
+      "kind": "account_managed_services",
+      "name": "Managed services",
+      "fact_ids": [
+        "FCT-004"
+      ]
+    },
+    {
+      "zone_id": "ZN-04",
+      "kind": "corporate_it",
+      "name": "Corporate IT",
+      "fact_ids": [
+        "FCT-005"
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "element_id": "EL-001",
+      "name": "API gateway",
+      "kind": "api_gateway",
+      "parent_container_id": "CTR-03",
+      "zone_id": "ZN-03",
+      "provider": "public cloud",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "yes",
+        "evidence_fact_ids": [
+          "FCT-002"
+        ]
+      },
+      "is_entry_point": true,
+      "auth_method": "Token check against the company sign-in service",
+      "owner_operator": "product team",
+      "fact_ids": [
+        "FCT-001",
+        "FCT-002"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-002",
+      "name": "Update service",
+      "kind": "microservice_workload",
+      "parent_container_id": "CTR-02",
+      "zone_id": "ZN-02",
+      "provider": "public cloud",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "no",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "product team",
+      "fact_ids": [
+        "FCT-006"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-003",
+      "name": "Firmware bucket",
+      "kind": "object_storage_bucket",
+      "parent_container_id": "CTR-03",
+      "zone_id": "ZN-03",
+      "provider": "public cloud",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "unknown",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "product team",
+      "data_handled": [
+        {
+          "item": "Signed firmware packages",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "fact_ids": [
+        "FCT-004"
+      ],
+      "confidence": "high"
+    },
+    {
+      "element_id": "EL-004",
+      "name": "Company sign-in service",
+      "kind": "identity_provider",
+      "zone_id": "ZN-04",
+      "provider": "central IT",
+      "hosting_type": "managed",
+      "internet_exposed": {
+        "value": "unknown",
+        "evidence_fact_ids": []
+      },
+      "is_entry_point": false,
+      "owner_operator": "central IT",
+      "fact_ids": [
+        "FCT-005"
+      ],
+      "confidence": "high"
+    }
+  ],
+  "links": [
+    {
+      "link_id": "IF-01",
+      "type": "data_flow",
+      "source_id": "EL-001",
+      "destination_id": "EL-002",
+      "direction": "unidirectional",
+      "protocol": "https_rest",
+      "usage_at_destination": "Start and track firmware rollouts",
+      "authentication": "unknown",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Rollout requests",
+          "category": "business_transactions"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "Authentication between gateway and service not documented",
+      "inferred_from_text": false,
+      "fact_ids": [
+        "FCT-001",
+        "FCT-006"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "link_id": "IF-02",
+      "type": "data_flow",
+      "source_id": "EL-002",
+      "destination_id": "EL-003",
+      "direction": "unidirectional",
+      "protocol": "s3_api",
+      "usage_at_destination": "Read signed firmware packages",
+      "authentication": "IAM role",
+      "encryption": "TLS",
+      "data_carried": [
+        {
+          "item": "Signed firmware packages",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "crosses_trust_boundary": true,
+      "remark": "",
+      "inferred_from_text": true,
+      "fact_ids": [
+        "FCT-004"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "functions": [
+    {
+      "function_id": "FN-001",
+      "name": "Publish firmware rollout",
+      "description": "An operator starts a rollout of a signed firmware package to a vehicle group.",
+      "actor_ids": [],
+      "element_ids": [
+        "EL-001",
+        "EL-002",
+        "EL-003"
+      ],
+      "endpoints": [
+        "POST /rollouts"
+      ],
+      "data_read": [
+        {
+          "item": "Signed firmware packages",
+          "category": "firmware_software_artifacts"
+        }
+      ],
+      "privileged": true,
+      "fact_ids": [
+        "FCT-004"
+      ]
+    }
+  ],
+  "scope_decisions": [
+    {
+      "decision_id": "SD-001",
+      "element_id": "EL-001",
+      "status": "in_scope",
+      "reason": "It is the public entry point of the portal.",
+      "based_on_fact_ids": [
+        "FCT-001",
+        "FCT-002"
+      ],
+      "based_on_question_ids": [],
+      "assumed": false
+    },
+    {
+      "decision_id": "SD-002",
+      "element_id": "EL-002",
+      "status": "in_scope",
+      "reason": "It runs in the portal's own account and network.",
+      "based_on_fact_ids": [
+        "FCT-006"
+      ],
+      "based_on_question_ids": [],
+      "assumed": false
+    },
+    {
+      "decision_id": "SD-003",
+      "element_id": "EL-003",
+      "status": "in_scope",
+      "reason": "It stores the firmware the portal delivers.",
+      "based_on_fact_ids": [
+        "FCT-004"
+      ],
+      "based_on_question_ids": [],
+      "assumed": false
+    },
+    {
+      "decision_id": "SD-004",
+      "element_id": "EL-004",
+      "status": "interface",
+      "reason": "You said it is the company-wide sign-in run by central IT. The portal's token check is inside the assessment.",
+      "based_on_fact_ids": [
+        "FCT-005"
+      ],
+      "based_on_question_ids": [
+        "Q-001"
+      ],
+      "assumed": true
+    }
+  ],
+  "assumptions": [
+    {
+      "assumption_id": "ASM-01",
+      "text": "The cloud provider protects the inside of the managed storage service.",
+      "based_on": [
+        "FCT-004"
+      ]
+    }
+  ],
+  "responsibility_split": [
+    {
+      "element_id": "EL-003",
+      "provider_side": "Storage service internals",
+      "customer_side": "Bucket policy, encryption key choice, access logging"
+    }
+  ],
+  "stated_control_fact_ids": [],
+  "stated_absence_fact_ids": [],
+  "stakeholders": [
+    {
+      "role": "Fleet operator",
+      "interest": "Starts and monitors rollouts"
+    }
+  ]
+}

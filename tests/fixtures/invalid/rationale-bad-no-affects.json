@@ -1,0 +1,130 @@
+[
+  {
+    "rationale_id": "RAT-101",
+    "stage": "01",
+    "kind": "conflict",
+    "attention": "needs_attention",
+    "title": "Is the internet-facing load balancer reachable from the internet?",
+    "concluded": "Two documents disagree. The client answers say the API gateway is the only public entry; the diagram shows a second, internet-facing load balancer with an arrow from the internet.",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-03",
+          "location": "answer 3",
+          "quote": "The API gateway is the only public entry point"
+        },
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, shape 'public ALB'",
+          "quote": "public ALB"
+        }
+      ]
+    },
+    "assumed": "The load balancer is reachable from the internet and is treated as a second entry point.",
+    "would_change": "Confirmation that the load balancer accepts traffic only from inside the network.",
+    "conflict_id": "CNF-001",
+    "auto_resolved": false,
+    "affects": [
+      "FCT-011",
+      "FCT-013",
+      "EL-011"
+    ],
+    "review": {
+      "status": "unreviewed"
+    }
+  },
+  {
+    "rationale_id": "RAT-109",
+    "stage": "01",
+    "kind": "conflict",
+    "attention": "information",
+    "title": "\"Key Service\" and \"signing service\" are the same service",
+    "concluded": "The diagram calls it Key Service and the functional description calls it signing service. The diagram name is kept.",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, shape 'Key Service'",
+          "quote": "Key Service"
+        },
+        {
+          "doc_id": "DOC-04",
+          "location": "section 1",
+          "quote": "Certificates are signed by the signing service, which uses the CA signing key"
+        }
+      ]
+    },
+    "assumed": "One service with two names.",
+    "would_change": "The client saying these are two separate services.",
+    "conflict_id": "CNF-004",
+    "auto_resolved": true,
+    "affects": [
+      "FCT-028",
+      "FCT-029"
+    ],
+    "review": {
+      "status": "confirmed",
+      "by": "analyst",
+      "at": "2026-10-01T10:00:00Z"
+    }
+  },
+  {
+    "rationale_id": "RAT-201",
+    "stage": "02",
+    "kind": "assumption",
+    "attention": "needs_attention",
+    "title": "The internet-facing load balancer is treated as a second way in",
+    "concluded": "Requests can reach the certificate service through the internet-facing load balancer without passing the API gateway.",
+    "why": {
+      "based_on_rationale_ids": [
+        "RAT-101"
+      ],
+      "sources": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, arrow from 'public ALB' to 'internal ALB'",
+          "quote": "public ALB -> internal ALB (unlabelled arrow)"
+        }
+      ]
+    },
+    "assumed": "Nothing on that path checks the sign-in token.",
+    "would_change": "The certificate service, or the load balancer, checking the sign-in token itself.",
+    "question_id": "Q-015",
+    "affects": [
+      "EL-011",
+      "IF-09",
+      "ASM-01",
+      "Q-015"
+    ],
+    "review": {
+      "status": "disputed",
+      "note": "The load balancer only allows the office network.",
+      "by": "analyst",
+      "at": "2026-10-01T10:05:00Z"
+    }
+  },
+  {
+    "rationale_id": "RAT-209",
+    "stage": "02",
+    "kind": "gap",
+    "attention": "needs_attention",
+    "title": "Who can read or delete the audit records is not documented",
+    "concluded": "The audit trail records API calls in the account, but no document says who can read or delete the records.",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-03",
+          "location": "answer 10",
+          "quote": "API calls in the cloud account are recorded by the audit trail"
+        }
+      ]
+    },
+    "assumed": "Only the platform team.",
+    "would_change": "The client naming who has access, or a setting that prevents deletion.",
+    "question_id": "Q-009",
+    "affects": [],
+    "review": {
+      "status": "unreviewed"
+    }
+  }
+]

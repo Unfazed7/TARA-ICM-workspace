@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "tools": [
+    {
+      "name": "submit_asset_register",
+      "description": "Submit the normalized asset register as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": { "$ref": "stage-03-asset-register.schema.json#/items" }
+          }
+        },
+        "required": ["assets"]
+      }
+    },
+    {
+      "name": "submit_damage_scenarios",
+      "description": "Submit the damage scenarios as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "damage_scenarios": {
+            "type": "array",
+            "items": { "$ref": "stage-04-damage-scenarios.schema.json#/items" }
+          }
+        },
+        "required": ["damage_scenarios"]
+      }
+    },
+    {
+      "name": "submit_threats",
+      "description": "Submit the STRIDE threats as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "threats": {
+            "type": "array",
+            "items": { "$ref": "stage-05-threats.schema.json#/items" }
+          }
+        },
+        "required": ["threats"]
+      }
+    },
+    {
+      "name": "submit_attack_paths",
+      "description": "Submit attack paths and CVSS metrics as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attack_paths": {
+            "type": "array",
+            "items": { "$ref": "stage-06-attack-paths.schema.json#/items" }
+          }
+        },
+        "required": ["attack_paths"]
+      }
+    },
+    {
+      "name": "submit_impact_analysis",
+      "description": "Submit impact analysis as structured JSON",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "impact_analysis": {
+            "type": "array",
+            "items": { "$ref": "stage-07-impact-analysis.schema.json#/items" }
+          }
+        },
+        "required": ["impact_analysis"]
+      }
+    },
+    {
+      "name": "submit_treatment",
+      "description": "Submit the risk treatment decision for one RSK_## record",
+      "input_schema": {
+        "type": "object",
+        "required": ["treatment_option", "treatment_rationale", "residual_risk_expected"],
+        "properties": {
+          "treatment_option": { "type": "string", "enum": ["reduce", "accept", "share", "avoid"] },
+          "treatment_rationale": { "type": "string" },
+          "goal_statement": { "type": ["string", "null"] },
+          "goal_self_test_note": { "type": ["string", "null"] },
+          "claim_statement": { "type": ["string", "null"] },
+          "acceptance_basis": { "type": ["string", "null"] },
+          "control_ids": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^CTR_\\d{2,}$" },
+            "maxItems": 3
+          },
+          "control_assignment_rationales": {
+            "type": "array",
+            "items": { "type": "string" },
+            "maxItems": 3
+          },
+          "avoidance_action": { "type": ["string", "null"] },
+          "residual_risk_expected": {
+            "type": "string",
+            "enum": ["informational", "low", "medium", "high", "critical"]
+          }
+        }
+      }
+    }
+  ]
+}

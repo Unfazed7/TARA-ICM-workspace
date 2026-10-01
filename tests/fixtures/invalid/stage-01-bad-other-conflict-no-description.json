@@ -1,0 +1,158 @@
+{
+  "facts": [
+    {
+      "fact_id": "FCT-001",
+      "subject": "API gateway",
+      "fact_type": "component_exists",
+      "value": "An API gateway receives all operator and vehicle requests",
+      "source_refs": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, top left",
+          "quote": "API Gateway"
+        },
+        {
+          "doc_id": "DOC-02",
+          "location": "answer 4",
+          "quote": "all traffic enters through the API gateway"
+        }
+      ],
+      "confidence": "high",
+      "group": "agreed",
+      "status": "confirmed"
+    },
+    {
+      "fact_id": "FCT-002",
+      "subject": "API gateway",
+      "fact_type": "attribute",
+      "value": "Reachable from the internet",
+      "source_refs": [
+        {
+          "doc_id": "DOC-02",
+          "location": "answer 4",
+          "quote": "the gateway is the only public entry"
+        }
+      ],
+      "confidence": "high",
+      "group": "single_source",
+      "status": "confirmed"
+    },
+    {
+      "fact_id": "FCT-003",
+      "subject": "Load balancer",
+      "fact_type": "attribute",
+      "value": "Internet-facing load balancer in front of the update service",
+      "source_refs": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, centre",
+          "quote": "public ALB"
+        }
+      ],
+      "confidence": "medium",
+      "group": "needs_you",
+      "status": "proposed"
+    },
+    {
+      "fact_id": "FCT-004",
+      "subject": "Firmware bucket",
+      "fact_type": "data",
+      "value": "Stores signed firmware packages",
+      "source_refs": [
+        {
+          "doc_id": "DOC-03",
+          "location": "section 2.1",
+          "quote": "signed packages are kept in object storage"
+        }
+      ],
+      "confidence": "high",
+      "group": "single_source",
+      "status": "confirmed"
+    },
+    {
+      "fact_id": "FCT-005",
+      "subject": "Sign-in service",
+      "fact_type": "responsibility",
+      "value": "Company-wide sign-in managed by central IT",
+      "source_refs": [
+        {
+          "doc_id": "DOC-02",
+          "location": "answer 6",
+          "quote": "we use the corporate login run by central IT"
+        }
+      ],
+      "confidence": "high",
+      "group": "single_source",
+      "status": "confirmed"
+    },
+    {
+      "fact_id": "FCT-006",
+      "subject": "Update service",
+      "fact_type": "component_exists",
+      "value": "Update service running on managed containers",
+      "source_refs": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, centre",
+          "quote": "Update Service"
+        }
+      ],
+      "confidence": "high",
+      "group": "single_source",
+      "status": "confirmed"
+    },
+    {
+      "fact_id": "FCT-007",
+      "subject": "Update service",
+      "fact_type": "component_exists",
+      "value": "Update API service",
+      "source_refs": [
+        {
+          "doc_id": "DOC-03",
+          "location": "section 1",
+          "quote": "the update API"
+        }
+      ],
+      "confidence": "high",
+      "group": "single_source",
+      "status": "rejected"
+    }
+  ],
+  "conflicts": [
+    {
+      "conflict_id": "CNF-001",
+      "fact_ids": [
+        "FCT-002",
+        "FCT-003"
+      ],
+      "kind": "internet_exposure",
+      "proposed_resolution": "Ask the analyst whether the load balancer is also public",
+      "auto_resolved": false,
+      "loser_fact_ids": []
+    },
+    {
+      "conflict_id": "CNF-002",
+      "fact_ids": [
+        "FCT-006",
+        "FCT-007"
+      ],
+      "kind": "naming",
+      "proposed_resolution": "Same service; keep the diagram name",
+      "auto_resolved": true,
+      "loser_fact_ids": [
+        "FCT-007"
+      ]
+    },
+    {
+      "conflict_id": "CNF-003",
+      "fact_ids": [
+        "FCT-004",
+        "FCT-006"
+      ],
+      "kind": "other",
+      "proposed_resolution": "Ask the analyst which access the service has",
+      "auto_resolved": false,
+      "loser_fact_ids": []
+    }
+  ]
+}
