@@ -443,7 +443,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 #### B5. Rationale spec and schema
 **Read first:** approved Rationale prototype and findings.
-**Do:** Write `.meta/specs/13-rationale.md` (split if needed): the item fields (id, stage, kind, four parts, source references, affected ids, label, review status and note), how each stage fills it, the exact default per conflict kind and gap, ordering, and the API endpoints (list per stage, set review status). Add `src/schemas/rationale.schema.json` with valid and invalid fixtures in `tests/schemas.test.js`.
+**Do:** Write `.meta/specs/13a-rationale-items.md` and `13b-rationale-defaults-and-api.md`: the item fields (id, stage, kind, four parts, source references, affected ids, label, review status and note), how each stage fills it, the exact default per conflict kind and gap, ordering, and the API endpoints (list per stage, set review status). Add `src/schemas/rationale.schema.json` with valid and invalid fixtures in `tests/schemas.test.js`.
 **Acceptance:** everything in the approved prototype is covered; schema tests pass.
 **Commit:** `spec: rationale`
 
@@ -500,7 +500,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 1. Add SQLAlchemy models for every B1 entity. Keep existing models; do not drop `BoundaryState` yet.
 2. Implement write endpoints with the refusal rules from spec 12d. Error messages exactly as written in the spec.
 3. Implement a bulk seed endpoint per stage that validates item by item and returns accepted ids plus refused items with reasons (partial acceptance is allowed; nothing refused is stored).
-4. Rationale table and endpoints per spec 13: list per stage, set review status. Add an `analyst` role; only it can set review status; model-facing service tokens never have it. No checkpoint confirm endpoints (D-36).
+4. Rationale table and endpoints per spec 13b: list per stage, set review status. Add an `analyst` role; only it can set review status; model-facing service tokens never have it. No checkpoint confirm endpoints (D-36).
 5. Tests: one test per refusal rule, plus seed partial-acceptance, plus role enforcement. Existing 12 tests must still pass.
 **Acceptance:** all tests pass; every refusal rule in spec 12d has a test.
 **Commit:** `feat: item definition store with refusal rules`
@@ -542,7 +542,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C7. Stage pages: output and Rationale
-**Read first:** spec 13, approved Rationale prototype, `frontend/src/pages/ProjectWorkspace.tsx`.
+**Read first:** specs 13a and 13b, approved Rationale prototype, `frontend/src/pages/ProjectWorkspace.tsx`.
 **Do:** Input Normalization page and Item Definition page, each showing the stage output (read-only, as in DR-4 and DR-5) with the Rationale section below it: items ordered Needs you first, four parts each, confirm or dispute with a note. "Why?" answers come only from stored sources. No canvas or animations.
 **Acceptance:** `tsc --noEmit` clean, `npm run build` succeeds, manual walk-through of item-01 recorded in `.meta/REBUILD-PROGRESS.md`.
 **Commit:** `feat: stage pages with rationale`

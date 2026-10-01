@@ -108,6 +108,18 @@ const itemDefinitionContract = [
       'stage-02-bad-generic-question-no-topic.json',
       'stage-02-bad-question-target-zone.json'
     ]
+  ],
+  [
+    'rationale.schema.json',
+    'rationale.json',
+    [
+      'rationale-bad-no-why.json',
+      'rationale-bad-disputed-no-note.json',
+      'rationale-bad-conflict-no-conflict-id.json',
+      'rationale-bad-auto-resolved-needs-attention.json',
+      'rationale-bad-confirmed-no-reviewer.json',
+      'rationale-bad-no-affects.json'
+    ]
   ]
 ];
 
