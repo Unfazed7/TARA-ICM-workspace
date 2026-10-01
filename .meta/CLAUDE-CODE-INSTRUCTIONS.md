@@ -230,7 +230,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 ## PART 3. Tasks
 
-> **Order of work after B3 (D-36, D-37):** B4, B5, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards. B6 and C9 are dropped (folded into B4, B5 and C7). B7 is deferred (D-39): the analyst checks outputs by hand.
+> **Order of work (D-41):** C3, C4, C5, C8, C6, C7, then C10. Focus is stages 01 and 02 only. C2 (model trial) is skipped; its extraction prompt is written in C4. C11 to C14 (private evaluation, Stage 03, old stages 04 to 10, legacy retirement) are on hold. Earlier order: B4, B5, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards. B6 and C9 are dropped (folded into B4, B5 and C7). B7 is deferred (D-39): the analyst checks outputs by hand.
 
 ### Phase A. Lock decisions and make the repo tell the truth
 
@@ -485,6 +485,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C2. Model trial (Stage 01 extraction only)
+> **Skipped (D-41).** Sonnet 5.5 is used directly. The extraction prompt (step 1) moves to C4. Resume only if output quality calls for comparing models.
+
 **Read first:** DR-11, B1, item-01.
 **Do:**
 1. Write a minimal Stage 01 per-document extraction prompt in `stages/01-input-normalization/prompts/extract-v1.md` (facts with source references only; no reconciliation).
@@ -510,7 +512,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C4. Stage 01 agent: per-document extraction and document register
-**Read first:** DR-4, DR-8, DR-9, stage 01 `CONTEXT.md`, C2 result.
+**Read first:** DR-4, DR-8, DR-9, stage 01 `CONTEXT.md`, `_config/models.json`.
 **Do:**
 1. `stages/01-input-normalization/agent.js`: check minimum input (DR-9) first; implement the deterministic parsers and the image path from DR-17 before any model extraction; build the document register (hash, type detection, environment, read status); extract facts per document with the chosen model; one call per document (split large documents by page range with overlap, keep page references); write `output/document-register.json`, `output/facts.raw.json`.
 2. Add a redaction hook (no-op by default, config switch) that runs before any content leaves the machine: account IDs, hostnames, bucket names, IPs, personal names, with a reversible mapping stored locally.
@@ -580,6 +582,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C11. Private evaluation on past cases (replaces synthetic items 02 and 03, D-35)
+> **On hold (D-41).** Focus is stages 01 and 02.
+
 **Read first:** DR-10, DR-16.
 **Do:** Locally, on approved infrastructure and with a model the client data may reach, run stages 01 and 02 on the documents of at least two past cases (TARA-1 to TARA-4) in `/private-eval/`. The analyst converts each past Item Definition into the expected format (a helper script may do the mechanical part) and compares the tool's output with it by hand (D-39); item-01 is re-checked the same way.
 **HUMAN GATE:** the analyst prepares the expected files and records the comparison.
@@ -589,6 +593,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C12. Stage 03 Asset Identification
+> **On hold (D-41).** Focus is stages 01 and 02.
+
 **Read first:** DR-15, `.meta/web-item-definition-questions.md` answers G1 to G4.
 **Do:**
 1. Spec `.meta/specs/16-asset-identification.md` first (HUMAN GATE on the spec).
@@ -600,6 +606,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C13. Reconnect downstream stages
+> **On hold (D-41).** Focus is stages 01 and 02.
+
 **Read first:** A6 changes, stage 04 onwards `CONTEXT.md`.
 **Do:** Point Stage 04 at the Stage 03 output from the API; update `scripts/validate-chain.js` and chain tests; run the full chain on item-01 with fixtures.
 **Acceptance:** chain validation passes end to end on item-01.
@@ -608,6 +616,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C14. Retire legacy
+> **On hold (D-41).** Focus is stages 01 and 02.
+
 **Read first:** `.meta/STALE-INVENTORY.md`.
 **Do:** With analyst approval, delete the superseded boundary blob endpoints and model, the legacy CSV-mode Stage 01 agent (a client asset list is now just another document type in Stage 01), the legacy v1 Item Definition agent, and superseded docs the analyst marks for deletion. Update the inventory to show every row resolved.
 **HUMAN GATE:** analyst approves the deletion list.

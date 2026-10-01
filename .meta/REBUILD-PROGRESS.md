@@ -2,7 +2,7 @@
 
 Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`, `done`, `blocked`, `waiting-gate`, `dropped`.
 
-**Order of work after B3 (D-36, D-37, D-39):** B4, B5, C1, C2, C3, C4, C5, C8, C6, C7, C10, C11, then C12 onwards.
+**Order of work (D-41):** C3, C4, C5, C8, C6, C7, then C10. Only stages 01 and 02 for now.
 
 | Task | Status | Date | Commit | Notes |
 |---|---|---|---|---|
@@ -22,7 +22,7 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | B6 | dropped | 2026-10-01 | | D-36: CP1 prototype and spec folded into B4 and B5. |
 | B7 | deferred | 2026-10-01 | | D-39: analyst checks outputs by hand; resume when the production feedback loop needs automated regression checks. |
 | C1 | done | 2026-10-01 | the commit that adds this row | Spec 17. `llm-client.js`: OpenRouter default, model and provider from `_config/models.json` per stage (or `default`), provider pinned with fallbacks off, strict JSON output via `response_format`, refusal reported as `stop_reason: refusal` (with `isRefusal`), one audit line per call to `web-based-tara/audit/llm-calls.jsonl` (git-ignored), clear errors for a missing key or an UNSET model, `LLM_MODEL` override recorded. `models.json`: every stage and `default` on `anthropic/claude-sonnet-5.5` (D-40). API runner defaults to OpenRouter. Legacy agent tests pin the anthropic provider; client passes `thinking` through on that path. `npm test` 130/130 (the 5 failures known since A2 are fixed); `pytest` 25/25. Known for C13: legacy stages 04 to 09 force a tool choice, which current Claude models reject; they need `auto` plus instructions when they are reconnected. Not run against the live API in this session (no key here). |
-| C2 | pending | | | |
+| C2 | skipped | 2026-10-01 | | D-41: Sonnet 5.5 used directly; extraction prompt moves to C4. |
 | C3 | pending | | | |
 | C4 | pending | | | |
 | C5 | pending | | | |
@@ -31,8 +31,8 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | C8 | pending | | | |
 | C9 | dropped | 2026-10-01 | | D-36: CP1 endpoints and screen folded into C7. |
 | C10 | pending | | | |
-| C11 | pending | | | |
-| C12 | pending | | | |
-| C13 | pending | | | |
-| C14 | pending | | | |
+| C11 | on-hold | 2026-10-01 | | D-41. |
+| C12 | on-hold | 2026-10-01 | | D-41. |
+| C13 | on-hold | 2026-10-01 | | D-41. Note from C1: legacy stages force a tool choice that current Claude models reject. |
+| C14 | on-hold | 2026-10-01 | | D-41. |
 | D1 (future) | not started | | | Production feedback loop and guardrails, PART 6 of the instructions (D-39). |
