@@ -221,7 +221,7 @@ Auto-resolved (loser kept in the conflict log): naming differences, instance siz
 - Default property table per element kind: see `.meta/web-item-definition-questions.md`, answer G1.
 
 ### DR-16. Evaluation metrics
-Measured per run against the expected output of a synthetic item. An element matches if it refers to the same real component regardless of name (a hand-made match map per item).
+Measured per run against the expected output of a synthetic item (item-01, the public smoke test) or of a private past case: the analyst's own past Item Definition for a TARA-1 to TARA-4 case, kept in `/private-eval/` (D-35). An element matches if it refers to the same real component regardless of name (a hand-made match map per item).
 
 | Metric | Definition | Target (v1) |
 |---|---|---|
@@ -476,7 +476,8 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 **Do:**
 1. `.meta/specs/15-evaluation.md`: how a run is scored against an item, how the match map is made, the four metrics and their targets, and the secondary tracking (cards per run, overrides, "why?" requests).
 2. `scripts/score-item-definition.js`: inputs = produced output folder, expected folder, match map; output = metrics JSON plus a readable summary in `stages/02-item-definition/output/score-<date>.md`.
-3. Test it by scoring a deliberately imperfect hand-made output (commit it under `tests/fixtures/synthetic/item-01/sample-imperfect-run/`) and asserting known metric values in `tests/engines/score-item-definition.test.js`.
+3. The scorer also accepts a private case folder in `/private-eval/<case>/` (expected files converted from the analyst's past Item Definition, plus a match map); its outputs stay in that folder.
+4. Test it by scoring a deliberately imperfect hand-made output (commit it under `tests/fixtures/synthetic/item-01/sample-imperfect-run/`) and asserting known metric values in `tests/engines/score-item-definition.test.js`.
 **Acceptance:** scorer test passes; scoring a run takes under 15 minutes including the match map.
 **Commit:** `feat: item definition evaluation scorer`
 
@@ -599,12 +600,12 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 ---
 
-#### C11. Synthetic items #2 and #3 and re-evaluation
-**Read first:** DR-10, B3.
-**Do:** Create `item-02` (no diagram: infrastructure sizing table, API specification, user manual) and `item-03` (configuration export only), same structure as item-01. Run stages 01 and 02 on all three items and score them.
-**HUMAN GATE:** analyst approves the expected outputs of items 02 and 03 before scoring.
-**Acceptance:** results table for all three items in `.meta/model-trial-results.md` (or a new `.meta/evaluation-results.md`); regressions on item-01 explained.
-**Commit:** `test: synthetic items 02 and 03 and evaluation`
+#### C11. Private evaluation on past cases (replaces synthetic items 02 and 03, D-35)
+**Read first:** DR-10, DR-16, B7.
+**Do:** Locally, on approved infrastructure and with a model the client data may reach, run stages 01 and 02 on the documents of at least two past cases (TARA-1 to TARA-4) in `/private-eval/`. The analyst converts each past Item Definition into the expected format (a helper script may do the mechanical part) and checks the match map. Score each case with the B7 scorer, and re-score item-01.
+**HUMAN GATE:** the analyst prepares the expected files and approves each match map before scoring.
+**Acceptance:** `.meta/evaluation-results.md` holds only case labels (TARA-1 to TARA-4), the four metrics and short generic notes; no names, components, counts or findings from client material. Regressions on item-01 explained.
+**Commit:** `test: private evaluation results`
 
 ---
 
@@ -648,9 +649,9 @@ Do not start any of these, even if they look easy:
 
 ## PART 5. Definition of done for the whole rebuild
 
-- The flow in DR-1 runs end to end on three synthetic items.
+- The flow in DR-1 runs end to end on item-01 and on at least two private past cases.
 - CP0 and CP1 are confirmed only by an analyst, and only when no "Needs you" card is open.
 - Every fact, element, link, question and scope decision traces to a source or an analyst decision.
-- Item-01 meets the DR-16 targets; items 02 and 03 have recorded scores.
+- Item-01 and the private past cases meet the DR-16 targets; scores are recorded without client content (D-35).
 - `.meta/DECISIONS.md`, the glossary, and all Layer 0 to 2 docs agree with each other and with the code.
 - No client-derived material in the repo.

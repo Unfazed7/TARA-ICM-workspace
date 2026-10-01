@@ -1,7 +1,7 @@
 # Synthetic Reference Item 01: Key and Certificate Management Portal
 
-**Status:** waiting for analyst review. The expected output is ground truth only after the analyst approves it.
-**Approval:** not yet approved. (Record here: "Approved by the analyst on YYYY-MM-DD, after round N.")
+**Status:** approved. Public smoke test for the Item Definition stages (D-35); the main quality measure is the private evaluation on past cases.
+**Approval:** approved by the analyst on 2026-10-01, after round 1. Decisions taken during the review: D-31 to D-35.
 
 A fictional portal on a public cloud that issues and revokes X.509 certificates. Built only from public knowledge of common cloud reference architectures. It describes no real system, client or engagement.
 
@@ -76,3 +76,11 @@ These are choices I made where the design reference does not settle the answer. 
 ## Contradiction resolved at the gate
 
 `_config/scoping-facts.md` asks account-level questions (who runs the account, whether it is shared, whether environments share anything), but the B1 questions schema only allowed elements and links as targets. The analyst chose to let questions target containers (decision D-31). Item-01 now has Q-016 (do dev and production share anything, open) and Q-018 (is the account shared, dropped because answer 1 says it is dedicated), both on CTR-01.
+
+## Calls made by Claude Code at approval
+
+The analyst approved without a line-by-line review of links and questions. These were kept as drafted:
+- Protocols inferred from public knowledge (`https_rest`, `sql_wire`, `s3_api`, `sigv4_service_api`) stay; unlabelled arrows with no supporting text stay `unknown`.
+- IF-24 (NAT gateway to internet gateway) stays as a link.
+- No link from the token authorizer to the SSO and none from the CRL publisher to the database: not documented.
+- The 16 open questions and their defaults stay as listed in `expected/questions.json`.
