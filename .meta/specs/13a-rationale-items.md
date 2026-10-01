@@ -1,6 +1,6 @@
 # Spec 13a: Rationale Items
 
-**Status:** draft, B5. Waiting for analyst approval.
+**Status:** approved by the analyst (B5 gate, round 1).
 **Schema:** `src/schemas/rationale.schema.json`
 **Decisions:** D-03, D-36, D-37. Prototype: `.meta/prototypes/rationale-item-01.md` (approved round 1).
 **See also:** spec 13b for defaults, ordering and the API.

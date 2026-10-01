@@ -32,6 +32,10 @@ Used by: Stage 01 (Input Normalization) and the reconciliation engine (C5). Sour
 - A higher-ranked source that is older than a lower-ranked one
 - Any conflict that fits none of the named kinds (`other`): record a short description of what disagrees and log it to `output/new-conflict-kinds.log`
 
+## 2a. Default while unanswered (D-37, spec 13b)
+
+Assume the option that means more security work: more exposed, weaker authentication or encryption, more sensitive data, more privilege, the component exists and is in scope, production. If code cannot tell which side is safer, the higher-ranked source is used and the point is always shown as needing attention, with both sides.
+
 ## 3. Auto-resolved (losing value kept in the conflict log)
 
 Naming differences, instance sizes, counts, versions.
