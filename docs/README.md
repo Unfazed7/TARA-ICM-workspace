@@ -44,7 +44,7 @@ Stage details: `tara-workspace/web-based-tara/CONTEXT.md`. Terms: `CONTEXT.md` a
 ## Tech stack
 
 - **Stages:** Node.js, model calls only through `stages/llm-client.js`
-- **Models:** open-weight models through OpenRouter, pinned per stage in `_config/models.json`
+- **Models:** through OpenRouter, pinned per stage in `_config/models.json` (currently Claude Sonnet 5.5, D-40)
 - **Store and API:** Python, FastAPI, SQLAlchemy (`checkpoint-api/`)
 - **Screens:** React (`frontend/`)
 - **Shared contract:** JSON schemas in `src/schemas/`

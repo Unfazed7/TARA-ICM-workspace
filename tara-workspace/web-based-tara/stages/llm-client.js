@@ -1,38 +1,78 @@
 'use strict';
 
 /**
- * Unified LLM client supporting:
- *   LLM_PROVIDER=anthropic  → Anthropic native API (default)
- *   LLM_PROVIDER=openrouter → OpenRouter (OpenAI-compatible, free models)
- *   LLM_PROVIDER=openai     → Any OpenAI-compatible endpoint
+ * The only path to a model (spec .meta/specs/17-llm-client.md, decision D-40).
+ *
+ *   LLM_PROVIDER=openrouter → OpenRouter, model and provider pinned per stage in
+ *                             _config/models.json (default)
+ *   LLM_PROVIDER=anthropic  → Anthropic native API (legacy, not used in the rebuild)
+ *   LLM_PROVIDER=openai     → any OpenAI-compatible endpoint (legacy, not used in the rebuild)
  *
  * Environment variables:
- *   LLM_PROVIDER   anthropic | openrouter | openai  (default: anthropic)
- *   LLM_API_KEY    API key for the chosen provider
- *   LLM_MODEL      Model identifier (overrides per-agent default)
- *   LLM_BASE_URL   Base URL for openai-compatible providers
- *
- * Anthropic fallback: ANTHROPIC_API_KEY still works when LLM_PROVIDER=anthropic.
+ *   OPENROUTER_API_KEY / ANTHROPIC_API_KEY / LLM_API_KEY   API key
+ *   LLM_MODEL       overrides the model for local experiments (recorded in the audit log)
+ *   LLM_BASE_URL    base URL override
+ *   LLM_MODELS_FILE path to models.json (default: ../_config/models.json)
+ *   LLM_AUDIT_FILE  audit log path (default: ../audit/llm-calls.jsonl)
  */
 
-const DEFAULT_MODELS = {
-  anthropic: 'claude-opus-4-8',
-  openrouter: 'nousresearch/hermes-3-llama-3.1-405b:free',
-  openai: 'gpt-4o-mini',
-};
+const fs = require('fs');
+const path = require('path');
+
+const WEB_TARA_ROOT = path.resolve(__dirname, '..');
+const DEFAULT_MODELS_FILE = path.join(WEB_TARA_ROOT, '_config', 'models.json');
+const DEFAULT_AUDIT_FILE = path.join(WEB_TARA_ROOT, 'audit', 'llm-calls.jsonl');
 
 const BASE_URLS = {
   anthropic: 'https://api.anthropic.com/v1',
   openrouter: 'https://openrouter.ai/api/v1',
 };
 
+const KEY_VARS = {
+  anthropic: 'ANTHROPIC_API_KEY',
+  openrouter: 'OPENROUTER_API_KEY',
+  openai: 'OPENAI_API_KEY',
+};
+
+const REFUSAL_REASONS = new Set(['refusal', 'content_filter']);
+
+function loadModelsConfig() {
+  const file = process.env.LLM_MODELS_FILE || DEFAULT_MODELS_FILE;
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function isUnset(value) {
+  return value === undefined || value === null || value === '' || value === 'UNSET';
+}
+
+/**
+ * Resolves the settings for one call. `stage` is a key under `stages` in models.json;
+ * without it the `default` entry is used.
+ */
+function resolveStageSettings(stage) {
+  const config = loadModelsConfig();
+  const entry = (stage && config.stages && config.stages[stage]) || config.default;
+  const label = stage || 'default';
+  if (!entry) throw new Error(`No entry for stage ${label} in _config/models.json`);
+  const model = process.env.LLM_MODEL || entry.model;
+  if (isUnset(model)) throw new Error(`Model for stage ${label} is not set in _config/models.json`);
+  return {
+    stage: label,
+    model,
+    modelOverridden: Boolean(process.env.LLM_MODEL),
+    provider: isUnset(entry.provider) ? null : entry.provider,
+    allowFallbacks: config.provider_routing ? config.provider_routing.allow_fallbacks === true : false,
+    temperature: typeof entry.temperature === 'number' ? entry.temperature : null,
+    maxTokens: entry.max_tokens,
+    promptVersion: isUnset(entry.prompt_version) ? null : entry.prompt_version,
+  };
+}
+
 function getConfig() {
-  const provider = (process.env.LLM_PROVIDER || 'anthropic').toLowerCase();
-  const apiKey = process.env.LLM_API_KEY
-    || (provider === 'anthropic' ? process.env.ANTHROPIC_API_KEY : null);
-  const model = process.env.LLM_MODEL || DEFAULT_MODELS[provider] || DEFAULT_MODELS.anthropic;
+  const provider = (process.env.LLM_PROVIDER || 'openrouter').toLowerCase();
+  const apiKey = process.env.LLM_API_KEY || process.env[KEY_VARS[provider]] || null;
   const baseUrl = process.env.LLM_BASE_URL || BASE_URLS[provider] || BASE_URLS.openrouter;
-  return { provider, apiKey, model, baseUrl };
+  return { provider, apiKey, baseUrl };
 }
 
 // ── Format translators ────────────────────────────────────────────────────────
@@ -85,41 +125,78 @@ function openAIResponseToAnthropic(data) {
     }
   }
 
-  return { content, stop_reason: choice.finish_reason || 'end_turn' };
+  const reasons = [choice.finish_reason, choice.native_finish_reason].filter(Boolean);
+  const refused = reasons.some((r) => REFUSAL_REASONS.has(String(r).toLowerCase())) || Boolean(message.refusal);
+
+  return {
+    id: data.id || null,
+    model: data.model || null,
+    provider: data.provider || null,
+    usage: data.usage || null,
+    content,
+    stop_reason: refused ? 'refusal' : (choice.finish_reason || 'end_turn'),
+  };
+}
+
+// ── Audit ─────────────────────────────────────────────────────────────────────
+
+function writeAudit(record) {
+  const file = process.env.LLM_AUDIT_FILE || DEFAULT_AUDIT_FILE;
+  try {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.appendFileSync(file, `${JSON.stringify(record)}\n`);
+  } catch (err) {
+    // An audit failure must be visible but must not hide the model result.
+    process.stderr.write(`llm-client: could not write audit record: ${err.message}\n`);
+  }
+}
+
+function usageCounts(usage) {
+  if (!usage) return { input_tokens: null, output_tokens: null };
+  return {
+    input_tokens: usage.prompt_tokens ?? usage.input_tokens ?? null,
+    output_tokens: usage.completion_tokens ?? usage.output_tokens ?? null,
+  };
 }
 
 // ── Main call ─────────────────────────────────────────────────────────────────
 
 /**
- * callLLM — drop-in replacement for direct Anthropic fetch calls.
- *
  * @param {object} params
- * @param {string}  params.model      - Anthropic model id (overridden by LLM_MODEL env)
- * @param {number}  params.max_tokens
- * @param {string}  params.system
+ * @param {string}  [params.stage]           key in models.json `stages` (else `default`)
+ * @param {string}  [params.model]           honoured only on the legacy anthropic provider
+ * @param {number}  [params.max_tokens]      overrides the models.json value
+ * @param {string}  [params.system]
  * @param {Array}   params.messages
  * @param {Array}   [params.tools]
  * @param {object}  [params.tool_choice]
- * @param {Function} [fetchImpl]      - injectable fetch (for testing)
- * @returns {Promise<object>} Anthropic-style response: { content: [...], stop_reason }
+ * @param {object}  [params.thinking]        legacy anthropic provider only
+ * @param {object}  [params.response_schema] {name, schema} for strict JSON output
+ * @param {Function} [fetchImpl]             injectable fetch (tests)
+ * @returns {Promise<object>} {content, stop_reason, model, provider, usage, id}
  */
 async function callLLM(params, fetchImpl = fetch) {
   const config = getConfig();
   if (!config.apiKey) {
-    throw new Error(
-      `LLM API key not set. Set LLM_API_KEY (or ANTHROPIC_API_KEY for Anthropic provider).`
-    );
+    const keyVar = KEY_VARS[config.provider] || 'LLM_API_KEY';
+    throw new Error(`${keyVar} is required (or set LLM_API_KEY) for LLM_PROVIDER=${config.provider}.`);
   }
 
+  let result;
+  let requestedModel;
+  let settings = null;
+
   if (config.provider === 'anthropic') {
+    requestedModel = process.env.LLM_MODEL || params.model;
     const body = {
-      model: config.model,
+      model: requestedModel,
       max_tokens: params.max_tokens,
       system: params.system,
       messages: params.messages,
     };
     if (params.tools) body.tools = params.tools;
     if (params.tool_choice) body.tool_choice = params.tool_choice;
+    if (params.thinking) body.thinking = params.thinking;
 
     const res = await fetchImpl(`${config.baseUrl}/messages`, {
       method: 'POST',
@@ -135,47 +212,77 @@ async function callLLM(params, fetchImpl = fetch) {
       const text = await res.text().catch(() => '');
       throw new Error(`Anthropic API error ${res.status}: ${text}`);
     }
-    return res.json();
+    result = await res.json();
+  } else {
+    settings = resolveStageSettings(params.stage);
+    requestedModel = settings.model;
+
+    const messages = [];
+    if (params.system) messages.push({ role: 'system', content: params.system });
+    messages.push(...params.messages);
+
+    const body = {
+      model: settings.model,
+      max_tokens: params.max_tokens || settings.maxTokens,
+      messages,
+    };
+    if (settings.temperature !== null) body.temperature = settings.temperature;
+    if (config.provider === 'openrouter' && settings.provider) {
+      body.provider = { order: [settings.provider], allow_fallbacks: settings.allowFallbacks };
+    }
+    if (params.response_schema) {
+      body.response_format = {
+        type: 'json_schema',
+        json_schema: { name: params.response_schema.name, strict: true, schema: params.response_schema.schema },
+      };
+    }
+    if (params.tools && params.tools.length > 0) {
+      body.tools = toOpenAITools(params.tools);
+      body.tool_choice = toOpenAIToolChoice(params.tool_choice) || 'auto';
+    }
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${config.apiKey}`,
+    };
+    if (config.provider === 'openrouter') {
+      headers['HTTP-Referer'] = 'https://github.com/Unfazed7/tara-icm-workspace';
+      headers['X-Title'] = 'TARA Aegis';
+    }
+
+    const res = await fetchImpl(`${config.baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`LLM API error ${res.status}: ${text}`);
+    }
+    result = openAIResponseToAnthropic(await res.json());
   }
 
-  // OpenAI-compatible path (openrouter / openai)
-  const messages = [];
-  if (params.system) messages.push({ role: 'system', content: params.system });
-  messages.push(...params.messages);
-
-  const body = {
-    model: config.model,
-    max_tokens: params.max_tokens,
-    messages,
-  };
-
-  if (params.tools && params.tools.length > 0) {
-    body.tools = toOpenAITools(params.tools);
-    body.tool_choice = toOpenAIToolChoice(params.tool_choice) || 'auto';
-  }
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${config.apiKey}`,
-  };
-  if (config.provider === 'openrouter') {
-    headers['HTTP-Referer'] = 'https://github.com/Unfazed7/tara-icm-workspace';
-    headers['X-Title'] = 'TARA Aegis';
-  }
-
-  const res = await fetchImpl(`${config.baseUrl}/chat/completions`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
+  writeAudit({
+    timestamp: new Date().toISOString(),
+    stage: settings ? settings.stage : (params.stage || null),
+    llm_provider: config.provider,
+    model_requested: requestedModel || null,
+    model_overridden_by_env: settings ? settings.modelOverridden : Boolean(process.env.LLM_MODEL),
+    model_served: result.model || null,
+    provider_pinned: settings ? settings.provider : null,
+    provider_served: result.provider || null,
+    prompt_version: settings ? settings.promptVersion : null,
+    ...usageCounts(result.usage),
+    request_id: result.id || null,
+    stop_reason: result.stop_reason || null,
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`LLM API error ${res.status}: ${text}`);
-  }
-
-  const data = await res.json();
-  return openAIResponseToAnthropic(data);
+  return result;
 }
 
-module.exports = { callLLM, getConfig };
+function isRefusal(response) {
+  return Boolean(response) && response.stop_reason === 'refusal';
+}
+
+module.exports = { callLLM, getConfig, resolveStageSettings, isRefusal };

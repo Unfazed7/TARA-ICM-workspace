@@ -1,5 +1,7 @@
 'use strict';
 
+require('../helpers/legacy-llm-env');
+
 const fs = require('fs');
 const path = require('path');
 const test = require('node:test');

@@ -1,63 +1,70 @@
 {
-  "_note": "Placeholder created in task B2. Filled in C1 (provider pinning) and C2 (model trial, analyst picks). OpenRouter only, open-weight models only (DR-11, D-10). llm-client.js must fail loudly while any value is UNSET.",
+  "_note": "Filled in C1 (D-40): Claude Sonnet 5.5 via OpenRouter, Anthropic as the pinned provider. temperature null means not sent (current Claude models reject non-default sampling). prompt_version is set when each stage's prompt is written (C4, C8). LLM_MODEL overrides the model for local experiments and is recorded in the audit log.",
   "provider_routing": {
     "service": "openrouter",
     "allow_fallbacks": false
   },
+  "default": {
+    "model": "anthropic/claude-sonnet-5.5",
+    "provider": "anthropic",
+    "temperature": null,
+    "max_tokens": 16000,
+    "prompt_version": "UNSET"
+  },
   "stages": {
     "01-extract-text": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "UNSET"
     },
     "01-extract-image": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "UNSET"
     },
     "01-reconcile-leftovers": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 4000,
       "prompt_version": "UNSET"
     },
     "02-build": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 16000,
       "prompt_version": "UNSET"
     },
     "02-generate-questions": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "UNSET"
     },
     "02-answer-check": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 4000,
       "prompt_version": "UNSET"
     },
     "03-assets": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "UNSET"
     },
     "review-assistant": {
-      "model": "UNSET",
-      "provider": "UNSET",
-      "temperature": 0,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 2000,
       "prompt_version": "UNSET"
     }

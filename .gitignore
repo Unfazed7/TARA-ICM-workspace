@@ -13,3 +13,6 @@ tara_aegis.db
 test-risk-register.tmp.json
 tests/.tmp-*/
 /private-eval/
+
+# Model call audit log (C1)
+tara-workspace/web-based-tara/audit/

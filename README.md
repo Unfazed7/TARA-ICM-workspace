@@ -67,6 +67,14 @@ cd checkpoint-api
 DATABASE_URL=sqlite:///./local.db JWT_SECRET=<a-long-random-string> python -m uvicorn checkpoint_api.main:app --port 8000
 ```
 
+Model calls go through OpenRouter (D-40). Set your key before starting the backend or running a stage:
+
+```bash
+export OPENROUTER_API_KEY=<your-openrouter-key>
+```
+
+The model for each stage is set in `tara-workspace/web-based-tara/_config/models.json`. Every call is logged to `tara-workspace/web-based-tara/audit/llm-calls.jsonl` (not committed).
+
 Frontend:
 
 ```bash

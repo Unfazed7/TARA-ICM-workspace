@@ -160,4 +160,5 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `13b-rationale-defaults-and-api.md` | Rationale defaults (general principle plus named kinds), attention rule, review API | approved (B5 gate) |
 | `15-evaluation.md` | Evaluation scorer | deferred (D-39) |
 | `16-asset-identification.md` | Stage 03 | planned, C12 |
+| `17-llm-client.md` | Model client: OpenRouter, pinned per stage, strict JSON, refusals, audit | approved (C1) |
 | none | Stage 10 Residual Risk and the orchestrator | no spec; outside this rebuild |

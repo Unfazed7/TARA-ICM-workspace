@@ -11,8 +11,9 @@ UPLOAD_DIR = os.getenv("UPLOAD_DIR", os.path.join(WORKSPACE_ROOT, "uploads"))
 
 # LLM provider config — forwarded to Node.js stage agents
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "anthropic")   # anthropic | openrouter | openai
-LLM_API_KEY = os.getenv("LLM_API_KEY", ANTHROPIC_API_KEY)
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openrouter")   # openrouter (D-40) | anthropic | openai (legacy)
+# Empty means the Node client picks the provider's own key (OPENROUTER_API_KEY, passed through from the environment).
+LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 LLM_MODEL = os.getenv("LLM_MODEL", "")
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")
 

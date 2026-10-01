@@ -171,9 +171,9 @@ Auto-resolved (loser kept in the conflict log): naming differences, instance siz
 
 ### DR-11. Model policy
 - OpenRouter for all model calls, for both the pipeline and the review assistant. No MCP for now.
-- Open-weight models only, at a size that could realistically be self-hosted later, so test results transfer.
+- Any model available on OpenRouter; the goal for now is the best output, not self-hosting or privacy (D-40). Current pin: Claude Sonnet 5.5 (`anthropic/claude-sonnet-5.5`), provider Anthropic, fallbacks off. Client documents sent to a hosted model need client permission (DR-10).
 - Model and provider pinned per stage in `_config/models.json`. Every run records the model, provider and prompt version in the audit trail.
-- Heavy reading (Stage 01) gets the strongest model you could host. The review assistant answers from stored reasons, so a smaller model is acceptable.
+- Heavy reading (Stage 01) gets the strongest model that proves itself on item-01; a stage can be moved to a stronger model (for example Claude Opus 5.5) by changing one line in `models.json`. The review assistant answers from stored reasons, so a smaller model is acceptable.
 
 ### DR-12. Architecture decisions
 - AD-1. `checkpoint-api` (FastAPI, SQLAlchemy) is the single source of truth for anything an analyst can see or change.
@@ -488,10 +488,10 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 **Read first:** DR-11, B1, item-01.
 **Do:**
 1. Write a minimal Stage 01 per-document extraction prompt in `stages/01-input-normalization/prompts/extract-v1.md` (facts with source references only; no reconciliation).
-2. `scripts/model-trial.js`: for each candidate model in a list the analyst provides (open-weight, self-hostable size), run extraction on item-01, print a per-model difference listing against item-01 expected facts (missing, extra, misquoted) for the analyst to judge by hand (D-39); record cost and latency.
+2. `scripts/model-trial.js`: for each candidate model (default: Claude Sonnet 5.5 and GPT-6.1 Sol via OpenRouter; the analyst may add others), run extraction on item-01, print a per-model difference listing against item-01 expected facts (missing, extra, misquoted) for the analyst to judge by hand (D-39); record cost and latency.
 3. Test image reading separately on item-01's PNG diagram (DR-17): element recall from the image alone and arrow correctness. If the best text model cannot read images, pick a second, image-capable model and pin both.
 4. Write `.meta/model-trial-results.md`: per model, the analyst's judgement from the difference listing, cost, latency, and 3 examples of typical errors.
-**HUMAN GATE:** the analyst provides the candidate list before the run, and picks the model after it. Record the choice as a decision in `.meta/DECISIONS.md` and in `_config/models.json`.
+**HUMAN GATE:** the analyst confirms the candidate list before the run (it costs real money), and picks the model after it. Record the choice as a decision in `.meta/DECISIONS.md` and in `_config/models.json`.
 **Commit:** `chore: stage 01 model trial`
 
 ---

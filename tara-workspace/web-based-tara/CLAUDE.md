@@ -1,7 +1,7 @@
 # Web-Based TARA: Runtime Identity (Layer 0)
 
 **Tool:** TARA Aegis, Web-Based Application TARA module
-**Models:** open-weight models through OpenRouter, pinned per stage in `_config/models.json` (filled in task C1). All model calls go through `stages/llm-client.js`.
+**Models:** through OpenRouter, pinned per stage in `_config/models.json` (currently Claude Sonnet 5.5, D-40). All model calls go through `stages/llm-client.js`.
 **Standards:** ISO/SAE 21434, ISO/IEC 27001:2022, ISO/IEC 27005:2022, OWASP, CVSS v3.1
 **Scope:** SaaS platforms, automotive cloud backends, web diagnostic portals, OTA management systems
 
