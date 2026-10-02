@@ -4,7 +4,7 @@ import hmac
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
@@ -84,7 +84,7 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)):
         email=body.email,
         name=body.name,
         hashed_password=hash_password(body.password),
-        role="user",
+        role="analyst",  # D-42: everyone who registers is an analyst
     )
     db.add(user)
     db.commit()
@@ -99,6 +99,17 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     token = create_access_token({"sub": user.email, "role": user.role})
     return TokenResponse(access_token=token)
+
+
+@router.post("/service-token", response_model=TokenResponse)
+def service_token(body: dict = Body(...)):
+    """Login for the pipeline: it can store stage output but never review (D-42)."""
+    expected = os.getenv("PIPELINE_SERVICE_SECRET")
+    if not expected:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Service login is not configured")
+    if not hmac.compare_digest(str(body.get("secret", "")), expected):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    return TokenResponse(access_token=create_access_token({"sub": "pipeline", "role": "service"}))
 
 
 @router.get("/me", response_model=UserResponse)

@@ -2,7 +2,7 @@
 
 **Status:** Revised after analyst review round 1 (B1 gate)
 **Decisions:** D-11, D-13
-**See also:** spec 12e (checkpoint and re-run rules) is superseded by D-36.
+**See also:** spec 12e (checkpoint and re-run rules) is superseded by D-36. Spec 18 adds R-18 to R-20 and the run endpoint (C3).
 
 ## Goal
 

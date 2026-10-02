@@ -67,6 +67,8 @@ cd checkpoint-api
 DATABASE_URL=sqlite:///./local.db JWT_SECRET=<a-long-random-string> python -m uvicorn checkpoint_api.main:app --port 8000
 ```
 
+Everyone who registers is an analyst. The pipeline logs in with `POST /api/v1/auth/service-token` and the secret in `PIPELINE_SERVICE_SECRET` (set it to another long random string); that login can store stage output but cannot review Rationale. Stage tables are created and updated automatically at startup (Alembic, D-42).
+
 Model calls go through OpenRouter (D-40). Set your key before starting the backend or running a stage:
 
 ```bash

@@ -7,3 +7,5 @@ Pygments>=2.18.0
 python-multipart>=0.0.9
 SQLAlchemy>=2.0.0
 uvicorn>=0.30.0
+alembic>=1.13.0
+jsonschema>=4.21.0
