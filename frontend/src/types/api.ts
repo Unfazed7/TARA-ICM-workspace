@@ -17,6 +17,24 @@ export interface PipelineRunStatus {
   error_message: string | null;
 }
 
+export interface StageDefinition {
+  stage_num: number;
+  key: string;
+  name: string;
+  description: string;
+  dependencies: number[];
+  outputs: string[];
+  checkpoint: string | null;
+  available: boolean;
+}
+
+export interface AssetRegisterImportResult {
+  filename: string;
+  asset_count: number;
+  stage_num: 3;
+  status: 'complete';
+}
+
 export interface CreateAssessmentBody {
   name: string;
   description?: string;

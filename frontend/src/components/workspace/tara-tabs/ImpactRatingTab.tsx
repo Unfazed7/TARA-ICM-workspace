@@ -20,13 +20,13 @@ function RatingBadge({ value }: { value: string }) {
 function EmptyState({ status }: { status: string }) {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
-      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">5</div>
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">7</div>
       <div>
         <p className="text-sm font-semibold text-foreground">No impact data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 05 — Impact Analysis is running…'
-            : 'Run Stage 05 — Impact Analysis from the pipeline panel above.'}
+            ? 'Stage 07 — Impact Analysis is running…'
+            : 'Run Stage 07 — Impact Analysis from the pipeline panel above.'}
         </p>
       </div>
     </div>
@@ -35,7 +35,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function ImpactRatingTab() {
   const { impacts, assets, threats, stageStatuses } = useTara();
-  const status = stageStatuses['05'] ?? 'not_started';
+  const status = stageStatuses['07'] ?? 'not_started';
 
   if (impacts.length === 0) return <EmptyState status={status} />;
 

@@ -19,13 +19,13 @@ const RISK_LEVEL_STYLE = (v: number) => {
 function EmptyState({ status }: { status: string }) {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
-      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">7</div>
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">9</div>
       <div>
         <p className="text-sm font-semibold text-foreground">No risk treatment data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 07 — Risk Treatment is running…'
-            : 'Run Stage 06 (Risk Scoring) then Stage 07 (Risk Treatment) from the pipeline panel above.'}
+            ? 'Stage 09 — Risk Treatment is running…'
+            : 'Complete Stage 08 — Risk Scoring, then run Stage 09 — Risk Treatment.'}
         </p>
       </div>
     </div>
@@ -34,7 +34,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function RiskTreatmentTab() {
   const { treatments, threats, assets, stageStatuses } = useTara();
-  const status = stageStatuses['07'] ?? 'not_started';
+  const status = stageStatuses['09'] ?? 'not_started';
 
   if (treatments.length === 0) return <EmptyState status={status} />;
 

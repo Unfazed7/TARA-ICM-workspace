@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { AssetDamageTab } from './tara-tabs/AssetDamageTab';
+import { DamageAnalysisTab } from './tara-tabs/DamageAnalysisTab';
 import { ThreatAnalysisTab } from './tara-tabs/ThreatAnalysisTab';
 import { ImpactRatingTab } from './tara-tabs/ImpactRatingTab';
 import { AttackPathTab } from './tara-tabs/AttackPathTab';
@@ -18,20 +19,21 @@ import { useState } from 'react';
 import { ThreatScenario } from '@/types/risk-assessment';
 const mockThreatScenarios: ThreatScenario[] = [];
 
-type TaraTab = 'asset-id' | 'threat-analysis' | 'attack-trees' | 'impact-rating' | 'attack-path' | 'feasibility' | 'risk-treatment' | 'cybersecurity-goals' | 'residual-risk' | 'final-tara' | 'reports';
+type TaraTab = 'asset-id' | 'damage-analysis' | 'threat-analysis' | 'attack-trees' | 'impact-rating' | 'attack-path' | 'feasibility' | 'risk-treatment' | 'cybersecurity-goals' | 'residual-risk' | 'final-tara' | 'reports';
 
 const taraSteps = [
   { id: 'asset-id' as TaraTab, step: 1, label: 'Asset Analysis', description: 'Asset identification & cataloging (Clause 15.3)', icon: Package },
-  { id: 'impact-rating' as TaraTab, step: 2, label: 'Impact Analysis', description: 'Impact rating per damage scenario (Clause 15.5)', icon: Gauge },
+  { id: 'damage-analysis' as TaraTab, step: 2, label: 'Damage Analysis', description: 'Damage scenarios by asset and CIAAAN property (Clause 15.4)', icon: ShieldAlert },
   { id: 'threat-analysis' as TaraTab, step: 3, label: 'Threat Analysis', description: 'Threat scenario identification (Clause 15.4)', icon: Target },
   { id: 'attack-trees' as TaraTab, step: 4, label: 'Attack Trees', description: 'Visual attack tree diagrams for threat paths', icon: GitBranch },
-  { id: 'attack-path' as TaraTab, step: 5, label: 'Attack Path', description: 'Attack path & vector analysis (Clause 15.6)', icon: Route },
-  { id: 'feasibility' as TaraTab, step: 6, label: 'Feasibility', description: 'Attack feasibility rating (Clause 15.7)', icon: Activity },
-  { id: 'risk-treatment' as TaraTab, step: 7, label: 'Risk Determination & Decision', description: 'Risk determination & treatment decision (Clause 15.8 & 15.9)', icon: ShieldAlert },
-  { id: 'cybersecurity-goals' as TaraTab, step: 8, label: 'Cybersecurity Goals', description: 'Cybersecurity goals, claims & controls (Clause 15.9)', icon: Shield },
-  { id: 'residual-risk' as TaraTab, step: 9, label: 'Residual Risk', description: 'Post-treatment feasibility & residual risk assessment', icon: ShieldCheck },
-  { id: 'final-tara' as TaraTab, step: 10, label: 'Final TARA', description: 'Consolidated TARA summary view', icon: ClipboardList },
-  { id: 'reports' as TaraTab, step: 11, label: 'Reports', description: 'Work products & compliance documentation', icon: FileCheck },
+  { id: 'impact-rating' as TaraTab, step: 5, label: 'Impact Analysis', description: 'Impact rating per damage scenario (Clause 15.5)', icon: Gauge },
+  { id: 'attack-path' as TaraTab, step: 6, label: 'Attack Path', description: 'Attack path & vector analysis (Clause 15.6)', icon: Route },
+  { id: 'feasibility' as TaraTab, step: 7, label: 'Feasibility', description: 'Attack feasibility rating (Clause 15.7)', icon: Activity },
+  { id: 'risk-treatment' as TaraTab, step: 8, label: 'Risk Determination & Decision', description: 'Risk determination & treatment decision (Clause 15.8 & 15.9)', icon: ShieldAlert },
+  { id: 'cybersecurity-goals' as TaraTab, step: 9, label: 'Cybersecurity Goals', description: 'Cybersecurity goals, claims & controls (Clause 15.9)', icon: Shield },
+  { id: 'residual-risk' as TaraTab, step: 10, label: 'Residual Risk', description: 'Post-treatment feasibility & residual risk assessment', icon: ShieldCheck },
+  { id: 'final-tara' as TaraTab, step: 11, label: 'Final TARA', description: 'Consolidated TARA summary view', icon: ClipboardList },
+  { id: 'reports' as TaraTab, step: 12, label: 'Reports', description: 'Work products & compliance documentation', icon: FileCheck },
 ];
 
 interface WorkspaceTabsProps {
@@ -98,6 +100,7 @@ export function WorkspaceTabs({ activeTab, onTabChange }: WorkspaceTabsProps) {
 
         <div className="flex-1 overflow-hidden">
           <TabsContent value="asset-id" className="h-full m-0 p-0"><AssetDamageTab /></TabsContent>
+          <TabsContent value="damage-analysis" className="h-full m-0 p-0"><DamageAnalysisTab /></TabsContent>
           <TabsContent value="threat-analysis" className="h-full m-0 p-0"><ThreatAnalysisTab /></TabsContent>
           <TabsContent value="attack-trees" className="h-full m-0 p-0"><AttackTreesTab /></TabsContent>
           <TabsContent value="impact-rating" className="h-full m-0 p-0"><ImpactRatingTab /></TabsContent>

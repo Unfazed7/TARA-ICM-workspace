@@ -71,6 +71,9 @@ def test_auth_register_login_and_assessment_crud(client):
         "05": "not_started",
         "06": "not_started",
         "07": "not_started",
+        "08": "not_started",
+        "09": "not_started",
+        "10": "not_started",
     }
 
     listed = client.get("/api/v1/assessments", headers=headers)
@@ -130,11 +133,56 @@ def test_stage_dependency_check_returns_409(client):
     assessment_id = create_assessment(client, headers)["assessment_id"]
 
     response = client.post(
-        f"/api/v1/assessments/{assessment_id}/stages/2/run",
+        f"/api/v1/assessments/{assessment_id}/stages/4/run",
         headers=headers,
     )
     assert response.status_code == 409
-    assert response.json()["detail"] == "Stage 2 requires stage 1 to be complete first"
+    assert response.json()["detail"] == "Stage 4 requires stage 3 to be complete first"
+
+
+def test_stage_catalog_uses_canonical_ten_stage_flow(client):
+    headers = register_and_login(client)
+    assessment_id = create_assessment(client, headers)["assessment_id"]
+
+    response = client.get(
+        f"/api/v1/assessments/{assessment_id}/stages",
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+    stages = response.json()
+    assert [stage["stage_num"] for stage in stages] == list(range(1, 11))
+    assert stages[0]["name"] == "Input Normalization"
+    assert stages[0]["outputs"] == ["document-register.json", "facts.json"]
+    assert stages[2]["name"] == "Asset Identification"
+    assert stages[2]["outputs"] == ["asset-register.json"]
+    assert stages[9]["name"] == "Residual Risk"
+    assert [stage["stage_num"] for stage in stages if not stage["available"]] == [1, 2, 3, 10]
+
+
+def test_available_stages_have_runners():
+    from checkpoint_api.pipeline_runner import get_agent_path
+    from checkpoint_api.stage_catalog import STAGES
+
+    missing = [
+        stage.number
+        for stage in STAGES
+        if stage.available and not Path(get_agent_path(stage.number)).is_file()
+    ]
+    assert missing == []
+
+
+def test_unavailable_stage_cannot_be_run(client):
+    headers = register_and_login(client)
+    assessment_id = create_assessment(client, headers)["assessment_id"]
+
+    response = client.post(
+        f"/api/v1/assessments/{assessment_id}/stages/1/run",
+        headers=headers,
+    )
+
+    assert response.status_code == 501
+    assert response.json()["detail"] == "Stage 01 — Input Normalization is not implemented yet"
 
 
 def test_stage_status_defaults_to_not_started(client):
@@ -156,23 +204,188 @@ def test_stage_output_reads_json_file(client, monkeypatch):
         monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
         headers = register_and_login(client)
         assessment_id = create_assessment(client, headers)["assessment_id"]
-        output_path = Path(pipeline_runner.get_output_path(1))
+        output_path = Path(pipeline_runner.get_output_path(3, assessment_id))
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text('[{"asset_id":"AS_01"}]\n', encoding="utf-8")
 
         response = client.get(
-            f"/api/v1/assessments/{assessment_id}/stages/1/output",
+            f"/api/v1/assessments/{assessment_id}/stages/3/output",
             headers=headers,
         )
         assert response.status_code == 200
         assert response.json() == [{"asset_id": "AS_01"}]
 
         alias_response = client.get(
-            f"/api/v1/assessments/{assessment_id}/outputs/01",
+            f"/api/v1/assessments/{assessment_id}/outputs/03",
             headers=headers,
         )
         assert alias_response.status_code == 200
         assert alias_response.json() == [{"asset_id": "AS_01"}]
+
+
+def test_manual_csv_asset_register_marks_stage_3_complete(client, monkeypatch):
+    from checkpoint_api import pipeline_runner
+
+    csv_content = (
+        b"asset_title,asset_type,asset_description,confidentiality,integrity,availability,"
+        b"authenticity,authorization,non_repudiation\n"
+        b"Diagnostic API,api_endpoint,Accepts diagnostic requests,yes,true,1,no,yes,false\n"
+    )
+    with tempfile.TemporaryDirectory() as workspace_root:
+        monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
+        headers = register_and_login(client)
+        assessment_id = create_assessment(client, headers)["assessment_id"]
+
+        response = client.post(
+            f"/api/v1/assessments/{assessment_id}/stages/3/asset-register",
+            headers=headers,
+            files={"asset_file": ("assets.csv", csv_content, "text/csv")},
+        )
+
+        assert response.status_code == 200
+        assert response.json()["asset_count"] == 1
+        assessment = client.get(f"/api/v1/assessments/{assessment_id}", headers=headers)
+        assert assessment.json()["stages"]["03"] == "complete"
+        output = client.get(
+            f"/api/v1/assessments/{assessment_id}/stages/3/output",
+            headers=headers,
+        )
+        assert output.status_code == 200
+        asset = output.json()[0]
+        assert asset["asset_id"] == "AS_01"
+        assert asset["input_mode"] == "manual"
+        assert asset["ciaaan"]["authorization"] is True
+
+
+def test_manual_xlsx_asset_register_is_supported(client, monkeypatch):
+    from io import BytesIO
+
+    from openpyxl import Workbook
+
+    from checkpoint_api import pipeline_runner
+
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.append([
+        "asset_id", "asset_title", "asset_type", "asset_description",
+        "confidentiality", "integrity", "availability", "authenticity",
+        "authorization", "non_repudiation",
+    ])
+    worksheet.append([
+        "AS_42", "Audit Log", "data_store", "Records privileged operations",
+        False, True, True, True, False, True,
+    ])
+    content = BytesIO()
+    workbook.save(content)
+    workbook.close()
+
+    with tempfile.TemporaryDirectory() as workspace_root:
+        monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
+        headers = register_and_login(client)
+        assessment_id = create_assessment(client, headers)["assessment_id"]
+        response = client.post(
+            f"/api/v1/assessments/{assessment_id}/stages/3/asset-register",
+            headers=headers,
+            files={
+                "asset_file": (
+                    "assets.xlsx",
+                    content.getvalue(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                )
+            },
+        )
+
+        assert response.status_code == 200
+        assert response.json()["asset_count"] == 1
+
+
+def test_manual_asset_register_returns_row_specific_validation_error(client, monkeypatch):
+    from checkpoint_api import pipeline_runner
+
+    csv_content = (
+        b"asset_title,asset_type,asset_description,confidentiality,integrity,availability,"
+        b"authenticity,authorization,non_repudiation\n"
+        b"Diagnostic API,api_endpoint,Accepts requests,maybe,true,true,false,true,false\n"
+    )
+    with tempfile.TemporaryDirectory() as workspace_root:
+        monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
+        headers = register_and_login(client)
+        assessment_id = create_assessment(client, headers)["assessment_id"]
+        response = client.post(
+            f"/api/v1/assessments/{assessment_id}/stages/3/asset-register",
+            headers=headers,
+            files={"asset_file": ("assets.csv", csv_content, "text/csv")},
+        )
+
+        assert response.status_code == 422
+        assert response.json()["detail"].startswith("Row 2, confidentiality:")
+
+
+def test_manual_asset_register_unblocks_stage_4(client, monkeypatch):
+    from checkpoint_api import pipeline_runner
+    from checkpoint_api.routers import pipeline
+
+    async def do_not_launch_agent(*_args, **_kwargs):
+        return None
+
+    monkeypatch.setattr(pipeline, "run_stage_subprocess", do_not_launch_agent)
+    csv_content = (
+        b"asset_title,asset_type,asset_description,confidentiality,integrity,availability,"
+        b"authenticity,authorization,non_repudiation\n"
+        b"Diagnostic API,api_endpoint,Accepts requests,true,true,true,false,true,false\n"
+    )
+    with tempfile.TemporaryDirectory() as workspace_root:
+        monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
+        headers = register_and_login(client)
+        assessment_id = create_assessment(client, headers)["assessment_id"]
+        imported = client.post(
+            f"/api/v1/assessments/{assessment_id}/stages/3/asset-register",
+            headers=headers,
+            files={"asset_file": ("assets.csv", csv_content, "text/csv")},
+        )
+        assert imported.status_code == 200
+
+        run = client.post(
+            f"/api/v1/assessments/{assessment_id}/stages/4/run",
+            headers=headers,
+        )
+        assert run.status_code == 202
+        assert run.json()["status"] == "pending"
+
+
+def test_manual_asset_registers_are_isolated_by_assessment(client, monkeypatch):
+    from checkpoint_api import pipeline_runner
+
+    def asset_csv(title: str) -> bytes:
+        return (
+            "asset_title,asset_type,asset_description,confidentiality,integrity,availability,"
+            "authenticity,authorization,non_repudiation\n"
+            f"{title},api_endpoint,Accepts requests,true,true,true,false,true,false\n"
+        ).encode()
+
+    with tempfile.TemporaryDirectory() as workspace_root:
+        monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
+        headers = register_and_login(client)
+        first_id = create_assessment(client, headers)["assessment_id"]
+        second_id = create_assessment(client, headers)["assessment_id"]
+        for assessment_id, title in ((first_id, "First API"), (second_id, "Second API")):
+            response = client.post(
+                f"/api/v1/assessments/{assessment_id}/stages/3/asset-register",
+                headers=headers,
+                files={"asset_file": ("assets.csv", asset_csv(title), "text/csv")},
+            )
+            assert response.status_code == 200
+
+        first_output = client.get(
+            f"/api/v1/assessments/{first_id}/stages/3/output",
+            headers=headers,
+        ).json()
+        second_output = client.get(
+            f"/api/v1/assessments/{second_id}/stages/3/output",
+            headers=headers,
+        ).json()
+        assert first_output[0]["asset_title"] == "First API"
+        assert second_output[0]["asset_title"] == "Second API"
 
 
 def test_assessment_stage_status_reflects_pipeline_runs(client):

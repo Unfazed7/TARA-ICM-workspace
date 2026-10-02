@@ -7,6 +7,7 @@ from ..database import get_db
 from ..models import Assessment, PipelineRun
 from ..pipeline_runner import STAGE_OUTPUT_FILES, get_output_path
 from ..schemas import AssessmentCreate, AssessmentResponse, AssessmentUpdate
+from ..stage_catalog import STAGES
 from .auth import get_current_claims
 
 
@@ -36,14 +37,17 @@ def require_assessment_access(assessment: Assessment, claims: dict) -> None:
 def stage_statuses(db: Session, assessment_id: str) -> dict[str, str]:
     runs = db.query(PipelineRun).filter_by(assessment_id=assessment_id).all()
     by_stage = {run.stage_num: run.status for run in runs}
-    return {f"{stage_num:02d}": by_stage.get(stage_num, "not_started") for stage_num in range(1, 8)}
+    return {
+        f"{stage.number:02d}": by_stage.get(stage.number, "not_started")
+        for stage in STAGES
+    }
 
 
-def stage_outputs_available() -> list[int]:
+def stage_outputs_available(assessment_id: str) -> list[int]:
     return [
         stage_num
         for stage_num in STAGE_OUTPUT_FILES
-        if os.path.exists(get_output_path(stage_num))
+        if os.path.exists(get_output_path(stage_num, assessment_id))
     ]
 
 
@@ -58,7 +62,7 @@ def to_response(db: Session, assessment: Assessment) -> AssessmentResponse:
         owner_id=assessment.owner_id,
         completion_percentage=assessment.completion_percentage,
         stages=stage_statuses(db, assessment.assessment_id),
-        stage_outputs_available=stage_outputs_available(),
+        stage_outputs_available=stage_outputs_available(assessment.assessment_id),
         created_at=assessment.created_at,
         updated_at=assessment.updated_at,
     )

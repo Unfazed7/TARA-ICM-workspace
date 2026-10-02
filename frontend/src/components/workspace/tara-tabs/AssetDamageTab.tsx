@@ -18,8 +18,8 @@ function EmptyState({ status }: { status: string }) {
         <p className="text-sm font-semibold text-foreground">No asset data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 01 — Input Normalization is running…'
-            : 'Upload a CSV file and run Stage 01 — Input Normalization from the pipeline panel above.'}
+            ? 'Stage 03 — Asset Identification is running…'
+            : 'Complete the Item Definition and run Stage 03 — Asset Identification.'}
         </p>
       </div>
     </div>
@@ -28,7 +28,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function AssetDamageTab() {
   const { assets, stageStatuses } = useTara();
-  const status = stageStatuses['01'] ?? 'not_started';
+  const status = stageStatuses['03'] ?? 'not_started';
 
   if (assets.length === 0) return <EmptyState status={status} />;
 

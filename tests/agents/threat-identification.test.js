@@ -71,6 +71,33 @@ test('generic threat without asset title is rejected', () => {
   assert.throws(() => validateThreats(threats, damage), /does not contain asset title/);
 });
 
+test('generated threat is normalized to include the exact asset title', async () => {
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  const fakeFetch = async () => ({
+    ok: true,
+    json: async () => ({
+      content: [{
+        type: 'tool_use',
+        name: 'submit_threat',
+        input: {
+          stride_category: 'elevation_of_privilege',
+          threat_statement: 'Authorization checks may be bypassed to invoke privileged diagnostic actions.',
+          derivation_note: 'Derived from the authorization damage scenario.',
+          owasp_reference: 'A01'
+        }
+      }]
+    })
+  });
+
+  const threats = await buildThreatsWithClaude(damage, { fetchImpl: fakeFetch });
+  restoreEnv('ANTHROPIC_API_KEY', previousKey);
+
+  assert.match(threats[0].threat_statement, new RegExp(damage[0].asset_title));
+  assert.equal(validateSchema(threats, readJson(schemaPath(5))).valid, true);
+});
+
 test('invalid stride category is rejected', () => {
   const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
   const threats = [{
@@ -124,6 +151,81 @@ test('threat identification retries once on free text before accepting tool_use'
   assert.equal(threats.length, 1);
 });
 
+test('threat identification falls back to a valid deterministic threat when the model repeatedly returns free text', async () => {
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  let calls = 0;
+  const fakeFetch = async () => {
+    calls += 1;
+    return {
+      ok: true,
+      json: async () => ({ content: [{ type: 'text', text: 'I cannot call the requested tool.' }] })
+    };
+  };
+
+  const threats = await buildThreatsWithClaude(damage, {
+    fetchImpl: fakeFetch,
+    timestamp: '2026-06-01T10:02:00Z'
+  });
+  restoreEnv('ANTHROPIC_API_KEY', previousKey);
+
+  assert.equal(calls, 2);
+  assert.equal(threats.length, damage.length);
+  assert.equal(threats[0].damage_scenario_id, damage[0].damage_id);
+  assert.match(threats[0].threat_statement, new RegExp(damage[0].asset_title));
+  assert.equal(validateSchema(threats, readJson(schemaPath(5))).valid, true);
+});
+
+test('threat identification falls back after repeated transient network failures', async () => {
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  let calls = 0;
+  const fakeFetch = async () => {
+    calls += 1;
+    const cause = Object.assign(new Error('Connect Timeout Error'), { code: 'UND_ERR_CONNECT_TIMEOUT' });
+    throw new TypeError('fetch failed', { cause });
+  };
+
+  const threats = await buildThreatsWithClaude(damage, { fetchImpl: fakeFetch });
+  restoreEnv('ANTHROPIC_API_KEY', previousKey);
+
+  assert.equal(calls, 2);
+  assert.equal(threats.length, damage.length);
+  assert.match(threats[0].derivation_note, /UND_ERR_CONNECT_TIMEOUT/);
+  assert.equal(validateSchema(threats, readJson(schemaPath(5))).valid, true);
+});
+
+test('threat identification rejects malformed tool payloads before accepting a result', async () => {
+  const damage = readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'));
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  let calls = 0;
+  const fakeFetch = async () => {
+    calls += 1;
+    return {
+      ok: true,
+      json: async () => ({
+        content: [{
+          type: 'tool_use',
+          name: 'submit_threat',
+          input: {
+            threat_statement: 'Missing required structured fields.'
+          }
+        }]
+      })
+    };
+  };
+
+  const threats = await buildThreatsWithClaude(damage, { fetchImpl: fakeFetch });
+  restoreEnv('ANTHROPIC_API_KEY', previousKey);
+
+  assert.equal(calls, 2);
+  assert.equal(threats[0].stride_category, 'elevation_of_privilege');
+  assert.equal(validateSchema(threats, readJson(schemaPath(5))).valid, true);
+});
+
 test('threat identification Claude path fails without API key', async () => {
   const previousKey = process.env.ANTHROPIC_API_KEY;
   delete process.env.ANTHROPIC_API_KEY;
@@ -132,7 +234,7 @@ test('threat identification Claude path fails without API key', async () => {
       readJson(fixturePath('valid', 'stage-04-damage-scenarios.json'))[0],
       async () => { throw new Error('not called'); }
     ),
-    /ANTHROPIC_API_KEY is required/
+    /LLM API key not set/
   );
   restoreEnv('ANTHROPIC_API_KEY', previousKey);
 });

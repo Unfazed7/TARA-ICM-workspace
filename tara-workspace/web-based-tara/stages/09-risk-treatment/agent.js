@@ -389,7 +389,7 @@ async function run(options) {
   const treatments = await buildRiskTreatments(inputs, { fetchImpl: options.fetchImpl });
   writeJson(options.out, treatments);
   await submitCheckpoint(options.assessmentId, {
-    stage_num: 7,
+    stage_num: 9,
     stage_name: 'risk-treatment',
     output_summary: summarizeTreatments(treatments)
   });

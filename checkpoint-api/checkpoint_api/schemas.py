@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class CheckpointCreate(BaseModel):
-    stage_num: int = Field(ge=1, le=8)
+    stage_num: int = Field(ge=1, le=10)
     stage_name: str = Field(min_length=1)
     output_summary: dict[str, Any] | None = None
 
@@ -129,10 +129,28 @@ class PipelineRunResponse(BaseModel):
     completed_at: datetime | None = None
 
 
+class StageDefinitionResponse(BaseModel):
+    stage_num: int
+    key: str
+    name: str
+    description: str
+    dependencies: list[int]
+    outputs: list[str]
+    checkpoint: str | None
+    available: bool
+
+
 class UploadResponse(BaseModel):
     uploaded: bool
     filename: str | None = None
     size_bytes: int = 0
+
+
+class AssetRegisterImportResponse(BaseModel):
+    filename: str
+    asset_count: int
+    stage_num: int = 3
+    status: Literal["complete"] = "complete"
 
 
 # --- Stage 1 CP1: element-level boundary review ------------------------------

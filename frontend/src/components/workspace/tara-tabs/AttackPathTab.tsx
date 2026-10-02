@@ -11,13 +11,13 @@ const VECTOR_COLORS: Record<string, string> = {
 function EmptyState({ status }: { status: string }) {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
-      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">4</div>
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">6</div>
       <div>
         <p className="text-sm font-semibold text-foreground">No attack path data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 04 — Attack Path Modelling is running…'
-            : 'Run Stage 04 — Attack Path Modelling from the pipeline panel above.'}
+            ? 'Stage 06 — Attack Path Modelling is running…'
+            : 'Run Stage 06 — Attack Path Modelling from the pipeline panel above.'}
         </p>
       </div>
     </div>
@@ -26,7 +26,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function AttackPathTab() {
   const { attackPaths, threats, assets, stageStatuses } = useTara();
-  const status = stageStatuses['04'] ?? 'not_started';
+  const status = stageStatuses['06'] ?? 'not_started';
 
   if (attackPaths.length === 0) return <EmptyState status={status} />;
 

@@ -37,6 +37,17 @@ export interface TaraThreat {
   strideCategory: string;
 }
 
+export interface TaraDamageScenario {
+  id: string;
+  damageId: string;
+  linkedAssetId: string;
+  assetTitle: string;
+  property: string;
+  scenario: string;
+  stakeholderAffected: string;
+  createdAt: string;
+}
+
 export interface TaraImpact {
   id: string;
   linkedAssetId: string;
@@ -79,7 +90,7 @@ interface RawAsset {
   asset_title: string;
   component?: string;
   asset_type?: string;
-  description?: string;
+  asset_description?: string;
   ciaaan?: Record<string, boolean>;
 }
 
@@ -91,6 +102,16 @@ interface RawThreat {
   threat_statement: string;
   damage_scenario_id?: string;
   owasp_reference?: string | null;
+}
+
+interface RawDamageScenario {
+  damage_id: string;
+  asset_id: string;
+  asset_title: string;
+  property: string;
+  damage_scenario: string;
+  stakeholder_affected: string;
+  created_timestamp?: string;
 }
 
 interface RawAttackPath {
@@ -155,7 +176,7 @@ function mapAsset(raw: RawAsset): TaraAsset {
     assetId: raw.asset_id,
     name: raw.asset_title,
     assetType: 'other',
-    description: raw.description ?? '',
+    description: raw.asset_description ?? '',
     confidentiality: raw.ciaaan?.confidentiality ?? false,
     integrity: raw.ciaaan?.integrity ?? false,
     availability: raw.ciaaan?.availability ?? false,
@@ -172,7 +193,21 @@ function mapThreat(raw: RawThreat): TaraThreat {
     threatId: raw.threat_id,
     scenario: raw.threat_statement,
     linkedAssetId: raw.asset_id,
-    strideCategory: STRIDE_MAP[raw.stride_category] ?? raw.stride_category.toLowerCase(),
+    strideCategory: STRIDE_MAP[raw.stride_category]
+      ?? raw.stride_category.toLowerCase().replace(/_/g, '-'),
+  };
+}
+
+function mapDamageScenario(raw: RawDamageScenario): TaraDamageScenario {
+  return {
+    id: raw.damage_id,
+    damageId: raw.damage_id,
+    linkedAssetId: raw.asset_id,
+    assetTitle: raw.asset_title,
+    property: raw.property,
+    scenario: raw.damage_scenario,
+    stakeholderAffected: raw.stakeholder_affected,
+    createdAt: raw.created_timestamp ?? '',
   };
 }
 
@@ -230,6 +265,7 @@ type StageStatus = 'not_started' | 'pending' | 'running' | 'complete' | 'failed'
 
 interface TaraContextType {
   assets: TaraAsset[];
+  damageScenarios: TaraDamageScenario[];
   threats: TaraThreat[];
   impacts: TaraImpact[];
   attackPaths: TaraAttackPath[];
@@ -279,43 +315,53 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
     enabled: !!assessmentId,
     refetchInterval: (query) => {
       const stages = query.state.data?.stages ?? {};
-      const running = Object.values(stages).includes('running' as StageStatus);
-      return running ? 3000 : false;
+      const active = Object.values(stages).some(
+        (status) => status === 'pending' || status === 'running'
+      );
+      return active ? 3000 : false;
     },
     select: (data) => data.stages as Record<string, StageStatus>,
   });
 
   const { data: rawAssets } = useQuery({
-    queryKey: ['stage-output', assessmentId, 1],
-    queryFn: () => api.pipeline.output<RawAsset[]>(assessmentId, 1),
-    enabled: !!assessmentId && stageStatuses?.['01'] === 'complete',
-  });
-
-  const { data: rawThreats } = useQuery({
     queryKey: ['stage-output', assessmentId, 3],
-    queryFn: () => api.pipeline.output<RawThreat[]>(assessmentId, 3),
+    queryFn: () => api.pipeline.output<RawAsset[]>(assessmentId, 3),
     enabled: !!assessmentId && stageStatuses?.['03'] === 'complete',
   });
 
-  const { data: rawAttackPaths } = useQuery({
+  const { data: rawDamageScenarios } = useQuery({
     queryKey: ['stage-output', assessmentId, 4],
-    queryFn: () => api.pipeline.output<RawAttackPath[]>(assessmentId, 4),
+    queryFn: () => api.pipeline.output<RawDamageScenario[]>(assessmentId, 4),
     enabled: !!assessmentId && stageStatuses?.['04'] === 'complete',
   });
 
-  const { data: rawImpacts } = useQuery({
+  const { data: rawThreats } = useQuery({
     queryKey: ['stage-output', assessmentId, 5],
-    queryFn: () => api.pipeline.output<RawImpact[]>(assessmentId, 5),
+    queryFn: () => api.pipeline.output<RawThreat[]>(assessmentId, 5),
     enabled: !!assessmentId && stageStatuses?.['05'] === 'complete',
   });
 
-  const { data: rawTreatments } = useQuery({
+  const { data: rawAttackPaths } = useQuery({
+    queryKey: ['stage-output', assessmentId, 6],
+    queryFn: () => api.pipeline.output<RawAttackPath[]>(assessmentId, 6),
+    enabled: !!assessmentId && stageStatuses?.['06'] === 'complete',
+  });
+
+  const { data: rawImpacts } = useQuery({
     queryKey: ['stage-output', assessmentId, 7],
-    queryFn: () => api.pipeline.output<RawTreatment[]>(assessmentId, 7),
+    queryFn: () => api.pipeline.output<RawImpact[]>(assessmentId, 7),
     enabled: !!assessmentId && stageStatuses?.['07'] === 'complete',
   });
 
+  const { data: rawTreatments } = useQuery({
+    queryKey: ['stage-output', assessmentId, 9],
+    queryFn: () => api.pipeline.output<RawTreatment[]>(assessmentId, 9),
+    enabled: !!assessmentId && stageStatuses?.['09'] === 'complete',
+  });
+
   const assets = (rawAssets ?? []).map(mapAsset);
+
+  const damageScenarios = (rawDamageScenarios ?? []).map(mapDamageScenario);
 
   const threats = (rawThreats ?? []).map(mapThreat);
 
@@ -339,6 +385,7 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
   return (
     <TaraContext.Provider value={{
       assets,
+      damageScenarios,
       threats,
       impacts,
       attackPaths,

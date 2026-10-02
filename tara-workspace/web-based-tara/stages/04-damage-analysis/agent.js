@@ -214,7 +214,7 @@ async function run(options) {
     : await buildDamageScenariosWithClaude(assets, { fetchImpl: options.fetchImpl });
   writeJson(options.out, scenarios);
   await submitCheckpoint(options.assessmentId, {
-    stage_num: 2,
+    stage_num: 4,
     stage_name: 'damage-analysis',
     output_summary: {
       total_damage_scenarios: scenarios.length,

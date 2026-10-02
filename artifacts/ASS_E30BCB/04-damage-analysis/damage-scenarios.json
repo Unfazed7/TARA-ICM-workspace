@@ -1,0 +1,101 @@
+[
+  {
+    "damage_id": "DS_01",
+    "asset_id": "AS_01",
+    "asset_title": "EKS Kubernetes API server",
+    "property": "availability",
+    "damage_scenario": "The EKS Kubernetes API server is the single control point through which every workload in the ap-south-1 cluster is created, scaled, restarted, and rolled back, and it is the only component that can report and correct unhealthy cluster state. If its availability is compromised, the platform team loses all ability to deploy, replace failed pods, or push a corrective change for as long as the outage lasts, so a crashed or misbehaving service stays broken with no way to intervene, and because control-plane audit logs are not fed to GuardDuty the root cause is not automatically surfaced to anyone watching for it.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_02",
+    "asset_id": "AS_01",
+    "asset_title": "EKS Kubernetes API server",
+    "property": "authorization",
+    "damage_scenario": "The API server is the enforcement point that combines IAM/OIDC identity with Kubernetes RBAC to decide which authenticated identities may create, read, or modify workloads in each namespace. If its authorization is compromised, a low-privilege identity that authenticates successfully — a sandbox-scoped CI/CD account, a contractor token, or any credential reaching the publicly open 0.0.0.0/0 endpoint — can act on production namespaces it was never granted, so production database credentials, signing keys, and deployment configuration are exposed to being read, altered, or replaced by parties entitled only to test access.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_03",
+    "asset_id": "AS_02",
+    "asset_title": "EKS worker nodes",
+    "property": "confidentiality",
+    "damage_scenario": "The five private node groups are the single execution substrate for every platform workload — diagnostic API calls, license validation, OTA orchestration and session handling all run inside their process memory, and each instance also exposes its kubelet surface and the instance metadata endpoint (IMDS). If their confidentiality is compromised, the cloud service account tokens, node credentials and diagnostic or vehicle data resident on a node can be pulled out in plaintext, so secrets that were meant to stay sealed inside the cluster become readable and a single compromised node yields enough material to reach the rest of the platform.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_04",
+    "asset_id": "AS_02",
+    "asset_title": "EKS worker nodes",
+    "property": "integrity",
+    "damage_scenario": "These nodes are trusted precisely because the workloads running on them have not been altered, so every diagnostic result, license decision and OTA package the platform emits inherits its trustworthiness from the node it executed on. If their integrity is compromised, workloads or their outputs can be silently modified in place — a license check reports valid for an invalid key, diagnostic readings returned to the workshop differ from the actual vehicle values, or an OTA image is swapped before distribution — and no downstream output carries any indication that the result was falsified.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_05",
+    "asset_id": "AS_03",
+    "asset_title": "Envoy Gateway + public NLB (envoy-gateway-lb)",
+    "property": "integrity",
+    "damage_scenario": "The Envoy Gateway and NLB terminate TLS and decide which backend service each public API call is delivered to, so every diagnostic request and response passes through them unaltered. If their integrity is compromised, calls can be silently rerouted to a different backend or their contents and answers altered in transit, so the vehicle diagnostic data the technician's application displays is no longer what the platform actually returned.",
+    "stakeholder_affected": "tool_user",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_06",
+    "asset_id": "AS_03",
+    "asset_title": "Envoy Gateway + public NLB (envoy-gateway-lb)",
+    "property": "availability",
+    "damage_scenario": "Envoy Gateway behind the NLB is the sole internet entry point to the diagnostic platform, with no WAF or CloudFront layer that could absorb a failure in front of it. If its availability is compromised, no technician or third-party integration can reach any diagnostic API at all, and the whole cloud diagnostic service stays offline until the gateway is restored.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_07",
+    "asset_id": "AS_04",
+    "asset_title": "Kong API gateway",
+    "property": "authorization",
+    "damage_scenario": "The Kong API Gateway is the front door for /core/v2, /data/v2 and /pandora/v1, running the authentication plugins, rate limiting and routing that decide which backend service a given caller may reach with the scope it was granted. If its authorization is compromised, the gateway stops holding requests to that granted scope and forwards and answers them anyway, so diagnostics, telemetry and fleet records for vehicles, tenants or API operations that the caller was never entitled to are returned as if the permission check had passed.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_08",
+    "asset_id": "AS_05",
+    "asset_title": "Hasura GraphQL engine",
+    "property": "authorization",
+    "damage_scenario": "The Hasura GraphQL engine is the single programmatic entry point to the core vehicle, diagnostic and customer database, applying role and tenant permission rules that decide which rows and fields each caller is permitted to read or change. If its authorization is compromised, a caller holding valid credentials for one tenant can use the same query surface to read or modify rows belonging to other tenants, breaking the per-tenant and per-role isolation that is supposed to confine each dealer's vehicle and diagnostic records to its own assigned users.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_09",
+    "asset_id": "AS_06",
+    "asset_title": "Aurora cloudapi database",
+    "property": "integrity",
+    "damage_scenario": "This database is the system of record for role definitions, authorization policy rules, and tenant-to-vehicle bindings, and the Cloud API front door reads it on every request to decide whether the request may proceed. If its integrity is compromised, access decisions are computed from rules that no longer match what was approved — extra permissions can be added to a role, a tenant's vehicle bindings can be repointed at another tenant's fleet, or rule history can be silently overwritten — so the platform releases or withholds vehicle data in ways nobody authorized, and a rejected or wrongly permitted request cannot be explained afterwards because the rule version that produced the decision no longer exists.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_10",
+    "asset_id": "AS_07",
+    "asset_title": "Aurora directordb database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora directordb is the system of record for the Deep Updater, storing the software version actually installed on each vehicle's ECUs and defining which vehicles a given update campaign targets. If its integrity is compromised, the stored version and targeting records stop reflecting the true state of each vehicle, and update instructions are then generated from those false records — a vehicle is told to install software it already runs, is wrongly excluded from a campaign and stays on defective software, or is sent an update intended for a different vehicle configuration.",
+    "stakeholder_affected": "vehicle_owner",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  },
+  {
+    "damage_id": "DS_11",
+    "asset_id": "AS_08",
+    "asset_title": "Aurora pandoradb database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora pandoradb database is the authoritative record of which vehicle identities are enrolled in the platform and which device certificate each identity is bound to. If its integrity is compromised, those identity-to-certificate bindings can no longer be trusted: a vehicle may be recorded against a certificate that does not belong to it, a withdrawn enrollment may reappear as valid, or a correctly enrolled vehicle may be dropped from the table and be refused authentication on the next check-in.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-01T16:52:37.390Z"
+  }
+]

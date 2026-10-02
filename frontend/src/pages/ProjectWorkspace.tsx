@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 import { ModuleSidebar } from '@/components/workspace/ModuleSidebar';
@@ -57,34 +58,33 @@ const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | '
   failed: 'destructive',
 };
 
-const STAGE_LABELS = [
-  { num: 1, label: '01 — Input Normalization' },
-  { num: 2, label: '02 — Damage Analysis' },
-  { num: 3, label: '03 — Threat Identification' },
-  { num: 4, label: '04 — Attack Path Modelling' },
-  { num: 5, label: '05 — Impact Analysis' },
-  { num: 6, label: '06 — Risk Scoring' },
-  { num: 7, label: '07 — Risk Treatment' },
-];
-
 function StageRunnerPanel({ assessmentId }: { assessmentId: string }) {
   const { stageStatuses, runStage } = useTara();
-  const [uploading, setUploading] = useState(false);
-  const [csvReady, setCsvReady] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+  const assetFileRef = useRef<HTMLInputElement>(null);
+  const [uploadingAssets, setUploadingAssets] = useState(false);
+  const { data: stages = [], isLoading, error } = useQuery({
+    queryKey: ['stage-catalog', assessmentId],
+    queryFn: () => api.pipeline.catalog(assessmentId),
+    enabled: !!assessmentId,
+  });
 
-  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleAssetRegisterUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!file) return;
-    setUploading(true);
+    setUploadingAssets(true);
     try {
-      await api.uploads.csv(assessmentId, file);
-      setCsvReady(true);
-      toast.success('CSV uploaded successfully');
+      const result = await api.uploads.assetRegister(assessmentId, file);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['assessment', assessmentId] }),
+        queryClient.invalidateQueries({ queryKey: ['stage-output', assessmentId, 3] }),
+      ]);
+      toast.success(`${result.asset_count} Assets imported; Stage 03 marked complete`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Upload failed');
+      toast.error(err instanceof Error ? err.message : 'Asset import failed');
     } finally {
-      setUploading(false);
+      setUploadingAssets(false);
+      event.target.value = '';
     }
   };
 
@@ -104,41 +104,65 @@ function StageRunnerPanel({ assessmentId }: { assessmentId: string }) {
         <span className="text-sm font-medium">Pipeline Stages</span>
       </div>
 
-      {/* CSV Upload */}
-      <div className="flex items-center gap-2 pb-3 border-b border-border">
+      <div className="rounded-md border border-amber-500/30 bg-amber-500/5 p-3 space-y-2">
+        <p className="text-xs font-medium text-amber-300">Temporary Stage 03 test import</p>
+        <p className="text-[11px] text-muted-foreground">
+          Upload a CSV or XLSX Asset list to test Stages 04–09 before the initial pipeline is connected.
+        </p>
         <input
-          ref={fileInputRef}
+          ref={assetFileRef}
           type="file"
-          accept=".csv"
+          accept=".csv,.xlsx"
           className="hidden"
-          onChange={handleCsvUpload}
+          onChange={handleAssetRegisterUpload}
         />
         <Button
           variant="outline"
           size="sm"
           className="gap-1.5 text-xs"
-          disabled={uploading}
-          onClick={() => fileInputRef.current?.click()}
+          disabled={uploadingAssets}
+          onClick={() => assetFileRef.current?.click()}
         >
           <Upload className="w-3.5 h-3.5" />
-          {uploading ? 'Uploading...' : csvReady ? 'Replace CSV' : 'Upload Assets CSV'}
+          {uploadingAssets ? 'Validating…' : 'Upload Asset List'}
         </Button>
-        {csvReady && <span className="text-xs text-emerald-400">✓ CSV ready</span>}
       </div>
 
-      {/* Stage rows */}
-      {STAGE_LABELS.map(({ num, label }) => {
-        const key = String(num).padStart(2, '0');
+      {isLoading && <p className="text-xs text-muted-foreground">Loading stage catalogue…</p>}
+      {error && <p className="text-xs text-destructive">Unable to load stage catalogue.</p>}
+
+      {stages.map((stage) => {
+        const key = String(stage.stage_num).padStart(2, '0');
         const status = stageStatuses[key] ?? 'not_started';
-        const canRun = status === 'not_started' || status === 'failed';
+        const blockingDependency = stage.dependencies.find((dependency) => {
+          const dependencyKey = String(dependency).padStart(2, '0');
+          return stageStatuses[dependencyKey] !== 'complete';
+        });
+        const canRun = stage.available
+          && blockingDependency === undefined
+          && (status === 'not_started' || status === 'failed');
         return (
-          <div key={num} className="flex items-center gap-3">
-            <span className="text-xs w-44 text-muted-foreground">{label}</span>
-            <Badge variant={STATUS_VARIANT[status]}>{status.replace('_', ' ')}</Badge>
+          <div key={stage.stage_num} className="flex items-center gap-3">
+            <span className="text-xs w-52 text-muted-foreground">
+              {key} — {stage.name}
+            </span>
+            <Badge variant={stage.available || status === 'complete' ? STATUS_VARIANT[status] : 'outline'}>
+              {stage.available || status === 'complete' ? status.replace('_', ' ') : 'unavailable'}
+            </Badge>
             {canRun && (
-              <Button size="sm" variant="ghost" className="h-6 text-xs px-2" onClick={() => handleRun(num)}>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-6 text-xs px-2"
+                onClick={() => handleRun(stage.stage_num)}
+              >
                 Run
               </Button>
+            )}
+            {stage.available && blockingDependency !== undefined && status === 'not_started' && (
+              <span className="text-[10px] text-muted-foreground">
+                Waiting on {String(blockingDependency).padStart(2, '0')}
+              </span>
             )}
           </div>
         );

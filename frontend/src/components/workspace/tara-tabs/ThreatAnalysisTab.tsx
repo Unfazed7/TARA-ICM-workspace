@@ -13,13 +13,13 @@ const STRIDE_COLORS: Record<string, string> = {
 function EmptyState({ status }: { status: string }) {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
-      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">3</div>
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">5</div>
       <div>
         <p className="text-sm font-semibold text-foreground">No threat data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 03 — Threat Identification is running…'
-            : 'Run Stage 02 (Damage Analysis) then Stage 03 (Threat Identification) from the pipeline panel above.'}
+            ? 'Stage 05 — Threat Identification is running…'
+            : 'Complete Stage 04 — Damage Analysis, then run Stage 05 — Threat Identification.'}
         </p>
       </div>
     </div>
@@ -28,7 +28,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function ThreatAnalysisTab() {
   const { threats, assets, stageStatuses } = useTara();
-  const status = stageStatuses['03'] ?? 'not_started';
+  const status = stageStatuses['05'] ?? 'not_started';
 
   if (threats.length === 0) return <EmptyState status={status} />;
 

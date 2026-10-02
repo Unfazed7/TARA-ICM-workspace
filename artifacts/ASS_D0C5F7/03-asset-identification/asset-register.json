@@ -1,0 +1,130 @@
+[
+  {
+    "asset_id": "AS_01",
+    "asset_title": "EKS Kubernetes API server",
+    "asset_type": "cloud_service",
+    "asset_description": "Control plane of the ap-south-1-cluster EKS cluster, using IAM/OIDC and Kubernetes RBAC to decide who may create or change workloads. Control-plane audit logging is enabled. The public endpoint is open to 0.0.0.0/0 and the audit logs are not analysed by GuardDuty. Source: INF-01. Component: EKS platform.",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": false,
+      "availability": true,
+      "authenticity": false,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  },
+  {
+    "asset_id": "AS_02",
+    "asset_title": "EKS worker nodes",
+    "asset_type": "cloud_service",
+    "asset_description": "Five private node groups of about 22 Graviton EC2 instances running all platform workloads. Each node exposes its OS, kubelet and the instance metadata endpoint (IMDS). Source: INF-02. Component: EKS platform.",
+    "ciaaan": {
+      "confidentiality": true,
+      "integrity": true,
+      "availability": false,
+      "authenticity": false,
+      "authorization": false,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  },
+  {
+    "asset_id": "AS_03",
+    "asset_title": "Envoy Gateway + public NLB (envoy-gateway-lb)",
+    "asset_type": "api_endpoint",
+    "asset_description": "The single internet entry point: a layer 4 NLB on port 443 with no WAF or CloudFront in front, terminating into the in-cluster Envoy TLS and layer 7 router. Source: WL-01. Component: Cloud API front door.",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": true,
+      "availability": true,
+      "authenticity": false,
+      "authorization": false,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  },
+  {
+    "asset_id": "AS_04",
+    "asset_title": "Kong API gateway",
+    "asset_type": "api_endpoint",
+    "asset_description": "API gateway behind Envoy that runs the authentication plugins, rate limiting and request routing for /core/v2, /data/v2 and /pandora/v1. Source: WL-02. Component: Cloud API front door.",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": false,
+      "availability": false,
+      "authenticity": false,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  },
+  {
+    "asset_id": "AS_05",
+    "asset_title": "Hasura GraphQL engine",
+    "asset_type": "api_endpoint",
+    "asset_description": "GraphQL data API over the core database, with role and tenant permission rules deciding which rows and fields each caller may read or change. Source: WL-03. Component: Cloud API front door.",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": false,
+      "availability": false,
+      "authenticity": false,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  },
+  {
+    "asset_id": "AS_06",
+    "asset_title": "Aurora cloudapi database",
+    "asset_type": "data_store",
+    "asset_description": "Aurora PostgreSQL database holding core platform records, including the role, policy and tenant bindings that the platform's authorization decisions read. Source: DS-01. Component: Cloud API front door.",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": true,
+      "availability": false,
+      "authenticity": false,
+      "authorization": false,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  },
+  {
+    "asset_id": "AS_07",
+    "asset_title": "Aurora directordb database",
+    "asset_type": "data_store",
+    "asset_description": "Aurora PostgreSQL database holding the update-instruction signing service state: installed ECU versions per vehicle and campaign targeting. Source: DS-02. Component: Deep Updater (OTA).",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": true,
+      "availability": false,
+      "authenticity": false,
+      "authorization": false,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  },
+  {
+    "asset_id": "AS_08",
+    "asset_title": "Aurora pandoradb database",
+    "asset_type": "data_store",
+    "asset_description": "Aurora PostgreSQL database holding provisioning and device-identity state: which vehicle identities are enrolled and how each binds to a device certificate. Source: DS-03. Component: Device provisioning & PKI.",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": true,
+      "availability": false,
+      "authenticity": false,
+      "authorization": false,
+      "non_repudiation": false
+    },
+    "input_mode": "manual",
+    "created_timestamp": "2026-10-01T17:29:00.383619Z"
+  }
+]

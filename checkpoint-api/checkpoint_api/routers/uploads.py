@@ -1,13 +1,16 @@
+import json
 import os
 import shutil
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
+from ..asset_register_import import AssetImportError, import_asset_register
 from ..database import get_db
-from ..models import Assessment
-from ..pipeline_runner import UPLOAD_DIR
-from ..schemas import UploadResponse
+from ..models import Assessment, PipelineRun
+from ..pipeline_runner import UPLOAD_DIR, get_output_path, update_assessment_completion, utc_now
+from ..schemas import AssetRegisterImportResponse, UploadResponse
 from .auth import get_current_claims
 
 
@@ -70,3 +73,68 @@ def csv_status(
     if not os.path.exists(path):
         return UploadResponse(uploaded=False, filename=None, size_bytes=0)
     return UploadResponse(uploaded=True, filename="assets.csv", size_bytes=os.path.getsize(path))
+
+
+@router.post(
+    "/{assessment_id}/stages/3/asset-register",
+    response_model=AssetRegisterImportResponse,
+)
+async def import_manual_asset_register(
+    assessment_id: str,
+    asset_file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    claims: dict = Depends(get_current_claims),
+):
+    """Temporary production testing seam. Remove after Stage 03 is connected."""
+    require_assessment_access(db, assessment_id, claims)
+    filename = asset_file.filename or ""
+    content = await asset_file.read()
+    try:
+        assets = import_asset_register(filename, content)
+    except AssetImportError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+
+    downstream_run = (
+        db.query(PipelineRun)
+        .filter(PipelineRun.assessment_id == assessment_id, PipelineRun.stage_num >= 4)
+        .first()
+    )
+    if downstream_run:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Reset Stages 04-10 before replacing the manual Asset register",
+        )
+
+    output_path = Path(get_output_path(3, assessment_id))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = output_path.with_suffix(f"{output_path.suffix}.tmp")
+    temporary_path.write_text(f"{json.dumps(assets, indent=2)}\n", encoding="utf-8")
+    os.replace(temporary_path, output_path)
+
+    run = db.query(PipelineRun).filter_by(
+        assessment_id=assessment_id,
+        stage_num=3,
+    ).first()
+    now = utc_now()
+    if run is None:
+        run = PipelineRun(
+            assessment_id=assessment_id,
+            stage_num=3,
+            stage_name="03-asset-identification",
+        )
+        db.add(run)
+    run.status = "complete"
+    run.error_message = None
+    run.started_at = now
+    run.completed_at = now
+    db.flush()
+    update_assessment_completion(db, assessment_id)
+    db.commit()
+
+    return AssetRegisterImportResponse(
+        filename=filename,
+        asset_count=len(assets),
+    )

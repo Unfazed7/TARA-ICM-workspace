@@ -1,4 +1,10 @@
-import type { Assessment, PipelineRunStatus, CreateAssessmentBody } from '@/types/api';
+import type {
+  Assessment,
+  AssetRegisterImportResult,
+  PipelineRunStatus,
+  CreateAssessmentBody,
+  StageDefinition,
+} from '@/types/api';
 import type {
   BoundaryState,
   BoundaryEdit,
@@ -34,6 +40,20 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json();
 }
 
+async function uploadFetch<T>(path: string, form: FormData): Promise<T> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: form,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail ?? `Upload error ${res.status}`);
+  }
+  return res.json();
+}
+
 export const api = {
   auth: {
     login: (email: string, password: string) =>
@@ -59,6 +79,8 @@ export const api = {
   },
 
   pipeline: {
+    catalog: (assessmentId: string) =>
+      apiFetch<StageDefinition[]>(`/assessments/${assessmentId}/stages`),
     run: (assessmentId: string, stageNum: number) =>
       apiFetch<PipelineRunStatus>(`/assessments/${assessmentId}/stages/${stageNum}/run`, { method: 'POST' }),
     status: (assessmentId: string, stageNum: number) =>
@@ -68,6 +90,14 @@ export const api = {
   },
 
   uploads: {
+    assetRegister: (assessmentId: string, file: File) => {
+      const form = new FormData();
+      form.append('asset_file', file);
+      return uploadFetch<AssetRegisterImportResult>(
+        `/assessments/${assessmentId}/stages/3/asset-register`,
+        form,
+      );
+    },
     csv: (assessmentId: string, file: File) => {
       const form = new FormData();
       form.append('assets_csv', file);
