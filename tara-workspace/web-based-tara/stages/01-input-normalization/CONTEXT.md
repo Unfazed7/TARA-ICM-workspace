@@ -39,7 +39,7 @@ The stored version lives in `checkpoint-api` once seeded.
    - A drawn box is a zone only if it is labelled as one or confirmed by text. Managed services drawn as a sidebar with one generic arrow produce no per-service links.
 4. **Extract facts per document**, one model call per document (large documents split by page range with overlap, keeping page references). Every fact carries at least one source reference.
 5. **If one file cannot be read but the minimum is still met,** continue. Mark the file "failed" with the reason in the register, list it in the Rationale, and add a resend question.
-6. **Reconcile** (deterministic engine, `_engines/fact-reconcile.js`, built in C5): match facts that describe the same thing, detect conflicts, apply source precedence, label each fact Agreed, Single source or Needs you, and write a Rationale item for every conflict.
+6. **Reconcile** (`_engines/fact-reconcile.js`, spec 20; one model call reports duplicates, same names and disagreements, code decides everything else, D-44): match facts that describe the same thing, detect conflicts, apply source precedence, label each fact Agreed, Single source or Needs you, and write a Rationale item for every conflict.
 
 ## Source precedence (highest wins)
 

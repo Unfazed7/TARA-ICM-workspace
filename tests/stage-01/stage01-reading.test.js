@@ -156,8 +156,9 @@ test('item-01: outputs validate against the shared schemas', async () => {
   };
   check(readJson(path.join(outDir, 'document-register.json')), 'stage-01-document-register.schema.json');
   check(readJson(path.join(outDir, 'facts.raw.json')), 'stage-01-facts.schema.json');
+  check(readJson(path.join(outDir, 'facts.json')), 'stage-01-facts.schema.json');
   check(readJson(path.join(outDir, 'rationale.json')), 'rationale.schema.json');
-  assert.equal(result.facts[0].fact_id, 'FCT-001');
+  assert.equal(result.rawFacts[0].fact_id, 'FCT-001');
 });
 
 test('item-01: an invented quote is dropped and logged', async () => {
@@ -362,6 +363,7 @@ test('each model call is recorded with the pinned model and prompt version', asy
   const lines = fs.readFileSync(process.env.LLM_AUDIT_FILE, 'utf8').trim().split('\n').map(JSON.parse);
   assert.deepEqual(lines.map((l) => [l.stage, l.prompt_version]), [
     ['01-extract-text', 'extract-v1'], ['01-extract-text', 'extract-v1'], ['01-extract-image', 'image-v1'],
+    ['01-reconcile-leftovers', 'compare-v1'],
   ]);
 });
 

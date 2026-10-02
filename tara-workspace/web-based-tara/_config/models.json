@@ -31,7 +31,7 @@
       "provider": "anthropic",
       "temperature": null,
       "max_tokens": 4000,
-      "prompt_version": "UNSET"
+      "prompt_version": "compare-v1"
     },
     "02-build": {
       "model": "anthropic/claude-sonnet-5.5",

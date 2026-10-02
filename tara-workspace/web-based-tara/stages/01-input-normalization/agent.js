@@ -8,8 +8,8 @@
  *
  * The input folder holds the client files, boundary.txt and manifest.json
  * ([{file, doc_type, date_received}], written by the upload screen). Writes
- * document-register.json, facts.raw.json and rationale.json. Facts are per document;
- * C5 (fact reconciliation) merges them across documents and adds conflicts.
+ * document-register.json, facts.raw.json (per document), then compares documents
+ * (_engines/fact-reconcile.js, spec 20) and writes facts.json with conflicts, and rationale.json.
  *
  * Exit codes: 0 done, 2 minimum input missing (the missing items are printed), 1 error.
  */
@@ -25,6 +25,7 @@ const drawio = require('./lib/readers/drawio');
 const readers = require('./lib/readers/text-readers');
 const extract = require('./lib/extract');
 const { normalise } = require('./lib/quotes');
+const { reconcile, writeReconciled } = require('../../_engines/fact-reconcile');
 
 const DEFAULT_OUT = path.join(__dirname, 'output');
 
@@ -226,9 +227,19 @@ async function runStage01({ inputDir, outDir = DEFAULT_OUT, fetchImpl = fetch, r
     }
   }
 
-  const result = { status: 'done', register, facts, rationale: book.items, dropped: ctx.dropped };
-  writeOutputs(outDir, result, redactor);
-  return result;
+  writeOutputs(outDir, { register, facts, rationale: book.items, dropped: ctx.dropped }, redactor);
+  const reconciled = await reconcile({ register, rawFacts: facts, rationale: book.items, fetchImpl, redactor });
+  writeReconciled(outDir, reconciled);
+  return {
+    status: 'done',
+    register,
+    rawFacts: facts,
+    facts: reconciled.facts,
+    conflicts: reconciled.conflicts,
+    rationale: reconciled.rationale,
+    dropped: ctx.dropped,
+    reconcileLog: reconciled.log,
+  };
 }
 
 function writeOutputs(outDir, result, redactor) {
@@ -253,7 +264,7 @@ async function seedStage01({ api, assessmentId, secret, result, fetchImpl = fetc
   const response = await fetchImpl(`${api}/api/v1/assessments/${assessmentId}/stages/01/runs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ document_register: result.register, facts: result.facts, conflicts: [], rationale: result.rationale }),
+    body: JSON.stringify({ document_register: result.register, facts: result.facts, conflicts: result.conflicts || [], rationale: result.rationale }),
   });
   const body = await response.json();
   if (!response.ok && response.status !== 422) throw new Error(`storing the run failed (${response.status}): ${JSON.stringify(body)}`);
@@ -282,7 +293,7 @@ async function main() {
     process.exit(2);
   }
   const failed = result.register.filter((d) => d.read_status !== 'parsed').length;
-  process.stdout.write(`Stage 01 read ${result.register.length} documents (${failed} not fully read): ${result.facts.length} facts, ${result.dropped.length} dropped for a quote not found, ${result.rationale.length} Rationale items.\n`);
+  process.stdout.write(`Stage 01 read ${result.register.length} documents (${failed} not fully read): ${result.rawFacts.length} facts read, ${result.dropped.length} dropped for a quote not found; after comparing documents ${result.facts.length} facts and ${result.conflicts.length} conflicts; ${result.rationale.length} Rationale items.\n`);
   if (args.seed) {
     const stored = await seedStage01({ api: args.api || 'http://localhost:8000', assessmentId: args.assessment, secret: process.env.PIPELINE_SERVICE_SECRET, result });
     const refused = stored.refused || [];

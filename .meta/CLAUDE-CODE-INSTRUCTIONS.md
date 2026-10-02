@@ -528,7 +528,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 1. `tara-workspace/web-based-tara/_engines/fact-reconcile.js`: match facts that describe the same thing (normalised names plus a small synonym table in `_config/element-kinds.md`; a model call is allowed only for semantic matching of leftovers, recorded in audit); detect conflicts; apply precedence; auto-resolve only the DR-8 auto list; compute labels agreed/single_source/needs_you; write a Rationale item per conflict (D-37).
 2. Server exposes the grouped view (the grouping is computed in the API from stored facts, reusing the same rules; the engine is used by the pipeline and by tests).
 3. Tests with item-01: expected conflicts found; the ingress conflict and environment conflict land in "Needs you".
-**Acceptance:** tests pass; Needs you count on item-01 within 10 to 25.
+**Acceptance (changed in C5, D-44):** tests pass; the item-01 answer key is reproduced from split facts (facts, conflicts, defaults, labels). The old "Needs you 10 to 25" target came from the checkpoint flow and is dropped. Matching is done by one model call that reports, and code decides (D-44).
 **Commit:** `feat: fact reconciliation and grouping engine`
 
 ---
