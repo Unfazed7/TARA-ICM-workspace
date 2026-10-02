@@ -15,11 +15,13 @@ Read every client document once and turn it into facts, each with a source refer
 
 - The client documents: diagrams, Q&A documents, functional documents, API specifications, infrastructure or sizing documents, user manuals, SRS, configuration exports, existing item definitions, asset lists.
 - The analyst's boundary statement (or at least the item name plus one sentence).
+- `manifest.json`: the document type the analyst chose for each file at upload (D-43). Program: `agent.js`; how it reads each format is in spec 19.
 
 ## Output (Layer 4, raw machine output)
 
 - `output/document-register.json`: one entry per document with title, version and date as printed, date received, owner, environment described (prod, staging, dev or unknown), type, SHA-256 hash, read status (parsed, partial or failed) with reason, precedence rank, what it was used for, and what was ignored and why. Reading method is recorded per document and per page.
-- `output/facts.json`: one entry per fact with subject, fact type, value, one or more source references (document, location, short quote) and confidence.
+- `output/facts.raw.json`: facts as read, one source each, before reconciliation (C4). `output/dropped-facts.json`: facts whose quote was not found in the document.
+- `output/facts.json`: after reconciliation (C5), one entry per fact with subject, fact type, value, one or more source references (document, location, short quote) and confidence.
 
 - `output/rationale.json`: one item per conflict, ambiguity, gap and assumption (see Rationale below).
 

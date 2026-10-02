@@ -17,14 +17,14 @@
       "provider": "anthropic",
       "temperature": null,
       "max_tokens": 8000,
-      "prompt_version": "UNSET"
+      "prompt_version": "extract-v1"
     },
     "01-extract-image": {
       "model": "anthropic/claude-sonnet-5.5",
       "provider": "anthropic",
       "temperature": null,
       "max_tokens": 8000,
-      "prompt_version": "UNSET"
+      "prompt_version": "image-v1"
     },
     "01-reconcile-leftovers": {
       "model": "anthropic/claude-sonnet-5.5",

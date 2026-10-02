@@ -162,4 +162,5 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `16-asset-identification.md` | Stage 03 | planned, C12 |
 | `17-llm-client.md` | Model client: OpenRouter, pinned per stage, strict JSON, refusals, audit | approved (C1) |
 | `18-stage-data-store.md` | Stage 01 and 02 tables, run endpoint, refusals R-18 to R-20, roles | approved (C3) |
+| `19-stage-01-reading.md` | Stage 01 reading: register, readers per format, quote check, hiding | approved (C4) |
 | none | Stage 10 Residual Risk and the orchestrator | no spec; outside this rebuild |

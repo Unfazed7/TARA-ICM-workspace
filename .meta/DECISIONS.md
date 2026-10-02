@@ -47,6 +47,7 @@ Status values: `accepted` (in force), `proposed` (waiting for the analyst).
 | D-40 | Models: any model on OpenRouter, chosen for output quality; the open-weight and self-hostable rule of D-10 is dropped for now. All stages pinned to Claude Sonnet 5.5 (`anthropic/claude-sonnet-5.5`) with provider Anthropic and fallbacks off; temperature not sent (current Claude models reject non-default sampling). Calls use strict JSON output where a schema exists, report refusals instead of failing, and write one audit line per call. GPT-6.1 Sol is the comparison candidate in C2. Client documents still need client permission before they reach any hosted model (DR-10). | The analyst wants working, high-quality output now and has OpenRouter credits; Sonnet 5.5 leads GPT-6 Sol on document, chart and business-task benchmarks at the same token price. Analyst, C1. | 2026-10-01 | accepted |
 | D-41 | Focus on building stages 01 and 02 only. C2 (model trial) is skipped and its extraction prompt moves to C4. The old stages 04 to 10, Stage 03, the private evaluation and legacy retirement (C11 to C14) are on hold. Order: C3, C4, C5, C8, C6, C7, then C10. | The analyst wants a working Input Normalization and Item Definition first, without spending on trials or old stages. Analyst, after C1. | 2026-10-01 | accepted |
 | D-42 | Stage data store (C3): one table per kind of record with a column per field, references enforced by the database (SQLite foreign keys on), Alembic migrations for these tables; descriptive lists that point to nothing are JSON columns. Every stage run is kept; the latest is current. Everyone who registers is an analyst; the pipeline uses a service login that can store runs but never review. The current run is read at `.../stages/{n}/runs/current/output` because the legacy pipeline already uses `.../stages/{n}/output`. New refusals R-18 (unknown reference), R-19 (repeat), R-20 (format). | The analyst chose database-level structure after comparing it with a single generic table; a drift test keeps the JSON schemas and the tables in step. Keeping runs gives an audit trail of what the model produced. Analyst, C3. | 2026-10-02 | accepted |
+| D-43 | Stage 01 reading (C4): the analyst chooses each document's type at upload (sent in `manifest.json` until the upload screen exists); the environment a document describes is read from the document and kept only with a checked quote, else `unknown` with a Rationale item. Formats now: draw.io, text and Markdown, HTML, Word, Excel, PDF, PNG and JPEG; Visio and Lucid later. Every fact's quote is checked against the text sent to the model, and facts that fail are dropped and logged. An image of a diagram whose source file is also given is used only to cross-check labels. No OCR cross-check yet (no OCR engine). Hiding of sensitive details is available and off by default. | The analyst knows each document's type for certain and wants it fixed at upload; the type sets precedence. Quote checking keeps invented statements out of the facts. Analyst, C4. | 2026-10-02 | accepted |
 
 Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are added so every Design Reference section is covered, plus decisions made at the A1, A2 and B1 gates.
 
@@ -62,7 +63,7 @@ Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are
 | DR-6 Question generation | D-06, D-29, D-31 |
 | DR-7 Scoping | D-05, D-14, D-32 |
 | DR-8 Precedence | D-07, D-28, D-33 |
-| DR-9 Minimum input | D-08 |
+| DR-9 Minimum input | D-08, D-43 |
 | DR-10 Data policy | D-09, D-26 |
 | DR-11 Model policy | D-10, D-40 |
 | DR-12 Architecture | D-11, D-12, D-13, D-30, D-42 |
@@ -70,4 +71,4 @@ Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are
 | DR-14 Link model | D-21 |
 | DR-15 Asset Identification | D-16, D-22 |
 | DR-16 Evaluation | D-23, D-35, D-39 |
-| DR-17 Reading documents | D-24 |
+| DR-17 Reading documents | D-24, D-43 |

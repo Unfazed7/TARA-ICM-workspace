@@ -538,6 +538,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 **Do:**
 1. One "run" call per assessment starts Stage 01 and, when it completes, Stage 02. Reuse `run_stage_subprocess`, `STAGE_DEPS` and the status and output endpoints.
 2. Per-assessment output folders (today every assessment shares the same output files).
+   Uploads carry the document type chosen by the analyst and write it to the run's `manifest.json` (D-43).
 3. Replace the legacy stage 1 launch (it passes `--csv`, the legacy agent expects `--input`/`--mode`) with the new Stage 01 agent; agents must not fail when no checkpoint token is set.
 4. Status per stage (pending, running, complete, failed) with the error message shown; frontend polls while any stage is pending or running.
 **Acceptance:** API test runs a fake two-stage chain end to end; a failed Stage 01 leaves Stage 02 not started with the error visible; two assessments do not share outputs.
@@ -547,7 +548,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 #### C7. Stage pages: output and Rationale
 **Read first:** specs 13a and 13b, approved Rationale prototype, `frontend/src/pages/ProjectWorkspace.tsx`.
-**Do:** Input Normalization page and Item Definition page, each showing the stage output (read-only, as in DR-4 and DR-5) with the Rationale section below it: items ordered Needs you first, four parts each, confirm or dispute with a note. "Why?" answers come only from stored sources. No canvas or animations.
+**Do:** Upload screen with a document type picker per file (D-43). Input Normalization page and Item Definition page, each showing the stage output (read-only, as in DR-4 and DR-5) with the Rationale section below it: items ordered Needs you first, four parts each, confirm or dispute with a note. "Why?" answers come only from stored sources. No canvas or animations.
 **Acceptance:** `tsc --noEmit` clean, `npm run build` succeeds, manual walk-through of item-01 recorded in `.meta/REBUILD-PROGRESS.md`.
 **Commit:** `feat: stage pages with rationale`
 
