@@ -45,6 +45,8 @@ Facts outside FT-01 to FT-07 are asked as `generic` questions with a short topic
 
 ## 3. Triggers per element kind
 
+Read by code on every Stage 02 run (`_engines/scope-rules.js`, D-45): editing a row here changes the questions and scope on the next run. Keep the table format; a test checks every element kind has a row.
+
 Which fact types each kind needs. "S1 only" means the kind sits inside the item's own account and is in scope by the account rule; no scoping question is needed, but FT-05 may still be asked to record data for Stage 03.
 
 | Element kind | Fact types asked | Rules |
@@ -116,3 +118,34 @@ Container triggers: `cloud_account` gets FT-01 and FT-03 (S1) and FT-06 once per
 2. Log the kind to `stages/02-item-definition/output/new-kinds.log` with its label and the element id.
 3. If no existing rule fits the answers, mark the element `ambiguous` and say why in plain words. Never force it into the nearest rule.
 4. Only a human adds new rules to this file.
+
+---
+
+## 5. Why it matters and the default, per fact type
+
+Used by Stage 02 code to complete each question. `{name}` is the target, `{item}` the item name. Keep the wording plain (see `analyst-language.md`).
+
+| Fact type | Why it matters | Default if unanswered |
+|---|---|---|
+| FT-01 | Who runs {name} decides which parts of it this assessment covers. | Treated as a cloud provider service: its internals are out, its settings are in. |
+| FT-02 | Whoever controls {name}'s settings can change who may use it. | Treated as controlled by the {item} team. |
+| FT-03 | A shared {name} can be changed or misused by other systems. | Treated as shared with other company systems. |
+| FT-04 | Anything reachable from the internet can be attacked directly. | Treated as reachable from the internet. |
+| FT-05 | The data held decides how much damage a leak or change can do. | Treated as holding sensitive data, including credentials. |
+| FT-06 | Shared accounts, keys or data let a weaker environment reach production. | Treated as sharing nothing with production; flagged until confirmed. |
+| FT-07 | Anything that can push changes into {item} can also push harmful changes. | Treated as able to deploy to production. |
+
+## 6. Generic topics: question wording
+
+| Topic | Question | Why it matters | Default if unanswered |
+|---|---|---|---|
+| does it act on requests | Does {name} do anything with requests, such as checking sign-in, filtering traffic or ending TLS, or does it only pass them on? | If it acts on requests, its settings decide what reaches the services behind it. | Treated as only passing requests on. |
+| where the token is checked | Where does {item} check the sign-in token issued by {name}? | The place where the token is checked is part of this assessment even if {name} is not. | Treated as checked by {item} itself. |
+| who can read or delete the logs | Who can read or delete the logs held in {name}? | Logs that can be deleted cannot be trusted to show what happened. | Treated as readable and deletable by administrators of the account. |
+| who can read or delete the records | Who can read or delete the records held in {name}? | Audit records that can be deleted cannot prove what happened. | Treated as readable and deletable by administrators of the account. |
+| how the item authenticates to it | How does {item} prove its identity to {name}, and where is that credential kept? | The credential {item} holds for {name} is part of this assessment. | Treated as an API key stored by {item}. |
+| how it authenticates to the item | How does {name} prove its identity when it calls {item}? | Weak authentication lets another system pretend to be {name}. | Treated as the weakest method documented. |
+| who uses it and from which devices | Who uses {name}, and from which devices? | Unmanaged devices are an easier way in. | Treated as used from devices the company does not manage. |
+| are admin machines managed | Do {name} use company-managed computers to reach {item}? | Administrators on unmanaged computers are an easy target. | Treated as using unmanaged computers. |
+| which vehicle unit it talks to | Which unit in the vehicle does {name} talk to? | Each vehicle-side identity is a separate way in. | Treated as one unit per vehicle. |
+| is the in-vehicle side assessed elsewhere | Is the vehicle side of {name} covered by a separate vehicle assessment? | Without one, the vehicle side would not be assessed at all. | Treated as assessed elsewhere. |

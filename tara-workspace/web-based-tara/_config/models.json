@@ -30,29 +30,36 @@
       "model": "anthropic/claude-sonnet-5.5",
       "provider": "anthropic",
       "temperature": null,
-      "max_tokens": 4000,
+      "max_tokens": 16000,
       "prompt_version": "compare-v1"
     },
     "02-build": {
       "model": "anthropic/claude-sonnet-5.5",
       "provider": "anthropic",
       "temperature": null,
-      "max_tokens": 16000,
-      "prompt_version": "UNSET"
+      "max_tokens": 32000,
+      "prompt_version": "build-v1"
     },
     "02-generate-questions": {
       "model": "anthropic/claude-sonnet-5.5",
       "provider": "anthropic",
       "temperature": null,
       "max_tokens": 8000,
-      "prompt_version": "UNSET"
+      "prompt_version": "suggest-v1"
     },
     "02-answer-check": {
       "model": "anthropic/claude-sonnet-5.5",
       "provider": "anthropic",
       "temperature": null,
+      "max_tokens": 8000,
+      "prompt_version": "answer-v1"
+    },
+    "02-explain": {
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "anthropic",
+      "temperature": null,
       "max_tokens": 4000,
-      "prompt_version": "UNSET"
+      "prompt_version": "explain-v1"
     },
     "03-assets": {
       "model": "anthropic/claude-sonnet-5.5",

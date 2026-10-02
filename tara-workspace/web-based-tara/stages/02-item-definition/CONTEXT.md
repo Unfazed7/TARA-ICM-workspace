@@ -12,6 +12,10 @@
 
 Build the Web Item Definition from the Stage 01 facts: containers, zones, elements, links, functions, scope decisions, and the questions still needed to decide scope. Explain every judgement in the Rationale.
 
+## Program
+
+`agent.js` (spec 21, D-45): the model proposes the structure and reports scoping facts in fixed words; code checks it, applies the fixed rules, decides scope from `_config/scoping-facts.md`, builds the questions and writes the Rationale.
+
 ## Input
 
 From the API only:
