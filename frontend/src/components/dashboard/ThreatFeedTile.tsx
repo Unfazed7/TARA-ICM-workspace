@@ -56,6 +56,11 @@ export function ThreatFeedTile() {
         </div>
 
         <div className="relative z-10 flex flex-col gap-2 flex-1 overflow-y-auto glass-scroll">
+          {threats.length === 0 && (
+            <div className="grid flex-1 place-items-center rounded-md border border-dashed p-6 text-center">
+              <div><Shield className="mx-auto mb-2 size-5 text-muted-foreground" /><p className="text-sm font-medium">No threat results yet</p><p className="mt-1 text-xs text-muted-foreground">Complete threat identification to populate this feed.</p></div>
+            </div>
+          )}
           {threats.map((t) => {
             const level = riskLabels[t.riskValue] || 'Medium';
             const colorClass =

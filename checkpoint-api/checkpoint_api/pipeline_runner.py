@@ -1,7 +1,9 @@
 import asyncio
 import json
 import os
+import signal
 import subprocess
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -51,6 +53,63 @@ LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")
 # audit trail -- the model reads actual file content regardless of label.
 INPUT_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 INPUT_DOCUMENT_EXTENSIONS = {".txt", ".csv", ".md"}
+
+_ACTIVE_PROCESSES: dict[tuple[str, int], subprocess.Popen] = {}
+_PROCESS_LOCK = threading.RLock()
+
+
+def _get_active_process(assessment_id: str, stage_num: int) -> subprocess.Popen | None:
+    with _PROCESS_LOCK:
+        process = _ACTIVE_PROCESSES.get((assessment_id, stage_num))
+        return process if process is not None and process.poll() is None else None
+
+
+def pause_stage_process(assessment_id: str, stage_num: int) -> bool:
+    process = _get_active_process(assessment_id, stage_num)
+    if process is None or os.name != "posix" or not hasattr(signal, "SIGSTOP"):
+        return False
+    try:
+        os.killpg(process.pid, signal.SIGSTOP)
+        return True
+    except OSError:
+        return False
+
+
+def resume_stage_process(assessment_id: str, stage_num: int) -> bool:
+    process = _get_active_process(assessment_id, stage_num)
+    if process is None or os.name != "posix" or not hasattr(signal, "SIGCONT"):
+        return False
+    try:
+        os.killpg(process.pid, signal.SIGCONT)
+        return True
+    except OSError:
+        return False
+
+
+def cancel_stage_process(assessment_id: str, stage_num: int) -> bool:
+    process = _get_active_process(assessment_id, stage_num)
+    if process is None:
+        return False
+    try:
+        if os.name == "posix":
+            os.killpg(process.pid, signal.SIGTERM)
+            if hasattr(signal, "SIGCONT"):
+                try:
+                    os.killpg(process.pid, signal.SIGCONT)
+                except OSError:
+                    pass
+        else:
+            process.terminate()
+        return True
+    except OSError:
+        return False
+
+
+def cancel_assessment_processes(assessment_id: str) -> None:
+    with _PROCESS_LOCK:
+        stages = [stage_num for candidate_id, stage_num in _ACTIVE_PROCESSES if candidate_id == assessment_id]
+    for stage_num in stages:
+        cancel_stage_process(assessment_id, stage_num)
 
 
 def get_inputs_dir(assessment_id: str) -> str:
@@ -232,6 +291,8 @@ async def run_stage_subprocess(assessment_id: str, stage_num: int, db=None) -> N
         if not run:
             return
 
+        if run.status == "cancelled":
+            return
         run.status = "running"
         run.error_message = None
         run.started_at = utc_now()
@@ -252,18 +313,28 @@ async def run_stage_subprocess(assessment_id: str, stage_num: int, db=None) -> N
             # asyncio.create_subprocess_exec: on Windows, uvicorn may run a
             # SelectorEventLoop, which raises NotImplementedError for asyncio
             # subprocesses. A thread works on every event loop and platform.
-            proc = await asyncio.to_thread(
-                subprocess.run,
+            proc = subprocess.Popen(
                 ["node", get_agent_path(stage_num), *build_stage_args(assessment_id, stage_num)],
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 env=env,
                 cwd=WORKSPACE_ROOT,
+                start_new_session=True,
             )
+            with _PROCESS_LOCK:
+                _ACTIVE_PROCESSES[(assessment_id, stage_num)] = proc
+            session.refresh(run)
+            if run.status == "cancelled":
+                cancel_stage_process(assessment_id, stage_num)
+            stdout, stderr = await asyncio.to_thread(proc.communicate)
             returncode = proc.returncode
-            output_message = proc.stderr.decode(errors="replace") or proc.stdout.decode(errors="replace")
+            output_message = stderr.decode(errors="replace") or stdout.decode(errors="replace")
         except Exception as exc:  # noqa: BLE001 -- any failure here must still mark the run failed
             returncode = 1
             output_message = f"{type(exc).__name__}: {exc}"
+        finally:
+            with _PROCESS_LOCK:
+                _ACTIVE_PROCESSES.pop((assessment_id, stage_num), None)
 
         run = session.query(PipelineRun).filter_by(
             assessment_id=assessment_id,
@@ -271,11 +342,14 @@ async def run_stage_subprocess(assessment_id: str, stage_num: int, db=None) -> N
         ).first()
         if not run:
             return
-        run.completed_at = utc_now()
-        if returncode == 0:
+        if run.status == "cancelled":
+            run.completed_at = run.completed_at or utc_now()
+        elif returncode == 0:
+            run.completed_at = utc_now()
             run.status = "complete"
             run.error_message = None
         else:
+            run.completed_at = utc_now()
             run.status = "failed"
             run.error_message = output_message[:2000]
         update_assessment_completion(session, assessment_id)

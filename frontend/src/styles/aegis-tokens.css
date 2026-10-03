@@ -39,6 +39,24 @@
   --secondary-foreground: 27 22% 15%;
   --accent: 36 15% 90%;
   --accent-foreground: 27 22% 15%;
+  --sidebar-background: 40 20% 96%;
+  --sidebar-foreground: 27 22% 15%;
+  --sidebar-primary: 27 22% 15%;
+  --sidebar-primary-foreground: 40 33% 98%;
+  --sidebar-accent: 36 15% 90%;
+  --sidebar-accent-foreground: 27 22% 15%;
+  --sidebar-border: 36 14% 84%;
+  --sidebar-ring: 27 22% 15%;
+  --emerald: 160 45% 32%;
+  --emerald-foreground: 40 33% 98%;
+  --amber: 38 72% 44%;
+  --amber-foreground: 27 22% 15%;
+  --critical: 6 58% 42%;
+  --critical-foreground: 40 33% 98%;
+  --sage: 160 35% 42%;
+  --sage-foreground: 40 33% 98%;
+  --dusty-amber: 38 56% 50%;
+  --dusty-amber-foreground: 27 22% 15%;
 
   /* --- Reserved role 1: OCHRE — a human must decide ------------------------
    * ambiguous elements, agent_proposed fields, escalated conflicts,
@@ -132,6 +150,14 @@
   --secondary-foreground: 40 25% 92%;
   --accent: 30 8% 18%;
   --accent-foreground: 40 25% 92%;
+  --sidebar-background: 30 10% 13%;
+  --sidebar-foreground: 40 25% 92%;
+  --sidebar-primary: 40 25% 92%;
+  --sidebar-primary-foreground: 30 12% 9%;
+  --sidebar-accent: 30 8% 18%;
+  --sidebar-accent-foreground: 40 25% 92%;
+  --sidebar-border: 30 8% 24%;
+  --sidebar-ring: 40 25% 92%;
 
   /* Roles: lift lightness ~14 pts, drop chroma slightly, so they read at the
    * same signal strength on dark stock without blooming. */
@@ -233,4 +259,77 @@
 .aegis-scope .animate-pulse,
 .aegis-scope .animate-ping {
   animation: none;
+}
+
+/* Result workspaces use one semantic surface and one type family in either
+ * theme. These scoped rules retire legacy prototype colours without changing
+ * status badges, whose hues continue to carry risk meaning. */
+.result-surface {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+}
+
+.result-surface :where(.font-mono, table, th, td, input, textarea, button, [role="tab"]) {
+  font-family: var(--font-sans);
+}
+
+:where(
+  [class*="bg-[#05070a]"],
+  [class*="bg-[#080c14]"],
+  [class*="bg-[#080b12]"],
+  [class*="bg-[#0b0f17]"],
+  [class*="bg-[#0f1219]"],
+  [class*="bg-[#1a1f2e]"]
+) {
+  background-color: hsl(var(--background)) !important;
+}
+
+:where([class~="bg-white/5"], [class~="bg-white/[0.02]"], [class~="bg-white/[0.03]"]) {
+  background-color: hsl(var(--muted) / 0.55) !important;
+}
+
+:where([class~="text-slate-200"], [class~="text-slate-300"]) {
+  color: hsl(var(--foreground)) !important;
+}
+
+:where([class~="text-slate-400"], [class~="text-slate-500"], [class~="text-slate-600"]) {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+:where([class~="border-white/5"], [class~="border-white/10"], [class~="border-border/30"]) {
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Legacy categorical badges used 400-level text intended for charcoal.
+ * Deepen those foregrounds only on paper so their labels retain contrast. */
+:root:not(.dark) [class~="text-purple-400"] { color: rgb(107 33 168) !important; }
+:root:not(.dark) [class~="text-orange-400"] { color: rgb(154 52 18) !important; }
+:root:not(.dark) [class~="text-yellow-400"] { color: rgb(133 77 14) !important; }
+:root:not(.dark) [class~="text-blue-400"] { color: rgb(29 78 216) !important; }
+:root:not(.dark) [class~="text-red-400"] { color: rgb(185 28 28) !important; }
+:root:not(.dark) [class~="text-emerald-400"] { color: rgb(4 120 87) !important; }
+:root:not(.dark) [class~="text-cyan-400"] { color: rgb(14 116 144) !important; }
+:root:not(.dark) [class~="text-amber-300"],
+:root:not(.dark) [class~="text-amber-400"] { color: rgb(146 64 14) !important; }
+
+@keyframes result-progress-sweep {
+  from { background-position: 1rem 0; }
+  to { background-position: 0 0; }
+}
+
+.result-progress-running {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    hsl(var(--primary)),
+    hsl(var(--primary)) 0.35rem,
+    hsl(var(--primary) / 0.35) 0.35rem,
+    hsl(var(--primary) / 0.35) 0.7rem
+  );
+  background-size: 1rem 1rem;
+  animation: result-progress-sweep 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .result-progress-running { animation: none; }
 }

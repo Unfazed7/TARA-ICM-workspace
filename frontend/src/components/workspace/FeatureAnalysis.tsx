@@ -84,12 +84,12 @@ function ConnectionLines({ containerRef, selections }: {
 /* ── CIAAAN Display ── */
 function CiaaanDisplay({ item }: { item: CiaaanItem }) {
   const props = [
-    { key: 'C', val: item.confidentiality },
-    { key: 'I', val: item.integrity },
-    { key: 'A', val: item.availability },
-    { key: 'Au', val: item.authenticity },
-    { key: 'Az', val: item.authorization },
-    { key: 'NR', val: item.nonRepudiation },
+    { key: 'C', val: item.C },
+    { key: 'I', val: item.I },
+    { key: 'A', val: item.A },
+    { key: 'Au', val: item.Au },
+    { key: 'Az', val: item.An },
+    { key: 'NR', val: item.N },
   ];
   return (
     <div className="flex flex-wrap gap-1 mt-1">
@@ -131,7 +131,7 @@ export function FeatureAnalysis() {
   const filteredFunctions = functions.filter((f) => f.featureId === selectedFeature);
   const filteredAbuseCases = abuseCases.filter((a) => a.functionId === selectedFunction);
   const filteredDamages = damages.filter((d) => d.abuseCaseId === selectedAbuseCase);
-  const filteredThreats = threats.filter((t) => t.damageId === selectedDamage);
+  const filteredThreats = threats.filter((t) => t.damageScenarioId === selectedDamage);
   const filteredCiaaan = ciaaanItems.filter((c) => c.threatId === selectedThreat);
   const filteredAssets = assets.filter((a) => a.ciaaanId === selectedCiaaan);
   const filteredEcus = ecus.filter((e) => e.assetId === selectedAsset);
@@ -158,42 +158,42 @@ export function FeatureAnalysis() {
     const id = `fn-${Date.now()}`;
     setFunctions((p) => [...p, { id, featureId: selectedFeature, name: 'New Function', description: '' }]);
     selectFunction(id);
-  }, [selectedFeature]);
+  }, [selectedFeature, selectFunction]);
 
   const handleAddAbuseCase = useCallback(() => {
     if (!selectedFunction) return;
     const id = `ac-${Date.now()}`;
     setAbuseCases((p) => [...p, { id, functionId: selectedFunction, name: 'New Abuse Case', description: '', stride: 'Spoofing' }]);
     selectAbuseCase(id);
-  }, [selectedFunction]);
+  }, [selectedFunction, selectAbuseCase]);
 
   const handleAddDamage = useCallback(() => {
     if (!selectedAbuseCase) return;
     const id = `dmg-${Date.now()}`;
     setDamages((p) => [...p, { id, abuseCaseId: selectedAbuseCase, name: 'New Damage Scenario', description: '', impactArea: 'Safety' }]);
     selectDamage(id);
-  }, [selectedAbuseCase]);
+  }, [selectedAbuseCase, selectDamage]);
 
   const handleAddThreat = useCallback(() => {
     if (!selectedDamage) return;
     const id = `th-${Date.now()}`;
-    setThreats((p) => [...p, { id, damageId: selectedDamage, name: 'New Threat', description: '', attackVector: '' }]);
+    setThreats((p) => [...p, { id, damageScenarioId: selectedDamage, name: 'New Threat', description: '', strideCategory: 'Spoofing' }]);
     selectThreat(id);
-  }, [selectedDamage]);
+  }, [selectedDamage, selectThreat]);
 
   const handleAddCiaaan = useCallback(() => {
     if (!selectedThreat) return;
     const id = `ci-${Date.now()}`;
-    setCiaaanItems((p) => [...p, { id, threatId: selectedThreat, confidentiality: false, integrity: false, availability: false, authenticity: false, authorization: false, nonRepudiation: false }]);
+    setCiaaanItems((p) => [...p, { id, threatId: selectedThreat, C: false, I: false, A: false, Au: false, An: false, N: false }]);
     selectCiaaan(id);
-  }, [selectedThreat]);
+  }, [selectedThreat, selectCiaaan]);
 
   const handleAddAsset = useCallback(() => {
     if (!selectedCiaaan) return;
     const id = `ta-${Date.now()}`;
     setAssets((p) => [...p, { id, ciaaanId: selectedCiaaan, name: 'New Asset', category: 'data' }]);
     selectAsset(id);
-  }, [selectedCiaaan]);
+  }, [selectedCiaaan, selectAsset]);
 
   const handleAddEcu = useCallback(() => {
     if (!selectedAsset) return;
@@ -213,8 +213,8 @@ export function FeatureAnalysis() {
     setEcus((p) => p.map((e) => (e.id === id ? { ...e, type } : e)));
   }, []);
 
-  const handleToggleCiaaan = useCallback((id: string, prop: string) => {
-    setCiaaanItems((p) => p.map((c) => (c.id === id ? { ...c, [prop]: !(c as any)[prop] } : c)));
+  const handleToggleCiaaan = useCallback((id: string, prop: keyof Pick<CiaaanItem, 'C' | 'I' | 'A' | 'Au' | 'An' | 'N'>) => {
+    setCiaaanItems((p) => p.map((c) => (c.id === id ? { ...c, [prop]: !c[prop] } : c)));
   }, []);
 
   const selections = [selectedFeature, selectedFunction, selectedAbuseCase, selectedDamage, selectedThreat, selectedCiaaan, selectedAsset];
@@ -319,11 +319,7 @@ export function FeatureAnalysis() {
               <StreamItem key={th.id} id={th.id} isSelected={selectedThreat === th.id} onClick={() => selectThreat(th.id)}>
                 <div className="text-xs font-medium">{th.name}</div>
                 <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{th.description}</div>
-                {th.attackVector && (
-                  <Badge variant="outline" className="text-[9px] border-purple-500/40 text-purple-400 mt-1 px-1.5 py-0">
-                    {th.attackVector}
-                  </Badge>
-                )}
+                <Badge variant="outline" className="mt-1 px-1.5 py-0 text-[9px]">{th.strideCategory}</Badge>
               </StreamItem>
             ))
           )}
@@ -341,12 +337,12 @@ export function FeatureAnalysis() {
                 <div className="text-[10px] text-muted-foreground mb-1">Security Properties</div>
                 <CiaaanDisplay item={ci} />
                 <div className="flex flex-wrap gap-1 mt-2">
-                  {(['confidentiality', 'integrity', 'availability', 'authenticity', 'authorization', 'nonRepudiation'] as const).map((prop) => (
-                    <button key={prop} onClick={(e) => { e.stopPropagation(); handleToggleCiaaan(ci.id, prop); }}
+                  {([['C', 'Conf'], ['I', 'Int'], ['A', 'Avail'], ['Au', 'Authn'], ['An', 'Authz'], ['N', 'NR']] as const).map(([prop, label]) => (
+                    <button key={prop} onClick={(e) => { e.stopPropagation(); handleToggleCiaaan(ci.id, prop); }} aria-pressed={ci[prop]}
                       className={`text-[8px] px-1 py-0.5 rounded border transition-all ${
                         ci[prop] ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-300' : 'border-border/20 text-muted-foreground/50 hover:border-border/40'
                       }`}>
-                      {prop === 'nonRepudiation' ? 'NR' : prop.charAt(0).toUpperCase() + prop.slice(1, 4)}
+                      {label}
                     </button>
                   ))}
                 </div>
@@ -381,7 +377,7 @@ export function FeatureAnalysis() {
           emptyMessage="Select an Asset" onAdd={selectedAsset ? handleAddEcu : undefined} addLabel="Add ECU">
           {!selectedAsset ? <StreamEmpty message="Select an Asset" /> : filteredEcus.length === 0 ? <StreamEmpty message="No ECUs linked" /> : (
             filteredEcus.map((ecu) => (
-              <StreamItem key={ecu.id} id={ecu.id} isSelected={false} onClick={() => {}}>
+              <StreamItem key={ecu.id} id={ecu.id} isSelected={false}>
                 <div className="text-xs font-medium">{ecu.name}</div>
                 <div className="mt-1.5" onClick={(e) => e.stopPropagation()}>
                   <Select value={ecu.type} onValueChange={(val) => handleUpdateEcuType(ecu.id, val as AssociatedECU['type'])}>

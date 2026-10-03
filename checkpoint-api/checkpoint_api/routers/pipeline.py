@@ -8,7 +8,10 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import Assessment, PipelineRun
 from ..pipeline_runner import (
+    cancel_stage_process,
     get_output_path,
+    pause_stage_process,
+    resume_stage_process,
     run_stage_subprocess,
     utc_now,
 )
@@ -117,7 +120,7 @@ def run_stage(
     require_dependencies(db, assessment_id, stage_num)
 
     run = get_run(db, assessment_id, stage_num)
-    if run and run.status in {"pending", "running"}:
+    if run and run.status in {"pending", "running", "paused"}:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Stage {stage_num} is already running")
     if not run:
         run = PipelineRun(assessment_id=assessment_id, stage_num=stage_num, stage_name=stage.key)
@@ -135,6 +138,70 @@ def run_stage(
     db.refresh(run)
 
     background_tasks.add_task(run_stage_subprocess, assessment_id, stage_num, None)
+    return run
+
+
+@router.post("/{assessment_id}/stages/{stage_num}/pause", response_model=PipelineRunResponse)
+def pause_stage(
+    assessment_id: str,
+    stage_num: int,
+    db: Session = Depends(get_db),
+    claims: dict = Depends(get_current_claims),
+):
+    validate_stage_num(stage_num)
+    get_assessment_for_user(db, assessment_id, claims)
+    run = get_run(db, assessment_id, stage_num)
+    if not run or run.status != "running":
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Only a running stage can be paused")
+    if not pause_stage_process(assessment_id, stage_num):
+        detail = "Stage pausing is not supported on this operating system" if os.name != "posix" else "Stage process is not active"
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=detail)
+    run.status = "paused"
+    db.commit()
+    db.refresh(run)
+    return run
+
+
+@router.post("/{assessment_id}/stages/{stage_num}/resume", response_model=PipelineRunResponse)
+def resume_stage(
+    assessment_id: str,
+    stage_num: int,
+    db: Session = Depends(get_db),
+    claims: dict = Depends(get_current_claims),
+):
+    validate_stage_num(stage_num)
+    get_assessment_for_user(db, assessment_id, claims)
+    run = get_run(db, assessment_id, stage_num)
+    if not run or run.status != "paused":
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Only a paused stage can be resumed")
+    if not resume_stage_process(assessment_id, stage_num):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Stage process is not active")
+    run.status = "running"
+    db.commit()
+    db.refresh(run)
+    return run
+
+
+@router.post("/{assessment_id}/stages/{stage_num}/cancel", response_model=PipelineRunResponse)
+def cancel_stage(
+    assessment_id: str,
+    stage_num: int,
+    db: Session = Depends(get_db),
+    claims: dict = Depends(get_current_claims),
+):
+    validate_stage_num(stage_num)
+    get_assessment_for_user(db, assessment_id, claims)
+    run = get_run(db, assessment_id, stage_num)
+    if not run or run.status not in {"pending", "running", "paused", "cancelled"}:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Stage is not active")
+    if run.status == "cancelled":
+        return run
+    run.status = "cancelled"
+    run.completed_at = utc_now()
+    run.error_message = None
+    db.commit()
+    cancel_stage_process(assessment_id, stage_num)
+    db.refresh(run)
     return run
 
 
@@ -181,6 +248,10 @@ def reset_stage(
         os.unlink(output_path)
     run = get_run(db, assessment_id, stage_num)
     if run:
+        if run.status in {"pending", "running", "paused"}:
+            run.status = "cancelled"
+            db.commit()
+            cancel_stage_process(assessment_id, stage_num)
         db.delete(run)
         db.commit()
     return run_response(assessment_id, stage_num, None)

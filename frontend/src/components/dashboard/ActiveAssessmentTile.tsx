@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Project } from '@/types/tara';
 import { Button } from '@/components/ui/button';
-import { Play, Car, Zap, Truck, ChevronRight, ChevronLeft, Plus } from 'lucide-react';
+import { Play, Car, Zap, Truck, ChevronRight, ChevronLeft, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -10,19 +10,20 @@ interface ActiveAssessmentTileProps {
   project: Project | null;
   recentProjects?: Project[];
   allProjects?: Project[];
+  onDelete?: (project: Project) => void;
 }
 
 const vehicleIcons: Record<string, React.ElementType> = {
   sedan: Car,
   suv: Car,
   truck: Truck,
-  electric: Zap,
+  van: Truck,
+  bus: Truck,
   commercial: Truck,
   motorcycle: Car,
-  other: Car,
 };
 
-export function ActiveAssessmentTile({ project, recentProjects = [], allProjects = [] }: ActiveAssessmentTileProps) {
+export function ActiveAssessmentTile({ project, recentProjects = [], allProjects = [], onDelete }: ActiveAssessmentTileProps) {
   const navigate = useNavigate();
 
   // Combine all projects for scrolling — use allProjects if provided, else fallback
@@ -35,6 +36,10 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentProject = scrollableProjects[currentIndex] || null;
   const totalProjects = scrollableProjects.length;
+
+  useEffect(() => {
+    if (currentIndex >= totalProjects) setCurrentIndex(Math.max(0, totalProjects - 1));
+  }, [currentIndex, totalProjects]);
 
   const completion = currentProject?.completionPercentage ?? 0;
   const circumference = 2 * Math.PI * 45;
@@ -54,17 +59,9 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
       className={cn(
         'bento-tile relative overflow-hidden',
         'col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-2',
-        'flex flex-col p-6',
-        'shadow-[inset_0_0_20px_hsl(217_91%_60%/0.1)]'
+        'flex flex-col p-6'
       )}
     >
-      {/* Aurora gradient background */}
-      <div className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(230_70%_55%/0.1)] via-[hsl(222_47%_8%/0.8)] to-[hsl(222_47%_8%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,hsl(217_91%_60%/0.12),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_80%,hsl(199_89%_55%/0.08),transparent_50%)]" />
-      </div>
-
       {/* Hero Section */}
       <div className="relative z-10 flex-1 flex flex-col">
         {/* Header with navigation arrows */}
@@ -72,11 +69,23 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             Project Command Center
           </p>
-          {totalProjects > 1 && (
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1">
+            {currentProject && onDelete && (
+              <button
+                type="button"
+                onClick={() => onDelete(currentProject)}
+                aria-label={`Delete ${currentProject.name}`}
+                title="Delete project"
+                className="flex size-7 items-center justify-center rounded-md border border-destructive/30 text-destructive transition-colors hover:bg-destructive/10"
+              >
+                <Trash2 className="size-3.5" />
+              </button>
+            )}
+            {totalProjects > 1 && <>
               <button
                 onClick={goPrev}
                 disabled={currentIndex === 0}
+                aria-label="Previous project"
                 className={cn(
                   'w-7 h-7 rounded-lg border border-border/30 flex items-center justify-center transition-all',
                   currentIndex === 0
@@ -92,6 +101,7 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
               <button
                 onClick={goNext}
                 disabled={currentIndex === totalProjects - 1}
+                aria-label="Next project"
                 className={cn(
                   'w-7 h-7 rounded-lg border border-border/30 flex items-center justify-center transition-all',
                   currentIndex === totalProjects - 1
@@ -101,8 +111,8 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
-            </div>
-          )}
+            </>}
+          </div>
         </div>
 
         <div className="flex items-center justify-between flex-1">
@@ -144,10 +154,7 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
           <div className="relative w-28 h-28 flex-shrink-0">
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
               <defs>
-                <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="hsl(217 91% 60%)" />
-                  <stop offset="100%" stopColor="hsl(199 89% 55%)" />
-                </linearGradient>
+                <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="hsl(var(--foreground))" /><stop offset="100%" stopColor="hsl(var(--muted-foreground))" /></linearGradient>
               </defs>
               <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(217 33% 20%)" strokeWidth="6" />
               <circle
@@ -177,6 +184,8 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
+                aria-label={`Show project ${idx + 1}`}
+                aria-current={idx === currentIndex ? 'true' : undefined}
                 className={cn(
                   'w-1.5 h-1.5 rounded-full transition-all duration-300',
                   idx === currentIndex

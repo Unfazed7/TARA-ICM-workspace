@@ -10,7 +10,7 @@ from ..asset_register_import import AssetImportError, import_asset_register
 from ..database import get_db
 from ..models import Assessment, PipelineRun
 from ..pipeline_runner import UPLOAD_DIR, get_output_path, update_assessment_completion, utc_now
-from ..schemas import AssetRegisterImportResponse, UploadResponse
+from ..schemas import AssetRegisterImportResponse, AssetRegisterStatusResponse, UploadResponse
 from .auth import get_current_claims
 
 
@@ -36,6 +36,10 @@ def require_assessment_access(db: Session, assessment_id: str, claims: dict) -> 
 
 def upload_path(assessment_id: str) -> str:
     return os.path.join(UPLOAD_DIR, assessment_id, "assets.csv")
+
+
+def asset_register_metadata_path(assessment_id: str) -> Path:
+    return Path(get_output_path(3, assessment_id)).with_name("asset-register-upload.json")
 
 
 @router.post("/{assessment_id}/upload/csv", response_model=UploadResponse)
@@ -113,6 +117,13 @@ async def import_manual_asset_register(
     temporary_path = output_path.with_suffix(f"{output_path.suffix}.tmp")
     temporary_path.write_text(f"{json.dumps(assets, indent=2)}\n", encoding="utf-8")
     os.replace(temporary_path, output_path)
+    metadata_path = asset_register_metadata_path(assessment_id)
+    metadata_temporary_path = metadata_path.with_suffix(f"{metadata_path.suffix}.tmp")
+    metadata_temporary_path.write_text(
+        f'{json.dumps({"filename": filename, "asset_count": len(assets)}, indent=2)}\n',
+        encoding="utf-8",
+    )
+    os.replace(metadata_temporary_path, metadata_path)
 
     run = db.query(PipelineRun).filter_by(
         assessment_id=assessment_id,
@@ -137,4 +148,42 @@ async def import_manual_asset_register(
     return AssetRegisterImportResponse(
         filename=filename,
         asset_count=len(assets),
+    )
+
+
+@router.get(
+    "/{assessment_id}/stages/3/asset-register",
+    response_model=AssetRegisterStatusResponse,
+)
+def manual_asset_register_status(
+    assessment_id: str,
+    db: Session = Depends(get_db),
+    claims: dict = Depends(get_current_claims),
+):
+    require_assessment_access(db, assessment_id, claims)
+    output_path = Path(get_output_path(3, assessment_id))
+    if not output_path.exists():
+        return AssetRegisterStatusResponse(uploaded=False)
+
+    metadata_path = asset_register_metadata_path(assessment_id)
+    if metadata_path.exists():
+        try:
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            return AssetRegisterStatusResponse(
+                uploaded=True,
+                filename=metadata.get("filename"),
+                asset_count=int(metadata.get("asset_count", 0)),
+            )
+        except (OSError, ValueError, TypeError):
+            pass
+
+    try:
+        assets = json.loads(output_path.read_text(encoding="utf-8"))
+        asset_count = len(assets) if isinstance(assets, list) else 0
+    except (OSError, ValueError):
+        asset_count = 0
+    return AssetRegisterStatusResponse(
+        uploaded=True,
+        filename="asset-register.json",
+        asset_count=asset_count,
     )

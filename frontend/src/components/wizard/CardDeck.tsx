@@ -9,11 +9,12 @@ interface CardDeckProps {
   onComplete: () => void;
   onStepChange?: (step: number) => void;
   heading?: string;
+  isCompleting?: boolean;
 }
 
 type AnimationState = 'idle' | 'swipe-left' | 'swipe-right';
 
-export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading }: CardDeckProps) {
+export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading, isCompleting = false }: CardDeckProps) {
   const [current, setCurrent] = useState(0);
   const [animState, setAnimState] = useState<AnimationState>('idle');
   const [exitingIndex, setExitingIndex] = useState<number | null>(null);
@@ -39,7 +40,7 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
       setIncomingReady(false);
       setAnimState('idle');
     }, 500);
-  }, [animState, current, isLast, onComplete]);
+  }, [animState, current, isLast, onComplete, onStepChange]);
 
   const handleBack = useCallback(() => {
     if (animState !== 'idle' || current === 0) return;
@@ -61,32 +62,10 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
       setIncomingReady(false);
       setAnimState('idle');
     }, 500);
-  }, [animState, current]);
+  }, [animState, current, onStepChange]);
 
   return (
     <div className="flex flex-col items-center w-full max-w-4xl mx-auto flex-1 min-h-0 pb-6">
-      {/* Orb breathing animation */}
-      <style>{`
-        @keyframes orb-breathe {
-          0%, 100% { transform: translateX(-50%) scale(1); }
-          50% { transform: translateX(-50%) scale(1.04); }
-        }
-      `}</style>
-      {/* Single centered orb with smudge */}
-      <div
-        className="pointer-events-none absolute left-1/2"
-        style={{
-          top: '-30%',
-          width: '550px',
-          height: '550px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, rgba(100,60,220,0.85) 0%, rgba(50,100,255,0.8) 40%, rgba(40,160,255,0.7) 70%, rgba(60,200,240,0.6) 100%)',
-          boxShadow: '0 0 80px 20px rgba(50,100,255,0.15), 0 0 160px 60px rgba(40,80,200,0.08)',
-          filter: 'blur(30px)',
-          animation: 'orb-breathe 8s ease-in-out infinite',
-        }}
-      />
-
       {/* Heading */}
       {heading && (
         <h1 className="text-2xl font-bold tracking-tight mb-6 text-foreground drop-shadow-[0_0_12px_rgba(255,255,255,0.3)] relative z-10 text-center">
@@ -95,7 +74,7 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
       )}
 
       {/* Deck area */}
-      <div className="relative w-full" style={{ height: 'calc(100vh - 22rem)' }}>
+      <div className="relative w-full min-h-[460px] h-[calc(100dvh-18rem)]">
         {steps.map((step, i) => {
           const isExiting = exitingIndex === i;
           const isIncoming = incomingIndex === i && !isExiting;
@@ -166,10 +145,8 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
                 isExiting || isBehind ? "pointer-events-none" : ""
               )}
               style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: isHero ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(255, 255, 255, 0.06)',
+                background: 'hsl(var(--card))',
+                border: isHero ? '1px solid hsl(var(--border))' : '1px solid hsl(var(--border) / 0.7)',
                 boxShadow,
                 transform,
                 opacity,
@@ -184,7 +161,7 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
                   <Icon className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono block" style={{ color: 'hsl(210, 40%, 98%)' }}>
+                  <span className="text-xs font-mono block text-muted-foreground">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <h2 className="text-base font-semibold tracking-tight">{step.title}</h2>
@@ -212,16 +189,16 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
           Back
         </Button>
 
-        <span className="text-xs font-mono tabular-nums" style={{ color: 'hsl(210, 40%, 98%)' }}>
+        <span className="text-xs font-mono tabular-nums text-muted-foreground">
           Step {current + 1} of {steps.length}
         </span>
 
         <Button
           onClick={handleNext}
-          disabled={!canAdvance[current] || animState !== 'idle'}
+          disabled={!canAdvance[current] || animState !== 'idle' || isCompleting}
           className="gap-1.5 px-6 shadow-lg shadow-primary/10"
         >
-          {isLast ? 'Create Project' : 'Next'}
+          {isLast ? (isCompleting ? 'Creating…' : 'Create Project') : 'Next'}
           <ChevronRight className="w-4 h-4" />
         </Button>
       </div>

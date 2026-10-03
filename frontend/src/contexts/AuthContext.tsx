@@ -32,6 +32,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  useEffect(() => {
+    const handleUnauthorized = () => setUser(null);
+    window.addEventListener('autotara:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('autotara:unauthorized', handleUnauthorized);
+  }, []);
+
   const login = async (email: string, password: string) => {
     const { access_token } = await api.auth.login(email, password);
     sessionStorage.setItem('tara_token', access_token);

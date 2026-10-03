@@ -126,7 +126,7 @@ export function AttackTreeDesigner() {
   }, [nodes, edges, setNodes]);
 
   return (
-    <div className="h-full flex bg-[#05070a]">
+    <div className="h-full flex bg-background">
       {/* Canvas */}
       <div className="flex-1 relative">
         <ReactFlow
@@ -143,12 +143,12 @@ export function AttackTreeDesigner() {
           fitView
           fitViewOptions={{ padding: 0.3 }}
           proOptions={{ hideAttribution: true }}
-          className="bg-[#05070a]"
+          className="bg-background"
           snapToGrid
           snapGrid={[20, 20]}
         >
           <Background color="rgba(255,255,255,0.03)" gap={20} />
-          <Controls className="!bg-[#0b0f17] !border-white/10 !rounded-lg [&>button]:!bg-[#0b0f17] [&>button]:!border-white/10 [&>button]:!text-slate-400 [&>button:hover]:!bg-white/5" />
+          <Controls className="!rounded-lg !border-border !bg-card [&>button]:!border-border [&>button]:!bg-card [&>button]:!text-muted-foreground [&>button:hover]:!bg-muted" />
 
           {/* Add Node Toolbar */}
           <Panel position="top-left" className="flex gap-1.5">
@@ -188,7 +188,7 @@ export function AttackTreeDesigner() {
 
           {/* Feasibility Score */}
           <Panel position="bottom-center">
-            <div className="bg-[#0b0f17]/90 backdrop-blur-sm border border-white/10 rounded-xl px-6 py-3 flex items-center gap-4">
+            <div className="rounded-xl border border-border bg-card/90 px-6 py-3 backdrop-blur-sm flex items-center gap-4">
               <span className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">Path Feasibility</span>
               {feasInfo ? (
                 <>
@@ -208,7 +208,7 @@ export function AttackTreeDesigner() {
       </div>
 
       {/* Inspector Sidebar */}
-      <div className="w-72 border-l border-white/5 bg-[#080b12]">
+      <div className="w-72 border-l border-border bg-card">
         <AttackTreeInspector selectedNode={selectedNode} onUpdate={handleUpdateNode} />
       </div>
     </div>

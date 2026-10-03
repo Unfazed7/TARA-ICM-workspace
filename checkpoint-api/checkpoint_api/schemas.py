@@ -61,7 +61,7 @@ class CheckpointReviewResponse(BaseModel):
 
 VehicleType = Literal["sedan", "suv", "truck", "van", "bus", "motorcycle", "commercial"]
 AssessmentStatus = Literal["active", "archived"]
-RunStatus = Literal["not_started", "pending", "running", "complete", "failed"]
+RunStatus = Literal["not_started", "pending", "running", "paused", "cancelled", "complete", "failed"]
 
 
 class RegisterRequest(BaseModel):
@@ -151,6 +151,12 @@ class AssetRegisterImportResponse(BaseModel):
     asset_count: int
     stage_num: int = 3
     status: Literal["complete"] = "complete"
+
+
+class AssetRegisterStatusResponse(BaseModel):
+    uploaded: bool
+    filename: str | None = None
+    asset_count: int = 0
 
 
 # --- Stage 1 CP1: element-level boundary review ------------------------------

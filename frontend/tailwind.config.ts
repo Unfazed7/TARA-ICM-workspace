@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -107,7 +108,7 @@ export default {
   		},
   		fontFamily: {
   			sans: [
-  				'Inter',
+				'IBM Plex Sans',
   				'ui-sans-serif',
   				'system-ui',
   				'-apple-system',
@@ -120,7 +121,7 @@ export default {
   				'sans-serif'
   			],
   			serif: [
-  				'Lora',
+				'IBM Plex Serif',
   				'ui-serif',
   				'Georgia',
   				'Cambria',
@@ -129,7 +130,7 @@ export default {
   				'serif'
   			],
   			mono: [
-  				'JetBrains Mono',
+				'IBM Plex Mono',
   				'ui-monospace',
   				'SFMono-Regular',
   				'Menlo',
@@ -151,5 +152,5 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animate],
 } satisfies Config;

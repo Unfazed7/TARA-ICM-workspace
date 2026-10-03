@@ -13,7 +13,7 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   },
   {
     "asset_id": "AS_02",
@@ -29,7 +29,7 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   },
   {
     "asset_id": "AS_03",
@@ -45,7 +45,7 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   },
   {
     "asset_id": "AS_04",
@@ -61,7 +61,7 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   },
   {
     "asset_id": "AS_05",
@@ -77,7 +77,7 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   },
   {
     "asset_id": "AS_06",
@@ -93,7 +93,7 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   },
   {
     "asset_id": "AS_07",
@@ -109,7 +109,7 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   },
   {
     "asset_id": "AS_08",
@@ -125,6 +125,6 @@
       "non_repudiation": false
     },
     "input_mode": "manual",
-    "created_timestamp": "2026-10-01T15:48:33.501434Z"
+    "created_timestamp": "2026-10-02T15:20:28.044118Z"
   }
 ]

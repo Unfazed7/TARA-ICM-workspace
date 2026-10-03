@@ -1,9 +1,12 @@
 import type {
   Assessment,
   AssetRegisterImportResult,
+  AssetRegisterUploadStatus,
   PipelineRunStatus,
   CreateAssessmentBody,
+  UpdateAssessmentBody,
   StageDefinition,
+  Checkpoint,
 } from '@/types/api';
 import type {
   BoundaryState,
@@ -33,10 +36,15 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
     headers: { ...authHeaders(), ...init?.headers },
   });
+  if (res.status === 401) {
+    sessionStorage.removeItem('tara_token');
+    window.dispatchEvent(new Event('autotara:unauthorized'));
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(err.detail ?? `API error ${res.status}`);
   }
+  if (res.status === 204) return undefined as T;
   return res.json();
 }
 
@@ -74,8 +82,9 @@ export const api = {
     get: (id: string) => apiFetch<Assessment>(`/assessments/${id}`),
     create: (body: CreateAssessmentBody) =>
       apiFetch<Assessment>('/assessments', { method: 'POST', body: JSON.stringify(body) }),
-    update: (id: string, body: Partial<CreateAssessmentBody>) =>
+    update: (id: string, body: UpdateAssessmentBody) =>
       apiFetch<Assessment>(`/assessments/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+    delete: (id: string) => apiFetch<void>(`/assessments/${id}`, { method: 'DELETE' }),
   },
 
   pipeline: {
@@ -83,6 +92,12 @@ export const api = {
       apiFetch<StageDefinition[]>(`/assessments/${assessmentId}/stages`),
     run: (assessmentId: string, stageNum: number) =>
       apiFetch<PipelineRunStatus>(`/assessments/${assessmentId}/stages/${stageNum}/run`, { method: 'POST' }),
+    pause: (assessmentId: string, stageNum: number) =>
+      apiFetch<PipelineRunStatus>(`/assessments/${assessmentId}/stages/${stageNum}/pause`, { method: 'POST' }),
+    resume: (assessmentId: string, stageNum: number) =>
+      apiFetch<PipelineRunStatus>(`/assessments/${assessmentId}/stages/${stageNum}/resume`, { method: 'POST' }),
+    cancel: (assessmentId: string, stageNum: number) =>
+      apiFetch<PipelineRunStatus>(`/assessments/${assessmentId}/stages/${stageNum}/cancel`, { method: 'POST' }),
     status: (assessmentId: string, stageNum: number) =>
       apiFetch<PipelineRunStatus>(`/assessments/${assessmentId}/stages/${stageNum}/status`),
     output: <T>(assessmentId: string, stageNum: number) =>
@@ -90,6 +105,8 @@ export const api = {
   },
 
   uploads: {
+    assetRegisterStatus: (assessmentId: string) =>
+      apiFetch<AssetRegisterUploadStatus>(`/assessments/${assessmentId}/stages/3/asset-register`),
     assetRegister: (assessmentId: string, file: File) => {
       const form = new FormData();
       form.append('asset_file', file);
@@ -108,6 +125,16 @@ export const api = {
         body: form,
       }).then(r => r.json());
     },
+  },
+
+  checkpoints: {
+    list: (assessmentId: string) =>
+      apiFetch<Checkpoint[]>(`/assessments/${assessmentId}/checkpoints`),
+    review: (checkpointId: string, decision: 'approved' | 'rejected', notes?: string) =>
+      apiFetch<{ checkpoint_id: string; status: string; reviewer_id: string; reviewed_at: string }>(
+        `/checkpoints/${checkpointId}/review`,
+        { method: 'POST', body: JSON.stringify({ decision, notes: notes || null }) },
+      ),
   },
 
   boundary: {

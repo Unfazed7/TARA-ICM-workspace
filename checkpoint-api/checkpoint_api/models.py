@@ -60,7 +60,7 @@ class PipelineRun(Base):
     stage_num = Column(Integer, nullable=False)
     stage_name = Column(String, nullable=False)
     status = Column(
-        Enum("pending", "running", "complete", "failed", name="run_status"),
+        Enum("pending", "running", "paused", "cancelled", "complete", "failed", name="run_status"),
         nullable=False,
         default="pending",
     )

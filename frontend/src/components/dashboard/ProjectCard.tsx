@@ -35,10 +35,10 @@ const vehicleIcons: Record<VehicleType, typeof Car> = {
   sedan: Car,
   suv: Car,
   truck: Truck,
-  electric: Zap,
+  van: Truck,
+  bus: Bus,
   commercial: Bus,
   motorcycle: Bike,
-  other: CircleDot,
 };
 
 const statusColors: Record<string, string> = {

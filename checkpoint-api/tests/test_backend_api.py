@@ -12,7 +12,7 @@ from fastapi.testclient import TestClient
 
 from checkpoint_api.database import Base, engine
 from checkpoint_api.main import app
-from checkpoint_api.models import PipelineRun
+from checkpoint_api.models import BoundaryEdit, BoundaryState, Checkpoint, PipelineRun
 
 
 @pytest.fixture(autouse=True)
@@ -344,6 +344,16 @@ def test_manual_asset_register_unblocks_stage_4(client, monkeypatch):
             files={"asset_file": ("assets.csv", csv_content, "text/csv")},
         )
         assert imported.status_code == 200
+        upload_status = client.get(
+            f"/api/v1/assessments/{assessment_id}/stages/3/asset-register",
+            headers=headers,
+        )
+        assert upload_status.status_code == 200
+        assert upload_status.json() == {
+            "uploaded": True,
+            "filename": "assets.csv",
+            "asset_count": 1,
+        }
 
         run = client.post(
             f"/api/v1/assessments/{assessment_id}/stages/4/run",
@@ -410,3 +420,105 @@ def test_assessment_stage_status_reflects_pipeline_runs(client):
     response = client.get(f"/api/v1/assessments/{assessment_id}", headers=headers)
     assert response.status_code == 200
     assert response.json()["stages"]["01"] == "complete"
+
+
+def test_running_stage_can_pause_resume_and_cancel(client, monkeypatch):
+    from checkpoint_api.database import SessionLocal
+    from checkpoint_api.routers import pipeline
+
+    headers = register_and_login(client)
+    assessment_id = create_assessment(client, headers)["assessment_id"]
+    session = SessionLocal()
+    try:
+        session.add(PipelineRun(
+            assessment_id=assessment_id,
+            stage_num=4,
+            stage_name="04-damage-analysis",
+            status="running",
+        ))
+        session.commit()
+    finally:
+        session.close()
+
+    monkeypatch.setattr(pipeline, "pause_stage_process", lambda *_args: True)
+    monkeypatch.setattr(pipeline, "resume_stage_process", lambda *_args: True)
+    monkeypatch.setattr(pipeline, "cancel_stage_process", lambda *_args: True)
+
+    paused = client.post(f"/api/v1/assessments/{assessment_id}/stages/4/pause", headers=headers)
+    assert paused.status_code == 200
+    assert paused.json()["status"] == "paused"
+
+    resumed = client.post(f"/api/v1/assessments/{assessment_id}/stages/4/resume", headers=headers)
+    assert resumed.status_code == 200
+    assert resumed.json()["status"] == "running"
+
+    cancelled = client.post(f"/api/v1/assessments/{assessment_id}/stages/4/cancel", headers=headers)
+    assert cancelled.status_code == 200
+    assert cancelled.json()["status"] == "cancelled"
+    assert client.get(f"/api/v1/assessments/{assessment_id}", headers=headers).json()["stages"]["04"] == "cancelled"
+
+
+def test_delete_assessment_removes_related_data_and_files(client, monkeypatch, tmp_path):
+    from checkpoint_api import pipeline_runner
+    from checkpoint_api.database import SessionLocal
+
+    workspace_root = tmp_path / "workspace"
+    upload_root = tmp_path / "uploads"
+    monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", str(workspace_root))
+    monkeypatch.setattr(pipeline_runner, "UPLOAD_DIR", str(upload_root))
+    monkeypatch.setattr(pipeline_runner, "cancel_assessment_processes", lambda *_args: None)
+
+    headers = register_and_login(client)
+    assessment_id = create_assessment(client, headers)["assessment_id"]
+    artifact_dir = workspace_root / "artifacts" / assessment_id
+    upload_dir = upload_root / assessment_id
+    artifact_dir.mkdir(parents=True)
+    upload_dir.mkdir(parents=True)
+    (artifact_dir / "output.json").write_text("{}", encoding="utf-8")
+    (upload_dir / "input.csv").write_text("asset_id\nAS_01", encoding="utf-8")
+
+    session = SessionLocal()
+    try:
+        boundary = BoundaryState(
+            assessment_id=assessment_id,
+            model_ref="model.json",
+            boundary_statement="Test boundary",
+            decisions=[],
+        )
+        session.add(boundary)
+        session.flush()
+        session.add(BoundaryEdit(
+            boundary_id=boundary.boundary_id,
+            assessment_id=assessment_id,
+            action="rename",
+            element_id="EL_01",
+            actor="test@example.com",
+        ))
+        session.add(Checkpoint(
+            assessment_id=assessment_id,
+            stage_num=4,
+            stage_name="damage-analysis",
+        ))
+        session.add(PipelineRun(
+            assessment_id=assessment_id,
+            stage_num=4,
+            stage_name="04-damage-analysis",
+            status="cancelled",
+        ))
+        session.commit()
+    finally:
+        session.close()
+
+    response = client.delete(f"/api/v1/assessments/{assessment_id}", headers=headers)
+    assert response.status_code == 204
+    assert not artifact_dir.exists()
+    assert not upload_dir.exists()
+
+    session = SessionLocal()
+    try:
+        assert session.query(PipelineRun).filter_by(assessment_id=assessment_id).count() == 0
+        assert session.query(Checkpoint).filter_by(assessment_id=assessment_id).count() == 0
+        assert session.query(BoundaryState).filter_by(assessment_id=assessment_id).count() == 0
+        assert session.query(BoundaryEdit).filter_by(assessment_id=assessment_id).count() == 0
+    finally:
+        session.close()

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, memo } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef, memo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
@@ -139,6 +138,9 @@ export function RiskAssessmentGrid({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(600);
 
   const updateScenario = useCallback((id: string, updates: Partial<ThreatScenario>) => {
     onScenariosChange(scenarios.map(s => {
@@ -354,6 +356,23 @@ export function RiskAssessmentGrid({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const updateHeight = () => setViewportHeight(viewport.clientHeight);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
+
+  const allRows = table.getRowModel().rows;
+  const rowHeight = 53;
+  const overscan = 8;
+  const startIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan);
+  const endIndex = Math.min(allRows.length, Math.ceil((scrollTop + viewportHeight) / rowHeight) + overscan);
+  const visibleRows = allRows.slice(startIndex, endIndex);
+
   const handleRowClick = useCallback((scenarioId: string) => {
     onRowSelect?.(selectedRowId === scenarioId ? null : scenarioId);
   }, [selectedRowId, onRowSelect]);
@@ -372,8 +391,8 @@ export function RiskAssessmentGrid({
               className="pl-9 h-9"
             />
           </div>
-          <Select defaultValue="all">
-            <SelectTrigger className="w-32 h-9">
+          <Select defaultValue="all" disabled>
+            <SelectTrigger className="w-32 h-9" aria-label="Risk filter unavailable">
               <SelectValue placeholder="Risk Level" />
             </SelectTrigger>
             <SelectContent>
@@ -387,12 +406,12 @@ export function RiskAssessmentGrid({
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-9 gap-2">
+          <Button variant="outline" size="sm" className="h-9 gap-2" disabled title="Export is not available yet">
             <Download className="w-4 h-4" />
             Export
           </Button>
           {!isAnalystMode && (
-            <Button size="sm" className="h-9 gap-2">
+            <Button size="sm" className="h-9 gap-2" disabled title="Create threats from the threat-analysis step">
               <Plus className="w-4 h-4" />
               Add Threat
             </Button>
@@ -404,7 +423,11 @@ export function RiskAssessmentGrid({
       <div className="flex-1 flex overflow-hidden">
         {/* Data Grid */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <ScrollArea className="flex-1">
+          <div
+            ref={viewportRef}
+            className="flex-1 overflow-auto"
+            onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}
+          >
             <div className="min-w-max">
               {/* Header */}
               <div className="sticky top-0 z-10 bg-muted/80 backdrop-blur-sm border-b border-border">
@@ -426,8 +449,8 @@ export function RiskAssessmentGrid({
               </div>
 
               {/* Body */}
-              <div>
-                {table.getRowModel().rows.map(row => {
+              <div style={{ paddingTop: startIndex * rowHeight, paddingBottom: (allRows.length - endIndex) * rowHeight }}>
+                {visibleRows.map(row => {
                   const isApproved = row.original.reviewStatus === 'approved';
                   const isSelected = row.original.id === selectedRowId;
                   
@@ -455,7 +478,7 @@ export function RiskAssessmentGrid({
                 })}
               </div>
             </div>
-          </ScrollArea>
+          </div>
 
           {/* Footer */}
           <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-card/50 text-xs text-muted-foreground">

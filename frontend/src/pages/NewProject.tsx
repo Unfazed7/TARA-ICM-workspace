@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PageTransition } from '@/components/layout/PageTransition';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import {
   Select,
   SelectContent,
@@ -21,7 +22,8 @@ import {
   WorkflowMode,
   VehicleType,
   ProjectDomain,
-  catalogVersionOptions
+  catalogVersionOptions,
+  domainOptions,
 } from '@/types/tara';
 import {
   Shield,
@@ -41,6 +43,7 @@ import {
   Globe,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface WorkHistoryEntry {
   id: string;
@@ -64,11 +67,11 @@ const workflowOptions: { id: WorkflowMode; label: string; icon: typeof Sparkles;
   { id: 'manual', label: 'Manual', icon: Hammer, desc: 'Expert-driven analysis' },
 ];
 
-const GLASS_INPUT = "font-medium bg-[rgba(0,0,0,0.4)] border-0 ring-1 ring-white/[0.06] backdrop-blur-sm focus-visible:ring-0 focus-visible:outline-none wizard-input";
+const GLASS_INPUT = "font-medium bg-background border-input focus-visible:ring-2 focus-visible:ring-ring wizard-input";
 const GLASS_INPUT_SM = `${GLASS_INPUT} h-9 text-sm`;
 const GLASS_INPUT_XS = `${GLASS_INPUT} h-8 text-xs`;
 const LABEL_CLS = "text-[10px] uppercase tracking-wider font-medium";
-const LABEL_STYLE = { color: 'hsl(210, 40%, 98%)' } as const;
+const LABEL_STYLE = { color: 'hsl(var(--foreground))' } as const;
 
 export default function NewProject() {
   const navigate = useNavigate();
@@ -87,12 +90,13 @@ export default function NewProject() {
   const [reviewers, setReviewers] = useState('');
   const [confirmationReviewer, setConfirmationReviewer] = useState('');
   const [approver, setApprover] = useState('');
-  const [domains, setDomains] = useState<ProjectDomain[]>([]);
+  const [domains, setDomains] = useState<ProjectDomain[]>(['networks']);
   const [scope, setScope] = useState<ProjectScope>('vehicle');
   const [workflowMode, setWorkflowMode] = useState<WorkflowMode>('ai-assisted');
   const [vehicleType, setVehicleType] = useState<VehicleType>('sedan');
   const [objectives, setObjectives] = useState('');
   const [includeWebApp, setIncludeWebApp] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [workHistory, setWorkHistory] = useState<WorkHistoryEntry[]>([
     {
       id: crypto.randomUUID(),
@@ -124,8 +128,10 @@ export default function NewProject() {
   };
 
   const handleCreate = async () => {
+    if (isCreating) return;
+    setIsCreating(true);
     try {
-      const effectiveDomains = domains.length > 0 ? domains : ['web-based'];
+      const effectiveDomains = [...domains, ...(includeWebApp ? ['web-based' as ProjectDomain] : [])];
       const project = await createProject({
         name: name || moduleName || 'Untitled TARA',
         description,
@@ -135,11 +141,21 @@ export default function NewProject() {
         scope,
         workflowMode,
         objectives,
+        documentId,
+        templateVersion,
+        version,
+        authors,
+        reviewers,
+        confirmationReviewer,
+        approver,
+        workHistory,
       });
       setActiveProject(project.id);
       navigate(`/project/${project.id}`);
     } catch (err) {
-      alert(`Failed to create project: ${err instanceof Error ? err.message : String(err)}`);
+      toast.error('Project creation failed', { description: err instanceof Error ? err.message : String(err) });
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -149,7 +165,7 @@ export default function NewProject() {
     true, // step 2 - document control always valid
     true, // step 3 - stakeholders optional
     true, // step 4 - work history optional
-    true, // step 5 - configuration has defaults
+    domains.length > 0 || includeWebApp,
   ];
 
   const steps = [
@@ -161,12 +177,12 @@ export default function NewProject() {
         <div className="grid gap-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className={LABEL_CLS} style={LABEL_STYLE}>Project Name <span className="text-destructive">*</span></Label>
-              <Input value={name} onChange={e => setName(e.target.value)} placeholder="Name" className={GLASS_INPUT} />
+              <Label htmlFor="project-name" className={LABEL_CLS} style={LABEL_STYLE}>Project Name <span className="text-destructive">*</span></Label>
+              <Input id="project-name" value={name} onChange={e => setName(e.target.value)} placeholder="Name" className={GLASS_INPUT} />
             </div>
             <div className="space-y-1.5">
-              <Label className={LABEL_CLS} style={LABEL_STYLE}>Module</Label>
-              <Input value={moduleName} onChange={e => setModuleName(e.target.value)} placeholder="BCM, TCU, Gateway" className={GLASS_INPUT} />
+              <Label htmlFor="module-name" className={LABEL_CLS} style={LABEL_STYLE}>Module</Label>
+              <Input id="module-name" value={moduleName} onChange={e => setModuleName(e.target.value)} placeholder="BCM, TCU, Gateway" className={GLASS_INPUT} />
             </div>
           </div>
           <div className="space-y-1.5">
@@ -233,15 +249,16 @@ export default function NewProject() {
       title: 'Work History',
       icon: Clock,
       content: (
-        <div className="space-y-2">
+        <div className="space-y-2 overflow-x-auto pb-2">
           {workHistory.map(entry => (
-            <div key={entry.id} className="group flex gap-2 items-center">
+            <div key={entry.id} className="group flex min-w-[640px] gap-2 items-center">
               <Input type="date" value={entry.date} onChange={e => updateWorkHistory(entry.id, 'date', e.target.value)} className={`${GLASS_INPUT_XS} w-[110px] shrink-0`} />
               <Input value={entry.version} onChange={e => updateWorkHistory(entry.id, 'version', e.target.value)} placeholder="Ver" className={`${GLASS_INPUT_XS} w-14 shrink-0`} />
               <Input value={entry.status} onChange={e => updateWorkHistory(entry.id, 'status', e.target.value)} placeholder="Status" className={`${GLASS_INPUT_XS} w-20 shrink-0`} />
               <Input value={entry.author} onChange={e => updateWorkHistory(entry.id, 'author', e.target.value)} placeholder="Author" className={`${GLASS_INPUT_XS} flex-1 min-w-0`} />
               <Input value={entry.changeDescription} onChange={e => updateWorkHistory(entry.id, 'changeDescription', e.target.value)} placeholder="Description" className={`${GLASS_INPUT_XS} flex-1 min-w-0`} />
               <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeWorkHistoryRow(entry.id)}>
+                <span className="sr-only">Remove work history entry</span>
                 <Trash2 className="w-3 h-3 text-muted-foreground" />
               </Button>
             </div>
@@ -262,13 +279,15 @@ export default function NewProject() {
           <div className="space-y-2.5">
             <Label className={LABEL_CLS} style={LABEL_STYLE}>Assessment Scope</Label>
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
+        <div className="space-y-2 overflow-x-auto pb-2">
                 <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: 'hsl(210, 40%, 98%)' }}>OEM Level</span>
                 <div className="space-y-2">
                   {scopeOptions.filter(o => o.id === 'vehicle' || o.id === 'domain').map(opt => (
                     <button
                       key={opt.id}
+                      type="button"
                       onClick={() => setScope(opt.id)}
+                      aria-pressed={scope === opt.id}
                       className={cn(
                         "flex items-center gap-2.5 w-full p-3 rounded-lg border transition-all text-left",
                         scope === opt.id
@@ -278,8 +297,8 @@ export default function NewProject() {
                     >
                       <opt.icon className={cn("w-4 h-4 shrink-0", scope === opt.id ? "text-primary" : "text-muted-foreground")} />
                       <div>
-                         <span className={cn("text-xs font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.label}</span>
-                         <span className="text-[10px]" style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.desc}</span>
+                         <span className="text-sm font-medium block">{opt.label}</span>
+                         <span className="text-xs text-muted-foreground">{opt.desc}</span>
                       </div>
                     </button>
                   ))}
@@ -291,7 +310,9 @@ export default function NewProject() {
                   {scopeOptions.filter(o => o.id === 'component' || o.id === 'ecu').map(opt => (
                     <button
                       key={opt.id}
+                      type="button"
                       onClick={() => setScope(opt.id)}
+                      aria-pressed={scope === opt.id}
                       className={cn(
                         "flex items-center gap-2.5 w-full p-3 rounded-lg border transition-all text-left",
                         scope === opt.id
@@ -301,8 +322,8 @@ export default function NewProject() {
                     >
                       <opt.icon className={cn("w-4 h-4 shrink-0", scope === opt.id ? "text-primary" : "text-muted-foreground")} />
                       <div>
-                         <span className={cn("text-xs font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.label}</span>
-                         <span className="text-[10px]" style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.desc}</span>
+                         <span className="text-sm font-medium block">{opt.label}</span>
+                         <span className="text-xs text-muted-foreground">{opt.desc}</span>
                       </div>
                     </button>
                   ))}
@@ -311,11 +332,23 @@ export default function NewProject() {
             </div>
           </div>
 
+          <div className="space-y-2.5">
+            <Label className={LABEL_CLS} style={LABEL_STYLE}>Domains in scope</Label>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {domainOptions.map((domain) => {
+                const checked = domains.includes(domain.id);
+                return <button key={domain.id} type="button" aria-pressed={checked} onClick={() => setDomains((current) => checked ? current.filter((id) => id !== domain.id) : [...current, domain.id])} className={cn('min-h-11 rounded-md border px-3 py-2 text-left text-sm transition-colors', checked ? 'border-primary bg-primary/10' : 'border-border')}>{domain.label}</button>;
+              })}
+            </div>
+          </div>
+
           {/* Web-Based Application Add-on */}
           <div className="space-y-2.5">
             <Label className={LABEL_CLS} style={LABEL_STYLE}>Additional Scope</Label>
             <button
+              type="button"
               onClick={() => setIncludeWebApp(!includeWebApp)}
+              aria-pressed={includeWebApp}
               className={cn(
                 "flex items-center gap-3 w-full p-3 rounded-lg border transition-all text-left",
                 includeWebApp
@@ -325,8 +358,8 @@ export default function NewProject() {
             >
               <Globe className={cn("w-4 h-4 shrink-0", includeWebApp ? "text-primary" : "text-muted-foreground")} />
               <div className="flex-1">
-                <span className={cn("text-xs font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>Web-Based Application</span>
-                <span className="text-[10px]" style={{ color: 'hsl(210, 40%, 98%)' }}>Combinable with any OEM or Supplier level scope</span>
+                <span className="text-sm font-medium block">Web-Based Application</span>
+                <span className="text-xs text-muted-foreground">Combinable with any OEM or Supplier level scope</span>
               </div>
               <div className={cn(
                 "w-4 h-4 rounded border flex items-center justify-center transition-all shrink-0",
@@ -346,7 +379,9 @@ export default function NewProject() {
               {workflowOptions.map(opt => (
                 <button
                   key={opt.id}
+                  type="button"
                   onClick={() => setWorkflowMode(opt.id)}
+                  aria-pressed={workflowMode === opt.id}
                   className={cn(
                     "flex items-center gap-3 p-3.5 rounded-lg border transition-all text-left",
                     workflowMode === opt.id
@@ -356,8 +391,8 @@ export default function NewProject() {
                 >
                   <opt.icon className={cn("w-5 h-5 shrink-0", workflowMode === opt.id ? "text-primary" : "text-muted-foreground")} />
                   <div>
-                     <span className={cn("text-sm font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.label}</span>
-                     <span className="text-[11px]" style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.desc}</span>
+                     <span className="text-sm font-medium block">{opt.label}</span>
+                     <span className="text-xs text-muted-foreground">{opt.desc}</span>
                   </div>
                 </button>
               ))}
@@ -373,46 +408,30 @@ export default function NewProject() {
 
   return (
     <PageTransition variant="slide">
-      <div className="h-screen bg-[#0a0e1a] flex flex-col relative overflow-hidden" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
-        <style>{`
-          .wizard-input:focus {
-            box-shadow: 0 0 0 1px rgba(59,130,246,0.5), 0 0 12px -2px rgba(59,130,246,0.3) !important;
-          }
-          @keyframes shield-glow {
-            0%, 100% { box-shadow: 0 0 8px rgba(59,130,246,0.3), 0 0 20px rgba(59,130,246,0.1); }
-            50% { box-shadow: 0 0 14px rgba(59,130,246,0.5), 0 0 30px rgba(59,130,246,0.15); }
-          }
-        `}</style>
-
-        {/* Navy radial glow */}
-        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_50%_20%,rgba(59,130,246,0.07)_0%,transparent_70%)]" />
-
-        {/* Smudge orb effects */}
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-primary/[0.04] blur-[120px] animate-[pulse_8s_ease-in-out_infinite]" />
-          <div className="absolute top-[30%] right-[10%] w-[400px] h-[400px] rounded-full bg-blue-500/[0.03] blur-[100px] animate-[pulse_10s_ease-in-out_infinite_2s]" />
-          <div className="absolute bottom-[10%] left-[30%] w-[350px] h-[350px] rounded-full bg-indigo-500/[0.03] blur-[90px] animate-[pulse_12s_ease-in-out_infinite_4s]" />
-        </div>
+      <div className="min-h-[100dvh] bg-background flex flex-col">
 
         {/* Fixed HUD Navbar */}
-        <nav className="fixed top-0 w-full h-20 z-50 flex items-center justify-between px-8 backdrop-blur-md bg-black/20 border-b border-white/5">
+        <nav className="sticky top-0 w-full min-h-16 z-50 flex items-center justify-between px-3 sm:px-6 bg-background/95 border-b backdrop-blur">
           {/* Left: Glowing shield + title */}
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center"
-              style={{ animation: 'shield-glow 3s ease-in-out infinite' }}
             >
-              <Shield className="w-4 h-4 text-primary drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]" />
+              <Shield className="w-4 h-4 text-primary" />
             </div>
-            <span className="font-mono tracking-[0.3em] uppercase text-sm" style={{ color: 'hsl(210, 40%, 98%)' }}>
+            <span className="font-serif font-semibold text-sm">
               AUTO TARA
             </span>
           </div>
 
-          {/* Right: Close button */}
-          <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="h-8 w-8 text-muted-foreground hover:text-foreground">
-            <X className="w-4 h-4" />
-          </Button>
+          {/* Right: theme and close controls */}
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="h-8 w-8 text-muted-foreground hover:text-foreground">
+              <span className="sr-only">Close project creation</span>
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
 
           {/* Progress bar at bottom edge */}
           <div className="absolute bottom-0 left-0 h-[1px] bg-primary/60 transition-all duration-500 ease-out"
@@ -422,13 +441,14 @@ export default function NewProject() {
         </nav>
 
         {/* Content area - centered below navbar */}
-        <div className="flex-1 flex flex-col items-center justify-start px-6 pt-36 pb-8">
+        <div className="flex-1 flex flex-col items-center justify-start px-3 sm:px-6 pt-10 pb-8">
           <CardDeck
             steps={steps}
             canAdvance={canAdvance}
             onComplete={handleCreate}
             onStepChange={setCurrentStep}
             heading="Threat Analysis & Risk Assessment"
+            isCompleting={isCreating}
           />
         </div>
       </div>
