@@ -14,7 +14,7 @@ Task B4. Decisions D-36 and D-37. This is a mock-up, not a screen: it shows, as 
 
 **Summary.** The key and certificate management portal lets operators and internal services request and download X.509 certificates, and lets security admins approve and revoke them. It runs in its own cloud account, run by the platform team. Requests come in through an API gateway that checks a sign-in token from the company's central sign-in service. Certificates are signed with a key held in the cloud key management service. Two documents disagree on how the portal is reached from the internet and on which environment they describe; see the Rationale below.
 
-**Documents**
+**Documents** (comments)
 
 | Document | Read how | Used for | Ignored, and why |
 |---|---|---|---|
