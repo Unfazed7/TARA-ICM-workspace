@@ -289,7 +289,9 @@ async function main() {
   }
   const result = await runStage01({ inputDir: path.resolve(args.input), outDir: path.resolve(args.out || DEFAULT_OUT) });
   if (result.status === 'missing_input') {
-    process.stderr.write(`Stage 01 stopped. Missing input:\n${result.missing.map((m) => `- ${m}`).join('\n')}\n`);
+    const unread = (result.register || []).filter((d) => d.read_status === 'failed');
+    const why = unread.length ? `\nThese files could not be read:\n${unread.map((d) => `- ${d.client_doc_ref}: ${d.read_status_reason}`).join('\n')}\n` : '';
+    process.stderr.write(`Stage 01 stopped. Missing input:\n${result.missing.map((m) => `- ${m}`).join('\n')}\n${why}`);
     process.exit(2);
   }
   const failed = result.register.filter((d) => d.read_status !== 'parsed').length;

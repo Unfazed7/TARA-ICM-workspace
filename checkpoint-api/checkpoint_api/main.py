@@ -15,6 +15,7 @@ from .routers.auth import router as auth_router
 from .routers.boundary import router as boundary_router
 from .routers.checkpoints import router as checkpoints_router
 from .routers.pipeline import router as pipeline_router
+from .routers.pipeline_v2 import router as pipeline_v2_router
 from .routers.stages import router as stages_router
 from .routers.uploads import router as uploads_router
 
@@ -40,6 +41,7 @@ def create_app() -> FastAPI:
     app.include_router(pipeline_router, prefix="/api/v1/assessments", tags=["pipeline"])
     app.include_router(uploads_router, prefix="/api/v1/assessments", tags=["uploads"])
     app.include_router(stages_router, prefix="/api/v1/assessments", tags=["stages"])
+    app.include_router(pipeline_v2_router, prefix="/api/v1/assessments", tags=["pipeline-v2"])
     return app
 
 

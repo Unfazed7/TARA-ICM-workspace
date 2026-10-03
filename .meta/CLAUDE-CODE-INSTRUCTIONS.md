@@ -548,7 +548,7 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 #### C7. Stage pages: output and Rationale
 **Read first:** specs 13a and 13b, approved Rationale prototype, `frontend/src/pages/ProjectWorkspace.tsx`.
-**Do:** Upload screen with a document type picker per file (D-43). Input Normalization page and Item Definition page, each showing the stage output (read-only, as in DR-4 and DR-5) with the Rationale section below it: items ordered Needs you first, four parts each, confirm or dispute with a note. "Why?" answers come only from stored sources. No canvas or animations.
+**Do:** Upload screen with a document type picker per file (D-43), a boundary statement box and a Run button, using the C6 endpoints (spec 22); the screen refreshes while a stage is pending or running. Input Normalization page and Item Definition page, each showing the stage output (read-only, as in DR-4 and DR-5) with the Rationale section below it: items ordered Needs you first, four parts each, confirm or dispute with a note. "Why?" answers come only from stored sources. No canvas or animations.
 **Acceptance:** `tsc --noEmit` clean, `npm run build` succeeds, manual walk-through of item-01 recorded in `.meta/REBUILD-PROGRESS.md`.
 **Commit:** `feat: stage pages with rationale`
 

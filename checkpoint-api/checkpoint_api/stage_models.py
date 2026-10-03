@@ -475,3 +475,24 @@ class RationaleReview(StageBase):
     note = Column(Text, nullable=True)
     reviewed_by = Column(String, nullable=False)
     reviewed_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+
+# ── Pipeline status (C6, spec 22) ─────────────────────────────────────────────
+
+
+class StageJob(StageBase):
+    """Status of the automatic Stage 01 then Stage 02 run, one row per assessment and stage."""
+
+    __tablename__ = "stage_jobs"
+    __table_args__ = (UniqueConstraint("assessment_id", "stage"),)
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    stage = Column(String(2), nullable=False)
+    status = Column(String, nullable=False, default="not_started")
+    error_message = Column(Text, nullable=True)
+    run_number = Column(Integer, nullable=True)
+    refused_count = Column(Integer, nullable=True)
+    output_dir = Column(String, nullable=True)
+    started_at = Column(DateTime(timezone=True), nullable=True)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
