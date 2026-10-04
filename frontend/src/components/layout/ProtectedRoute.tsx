@@ -7,8 +7,10 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isLoading } = useAuth();
 
+    // A reload restores the login from the stored token; wait for it before deciding.
+    if (isLoading) return null;
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }

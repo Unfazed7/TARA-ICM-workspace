@@ -130,7 +130,7 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
                   Last edited {formatDistanceToNow(new Date(currentProject.updatedAt), { addSuffix: true })}
                 </p>
                 <Button
-                  onClick={() => navigate(`/project/${currentProject.id}`)}
+                  onClick={() => navigate(`/assessment/${currentProject.id}`)}
                   className="group rounded-full px-6 gap-2 mt-3 w-fit"
                 >
                   <Play className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -196,7 +196,7 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
             {recentProjects.map((p) => (
               <button
                 key={p.id}
-                onClick={() => navigate(`/project/${p.id}`)}
+                onClick={() => navigate(`/assessment/${p.id}`)}
                 className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-card/40 transition-colors group/row"
               >
                 <span className="text-sm text-foreground truncate max-w-[60%]">{p.name}</span>

@@ -1,7 +1,7 @@
 # Spec 24: Stage Screens with Assumptions (C7, part 2)
 
 **Status:** approved by the analyst for C7 (2026-10-04).
-**Code:** `frontend/src/pages/Assessment.tsx` (new route `/assessment/:id`), `frontend/src/components/stages/*`, `frontend/src/lib/api.ts`, `frontend/src/types/stages.ts`.
+**Code:** `frontend/src/pages/Assessment.tsx` (new route `/assessment/:id`), `frontend/src/components/stages/*`, `frontend/src/lib/stagesApi.ts`, `frontend/src/types/stages.ts`.
 **Decisions:** D-36, D-37, D-46. **Design:** the analyst's wireframes (Claude Design, 2026-10-04) in the 3a Blueprint theme (`styles/aegis-tokens.css`), light only.
 
 ## Goal
@@ -18,7 +18,9 @@ Plus a walk-through of item-01, recorded in `REBUILD-PROGRESS.md`.
 
 ## File Ownership
 
-WILL add the files above and one route and link in `App.tsx`. WON'T touch the old workspace, stages 03 to 10 or the theme tokens.
+WILL add the files above and one route in `App.tsx`. The stage API calls live in their own `lib/stagesApi.ts`, not in the legacy `lib/api.ts`. Also edited: `pages/NewProject.tsx` and `components/dashboard/ActiveAssessmentTile.tsx` open `/assessment/:id`; `components/layout/ProtectedRoute.tsx` waits while the login loads, so a reload stays on the page. WON'T touch the old workspace, stages 03 to 10 or the theme tokens.
+
+Note: `tsc` reports 46 errors, all in legacy files and present before C7; the new files have none.
 
 ## Screens
 

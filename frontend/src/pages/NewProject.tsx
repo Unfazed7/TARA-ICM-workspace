@@ -137,7 +137,7 @@ export default function NewProject() {
         objectives,
       });
       setActiveProject(project.id);
-      navigate(`/project/${project.id}`);
+      navigate(`/assessment/${project.id}`);
     } catch (err) {
       alert(`Failed to create project: ${err instanceof Error ? err.message : String(err)}`);
     }

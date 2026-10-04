@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import NewProject from "./pages/NewProject";
 import ProjectWorkspace from "./pages/ProjectWorkspace";
+import Assessment from "./pages/Assessment";
 import ReviewQueue from "./pages/ReviewQueue";
 import UserManagement from "./pages/UserManagement";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/projects/new" element={<ProtectedRoute><NewProject /></ProtectedRoute>} />
               <Route path="/project/:projectId" element={<ProtectedRoute><ProjectWorkspace /></ProtectedRoute>} />
+              <Route path="/assessment/:assessmentId" element={<ProtectedRoute><Assessment /></ProtectedRoute>} />
               <Route path="/review" element={<ProtectedRoute><ReviewQueue /></ProtectedRoute>} />
               <Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
