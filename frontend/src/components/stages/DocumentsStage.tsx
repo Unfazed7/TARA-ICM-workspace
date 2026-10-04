@@ -377,7 +377,14 @@ function RunStatus({ pipeline, starting, done, onOpen }: { pipeline?: PipelineSt
         {(starting || s01?.started_at) && <span className="aegis-label">{s01?.started_at ? `Started ${new Date(s01.started_at).toLocaleTimeString()}` : 'Starting'}</span>}
       </div>
       {failed?.error && <p className="m-0 whitespace-pre-line text-foreground">{failed.error}</p>}
-      {failed && <p className="m-0 text-muted-foreground">Fix or replace the documents named above, then execute again. Your documents and the text above are kept.</p>}
+      {failed && (
+        <p className="m-0 text-muted-foreground">
+          {failed.stage === '01' && /could not be read|Missing input/.test(failed.error || '')
+            ? 'Fix or replace the documents named above, then execute again.'
+            : 'Execute again. If it stops the same way, send the last lines of logs/aegis.log.'}{' '}
+          Your documents and the text above are kept.
+        </p>
+      )}
       {steps.map(({ n, label, s }) => (
         <div key={n} className="flex items-start gap-3">
           <span

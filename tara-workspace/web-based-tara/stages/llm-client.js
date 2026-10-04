@@ -160,6 +160,27 @@ function usageCounts(usage) {
   };
 }
 
+// ── Strict schema ─────────────────────────────────────────────────────────────
+
+/**
+ * Some providers refuse an enum on a type list such as ['string', 'null'] in strict mode.
+ * Rewrites that form as anyOf [{type, enum}, {type: 'null'}]; everything else is unchanged.
+ */
+function toStrictSchema(schema) {
+  if (Array.isArray(schema)) return schema.map(toStrictSchema);
+  if (!schema || typeof schema !== 'object') return schema;
+  const out = {};
+  for (const [key, value] of Object.entries(schema)) out[key] = toStrictSchema(value);
+  if (Array.isArray(out.type) && Array.isArray(out.enum)) {
+    const types = out.type.filter((t) => t !== 'null');
+    const values = out.enum.filter((v) => v !== null);
+    const { type, enum: _enum, ...rest } = out;
+    const choice = { ...rest, type: types.length === 1 ? types[0] : types, enum: values };
+    return out.type.includes('null') ? { anyOf: [choice, { type: 'null' }] } : choice;
+  }
+  return out;
+}
+
 // ── Main call ─────────────────────────────────────────────────────────────────
 
 /**
@@ -247,7 +268,7 @@ async function callModel(params, fetchImpl) {
     if (params.response_schema) {
       body.response_format = {
         type: 'json_schema',
-        json_schema: { name: params.response_schema.name, strict: true, schema: params.response_schema.schema },
+        json_schema: { name: params.response_schema.name, strict: true, schema: toStrictSchema(params.response_schema.schema) },
       };
     }
     if (params.tools && params.tools.length > 0) {
@@ -299,4 +320,4 @@ function isRefusal(response) {
   return Boolean(response) && response.stop_reason === 'refusal';
 }
 
-module.exports = { callLLM, getConfig, resolveStageSettings, isRefusal };
+module.exports = { callLLM, getConfig, resolveStageSettings, isRefusal, toStrictSchema };

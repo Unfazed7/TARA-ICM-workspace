@@ -33,3 +33,18 @@ test('progress is silent when a stage is used as a library', () => {
   }
   assert.strictEqual(printed, '');
 });
+
+test('a stage stopped for missing input exits with code 2 and no crash text', () => {
+  const env = { ...process.env, OPENROUTER_API_KEY: '', LLM_API_KEY: '', LLM_AUDIT_FILE: path.join(require('os').tmpdir(), 'progress-test-audit.jsonl') };
+  let code = 0;
+  let stderr = '';
+  try {
+    execFileSync('node', [AGENT, '--input', INPUTS, '--out', require('fs').mkdtempSync(path.join(require('os').tmpdir(), 'p-'))], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+  } catch (err) {
+    code = err.status;
+    stderr = err.stderr.toString();
+  }
+  assert.strictEqual(code, 2);
+  assert.match(stderr, /^Stage 01 stopped\. Missing input:/);
+  assert.doesNotMatch(stderr, /Assertion failed/);
+});

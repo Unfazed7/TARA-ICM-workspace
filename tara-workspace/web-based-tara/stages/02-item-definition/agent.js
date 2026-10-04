@@ -301,7 +301,8 @@ async function main() {
   const secret = process.env.PIPELINE_SERVICE_SECRET;
   if (!args.stage01 && !args.assessment) {
     process.stderr.write('Usage: node agent.js --stage01 <folder> [--boundary <file>] [--out <folder>] [--seed --api <url> --assessment <id>]\n');
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
   const stage01 = args.stage01 ? loadStage01FromFolder(path.resolve(args.stage01)) : await loadStage01FromApi({ api, assessmentId: args.assessment, secret });
   const boundary = args.boundary ? fs.readFileSync(path.resolve(args.boundary), 'utf8') : null;
@@ -310,7 +311,8 @@ async function main() {
   process.stdout.write(`Stage 02 built ${out.itemDef.elements.length} elements, ${out.itemDef.links.length} links, ${out.itemDef.scope_decisions.length} scope decisions, ${open} open questions, ${out.rationale.length} Rationale items.\n`);
   if (out.errors.length) {
     process.stderr.write(`Output did not pass the schema checks; see stage02-log.json.\n`);
-    process.exit(3);
+    process.exitCode = 3;
+    return;
   }
   if (args.seed) {
     const stored = await seedStage02({ api, assessmentId: args.assessment, secret, output: out });
@@ -324,7 +326,8 @@ if (require.main === module) {
   main().catch((err) => {
     progress(`Stopped by an error:\n${err.stack || err.message}`);
     process.stderr.write(`Stage 02 failed: ${err.message}\n`);
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   });
 }
 

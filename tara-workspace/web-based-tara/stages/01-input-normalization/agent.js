@@ -290,14 +290,16 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.input) {
     process.stderr.write('Usage: node agent.js --input <folder> [--out <folder>] [--seed --api <url> --assessment <id>]\n');
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
   const result = await runStage01({ inputDir: path.resolve(args.input), outDir: path.resolve(args.out || DEFAULT_OUT) });
   if (result.status === 'missing_input') {
     const unread = (result.register || []).filter((d) => d.read_status === 'failed');
     const why = unread.length ? `\nThese files could not be read:\n${unread.map((d) => `- ${d.client_doc_ref}: ${d.read_status_reason}`).join('\n')}\n` : '';
     process.stderr.write(`Stage 01 stopped. Missing input:\n${result.missing.map((m) => `- ${m}`).join('\n')}\n${why}`);
-    process.exit(2);
+    process.exitCode = 2;
+    return;
   }
   const failed = result.register.filter((d) => d.read_status !== 'parsed').length;
   process.stdout.write(`Stage 01 read ${result.register.length} documents (${failed} not fully read): ${result.rawFacts.length} facts read, ${result.dropped.length} dropped for a quote not found; after comparing documents ${result.facts.length} facts and ${result.conflicts.length} conflicts; ${result.rationale.length} Rationale items.\n`);
@@ -314,7 +316,8 @@ if (require.main === module) {
   main().catch((err) => {
     progress(`Stopped by an error:\n${err.stack || err.message}`);
     process.stderr.write(`Stage 01 failed: ${err.message}\n`);
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   });
 }
 

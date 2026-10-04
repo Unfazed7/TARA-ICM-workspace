@@ -156,3 +156,26 @@ test('the repo models.json pins a model for every stage', () => {
   }
   assert.equal(real.provider_routing.allow_fallbacks, false);
 });
+
+test('nullable enums are sent in a form strict providers accept', () => {
+  const { toStrictSchema } = require('../../tara-workspace/web-based-tara/stages/llm-client');
+  const schema = {
+    type: 'object',
+    properties: {
+      hosting: { type: ['string', 'null'], enum: ['managed', 'unknown', null] },
+      plain: { type: 'string', enum: ['a', 'b'] },
+      list: { type: 'array', items: { type: 'object', properties: { mode: { type: ['string', 'null'], enum: ['sync', null] } } } },
+    },
+  };
+  const out = toStrictSchema(schema);
+  assert.deepEqual(out.properties.hosting, { anyOf: [{ type: 'string', enum: ['managed', 'unknown'] }, { type: 'null' }] });
+  assert.deepEqual(out.properties.plain, { type: 'string', enum: ['a', 'b'] });
+  assert.deepEqual(out.properties.list.items.properties.mode, { anyOf: [{ type: 'string', enum: ['sync'] }, { type: 'null' }] });
+  const text = JSON.stringify(out);
+  assert.ok(!/"type":\["string","null"\],"enum"/.test(text));
+});
+
+test('every Stage 02 model schema has no enum on a type list', () => {
+  const src = require('fs').readFileSync(require('path').resolve(__dirname, '../../tara-workspace/web-based-tara/stages/02-item-definition/lib/model.js'), 'utf8');
+  assert.ok(!/type: \[[^\]]*\], enum/.test(src));
+});
