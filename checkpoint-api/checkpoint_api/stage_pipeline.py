@@ -34,7 +34,8 @@ def utc_now():
 
 def upload_dir() -> Path:
     workspace = os.getenv("WORKSPACE_ROOT", ".")
-    return Path(os.getenv("UPLOAD_DIR", os.path.join(workspace, "uploads")))
+    # Absolute, because the stage programs run from the repo root, not the API's working folder.
+    return Path(os.getenv("UPLOAD_DIR", os.path.join(workspace, "uploads"))).resolve()
 
 
 def documents_dir(assessment_id: str) -> Path:

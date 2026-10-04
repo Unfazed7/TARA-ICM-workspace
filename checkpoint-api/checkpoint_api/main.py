@@ -14,6 +14,7 @@ from . import run_log
 
 from .database import Base, engine
 from .migrate import upgrade_stage_tables
+from .stage_pipeline import upload_dir
 from .routers.assessments import router as assessments_router
 from .routers.auth import router as auth_router
 from .routers.boundary import router as boundary_router
@@ -68,6 +69,7 @@ def create_app() -> FastAPI:
 
 LOG_PATH = run_log.setup()
 run_log.get("startup").info("API starting; run log at %s", LOG_PATH)
+run_log.get("startup").info("Uploads and run folders at %s", upload_dir())
 Base.metadata.create_all(bind=engine)
 upgrade_stage_tables(engine)
 app = create_app()

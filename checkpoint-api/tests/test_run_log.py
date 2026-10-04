@@ -91,3 +91,14 @@ def test_missing_node_is_reported_in_plain_words(monkeypatch):
     monkeypatch.setattr(stage_pipeline.shutil, "which", lambda _name: None)
     code, _, stderr = stage_pipeline._run_node_blocking(["agent.js"])
     assert code == -1 and "Node.js was not found" in stderr
+
+
+def test_a_relative_upload_folder_still_reaches_the_stage_programs(client, tmp_path, monkeypatch):
+    # The API saves uploads relative to its own folder; the stage programs run from the repo root.
+    work = tmp_path / "api-folder"
+    work.mkdir()
+    monkeypatch.chdir(work)
+    monkeypatch.setenv("UPLOAD_DIR", "uploads")
+    _, stages = start(client)
+    assert [x["status"] for x in stages] == ["complete", "complete"]
+    assert (work / "uploads").is_dir()
