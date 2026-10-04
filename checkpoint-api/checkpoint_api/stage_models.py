@@ -196,8 +196,8 @@ class Element(StageBase):
     position = Column(Integer, nullable=False)
     element_id = Column(String, nullable=False)
     name = Column(String, nullable=False)
-    kind = Column(String, nullable=False)
-    kind_label = Column(String, nullable=True)
+    asset_type = Column(String, nullable=False)
+    asset_type_label = Column(String, nullable=True)
     parent_container_pk = Column(Integer, ForeignKey("containers.id", ondelete="CASCADE"), nullable=True)
     zone_pk = Column(Integer, ForeignKey("zones.id", ondelete="CASCADE"), nullable=False)
     provider = Column(String, nullable=True)
@@ -407,6 +407,7 @@ class RationaleItem(StageBase):
     rationale_id = Column(String, nullable=False)
     stage = Column(String(2), nullable=False)
     kind = Column(String, nullable=False)
+    topic = Column(String, nullable=False)
     attention = Column(String, nullable=False)
     title = Column(String(160), nullable=False)
     concluded = Column(Text, nullable=False)
@@ -475,6 +476,20 @@ class RationaleReview(StageBase):
     note = Column(Text, nullable=True)
     reviewed_by = Column(String, nullable=False)
     reviewed_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+
+class QuestionAnswer(StageBase):
+    """The analyst's answer to an open Stage 02 question (spec 23), kept outside runs like reviews."""
+
+    __tablename__ = "question_answers"
+    __table_args__ = (UniqueConstraint("assessment_id", "question_id"),)
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    question_id = Column(String, nullable=False)
+    answer = Column(Text, nullable=False)
+    answered_by = Column(String, nullable=False)
+    answered_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
 
 
 # ── Pipeline status (C6, spec 22) ─────────────────────────────────────────────

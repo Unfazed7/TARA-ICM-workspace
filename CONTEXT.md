@@ -58,6 +58,10 @@ _Avoid_: citation, provenance, evidence link
 The section below each stage's output that lists every assumption, conflict, ambiguity and gap the stage met, each with what was concluded, why (sources with quotes), what was assumed and what would change it. The analyst can mark each item confirmed or disputed at any time; this never stops or re-runs the pipeline.
 _Avoid_: checkpoint, review gate, flags, warnings
 
+**Assumptions**:
+What the analyst sees on screen for the **Rationale**: a panel opened from the top bar, for the current stage or all stages, grouped by topic (exposure, sign-in, scope, environment, data, naming, reading notes), with items that need the analyst first (D-46).
+_Avoid_: rationale panel, flags list
+
 **Review status**:
 The analyst's mark on a **Rationale** item: unreviewed, confirmed, or disputed with a note.
 _Avoid_: approval, sign-off
@@ -91,6 +95,10 @@ _Avoid_: override, manual edit, correction
 **Element**:
 One independently deployed or configured part of the system, or an actor or external party it interacts with, inside exactly one **Container**.
 _Avoid_: component, node, box
+
+**Asset type**:
+What sort of thing an **Element** is, such as load balancer, ECS service or human actor, from the fixed list in the Stage 02 schema (`asset_type`). Decides which scoping rules and questions apply (D-46).
+_Avoid_: kind, element kind, component type
 
 **Container**:
 A grouping that holds **Elements** but is not one itself, such as a cloud account, region, VPC, subnet or cluster.
@@ -144,4 +152,5 @@ _Avoid_: element, component, resource
 - "Item Definition" was used for both a single shared agent and a per-type agent. Resolved: there are two variants (**Web** and **Vehicle**), never merged, so a web-based TARA of a system touching vehicle ECUs does not produce a blend of both.
 - "Interface" was used both for a connection and for a scope status. Resolved: a connection is a **Link**; "interface" is only a **Scope decision** status.
 - **Element** and **Asset** were used interchangeably. Resolved: an **Element** is a part of the system; an **Asset** is something inside an **Element** worth protecting. One **Element** can yield several **Assets** or none.
+- "Kind" was used for what sort of thing an **Element** is. Resolved: it is the **Asset type** (D-46). Stage 03 also uses the words "asset type" for its own list of **Asset** sorts (for example credentials); that list is separate and on hold, and must be reconciled when Stage 03 resumes.
 - "CP0" and "CP1" were analyst checkpoints that stopped the pipeline after Stages 01 and 02. Replaced by the **Rationale** section on each stage page, which never blocks (D-36, D-37).

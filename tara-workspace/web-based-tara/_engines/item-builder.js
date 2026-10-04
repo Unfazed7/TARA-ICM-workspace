@@ -109,10 +109,10 @@ function buildItem({ reply, facts, rejectedIds = [], conflicts = [], boundary, d
       notes.push({ kind: 'ambiguity', touches: 'existence', title: `"${e.name}" could not be placed`, text: `"${e.name}" is described in the documents, but the network area it sits in is not shown, so it is not listed.`, fact_ids, affects: [] });
       continue;
     }
-    const element = { element_id: `EL-${pad(elements.length + 1, 3)}`, name: e.name, kind: e.kind };
-    if (e.kind === 'unknown_kind') {
-      element.kind_label = e.kind_label || e.name;
-      newKinds.push({ element_id: element.element_id, name: e.name, label: element.kind_label });
+    const element = { element_id: `EL-${pad(elements.length + 1, 3)}`, name: e.name, asset_type: e.asset_type };
+    if (e.asset_type === 'unknown_kind') {
+      element.asset_type_label = e.asset_type_label || e.name;
+      newKinds.push({ element_id: element.element_id, name: e.name, label: element.asset_type_label });
     }
     const external = EXTERNAL_ZONES.has(zone.kind);
     const named = e.container && containerByName.get(key(e.container));
@@ -126,7 +126,7 @@ function buildItem({ reply, facts, rejectedIds = [], conflicts = [], boundary, d
       element.parent_container_id = parent.container_id;
     }
     element.zone_id = zone.zone_id;
-    if (!ACTOR_KINDS.has(e.kind)) {
+    if (!ACTOR_KINDS.has(e.asset_type)) {
       element.provider = e.provider || 'unknown';
       element.hosting_type = e.hosting_type || 'unknown';
       let evidence = checkFacts(e.exposure_fact_ids, `exposure of ${e.name}`);
@@ -162,7 +162,7 @@ function buildItem({ reply, facts, rejectedIds = [], conflicts = [], boundary, d
 
   // One network boundary configuration element per network (DR-13)
   for (const vpc of containers.filter((c) => c.kind === 'vpc')) {
-    const hasOne = elements.some((e) => e.kind === 'network_boundary_configuration' && e.parent_container_id === vpc.container_id);
+    const hasOne = elements.some((e) => e.asset_type === 'network_boundary_configuration' && e.parent_container_id === vpc.container_id);
     if (hasOne) continue;
     const childZone = containers.filter((c) => c.parent_id === vpc.container_id && c.zone_id).map((c) => zones.find((z) => z.zone_id === c.zone_id)).find((z) => z && !EXTERNAL_ZONES.has(z.kind))
       || zones.find((z) => !EXTERNAL_ZONES.has(z.kind));
@@ -170,7 +170,7 @@ function buildItem({ reply, facts, rejectedIds = [], conflicts = [], boundary, d
     const element = {
       element_id: `EL-${pad(elements.length + 1, 3)}`,
       name: `${vpc.name} boundary configuration`,
-      kind: 'network_boundary_configuration',
+      asset_type: 'network_boundary_configuration',
       parent_container_id: vpc.container_id,
       zone_id: childZone.zone_id,
       provider: 'unknown',

@@ -123,7 +123,8 @@ test('item-01: defaults follow the more-security-work principle', async () => {
   }
   assert.match(byKind('environment')[0].assumed, /Production is assessed/);
   const naming = byKind('naming')[0];
-  assert.equal(naming.attention, 'information');
+  assert.equal(naming.attention, 'needs_attention'); // D-46: a merge of names needs the analyst
+  assert.equal(naming.topic, 'naming');
   assert.match(naming.title, /"Key Service"/);
   const winner = result.facts.find((f) => f.subject === 'Key Service' && f.fact_type === 'component_exists');
   assert.equal(winner.status, 'proposed');

@@ -46,6 +46,7 @@ function initialRegister(inputDir, today) {
   const files = fs.readdirSync(inputDir).filter((f) => !NOT_DOCUMENTS.has(f) && !f.startsWith('.') && fs.statSync(path.join(inputDir, f)).isFile());
   const ordered = [...manifest.map((m) => m.file).filter((f) => files.includes(f)), ...files.filter((f) => !listed.has(f)).sort()];
   const guessed = [];
+  const groups = {};
   const entries = ordered.map((file, index) => {
     const meta = listed.get(file) || {};
     let docType = meta.doc_type;
@@ -70,10 +71,11 @@ function initialRegister(inputDir, today) {
       used_for: '',
       ignored_and_why: '',
     };
-    if (docType === 'other') entry.doc_type_label = meta.doc_type_label || (listed.has(file) ? 'other' : 'not classified at upload');
+    if (docType === 'other') entry.doc_type_label = meta.type_label || meta.doc_type_label || (listed.has(file) ? 'other' : 'not classified at upload');
+    if (meta.category === 'components' || meta.category === 'behaviour') groups[entry.doc_id] = meta.category;
     return entry;
   });
-  return { entries, guessed };
+  return { entries, guessed, groups };
 }
 
 module.exports = { initialRegister, sha256, RANKS, DOC_TYPES, READER_VERSION };

@@ -40,6 +40,7 @@
       "rationale_id",
       "stage",
       "kind",
+      "topic",
       "attention",
       "title",
       "concluded",
@@ -66,6 +67,19 @@
           "gap",
           "assumption"
         ]
+      },
+      "topic": {
+        "type": "string",
+        "enum": [
+          "exposure",
+          "sign_in",
+          "scope",
+          "environment",
+          "data",
+          "naming",
+          "reading"
+        ],
+        "description": "The group the Assumptions panel shows it under. Set by code from the template that wrote the item, never by a model (spec 23)."
       },
       "attention": {
         "type": "string",
@@ -227,10 +241,16 @@
             "auto_resolved": {
               "type": "boolean",
               "const": true
+            },
+            "topic": {
+              "not": {
+                "const": "naming"
+              }
             }
           },
           "required": [
-            "auto_resolved"
+            "auto_resolved",
+            "topic"
           ]
         },
         "then": {

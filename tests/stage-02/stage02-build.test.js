@@ -75,16 +75,16 @@ function buildReply() {
     zones: i.zones.map((z) => ({ name: z.name, kind: z.kind, fact_ids: z.fact_ids })),
     containers: i.containers.map((c) => ({ name: c.name, kind: c.kind, parent: c.parent_id ? names.get(c.parent_id) : null, zone: c.zone_id ? names.get(c.zone_id) : null, fact_ids: c.fact_ids, readings: readingsFor(c.container_id, c.kind) })),
     elements: i.elements.map((e) => {
-      const trigger = scope.loadRules().kinds[e.kind];
+      const trigger = scope.loadRules().kinds[e.asset_type];
       const openTopics = key.questions.filter((q) => q.target_id === e.element_id && q.fact_type === 'generic').map((q) => q.topic);
       return {
-        name: e.name, kind: e.kind, kind_label: e.kind_label || null,
+        name: e.name, asset_type: e.asset_type, asset_type_label: e.asset_type_label || null,
         container: e.parent_container_id ? names.get(e.parent_container_id) : null, zone: names.get(e.zone_id),
         provider: e.provider || null, hosting_type: e.hosting_type || null,
         internet_exposed: e.internet_exposed ? e.internet_exposed.value : 'unknown', exposure_fact_ids: e.internet_exposed ? e.internet_exposed.evidence_fact_ids : [],
         is_entry_point: e.is_entry_point, auth_method: e.auth_method || null, owner_operator: e.owner_operator,
         data_handled: nullData(e.data_handled), stated_security_config: e.stated_security_config || [], fact_ids: e.fact_ids, confidence: e.confidence,
-        readings: readingsFor(e.element_id, e.kind),
+        readings: readingsFor(e.element_id, e.asset_type),
         answered_topics: trigger.topics.filter((t) => !openTopics.includes(t)),
       };
     }),
@@ -234,7 +234,7 @@ test('an element supported only by a rejected fact is never built', async () => 
 });
 
 test('a component no fact mentions is never invented', async () => {
-  const { out } = await run({ overrides: withBuild((r) => r.elements.push({ ...r.elements[15], name: 'Web application firewall', kind: 'waf', fact_ids: ['FCT-999'] })) });
+  const { out } = await run({ overrides: withBuild((r) => r.elements.push({ ...r.elements[15], name: 'Web application firewall', asset_type: 'waf', fact_ids: ['FCT-999'] })) });
   assert.ok(!byName(out).has('Web application firewall'));
 });
 
@@ -278,19 +278,19 @@ test('an open exposure disagreement makes the element exposed with an assumption
 });
 
 test('a missing network boundary configuration is added for each network', async () => {
-  const { out } = await run({ overrides: withBuild((r) => { r.elements = r.elements.filter((e) => e.kind !== 'network_boundary_configuration'); }) });
-  const added = out.itemDef.elements.filter((e) => e.kind === 'network_boundary_configuration');
+  const { out } = await run({ overrides: withBuild((r) => { r.elements = r.elements.filter((e) => e.asset_type !== 'network_boundary_configuration'); }) });
+  const added = out.itemDef.elements.filter((e) => e.asset_type === 'network_boundary_configuration');
   assert.equal(added.length, 1);
   assert.equal(added[0].name, 'VPC boundary configuration');
   assert.deepEqual(out.errors, []);
 });
 
-test('an unknown kind is ambiguous, gets the full fact set (capped at 7) and is logged', async () => {
+test('an unknown asset type is ambiguous, gets the full fact set (capped at 7) and is logged', async () => {
   const { out, outDir } = await run({
     overrides: withBuild((r) => {
       const e = r.elements.find((x) => x.name === 'Cache');
-      e.kind = 'unknown_kind';
-      e.kind_label = 'Quantum token mixer';
+      e.asset_type = 'unknown_kind';
+      e.asset_type_label = 'Quantum token mixer';
       e.internet_exposed = 'unknown';
       e.exposure_fact_ids = [];
       e.readings = { runs: 'unknown', controls: 'unknown', shared: 'unknown', reachable: 'unknown', data: 'unknown', environments_shared: 'unknown', pushes_changes: 'unknown', fact_ids: [] };
@@ -351,8 +351,8 @@ test('seeding sends the item definition, questions and Rationale as one Stage 02
   assert.equal(calls[1].body.item_definition.scope_decisions.length, key.item.elements.length);
 });
 
-test('the rules come from scoping-facts.md: every element kind in the schema has a row', () => {
-  const kinds = readJson(path.join(ROOT, 'src', 'schemas', 'stage-02-item-definition.schema.json')).properties.elements.items.properties.kind.enum;
+test('the rules come from scoping-facts.md: every asset type in the schema has a row', () => {
+  const kinds = readJson(path.join(ROOT, 'src', 'schemas', 'stage-02-item-definition.schema.json')).properties.elements.items.properties.asset_type.enum;
   const rules = scope.loadRules();
   for (const k of kinds) assert.ok(rules.kinds[k], `no rule row for ${k}`);
   for (const t of Object.values(rules.kinds).flatMap((k) => k.topics)) assert.ok(rules.topics[t], `no wording for topic "${t}"`);

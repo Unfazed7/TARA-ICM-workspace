@@ -9,6 +9,7 @@
  * spec 13b, attention is set by rule, and Rationale text comes from templates.
  */
 
+const { topicForAspect } = require('./topics');
 const fs = require('fs');
 const path = require('path');
 const { callLLM, isRefusal } = require('../stages/llm-client');
@@ -279,7 +280,7 @@ function buildResult({ register, rawFacts, reply, rationale, compared }) {
       loser_fact_ids: loserFinal,
     });
     book.push({
-      rationale_id: nextRat(), stage: '01', kind: 'conflict', attention: 'information',
+      rationale_id: nextRat(), stage: '01', kind: 'conflict', topic: 'naming', attention: 'needs_attention',
       title: `${loserNames} and "${n.winner.name}" are the same component`,
       concluded: `${docName(winnerIds[0])} calls it "${n.winner.name}" and ${docName(loserFinal[0])} calls it ${loserNames}. They describe the same component, so the name from the higher-ranked document is kept.`,
       why: { sources: sourcesOf([...winnerIds, ...loserFinal]), ...(n.why ? { note: n.why } : {}) },
@@ -344,7 +345,7 @@ function buildResult({ register, rawFacts, reply, rationale, compared }) {
 
     const sideText = sides.map((s) => `${docName(s.final[0])} says ${midSentence(s.says || factById.get(s.final[0]).value)}`).join('; ');
     book.push({
-      rationale_id: nextRat(), stage: '01', kind: 'conflict',
+      rationale_id: nextRat(), stage: '01', kind: 'conflict', topic: topicForAspect(KIND_ASPECT[kind] || aspect || (AUTO_KINDS.has(c.kind) ? (c.kind === 'instance_size' ? 'size' : c.kind) : 'other')),
       attention: auto ? 'information' : 'needs_attention',
       title: titleFor(kind, subject),
       concluded: `Documents disagree: ${sideText}.${cannotTell ? ' I could not tell which option is safer.' : ''}`,
@@ -365,7 +366,7 @@ function buildResult({ register, rawFacts, reply, rationale, compared }) {
 
   if (!compared) {
     book.push({
-      rationale_id: nextRat(), stage: '01', kind: 'gap', attention: 'needs_attention',
+      rationale_id: nextRat(), stage: '01', kind: 'gap', topic: 'reading', attention: 'needs_attention',
       title: 'Facts were not compared across documents',
       concluded: 'The comparison of documents did not run, so disagreements between documents may be missing. Only facts with exactly the same name and type were joined.',
       why: { sources: register.filter((d) => d.read_status !== 'failed').map((d) => ({ doc_id: d.doc_id, location: 'file name', quote: d.client_doc_ref })) },

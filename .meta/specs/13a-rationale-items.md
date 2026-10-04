@@ -28,6 +28,7 @@ Each stage writes `output/rationale.json`, an array of items:
 | `rationale_id` | `RAT-###`; Stage 01 uses 101 onwards, Stage 02 201 onwards |
 | `stage` | `01`, `02` |
 | `kind` | `conflict`, `ambiguity`, `gap`, `assumption` |
+| `topic` | `exposure`, `sign_in`, `scope`, `environment`, `data`, `naming`, `reading`: the group shown in the Assumptions panel, set by code (spec 23, D-46) |
 | `attention` | `needs_attention` or `information` (rules in 13b; set by code, not the model) |
 | `title` | One line, conclusion first |
 | `concluded`, `assumed`, `would_change` | Three of the four parts, plain language (`_config/analyst-language.md`) |

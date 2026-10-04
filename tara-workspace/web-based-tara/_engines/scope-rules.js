@@ -4,7 +4,7 @@
  * Scope rules for Stage 02 (spec 21, D-45). Code decides scope; the model only reports
  * facts in fixed words and explains the decision in plain language.
  *
- * Which rule and which questions apply to each element kind are read from the tables
+ * Which rule and which questions apply to each asset type are read from the tables
  * in `_config/scoping-facts.md` on every run, so a human refines the rules by editing
  * that file. What each rule decides from the facts is below.
  */
@@ -41,7 +41,7 @@ function loadRules(file = process.env.SCOPING_FACTS_FILE || CONFIG) {
   if (cache && cache.file === file) return cache.rules;
   const text = fs.readFileSync(file, 'utf8');
   const kinds = {};
-  for (const [kindCell, factsCell, rulesCell] of tableRows(text, '## 3. Triggers per element kind')) {
+  for (const [kindCell, factsCell, rulesCell] of tableRows(text, '## 3. Triggers per asset type')) {
     const kind = kindCell.replace(/`/g, '');
     kinds[kind] = {
       fact_types: /FT-01 to FT-07/.test(factsCell) ? [...ALL_FACT_TYPES] : factsCell.match(/FT-0\d/g) || [],
@@ -89,7 +89,7 @@ function starterQuestions({ target, kind, name, readings, answeredTopics = [], i
 /**
  * Decides scope for one element.
  * @param {object} p
- * @param {string} p.kind        element kind
+ * @param {string} p.kind        the element's asset type
  * @param {string} p.zoneKind    kind of the element's zone
  * @param {object} p.readings    fixed words from the build call and the answer check
  * @param {Array}  p.openQuestions  open questions targeting this element

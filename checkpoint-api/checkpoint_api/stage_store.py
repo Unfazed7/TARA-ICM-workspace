@@ -86,7 +86,7 @@ COLUMNS = {
     "zone": {"zone_id": "zone_id", "kind": "kind", "name": "name"},
     "container": {"container_id": "container_id", "kind": "kind", "name": "name"},
     "element": {
-        "element_id": "element_id", "name": "name", "kind": "kind", "kind_label": "kind_label",
+        "element_id": "element_id", "name": "name", "asset_type": "asset_type", "asset_type_label": "asset_type_label",
         "provider": "provider", "hosting_type": "hosting_type", "is_entry_point": "is_entry_point",
         "auth_method": "auth_method", "owner_operator": "owner_operator", "data_handled": "data_handled",
         "stated_security_config": "stated_security_config", "confidence": "confidence",
@@ -112,7 +112,7 @@ COLUMNS = {
         "origin": "origin", "answer": "answer", "answered_by": "answered_by", "status": "status",
     },
     "rationale": {
-        "rationale_id": "rationale_id", "stage": "stage", "kind": "kind", "attention": "attention",
+        "rationale_id": "rationale_id", "stage": "stage", "kind": "kind", "topic": "topic", "attention": "attention",
         "title": "title", "concluded": "concluded", "assumed": "assumed", "would_change": "would_change",
         "auto_resolved": "auto_resolved",
     },
@@ -561,7 +561,7 @@ def write_stage_02(db: Session, run: m.StageRun, stage01: m.StageRun, payload: d
             problems.append(("R-06", {"question_id": asked[key]}))
         if item["status"] != "dropped_answered_by_docs":
             target = target_of(target_id)
-            cap = question_cap_unknown_kind() if isinstance(target, m.Element) and target.kind == "unknown_kind" else question_cap()
+            cap = question_cap_unknown_kind() if isinstance(target, m.Element) and target.asset_type == "unknown_kind" else question_cap()
             existing = visible.get(target_id, [])
             if len(existing) >= cap:
                 problems.append(("R-07", {"cap": cap, "target_id": target_id, "question_ids": list(existing)}))

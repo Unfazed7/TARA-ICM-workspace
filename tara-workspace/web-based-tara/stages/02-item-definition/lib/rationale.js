@@ -6,6 +6,8 @@
  * credentials, audit records or whether a component exists needs attention.
  */
 
+const { topicForText } = require('../../../_engines/topics');
+
 const SENSITIVE_KINDS = new Set(['kms_key', 'secrets_store', 'audit_trail_config_recorder', 'identity_provider', 'certificate_authority', 'signing_service']);
 const STATUS_TEXT = {
   in_scope: 'inside the assessment',
@@ -52,7 +54,7 @@ function writeRationale({ itemDef, questions, decisions, notes, factsById }) {
   const book = new Book(factsById);
   const elements = new Map(itemDef.elements.map((e) => [e.element_id, e]));
   const targets = new Map([
-    ...itemDef.elements.map((e) => [e.element_id, { name: e.name, kind: e.kind, fact_ids: e.fact_ids }]),
+    ...itemDef.elements.map((e) => [e.element_id, { name: e.name, kind: e.asset_type, fact_ids: e.fact_ids }]),
     ...itemDef.links.map((l) => [l.link_id, { name: `the connection from "${elements.get(l.source_id).name}" to "${elements.get(l.destination_id).name}"`, kind: 'link', fact_ids: l.fact_ids }]),
     ...itemDef.containers.map((c) => [c.container_id, { name: c.name, kind: c.kind, fact_ids: c.fact_ids }]),
   ]);
@@ -65,6 +67,7 @@ function writeRationale({ itemDef, questions, decisions, notes, factsById }) {
     const first = linked[0];
     book.add({
       kind: 'assumption',
+      topic: 'scope',
       attention: 'needs_attention',
       title: `The scope of "${element.name}" is assumed`.slice(0, 160),
       concluded: `"${element.name}" is ${STATUS_TEXT[d.status]}. ${d.reason}`,
@@ -79,6 +82,7 @@ function writeRationale({ itemDef, questions, decisions, notes, factsById }) {
     const target = targets.get(q.target_id);
     book.add({
       kind: 'gap',
+      topic: topicForText(`${q.topic || ''} ${q.text}`),
       attention: questionNeedsAttention(q, target) ? 'needs_attention' : 'information',
       title: q.text.slice(0, 160),
       concluded: `The documents do not say this about ${target.kind === 'link' ? target.name : `"${target.name}"`}.`,
@@ -93,6 +97,7 @@ function writeRationale({ itemDef, questions, decisions, notes, factsById }) {
     const needs = a.based_on.some((id) => (factsById.get(id) || {}).group === 'needs_you') || /internet|exposed|entry point|authenticat|key|credential|environment|scope/i.test(a.text);
     book.add({
       kind: 'assumption',
+      topic: topicForText(a.text),
       attention: needs ? 'needs_attention' : 'information',
       title: a.text.length <= 160 ? a.text : `${a.text.slice(0, 157)}...`,
       concluded: `To keep going, this is assumed: ${a.text}`,
@@ -105,6 +110,7 @@ function writeRationale({ itemDef, questions, decisions, notes, factsById }) {
   for (const n of notes) {
     book.add({
       kind: n.kind,
+      topic: { exposure: 'exposure', authentication: 'sign_in', existence: 'scope' }[n.touches] || topicForText(`${n.title} ${n.text}`),
       attention: ['existence', 'authentication', 'exposure'].includes(n.touches) ? 'needs_attention' : 'information',
       title: n.title.slice(0, 160),
       concluded: n.text,
@@ -120,6 +126,7 @@ function writeRationale({ itemDef, questions, decisions, notes, factsById }) {
     const names = unknownLinks.map((l) => `"${elements.get(l.source_id).name}" to "${elements.get(l.destination_id).name}"`);
     book.add({
       kind: 'gap',
+      topic: 'sign_in',
       attention: 'information',
       title: `${unknownLinks.length} connection(s) do not say how they are authenticated or encrypted`,
       concluded: `The documents do not name the authentication or encryption for: ${names.join('; ')}.`,

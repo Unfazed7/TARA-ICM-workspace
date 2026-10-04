@@ -43,13 +43,13 @@ Facts outside FT-01 to FT-07 are asked as `generic` questions with a short topic
 
 ---
 
-## 3. Triggers per element kind
+## 3. Triggers per asset type
 
-Read by code on every Stage 02 run (`_engines/scope-rules.js`, D-45): editing a row here changes the questions and scope on the next run. Keep the table format; a test checks every element kind has a row.
+Read by code on every Stage 02 run (`_engines/scope-rules.js`, D-45): editing a row here changes the questions and scope on the next run. Keep the table format; a test checks every asset type has a row.
 
 Which fact types each kind needs. "S1 only" means the kind sits inside the item's own account and is in scope by the account rule; no scoping question is needed, but FT-05 may still be asked to record data for Stage 03.
 
-| Element kind | Fact types asked | Rules |
+| Asset type | Fact types asked | Rules |
 |---|---|---|
 | `cluster_control_plane` | FT-01, FT-02 | S3 |
 | `worker_nodes` | FT-01 | S1, S3 |
@@ -112,7 +112,7 @@ Container triggers: `cloud_account` gets FT-01 and FT-03 (S1) and FT-06 once per
 
 ---
 
-## 4. Unknown element kinds
+## 4. Unknown asset types
 
 1. Ask the full fact set FT-01 to FT-07.
 2. Log the kind to `stages/02-item-definition/output/new-kinds.log` with its label and the element id.

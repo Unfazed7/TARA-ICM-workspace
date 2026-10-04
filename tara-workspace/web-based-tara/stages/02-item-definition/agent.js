@@ -86,7 +86,7 @@ async function runStage02({ stage01, boundary, outDir = DEFAULT_OUT, fetchImpl =
   // 2. Starter questions from the trigger table.
   let candidates = [];
   for (const e of itemDef.elements) {
-    candidates.push(...scope.starterQuestions({ target: e.element_id, kind: e.kind, name: e.name, readings: readings.get(e.element_id) || {}, answeredTopics: answeredTopics.get(e.element_id), item, rules }));
+    candidates.push(...scope.starterQuestions({ target: e.element_id, kind: e.asset_type, name: e.name, readings: readings.get(e.element_id) || {}, answeredTopics: answeredTopics.get(e.element_id), item, rules }));
   }
   const account = itemDef.containers.find((c) => c.kind === 'cloud_account');
   if (account) {
@@ -143,7 +143,7 @@ async function runStage02({ stage01, boundary, outDir = DEFAULT_OUT, fetchImpl =
   // 5. Cap visible questions per target; give ids.
   const visible = new Map();
   const questions = [];
-  const kindOf = (id) => (itemDef.elements.find((e) => e.element_id === id) || {}).kind;
+  const kindOf = (id) => (itemDef.elements.find((e) => e.element_id === id) || {}).asset_type;
   for (const q of candidates) {
     if (q.status === 'open') {
       const limit = kindOf(q.target_id) === 'unknown_kind' ? cap().unknown : cap().normal;
@@ -162,13 +162,13 @@ async function runStage02({ stage01, boundary, outDir = DEFAULT_OUT, fetchImpl =
   const decisions = itemDef.elements.map((e) => {
     const zone = itemDef.zones.find((z) => z.zone_id === e.zone_id);
     const open = questions.filter((q) => q.target_id === e.element_id && q.status === 'open');
-    return { element: e, ...scope.decideScope({ kind: e.kind, zoneKind: zone.kind, readings: readings.get(e.element_id) || {}, openQuestions: open, rules }) };
+    return { element: e, ...scope.decideScope({ kind: e.asset_type, zoneKind: zone.kind, readings: readings.get(e.element_id) || {}, openQuestions: open, rules }) };
   });
 
   // 7. The model explains each decision in one plain sentence; code checks it.
   const explained = await safely(log, 'explain scope', () => model.explain({
     item,
-    decisions: decisions.map((d) => ({ element: d.element.name, kind: d.element.kind, decision: d.status, assumed: d.assumed, why: scope.templateReason(d.basis, d.element.name, item), facts: d.element.fact_ids.map((id) => factsById.get(id).value) })),
+    decisions: decisions.map((d) => ({ element: d.element.name, asset_type: d.element.asset_type, decision: d.status, assumed: d.assumed, why: scope.templateReason(d.basis, d.element.name, item), facts: d.element.fact_ids.map((id) => factsById.get(id).value) })),
     fetchImpl,
   }));
   const reasons = new Map(((explained && explained.reasons) || []).map((r) => [r.element.toLowerCase(), r.reason]));
@@ -195,6 +195,7 @@ async function runStage02({ stage01, boundary, outDir = DEFAULT_OUT, fetchImpl =
       rationale_id: `RAT-${200 + rationale.length + 1}`,
       stage: '02',
       kind: 'gap',
+      topic: 'reading',
       attention: 'information',
       title: 'Some checks did not run',
       concluded: `These steps did not run: ${failedSteps.join(', ')}. Scope reasons use standard wording, and questions the documents may already answer are still listed.`,

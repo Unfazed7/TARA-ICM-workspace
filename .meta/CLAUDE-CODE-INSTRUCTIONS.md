@@ -81,12 +81,15 @@ Every stage writes a Rationale next to its output: one item per conflict, ambigu
 - The server, never the model, labels facts **Agreed** (two or more documents, no conflict), **Single source** or **Needs you** (conflicts, gaps, assumptions, scope questions, low-confidence reads). Needs you items are listed first.
 - Review status per item, set by the analyst at any time: unreviewed, confirmed, or disputed with a note. A dispute is recorded and shown; nothing re-runs.
 - If more than about 20% of elements are flagged, the stage says the documents are too weak and lists the questions for the client.
+- On screen (D-46) the Rationale is called **Assumptions**: one top-bar button with a "need you" count opens a right-side panel for this stage or all stages, grouped by topic, needs-you first. Opening a card highlights what it affects; nothing is marked on the content. A Stage 02 item built on a Stage 01 item shows as one card. Open questions sit there with an answer box. Merges of names need the analyst.
 
 ### DR-4. Stage 01 page
+- On screen (D-46): the upload screen (boundary first, two document groups, Execute and live status); the summary and document register are under Settings as "What I read"; the Rationale is in the Assumptions panel.
 - One-paragraph summary of the system as understood; the document register view (per document: what it was used for, what was ignored and why, read status); the facts.
 - Rationale: conflicts between documents, failed or partial reads (each with a request to resend), facts the agent could not find (gaps), ambiguous reads, defaults applied.
 
 ### DR-5. Stage 02 page
+- On screen (D-46): a diagram (zones as bands, containers as nested frames, elements as boxes, links as arrows; interfaces dashed, out of scope grey) with a details drawer per element or link (asset type, scope and reason, the facts and quotes behind it); the Rationale is in the Assumptions panel.
 - Boundary statement (marked "proposed" if the agent wrote it); container tree and zones, elements, links (Data Flow Inventory), trust boundaries; scope decision per element with a plain reason (see DR-7 example); assumptions, responsibility split, stated controls and stated absences, stakeholders, open questions.
 - Rationale: assumed scope decisions with the question that would settle them, open questions with the default used, assumptions, ambiguities met while building, and Stage 01 conflicts that changed an element, link or scope decision.
 - Analyst edits on this page (scope, elements, links, boundary) are stored as analyst decisions and never silently overwritten. They do not re-run later stages for now. Re-run, diff and lock behaviour comes later.
@@ -97,7 +100,7 @@ Every stage writes a Rationale next to its output: one item per conflict, ambigu
 - Guards, all enforced by the server:
   1. Every question must reference one target (an element, a link, or a container for account-level facts) and one fact type from the catalogue; a `generic` question also needs a short topic. Otherwise refused.
   2. A separate model call tries to answer each generated question from the confirmed facts and documents. If it finds an answer with a quote, the question is dropped before the analyst sees it.
-  3. Deduplicate by (target, fact type), or (target, topic) for `generic` questions. Cap visible questions per target (configurable, default 3; up to 7 for unknown element kinds); dropped questions do not count.
+  3. Deduplicate by (target, fact type), or (target, topic) for `generic` questions. Cap visible questions per target (configurable, default 3; up to 7 for unknown asset types); dropped questions do not count.
 - Questions go to the analyst first. Only the ones the analyst cannot answer go to the client question list.
 
 ### DR-7. Scoping: internal defaults confirmed through factual questions
@@ -546,9 +549,9 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 
 ---
 
-#### C7. Stage pages: output and Rationale
-**Read first:** specs 13a and 13b, approved Rationale prototype, `frontend/src/pages/ProjectWorkspace.tsx`.
-**Do:** Upload screen with a document type picker per file (D-43), a boundary statement box and a Run button, using the C6 endpoints (spec 22); the screen refreshes while a stage is pending or running. Input Normalization page and Item Definition page, each showing the stage output (read-only, as in DR-4 and DR-5) with the Rationale section below it: items ordered Needs you first, four parts each, confirm or dispute with a note. "Why?" answers come only from stored sources. No canvas or animations.
+#### C7. Stage pages: output and Assumptions
+**Read first:** specs 23 and 24, D-46, specs 13a and 13b, the analyst's wireframes, `frontend/src/styles/aegis-tokens.css` (3a Blueprint).
+**Do:** Spec 23 data changes (document groups and labels, `asset_type`, Rationale `topic`, naming merges need the analyst, question answers). Then spec 24 screens on a new page: upload and execute with two document groups and live status (C6 endpoints); Item Definition diagram with a details drawer; the Assumptions panel from the top bar; Settings with "What I read". "Why?" answers come only from stored sources. No canvas library or animations. Light only for now.
 **Acceptance:** `tsc --noEmit` clean, `npm run build` succeeds, manual walk-through of item-01 recorded in `.meta/REBUILD-PROGRESS.md`.
 **Commit:** `feat: stage pages with rationale`
 

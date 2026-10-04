@@ -70,7 +70,7 @@
     {
       "element_id": "EL-001",
       "name": "API gateway",
-      "kind": "api_gateway",
+      "asset_type": "api_gateway",
       "parent_container_id": "CTR-03",
       "zone_id": "ZN-03",
       "provider": "public cloud",
@@ -93,7 +93,7 @@
     {
       "element_id": "EL-002",
       "name": "Update service",
-      "kind": "microservice_workload",
+      "asset_type": "microservice_workload",
       "parent_container_id": "CTR-02",
       "zone_id": "ZN-02",
       "provider": "public cloud",
@@ -110,7 +110,7 @@
     {
       "element_id": "EL-003",
       "name": "Firmware bucket",
-      "kind": "object_storage_bucket",
+      "asset_type": "object_storage_bucket",
       "parent_container_id": "CTR-03",
       "zone_id": "ZN-03",
       "provider": "public cloud",
@@ -135,7 +135,7 @@
     {
       "element_id": "EL-004",
       "name": "Company sign-in service",
-      "kind": "identity_provider",
+      "asset_type": "identity_provider",
       "zone_id": "ZN-04",
       "provider": "central IT",
       "hosting_type": "managed",

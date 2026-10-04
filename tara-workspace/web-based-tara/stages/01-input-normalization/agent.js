@@ -179,9 +179,9 @@ async function readSafely(doc, read) {
 async function runStage01({ inputDir, outDir = DEFAULT_OUT, fetchImpl = fetch, redactor = new Redactor(), date = today() }) {
   const boundaryFile = path.join(inputDir, 'boundary.txt');
   const boundary = fs.existsSync(boundaryFile) ? fs.readFileSync(boundaryFile, 'utf8') : null;
-  const { entries: register, guessed } = initialRegister(inputDir, date);
+  const { entries: register, guessed, groups } = initialRegister(inputDir, date);
 
-  let missing = missingInput(boundary, register);
+  let missing = missingInput(boundary, register, groups);
   if (missing.length) return { status: 'missing_input', missing };
 
   const book = new RationaleBook();
@@ -209,7 +209,7 @@ async function runStage01({ inputDir, outDir = DEFAULT_OUT, fetchImpl = fetch, r
   }
   for (const { file } of guessed) book.guessedType(register.find((d) => d.client_doc_ref === file));
 
-  missing = missingInput(boundary, register);
+  missing = missingInput(boundary, register, groups);
   if (missing.length) return { status: 'missing_input', missing, register };
 
   const facts = [];

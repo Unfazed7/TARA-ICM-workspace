@@ -24,7 +24,7 @@ Each network also gets one `network_boundary_configuration` element (security gr
 
 ---
 
-## 2. Element kinds
+## 2. Asset types
 
 | Kind | What it is |
 |---|---|

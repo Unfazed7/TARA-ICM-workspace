@@ -1,6 +1,6 @@
 # Spec 24: Stage Screens with Assumptions (C7, part 2)
 
-**Status:** draft for the analyst (2026-10-04).
+**Status:** approved by the analyst for C7 (2026-10-04).
 **Code:** `frontend/src/pages/Assessment.tsx` (new route `/assessment/:id`), `frontend/src/components/stages/*`, `frontend/src/lib/api.ts`, `frontend/src/types/stages.ts`.
 **Decisions:** D-36, D-37, D-46. **Design:** the analyst's wireframes (Claude Design, 2026-10-04) in the 3a Blueprint theme (`styles/aegis-tokens.css`), light only.
 

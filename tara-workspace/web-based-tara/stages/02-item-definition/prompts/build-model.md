@@ -4,11 +4,11 @@ Every item you propose must cite the fact ids that support it. An item without a
 
 ## What to build
 
-Follow the reference sections below (element kinds, granularity, links). In short:
+Follow the reference sections below (asset types, granularity, links). In short:
 
 - **Zones**: only the network areas the facts show (internet, public subnet, private subnet, account-level managed services, corporate IT, third-party services, and so on). Never invent a zone.
 - **Containers**: real cloud structure only: the cloud account, networks, subnets, clusters, and one "account-level managed services" container for managed services outside any network. Give each container its parent by name, and its zone for subnets.
-- **Elements**: one per independently deployed or configured unit with its own identity, access policy or distinct data. Not one per pod, table, endpoint or security group; not one "backend" for parts with different data. One element per load balancer. People and roles are `human_actor`; other systems calling in are `system_to_system_client`. Use `unknown_kind` with a `kind_label` when no kind fits.
+- **Elements**: one per independently deployed or configured unit with its own identity, access policy or distinct data. Not one per pod, table, endpoint or security group; not one "backend" for parts with different data. One element per load balancer. People and roles are `human_actor`; other systems calling in are `system_to_system_client`. Each element's `asset_type` is one value from the list; use `unknown_kind` with an `asset_type_label` when none fits.
   - `zone` and `container` by name. Elements in the internet, corporate IT, third-party or vehicle zones have `container` null.
   - `internet_exposed`: `yes` only if a fact says or shows it is reachable from the internet, with those fact ids in `exposure_fact_ids`; `no` if the facts say it is internal; else `unknown`. An open disagreement about exposure is listed in the input: cite its facts and code will apply the default.
   - `provider`, `hosting_type`, `owner_operator`, `auth_method` (for entry points and anything reachable from the internet), `data_handled` (category plus specific items when given), `stated_security_config` as the facts say. Use null when not stated; never guess.

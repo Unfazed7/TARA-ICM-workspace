@@ -41,7 +41,9 @@ def url(assessment_id, stage, rationale_id=None):
 def test_list_puts_needs_attention_first_with_counts(client, headers, assessment):
     body = client.get(url(assessment, "01"), headers=headers).json()
     assert [item["rationale_id"] for item in body["items"]] == ["RAT-101", "RAT-109"]
-    assert body["counts"] == {"needs_attention": 1, "information": 1, "confirmed": 0, "disputed": 0, "unreviewed": 2}
+    # RAT-109 is a naming merge, which needs the analyst since D-46.
+    assert body["counts"] == {"needs_attention": 2, "information": 0, "confirmed": 0, "disputed": 0, "unreviewed": 2}
+    assert [item["topic"] for item in body["items"]] == ["exposure", "naming"]
 
 
 def test_review_sent_by_a_stage_is_ignored(client, headers, assessment):

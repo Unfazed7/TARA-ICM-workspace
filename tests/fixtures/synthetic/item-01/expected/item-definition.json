@@ -118,7 +118,7 @@
     {
       "element_id": "EL-001",
       "name": "Operators",
-      "kind": "human_actor",
+      "asset_type": "human_actor",
       "zone_id": "ZN-01",
       "is_entry_point": false,
       "owner_operator": "company staff",
@@ -131,7 +131,7 @@
     {
       "element_id": "EL-002",
       "name": "Security admins",
-      "kind": "human_actor",
+      "asset_type": "human_actor",
       "zone_id": "ZN-01",
       "is_entry_point": false,
       "owner_operator": "company security team",
@@ -144,7 +144,7 @@
     {
       "element_id": "EL-003",
       "name": "Internal services",
-      "kind": "system_to_system_client",
+      "asset_type": "system_to_system_client",
       "zone_id": "ZN-05",
       "is_entry_point": false,
       "owner_operator": "other company teams",
@@ -157,7 +157,7 @@
     {
       "element_id": "EL-004",
       "name": "Corporate SSO",
-      "kind": "identity_provider",
+      "asset_type": "identity_provider",
       "zone_id": "ZN-05",
       "provider": "central IT",
       "hosting_type": "unknown",
@@ -176,7 +176,7 @@
     {
       "element_id": "EL-005",
       "name": "CDN",
-      "kind": "cdn",
+      "asset_type": "cdn",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -209,7 +209,7 @@
     {
       "element_id": "EL-006",
       "name": "Portal UI bucket",
-      "kind": "object_storage_bucket",
+      "asset_type": "object_storage_bucket",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -235,7 +235,7 @@
     {
       "element_id": "EL-007",
       "name": "Revocation list bucket",
-      "kind": "object_storage_bucket",
+      "asset_type": "object_storage_bucket",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -260,7 +260,7 @@
     {
       "element_id": "EL-008",
       "name": "CRL publisher",
-      "kind": "serverless_function",
+      "asset_type": "serverless_function",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -286,7 +286,7 @@
     {
       "element_id": "EL-009",
       "name": "API gateway",
-      "kind": "api_gateway",
+      "asset_type": "api_gateway",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -319,7 +319,7 @@
     {
       "element_id": "EL-010",
       "name": "Token authorizer",
-      "kind": "serverless_function",
+      "asset_type": "serverless_function",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -345,7 +345,7 @@
     {
       "element_id": "EL-011",
       "name": "Internet-facing load balancer",
-      "kind": "load_balancer",
+      "asset_type": "load_balancer",
       "parent_container_id": "CTR-03",
       "zone_id": "ZN-02",
       "provider": "public cloud provider",
@@ -368,7 +368,7 @@
     {
       "element_id": "EL-012",
       "name": "NAT gateway",
-      "kind": "nat_gateway",
+      "asset_type": "nat_gateway",
       "parent_container_id": "CTR-03",
       "zone_id": "ZN-02",
       "provider": "public cloud provider",
@@ -387,7 +387,7 @@
     {
       "element_id": "EL-013",
       "name": "Internet gateway",
-      "kind": "internet_gateway",
+      "asset_type": "internet_gateway",
       "parent_container_id": "CTR-02",
       "zone_id": "ZN-02",
       "provider": "public cloud provider",
@@ -406,7 +406,7 @@
     {
       "element_id": "EL-014",
       "name": "Network boundary configuration",
-      "kind": "network_boundary_configuration",
+      "asset_type": "network_boundary_configuration",
       "parent_container_id": "CTR-02",
       "zone_id": "ZN-03",
       "provider": "public cloud provider",
@@ -427,7 +427,7 @@
     {
       "element_id": "EL-015",
       "name": "Certificate service",
-      "kind": "ecs_service",
+      "asset_type": "ecs_service",
       "parent_container_id": "CTR-05",
       "zone_id": "ZN-03",
       "provider": "platform team",
@@ -472,7 +472,7 @@
     {
       "element_id": "EL-016",
       "name": "Key service",
-      "kind": "ecs_service",
+      "asset_type": "ecs_service",
       "parent_container_id": "CTR-05",
       "zone_id": "ZN-03",
       "provider": "platform team",
@@ -498,7 +498,7 @@
     {
       "element_id": "EL-017",
       "name": "Cache",
-      "kind": "cache",
+      "asset_type": "cache",
       "parent_container_id": "CTR-04",
       "zone_id": "ZN-03",
       "provider": "public cloud provider",
@@ -522,7 +522,7 @@
     {
       "element_id": "EL-018",
       "name": "Certificate database",
-      "kind": "database",
+      "asset_type": "database",
       "parent_container_id": "CTR-04",
       "zone_id": "ZN-03",
       "provider": "public cloud provider",
@@ -557,7 +557,7 @@
     {
       "element_id": "EL-019",
       "name": "CA signing key",
-      "kind": "kms_key",
+      "asset_type": "kms_key",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -589,7 +589,7 @@
     {
       "element_id": "EL-020",
       "name": "Secrets store",
-      "kind": "secrets_store",
+      "asset_type": "secrets_store",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -625,7 +625,7 @@
     {
       "element_id": "EL-021",
       "name": "Container registry",
-      "kind": "container_registry",
+      "asset_type": "container_registry",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -651,7 +651,7 @@
     {
       "element_id": "EL-022",
       "name": "Audit trail",
-      "kind": "audit_trail_config_recorder",
+      "asset_type": "audit_trail_config_recorder",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -676,7 +676,7 @@
     {
       "element_id": "EL-023",
       "name": "Logs and metrics",
-      "kind": "monitoring_logging",
+      "asset_type": "monitoring_logging",
       "parent_container_id": "CTR-06",
       "zone_id": "ZN-04",
       "provider": "public cloud provider",
@@ -701,7 +701,7 @@
     {
       "element_id": "EL-024",
       "name": "Notification service",
-      "kind": "notification_gateway",
+      "asset_type": "notification_gateway",
       "zone_id": "ZN-06",
       "provider": "third-party provider",
       "hosting_type": "managed",
@@ -726,7 +726,7 @@
     {
       "element_id": "EL-025",
       "name": "CI/CD pipeline",
-      "kind": "ci_cd_pipeline",
+      "asset_type": "ci_cd_pipeline",
       "zone_id": "ZN-06",
       "provider": "hosted CI service",
       "hosting_type": "managed",
@@ -759,7 +759,7 @@
     {
       "element_id": "EL-026",
       "name": "Internal load balancer",
-      "kind": "load_balancer",
+      "asset_type": "load_balancer",
       "parent_container_id": "CTR-04",
       "zone_id": "ZN-03",
       "provider": "public cloud provider",

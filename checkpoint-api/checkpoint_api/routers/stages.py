@@ -35,6 +35,18 @@ def assessment_for(db: Session, assessment_id: str, claims: dict):
     return assessment
 
 
+def with_answers(db: Session, assessment_id: str, stage: str, output: dict) -> dict:
+    """Shows the analyst's stored answers on the open questions they answer (spec 23)."""
+    if stage != "02" or not output.get("questions"):
+        return output
+    answers = {a.question_id: a for a in db.query(m.QuestionAnswer).filter_by(assessment_id=assessment_id)}
+    for q in output["questions"]:
+        a = answers.get(q.get("question_id"))
+        if a and q.get("status") == "open":
+            q.update(status="answered", answer=a.answer, answered_by="analyst")
+    return output
+
+
 def current_or_404(db: Session, assessment_id: str, stage: str) -> m.StageRun:
     run = stage_store.current_run(db, assessment_id, stage)
     if run is None:
@@ -84,7 +96,7 @@ def list_runs(assessment_id: str, stage: str, claims: dict = Depends(get_current
 def current_output(assessment_id: str, stage: str, claims: dict = Depends(get_current_claims), db: Session = Depends(get_db)):
     check_stage(stage)
     assessment_for(db, assessment_id, claims)
-    return stage_store.read_output(db, current_or_404(db, assessment_id, stage))
+    return with_answers(db, assessment_id, stage, stage_store.read_output(db, current_or_404(db, assessment_id, stage)))
 
 
 @router.get("/{assessment_id}/stages/{stage}/runs/{run_number}/output")
@@ -150,3 +162,30 @@ def review_rationale(
         review.reviewed_at = datetime.now(timezone.utc)
     db.commit()
     return stage_store.read_rationale_item(db, assessment_id, row)
+
+
+@router.put("/{assessment_id}/stages/02/questions/{question_id}/answer")
+def answer_question(
+    assessment_id: str,
+    question_id: str,
+    body: dict = Body(...),
+    claims: dict = Depends(get_current_claims),
+    db: Session = Depends(get_db),
+):
+    """Stores the analyst's answer to an open question (spec 23). Kept across re-runs while the question keeps its id."""
+    if claims.get("role") not in REVIEW_ROLES:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only the analyst can answer questions.")
+    assessment_for(db, assessment_id, claims)
+    run = current_or_404(db, assessment_id, "02")
+    if db.query(m.Question).filter_by(run_id=run.id, question_id=question_id).first() is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Question {question_id} not found.")
+    answer = " ".join(str(body.get("answer") or "").split())
+    if not 3 <= len(answer) <= 2000:
+        raise HTTPException(status_code=422, detail="Write an answer of 3 to 2000 characters.")
+    row = db.query(m.QuestionAnswer).filter_by(assessment_id=assessment_id, question_id=question_id).first()
+    if row is None:
+        row = m.QuestionAnswer(assessment_id=assessment_id, question_id=question_id)
+        db.add(row)
+    row.answer, row.answered_by, row.answered_at = answer, current_user_id(claims), datetime.now(timezone.utc)
+    db.commit()
+    return {"question_id": question_id, "answer": answer, "answered_by": row.answered_by, "answered_at": row.answered_at.isoformat()}

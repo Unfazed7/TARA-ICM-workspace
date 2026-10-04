@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from .. import stage_models as m
 from ..database import get_db
+from ..document_types import GROUPS, LABELS, missing_input
 from ..stage_pipeline import RESERVED, documents_dir, job, run_pipeline
 from .assessments import get_assessment_or_404, require_assessment_access
 from .auth import get_current_claims
@@ -64,11 +65,35 @@ def document_list(folder) -> list:
     return out
 
 
+def document_type(doc_type: str | None, category: str | None, type_label: str | None):
+    """Resolves the upload screen's choice (spec 23) or a bare doc_type (spec 22) to (doc_type, category, type_label)."""
+    if category is not None and category not in GROUPS:
+        raise HTTPException(status_code=422, detail=f"Unknown group. Choose one of: {', '.join(GROUPS)}.")
+    if type_label is not None:
+        type_label = " ".join(type_label.split())
+        if type_label in LABELS:
+            group, mapped = LABELS[type_label]
+            if category and category != group:
+                raise HTTPException(status_code=422, detail=f"{type_label} belongs with the documents describing {'components' if group == 'components' else 'what the system does'}.")
+            return mapped, group, type_label
+        if not category:
+            raise HTTPException(status_code=422, detail="Say which group this document is in.")
+        if not 3 <= len(type_label) <= 60:
+            raise HTTPException(status_code=422, detail="Name the document type in 3 to 60 characters, for example Security policy.")
+        return "other", category, type_label
+    if doc_type not in DOC_TYPES:
+        allowed = ", ".join(LABELS)
+        raise HTTPException(status_code=422, detail=f"Unknown document type. Choose one of: {allowed}, or Other with your own words.")
+    return doc_type, category, None
+
+
 @router.post("/{assessment_id}/documents", status_code=status.HTTP_201_CREATED)
 async def upload_document(
     assessment_id: str,
     file: UploadFile = File(...),
-    doc_type: str = Form(...),
+    doc_type: str | None = Form(None),
+    category: str | None = Form(None),
+    type_label: str | None = Form(None),
     date_received: str | None = Form(None),
     claims: dict = Depends(get_current_claims),
     db: Session = Depends(get_db),
@@ -77,8 +102,7 @@ async def upload_document(
     name = clean_name(file.filename)
     if name.lower() in RESERVED or extension(name) not in ALLOWED_EXTENSIONS:
         raise HTTPException(status_code=422, detail=f"This file type cannot be read. Allowed: {', '.join(sorted(ALLOWED_EXTENSIONS))}.")
-    if doc_type not in DOC_TYPES:
-        raise HTTPException(status_code=422, detail=f"Unknown document type. Choose one of: {', '.join(sorted(DOC_TYPES))}.")
+    doc_type, category, type_label = document_type(doc_type, category, type_label)
     if date_received and not DATE.match(date_received):
         raise HTTPException(status_code=422, detail="date_received must look like 2026-10-03.")
 
@@ -99,6 +123,10 @@ async def upload_document(
 
     entries = [e for e in read_manifest(folder) if e["file"] != name]
     entry = {"file": name, "doc_type": doc_type}
+    if category:
+        entry["category"] = category
+    if type_label:
+        entry["type_label"] = type_label
     if date_received:
         entry["date_received"] = date_received
     entries.append(entry)
@@ -156,7 +184,15 @@ def status_body(db: Session, assessment_id: str) -> dict:
             "started_at": row.started_at.isoformat() if row and row.started_at else None,
             "completed_at": row.completed_at.isoformat() if row and row.completed_at else None,
         })
-    return {"stages": stages, "documents": len(document_list(folder)), "boundary_set": (folder / "boundary.txt").exists()}
+    documents = document_list(folder)
+    boundary = folder / "boundary.txt"
+    text = boundary.read_text(encoding="utf-8") if boundary.exists() else None
+    return {
+        "stages": stages,
+        "documents": len(documents),
+        "boundary_set": boundary.exists(),
+        "missing": missing_input(text, documents),
+    }
 
 
 @router.post("/{assessment_id}/run", status_code=status.HTTP_202_ACCEPTED)

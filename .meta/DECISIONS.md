@@ -50,6 +50,7 @@ Status values: `accepted` (in force), `proposed` (waiting for the analyst).
 | D-43 | Stage 01 reading (C4): the analyst chooses each document's type at upload (sent in `manifest.json` until the upload screen exists); the environment a document describes is read from the document and kept only with a checked quote, else `unknown` with a Rationale item. Formats now: draw.io, text and Markdown, HTML, Word, Excel, PDF, PNG and JPEG; Visio and Lucid later. Every fact's quote is checked against the text sent to the model, and facts that fail are dropped and logged. An image of a diagram whose source file is also given is used only to cross-check labels. No OCR cross-check yet (no OCR engine). Hiding of sensitive details is available and off by default. | The analyst knows each document's type for certain and wants it fixed at upload; the type sets precedence. Quote checking keeps invented statements out of the facts. Analyst, C4. | 2026-10-02 | accepted |
 | D-44 | Reconciliation (C5): one model call per run compares the Stage 01 facts and reports duplicates, names that mean the same component, and disagreements with a fixed reading per side. Code checks every id, merges, applies the spec 13b default by reading, sets attention, auto-resolves only naming, size, count and version (never when the higher-ranked document is older), and writes Rationale from templates. Same-name groups merge automatically: the higher-ranked name wins, the other existence fact is rejected, and an information item records it. If the call fails, only same-name existence facts are joined and a gap item says so. | The analyst chose to let the model compare facts rather than fill a fixed form while reading (the on-hold proposal for D-38 stays on hold), and to merge same-named components as information they can dispute. The model still never chooses a default (D-37). Analyst, C5. | 2026-10-02 | accepted |
 | D-45 | Stage 02 build (C8): the model proposes the Item Definition by name with cited facts and reports scoping facts in fixed words; code assigns ids, drops anything without a usable fact, applies the fixed rules (D-27, D-33, D-34, one boundary configuration per network, trust boundaries from zones) and decides scope from the tables in `_config/scoping-facts.md`, which code reads on every run. The model writes the plain reason. Starter questions come from the trigger table; the model may suggest more, including link questions; one batch call drops questions the facts answer. Only a human changes the rules, and every change is checked against item-01. | The analyst chose code-decided scope so the same documents give the same scope, and so the tool improves by refining rules rather than prompts. Analyst, C8. | 2026-10-02 | accepted |
+| D-46 | Stage screens (C7): the analyst's wireframes in the 3a Blueprint theme, light only for now (3a tokens kept on the on-hold screens too). Rationale is shown as **Assumptions**: one top-bar button with a "need you" count opens a right-side panel for the current stage or all stages, grouped by topic (exposure, sign-in, scope, environment, data, naming, reading notes; the topic is set by code), needs-you first, one plain line per card, opened to show what was found, why with quotes, what was assumed and what would change it, with confirm or dispute. A Stage 02 item built on a Stage 01 item shows as one card. Opening a card highlights what it affects; nothing is marked on the content itself. Open questions sit in Assumptions with an answer box. Information items need no action, except merges of names, which now need the analyst. Stage 01 "What I read" moves to Settings. Item Definition is a diagram with a details drawer. Upload: boundary first, then two groups (components or architecture; what the system does), each needing a readable document, type chosen from a fixed list or typed as Other, which counts for its group. The Stage 02 element field `kind` is renamed `asset_type` in data and on screen; Stage 03's asset types stay a separate list (on hold). | The analyst designed the screens in Claude Design (wireframes, then a colour study) and chose 3a. One place for assumptions avoids repeating the same item under every stage; grouping by topic keeps nine stages readable. "Asset type" is the TARA term the analyst uses. Analyst, C7. | 2026-10-04 | accepted |
 
 Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are added so every Design Reference section is covered, plus decisions made at the A1, A2 and B1 gates.
 
@@ -59,17 +60,17 @@ Entries D-01 to D-17 use the numbers given in the instructions. D-18 onwards are
 |---|---|
 | DR-1 Flow | D-01, D-02, D-15, D-36 |
 | DR-2 Discussion | D-03 |
-| DR-3 Rationale (was review by exception) | D-04, D-37 |
-| DR-4 Stage 01 page (was CP0 content) | D-18, D-37 |
-| DR-5 Stage 02 page (was CP1 content) | D-19, D-37 |
+| DR-3 Rationale (was review by exception) | D-04, D-37, D-46 |
+| DR-4 Stage 01 page (was CP0 content) | D-18, D-37, D-46 |
+| DR-5 Stage 02 page (was CP1 content) | D-19, D-37, D-46 |
 | DR-6 Question generation | D-06, D-29, D-31, D-45 |
 | DR-7 Scoping | D-05, D-14, D-32, D-45 |
 | DR-8 Precedence | D-07, D-28, D-33, D-44 |
-| DR-9 Minimum input | D-08, D-43 |
+| DR-9 Minimum input | D-08, D-43, D-46 |
 | DR-10 Data policy | D-09, D-26 |
 | DR-11 Model policy | D-10, D-40 |
 | DR-12 Architecture | D-11, D-12, D-13, D-30, D-42 |
-| DR-13 Element model | D-20, D-25, D-27, D-33, D-34 |
+| DR-13 Element model | D-20, D-25, D-27, D-33, D-34, D-46 |
 | DR-14 Link model | D-21 |
 | DR-15 Asset Identification | D-16, D-22 |
 | DR-16 Evaluation | D-23, D-35, D-39 |

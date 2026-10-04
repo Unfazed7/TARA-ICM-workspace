@@ -25,6 +25,7 @@ class RationaleBook {
   unreadable(doc, partial) {
     return this.add({
       kind: 'gap',
+      topic: 'reading',
       attention: 'needs_attention',
       title: partial ? `Part of ${doc.client_doc_ref} could not be read` : `${doc.client_doc_ref} could not be read`,
       concluded: partial
@@ -40,6 +41,7 @@ class RationaleBook {
   unknownEnvironment(doc) {
     return this.add({
       kind: 'gap',
+      topic: 'environment',
       attention: 'needs_attention',
       title: `Which environment does ${doc.client_doc_ref} describe?`,
       concluded: `${doc.client_doc_ref} does not say whether it describes production, staging or development.`,
@@ -53,6 +55,7 @@ class RationaleBook {
   guessedType(doc) {
     return this.add({
       kind: 'assumption',
+      topic: 'reading',
       attention: 'information',
       title: `No document type was chosen for ${doc.client_doc_ref}`,
       concluded: `${doc.client_doc_ref} was uploaded without a type, so it is treated as ${doc.doc_type === 'other' ? 'an unclassified document' : `a ${doc.doc_type.replace(/_/g, ' ')}`}.`,
@@ -69,6 +72,7 @@ class RationaleBook {
     if (onlyInImage.length) parts.push(`Read from the image but not in the source file: ${onlyInImage.join(', ')}.`);
     return this.add({
       kind: 'ambiguity',
+      topic: 'reading',
       attention: 'needs_attention',
       title: `${imageDoc.client_doc_ref} and ${sourceDoc.client_doc_ref} do not show the same labels`,
       concluded: `The image is treated as a copy of the source diagram, but their labels differ. ${parts.join(' ')}`,
@@ -83,6 +87,7 @@ class RationaleBook {
     const list = arrows.map((a) => `${a.from || '?'} to ${a.to || '?'}`).join('; ');
     return this.add({
       kind: 'ambiguity',
+      topic: 'reading',
       attention: 'needs_attention',
       title: `Some arrows in ${doc.client_doc_ref} could not be read clearly`,
       concluded: `These arrows were seen, but their ends or direction are unclear: ${list}.`,

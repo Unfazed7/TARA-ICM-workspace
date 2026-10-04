@@ -29,7 +29,7 @@ Never read client documents. If a needed fact is missing, it becomes a question,
 
 - `output/item-definition.json`: containers, zones, elements, links, functions, assumptions, responsibility split, stated controls and stated absences, stakeholders, scope decisions, and the proposed boundary statement if the analyst left it blank (marked "proposed").
 - `output/questions.json`: open questions, each tied to one element and one fact type.
-- `output/new-kinds.log`: element kinds not in `element-kinds.md`, for later human review.
+- `output/new-kinds.log`: asset types not in `element-kinds.md`, for later human review.
 
 - `output/rationale.json`: one item per assumption, conflict, ambiguity and gap (see Rationale below).
 
@@ -44,14 +44,14 @@ The stored version lives in `checkpoint-api` once seeded.
    - Never invent a zone the facts do not show. Components mentioned nowhere in the facts become questions, never elements. Stated absences ("no WAF") are recorded as facts.
    - A vehicle or ECU the item talks to is one external element at the edge, never broken down.
 2. **Generate questions.**
-   - Start from the fact types each element kind needs, as listed in `scoping-facts.md`.
+   - Start from the fact types each asset type needs, as listed in `scoping-facts.md`.
    - A reasoning model may add questions after looking at the elements.
    - A separate model call tries to answer each question from the facts; a question that can be answered with a quote is dropped before the analyst sees it.
    - Every question names one target (an element; a link when its authentication or encryption is unknown; or the cloud account container for sharing and environment facts) and one fact type. A `generic` question also needs a short topic.
    - Duplicates by (target, fact type), or (target, topic) for `generic`, are removed. Visible questions are capped per target: 3 by default (configurable), up to 7 for `unknown_kind` elements. Dropped questions do not count.
    - Questions go to the analyst first; only the ones the analyst cannot answer go to the client question list.
 3. **Decide scope.** Apply the internal mapping in `scoping-facts.md` only when the facts it needs are known. Otherwise propose the default, mark it "assumed" and link the question that would settle it. Nothing is scoped out silently: every out-of-scope element has a recorded reason.
-4. **Unknown element kinds:** ask the full fact set FT-01 to FT-07 and log the kind in `output/new-kinds.log`. Only a human adds new rules.
+4. **Unknown asset types:** ask the full fact set FT-01 to FT-07 and log the kind in `output/new-kinds.log`. Only a human adds new rules.
 5. **Seed through the API** and log anything refused.
 
 `scoping-facts.md` is internal. Never quote it, paraphrase it, or name its rule IDs to the analyst. Show the decision and a plain reason instead, for example: "Sign-in service: outside the assessment. Reason: you said it is the company-wide login used by other applications and managed by central IT. The point where this system checks the login token is inside the assessment."
@@ -78,7 +78,7 @@ Rationale items for this stage include:
 - every scope decision marked assumed, with the question that would settle it;
 - every open question, with the default used meanwhile;
 - every assumption (`ASM-##`);
-- ambiguities met while building, such as an element kind that does not fit, a link with an unclear end, or an unknown authentication or encryption on a link;
+- ambiguities met while building, such as an asset type that does not fit, a link with an unclear end, or an unknown authentication or encryption on a link;
 - conflicts carried over from Stage 01, only where they changed an element, link or scope decision.
 
 Each item uses the same four parts and review status as in Stage 01: `unreviewed`, `confirmed`, or `disputed` with a note. A dispute is recorded; nothing re-runs (D-36).

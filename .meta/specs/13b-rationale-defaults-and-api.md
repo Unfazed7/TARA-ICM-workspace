@@ -39,7 +39,8 @@ WILL touch (later tasks): `checkpoint-api/` (C3), stage agents (C4, C8), stage p
 | `ownership` | The item's team runs it (stays in scope) | needs attention |
 | `entry_point_authentication` | The weaker one | needs attention |
 | `older_higher_precedence` | Principle if a security aspect is touched, else higher rank | needs attention |
-| `naming`, `instance_size`, `count`, `version` | Higher rank, newer within a rank; loser kept | information |
+| `naming` | Higher rank, newer within a rank; loser kept | needs attention: a merge of two names is the analyst's call (D-46) |
+| `instance_size`, `count`, `version` | Higher rank, newer within a rank; loser kept | information |
 
 **Any other disagreement (`other`):** code checks which aspect it touches. If it is one of the aspects above, the principle decides. If code cannot tell which side is more cautious, the higher-ranked source is used and the item is always `needs_attention`, shows both sides and says "I could not tell which option is safer." It is never `information`. Every `other` conflict is logged to `output/new-conflict-kinds.log`; when the analyst settles one, a human may add it as a named kind with its default. The model never chooses a default.
 
@@ -47,7 +48,7 @@ WILL touch (later tasks): `checkpoint-api/` (C3), stage agents (C4, C8), stage p
 
 **Attention rule (code, never the model):** `needs_attention` when the item touches internet exposure, authentication, scope, environment, access to keys, credentials or audit records, or a component's existence. Otherwise `information`.
 
-**Order on the page:** needs attention first, then information; within each, in the order the stage wrote them.
+**Order on the page:** needs attention first, then information; within each, in the order the stage wrote them. The Assumptions panel groups items by `topic` (spec 23) and keeps this order inside each group.
 
 **API:**
 - `GET /api/v1/assessments/{id}/stages/{n}/rationale`: items, with counts per attention level and per review status.

@@ -206,7 +206,7 @@
         "required": [
           "element_id",
           "name",
-          "kind",
+          "asset_type",
           "zone_id",
           "is_entry_point",
           "owner_operator",
@@ -222,7 +222,7 @@
             "type": "string",
             "minLength": 1
           },
-          "kind": {
+          "asset_type": {
             "type": "string",
             "enum": [
               "cluster_control_plane",
@@ -281,7 +281,7 @@
               "unknown_kind"
             ]
           },
-          "kind_label": {
+          "asset_type_label": {
             "type": "string",
             "minLength": 1
           },
@@ -366,7 +366,7 @@
             "if": {
               "type": "object",
               "properties": {
-                "kind": {
+                "asset_type": {
                   "type": "string",
                   "enum": [
                     "human_actor",
@@ -375,7 +375,7 @@
                 }
               },
               "required": [
-                "kind"
+                "asset_type"
               ]
             },
             "then": {
@@ -499,22 +499,22 @@
             "if": {
               "type": "object",
               "properties": {
-                "kind": {
+                "asset_type": {
                   "type": "string",
                   "const": "unknown_kind"
                 }
               },
               "required": [
-                "kind"
+                "asset_type"
               ]
             },
             "then": {
               "type": "object",
               "required": [
-                "kind_label"
+                "asset_type_label"
               ],
               "properties": {
-                "kind_label": {
+                "asset_type_label": {
                   "type": "string",
                   "minLength": 1
                 }

@@ -51,8 +51,8 @@ const BUILD_SCHEMA = obj({
     type: 'array',
     items: obj({
       name: { type: 'string' },
-      kind: enumOf(P.elements.items.properties.kind),
-      kind_label: nstr,
+      asset_type: enumOf(P.elements.items.properties.asset_type),
+      asset_type_label: nstr,
       container: nstr,
       zone: { type: 'string' },
       provider: nstr,
@@ -158,7 +158,7 @@ function build({ facts, conflicts, boundary, diagramGiven, fetchImpl }) {
 }
 
 function suggest({ itemDef, questions, fetchImpl }) {
-  const els = itemDef.elements.map((e) => `${e.element_id} ${e.name} (${e.kind})`).join('\n');
+  const els = itemDef.elements.map((e) => `${e.element_id} ${e.name} (${e.asset_type})`).join('\n');
   const links = itemDef.links.map((l) => `${l.link_id} ${l.source_name} -> ${l.destination_name}, authentication: ${l.authentication}, encryption: ${l.encryption}`).join('\n');
   const asked = questions.map((q) => `${q.target_id} ${q.fact_type}${q.topic ? ` (${q.topic})` : ''}: ${q.text}`).join('\n');
   const user = `Elements:\n${els}\n\nLinks:\n${links}\n\nContainers:\n${itemDef.containers.map((c) => `${c.container_id} ${c.name} (${c.kind})`).join('\n')}\n\nQuestions already planned:\n${asked}`;
