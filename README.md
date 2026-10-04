@@ -71,6 +71,8 @@ To run Stages 01 and 02 for an assessment: upload documents with their type (`PO
 
 Everyone who registers is an analyst. The pipeline logs in with `POST /api/v1/auth/service-token` and the secret in `PIPELINE_SERVICE_SECRET` (set it to another long random string); that login can store stage output but cannot review Rationale. Stage tables are created and updated automatically at startup (Alembic, D-42).
 
+**Where to look when a run fails.** The backend writes every step to `logs/aegis.log` at the repo root (git-ignored; change it with `LOG_FILE`, and the detail with `LOG_LEVEL`). For each run it shows when Execute was pressed, which documents were found, each stage starting and finishing with its exit code and time, each document read, each model call (started, finished or failed, with the reason), what was stored and the full error with its traceback if something stopped it. It never holds document contents, prompts, keys, tokens or passwords. Model calls are also recorded in `tara-workspace/web-based-tara/audit/llm-calls.jsonl`.
+
 Model calls go through OpenRouter (D-40). Set your key before starting the backend or running a stage:
 
 ```bash

@@ -20,3 +20,6 @@ tara-workspace/web-based-tara/audit/
 # Stage run outputs may hold client-derived content (DR-10, C4)
 tara-workspace/web-based-tara/stages/*/output/*
 !tara-workspace/web-based-tara/stages/*/output/.gitkeep
+
+# Run log (local only)
+logs/

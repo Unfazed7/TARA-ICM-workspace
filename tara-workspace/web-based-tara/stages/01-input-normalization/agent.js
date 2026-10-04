@@ -26,6 +26,7 @@ const readers = require('./lib/readers/text-readers');
 const extract = require('./lib/extract');
 const { normalise } = require('./lib/quotes');
 const { reconcile, writeReconciled } = require('../../_engines/fact-reconcile');
+const { enable, progress } = require('../progress');
 
 const DEFAULT_OUT = path.join(__dirname, 'output');
 
@@ -181,6 +182,7 @@ async function runStage01({ inputDir, outDir = DEFAULT_OUT, fetchImpl = fetch, r
   const boundary = fs.existsSync(boundaryFile) ? fs.readFileSync(boundaryFile, 'utf8') : null;
   const { entries: register, guessed, groups } = initialRegister(inputDir, date);
 
+  progress(`${register.length} document(s) found; boundary ${boundary ? 'set' : 'not set'}`);
   let missing = missingInput(boundary, register, groups);
   if (missing.length) return { status: 'missing_input', missing };
 
@@ -189,8 +191,10 @@ async function runStage01({ inputDir, outDir = DEFAULT_OUT, fetchImpl = fetch, r
   const factsByDoc = new Map();
 
   for (const doc of register) {
+    progress(`Reading ${doc.client_doc_ref} (${doc.doc_type})`);
     const buffer = fs.readFileSync(path.join(inputDir, doc.client_doc_ref));
     factsByDoc.set(doc.doc_id, await readSafely(doc, () => readDocument(doc, buffer, ctx)));
+    progress(`Read ${doc.client_doc_ref}: ${doc.read_status || 'parsed'}, ${(factsByDoc.get(doc.doc_id) || []).length} fact(s)${doc.read_status_reason ? `; ${doc.read_status_reason}` : ''}`);
   }
   for (const image of ctx.images) {
     factsByDoc.set(image.doc.doc_id, await readSafely(image.doc, () => readImage(image, ctx)));
@@ -228,6 +232,7 @@ async function runStage01({ inputDir, outDir = DEFAULT_OUT, fetchImpl = fetch, r
   }
 
   writeOutputs(outDir, { register, facts, rationale: book.items, dropped: ctx.dropped }, redactor);
+  progress(`Comparing ${facts.length} fact(s) across documents`);
   const reconciled = await reconcile({ register, rawFacts: facts, rationale: book.items, fetchImpl, redactor });
   writeReconciled(outDir, reconciled);
   return {
@@ -305,7 +310,9 @@ async function main() {
 }
 
 if (require.main === module) {
+  enable('01');
   main().catch((err) => {
+    progress(`Stopped by an error:\n${err.stack || err.message}`);
     process.stderr.write(`Stage 01 failed: ${err.message}\n`);
     process.exit(1);
   });

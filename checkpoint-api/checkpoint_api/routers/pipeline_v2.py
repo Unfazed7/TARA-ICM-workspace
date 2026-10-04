@@ -6,6 +6,7 @@ import re
 from fastapi import APIRouter, BackgroundTasks, Body, Depends, File, Form, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
+from .. import run_log
 from .. import stage_models as m
 from ..database import get_db
 from ..document_types import GROUPS, LABELS, missing_input
@@ -15,6 +16,7 @@ from .auth import get_current_claims
 
 
 router = APIRouter()
+log = run_log.get("pipeline")
 
 ALLOWED_EXTENSIONS = {".drawio", ".md", ".txt", ".html", ".htm", ".docx", ".xlsx", ".pdf", ".png", ".jpg", ".jpeg"}
 DOC_TYPES = {
@@ -200,14 +202,17 @@ def start_run(assessment_id: str, background_tasks: BackgroundTasks, claims: dic
     owned(db, assessment_id, claims)
     busy = db.query(m.StageJob).filter(m.StageJob.assessment_id == assessment_id, m.StageJob.status.in_(["pending", "running"])).first()
     if busy:
+        log.warning("%s | Execute refused: Stage %s is still %s", assessment_id, busy.stage, busy.status)
         raise HTTPException(status_code=409, detail=f"Stage {busy.stage} is still running. Wait for it to finish.")
     if not document_list(documents_dir(assessment_id)):
+        log.warning("%s | Execute refused: no documents uploaded", assessment_id)
         raise HTTPException(status_code=422, detail="Upload at least one document first.")
     j1, j2 = job(db, assessment_id, "01"), job(db, assessment_id, "02")
     for row, state in ((j1, "pending"), (j2, "not_started")):
         row.status, row.error_message, row.run_number, row.refused_count = state, None, None, None
         row.started_at = row.completed_at = None
     db.commit()
+    log.info("%s | Execute pressed; run queued", assessment_id)
     background_tasks.add_task(run_pipeline, assessment_id)
     return status_body(db, assessment_id)
 

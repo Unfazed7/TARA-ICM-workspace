@@ -18,6 +18,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { progress } = require('./progress');
 
 const WEB_TARA_ROOT = path.resolve(__dirname, '..');
 const DEFAULT_MODELS_FILE = path.join(WEB_TARA_ROOT, '_config', 'models.json');
@@ -176,6 +177,19 @@ function usageCounts(usage) {
  * @returns {Promise<object>} {content, stop_reason, model, provider, usage, id}
  */
 async function callLLM(params, fetchImpl = fetch) {
+  const started = Date.now();
+  progress(`Model call ${params.stage || 'default'} started`);
+  try {
+    const result = await callModel(params, fetchImpl);
+    progress(`Model call ${params.stage || 'default'} finished in ${((Date.now() - started) / 1000).toFixed(1)} s (${result.model || 'model'}, ${result.stop_reason})`);
+    return result;
+  } catch (err) {
+    progress(`Model call ${params.stage || 'default'} failed after ${((Date.now() - started) / 1000).toFixed(1)} s: ${err.message}`);
+    throw err;
+  }
+}
+
+async function callModel(params, fetchImpl) {
   const config = getConfig();
   if (!config.apiKey) {
     const keyVar = KEY_VARS[config.provider] || 'LLM_API_KEY';

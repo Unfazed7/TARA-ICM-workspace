@@ -22,6 +22,7 @@ const { writeRationale } = require('./lib/rationale');
 const { buildItem, stripHelpers } = require('../../_engines/item-builder');
 const scope = require('../../_engines/scope-rules');
 const { quoteFound } = require('../01-input-normalization/lib/quotes');
+const { enable, progress } = require('../progress');
 
 const DEFAULT_OUT = path.join(__dirname, 'output');
 const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
@@ -55,6 +56,7 @@ async function safely(log, what, fn) {
     return await fn();
   } catch (err) {
     log.push({ step: what, error: err.message });
+    progress(`Step "${what}" failed and was skipped: ${err.message}`);
     return null;
   }
 }
@@ -70,6 +72,7 @@ async function runStage02({ stage01, boundary, outDir = DEFAULT_OUT, fetchImpl =
   const conflicts = stage01.conflicts || [];
   const diagramGiven = (stage01.document_register || []).some((d) => d.doc_type === 'diagram' && d.read_status !== 'failed');
 
+  progress(`Building from ${facts.length} fact(s) and ${conflicts.length} conflict(s); boundary ${boundary ? 'set' : 'not set'}`);
   // 1. The model proposes the structure. Without it nothing can be built.
   let reply;
   try {
@@ -81,6 +84,7 @@ async function runStage02({ stage01, boundary, outDir = DEFAULT_OUT, fetchImpl =
   const { itemDef, readings, containerReadings, answeredTopics, notes } = built;
   log.push(...built.log);
   const item = itemDef.item_name;
+  progress(`Structure built: ${itemDef.elements.length} component(s), ${itemDef.links.length} connection(s)`);
   const rules = scope.loadRules();
 
   // 2. Starter questions from the trigger table.
@@ -158,6 +162,7 @@ async function runStage02({ stage01, boundary, outDir = DEFAULT_OUT, fetchImpl =
   }
   questions.forEach((q, i) => { q.question_id = `Q-${String(i + 1).padStart(3, '0')}`; });
 
+  progress('Deciding scope from the rules table');
   // 6. Scope, decided by code.
   const decisions = itemDef.elements.map((e) => {
     const zone = itemDef.zones.find((z) => z.zone_id === e.zone_id);
@@ -315,7 +320,9 @@ async function main() {
 }
 
 if (require.main === module) {
+  enable('02');
   main().catch((err) => {
+    progress(`Stopped by an error:\n${err.stack || err.message}`);
     process.stderr.write(`Stage 02 failed: ${err.message}\n`);
     process.exit(1);
   });

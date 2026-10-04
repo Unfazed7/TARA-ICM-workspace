@@ -5,8 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-from fastapi import FastAPI
+import time
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+
+from . import run_log
 
 from .database import Base, engine
 from .migrate import upgrade_stage_tables
@@ -20,8 +24,25 @@ from .routers.stages import router as stages_router
 from .routers.uploads import router as uploads_router
 
 
+log = run_log.get("http")
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="TARA Checkpoint API")
+
+    @app.middleware("http")
+    async def log_requests(request: Request, call_next):
+        # Method, path, status and time only: never bodies, tokens or passwords.
+        started = time.monotonic()
+        try:
+            response = await call_next(request)
+        except Exception:
+            log.exception("%s %s failed after %d ms", request.method, request.url.path, (time.monotonic() - started) * 1000)
+            raise
+        level = log.warning if response.status_code >= 500 else log.info
+        level("%s %s %d %d ms", request.method, request.url.path, response.status_code, (time.monotonic() - started) * 1000)
+        return response
+
     allowed_origins = [
         origin.strip()
         for origin in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
@@ -45,6 +66,8 @@ def create_app() -> FastAPI:
     return app
 
 
+LOG_PATH = run_log.setup()
+run_log.get("startup").info("API starting; run log at %s", LOG_PATH)
 Base.metadata.create_all(bind=engine)
 upgrade_stage_tables(engine)
 app = create_app()
