@@ -76,12 +76,38 @@ export default {
 			'dusty-amber': {
 				DEFAULT: 'hsl(var(--dusty-amber))',
 				foreground: 'hsl(var(--dusty-amber-foreground))'
+			},
+			// 3a Blueprint structural + risk tokens (src/styles/aegis-tokens.css)
+			zone: 'hsl(var(--zone))',
+			bar: {
+				DEFAULT: 'hsl(var(--bar))',
+				foreground: 'hsl(var(--bar-foreground))'
+			},
+			'primary-soft': 'hsl(var(--primary-soft))',
+			signal: {
+				DEFAULT: 'hsl(var(--signal))',
+				foreground: 'hsl(var(--signal-foreground))',
+				ink: 'hsl(var(--signal-ink))'
+			},
+			sev: {
+				1: 'hsl(var(--sev-1))',
+				'1-foreground': 'hsl(var(--sev-1-foreground))',
+				2: 'hsl(var(--sev-2))',
+				'2-foreground': 'hsl(var(--sev-2-foreground))',
+				3: 'hsl(var(--sev-3))',
+				'3-foreground': 'hsl(var(--sev-3-foreground))',
+				4: 'hsl(var(--sev-4))',
+				'4-foreground': 'hsl(var(--sev-4-foreground))'
 			}
 		},
+  		// 3a: 3px everywhere; outer frames 6px. Pills keep rounded-full.
   		borderRadius: {
+  			sm: '2px',
+  			md: 'var(--radius)',
   			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			xl: 'var(--radius-frame)',
+  			'2xl': 'var(--radius-frame)',
+  			'3xl': 'var(--radius-frame)'
   		},
   		keyframes: {
   			'accordion-down': {
@@ -107,7 +133,7 @@ export default {
   		},
   		fontFamily: {
   			sans: [
-  				'Inter',
+  				'IBM Plex Sans',
   				'ui-sans-serif',
   				'system-ui',
   				'-apple-system',
@@ -120,7 +146,7 @@ export default {
   				'sans-serif'
   			],
   			serif: [
-  				'Lora',
+  				'IBM Plex Serif',
   				'ui-serif',
   				'Georgia',
   				'Cambria',
@@ -129,7 +155,7 @@ export default {
   				'serif'
   			],
   			mono: [
-  				'JetBrains Mono',
+  				'IBM Plex Mono',
   				'ui-monospace',
   				'SFMono-Regular',
   				'Menlo',

@@ -4,10 +4,10 @@ import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const feasibilityColors: Record<FeasibilityLevel, { bg: string; text: string; label: string }> = {
-  high: { bg: 'bg-red-500/20', text: 'text-red-400', label: 'High' },
-  medium: { bg: 'bg-amber-500/20', text: 'text-amber-400', label: 'Medium' },
-  low: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', label: 'Low' },
-  'very-low': { bg: 'bg-slate-500/20', text: 'text-slate-400', label: 'Very Low' },
+  high: { bg: 'bg-sev-4', text: 'text-sev-4-foreground', label: 'High' },
+  medium: { bg: 'bg-sev-3', text: 'text-sev-3-foreground', label: 'Medium' },
+  low: { bg: 'bg-sev-2', text: 'text-sev-2-foreground', label: 'Low' },
+  'very-low': { bg: 'bg-sev-1', text: 'text-sev-1-foreground', label: 'Very Low' },
 };
 
 const timeOptions = [
@@ -78,19 +78,19 @@ export function FeasibilityTab() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#05070a]">
-      <div className="px-4 py-3 border-b border-white/5">
-        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">Clause 15.7 — Attack Feasibility Rating (Table G.6)</p>
+    <div className="h-full flex flex-col bg-background">
+      <div className="px-4 py-3 border-b border-border">
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Clause 15.7 — Attack Feasibility Rating (Table G.6)</p>
       </div>
 
       <div className="flex-1 overflow-auto">
         <div className="min-w-max">
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
-            <div className="w-[250px] min-w-[250px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Attack Path Reference</div>
+          <div className="flex bg-card border-b border-border sticky top-0 z-10">
+            <div className="w-[250px] min-w-[250px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Attack Path Reference</div>
             {factorColumns.map(f => (
-              <div key={f.key} className="w-[150px] min-w-[150px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">{f.label}</div>
+              <div key={f.key} className="w-[150px] min-w-[150px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">{f.label}</div>
             ))}
-            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Score</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Score</div>
           </div>
 
           {feasibilities.map(feas => {
@@ -99,12 +99,12 @@ export function FeasibilityTab() {
             const style = feasibilityColors[level];
 
             return (
-              <div key={feas.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+              <div key={feas.id} className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors">
                 <div className="w-[250px] min-w-[250px] px-3 py-3">
                   <div className="text-sm text-foreground font-medium truncate">
                     {ctx?.threat ? ctx.threat.threatId : '—'}
                   </div>
-                  <div className="text-xs text-slate-500 truncate">
+                  <div className="text-xs text-muted-foreground truncate">
                     {ctx?.ap ? `${ctx.ap.attackVector} — ${ctx.ap.description.slice(0, 40)}...` : '—'}
                   </div>
                 </div>
@@ -114,10 +114,10 @@ export function FeasibilityTab() {
                       value={String(feas.factors[col.key])}
                       onValueChange={v => updateFeasibility(feas.linkedAttackPathId, { ...feas.factors, [col.key]: Number(v) })}
                     >
-                      <SelectTrigger className="h-8 bg-[#0b0f17] border-white/10 text-xs">
+                      <SelectTrigger className="h-8 bg-card border-border text-xs">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#1a1f2e] border-white/10">
+                      <SelectContent className="bg-muted border-border">
                         {col.options.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                       </SelectContent>
                     </Select>

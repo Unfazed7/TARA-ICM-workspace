@@ -26,7 +26,7 @@ interface StatTileProps {
 const statusColors: Record<string, string> = {
   draft: 'bg-muted text-muted-foreground',
   active: 'bg-primary/10 text-primary border-primary/20',
-  completed: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  completed: 'bg-primary/10 text-primary border-primary/20',
   archived: 'bg-muted text-muted-foreground',
 };
 
@@ -38,7 +38,7 @@ export function StatTile({ label, value, icon: Icon, subtitle, accentClass, dial
     <>
       <div
         className={cn(
-          'bento-tile group relative overflow-hidden flex flex-col justify-between p-5 bg-[hsl(0_0%_100%/0.03)] hover:bg-[hsl(0_0%_100%/0.07)] transition-colors',
+          'bento-tile group relative overflow-hidden flex flex-col justify-between p-5 bg-foreground/[0.03] hover:bg-foreground/[0.06] transition-colors',
           hasPopup && 'cursor-pointer'
         )}
         onClick={() => hasPopup && setOpen(true)}

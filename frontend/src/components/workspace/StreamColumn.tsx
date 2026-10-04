@@ -27,29 +27,29 @@ export function StreamColumn({
   return (
     <div
       className={cn(
-        'flex flex-col h-full min-w-[250px] bg-[#0b0f17]/80 backdrop-blur-xl',
-        !isLast && 'border-r border-white/10'
+        'flex flex-col h-full min-w-[250px] bg-card/80 backdrop-blur-xl',
+        !isLast && 'border-r border-border'
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 text-[10px] font-bold shrink-0">
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary/20 text-primary text-[10px] font-bold shrink-0">
               {stepNumber}
             </span>
-            <h3 className="text-[11px] uppercase tracking-[0.12em] text-slate-400 font-medium truncate">
+            <h3 className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground font-medium truncate">
               {title}
             </h3>
           </div>
-          {subtitle && <div className="text-[10px] text-slate-600 mt-1 truncate pl-7">{subtitle}</div>}
+          {subtitle && <div className="text-[10px] text-muted-foreground/70 mt-1 truncate pl-7">{subtitle}</div>}
         </div>
         {onAdd && (
           <Button
             variant="outline"
             size="sm"
             onClick={onAdd}
-            className="text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/10 hover:border-cyan-500/50 text-[10px] h-7 px-2 shrink-0"
+            className="text-primary border-primary/30 hover:bg-primary/10 hover:border-primary/50 text-[10px] h-7 px-2 shrink-0"
           >
             <Plus className="w-3 h-3 mr-1" />
             {addLabel}
@@ -78,14 +78,14 @@ export function StreamItem({ id, isSelected, onClick, children }: StreamItemProp
       data-id={id}
       onClick={onClick}
       className={cn(
-        'w-full text-left px-4 py-3 border-b border-white/5 transition-all relative',
+        'w-full text-left px-4 py-3 border-b border-border transition-all relative',
         isSelected
-          ? 'bg-cyan-500/10 text-cyan-300'
-          : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
+          ? 'bg-primary/10 text-primary'
+          : 'text-muted-foreground hover:text-foreground hover:bg-foreground/[0.03]'
       )}
     >
       {isSelected && (
-        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-cyan-500 shadow-[0_0_10px_cyan]" />
+        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary" />
       )}
       {children}
     </button>
@@ -94,7 +94,7 @@ export function StreamItem({ id, isSelected, onClick, children }: StreamItemProp
 
 export function StreamEmpty({ message }: { message: string }) {
   return (
-    <div className="flex-1 flex items-center justify-center text-slate-600 text-xs px-6 text-center h-full min-h-[120px]">
+    <div className="flex-1 flex items-center justify-center text-muted-foreground/70 text-xs px-6 text-center h-full min-h-[120px]">
       {message}
     </div>
   );

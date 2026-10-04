@@ -66,10 +66,10 @@ const getCybersecurityIcon = (property: string) => {
 
 const getImpactColor = (rating: string) => {
   switch (rating) {
-    case 'severe': return 'bg-destructive/15 text-destructive border-destructive/30';
-    case 'major': return 'bg-amber/15 text-amber border-amber/30';
-    case 'moderate': return 'bg-chart-3/15 text-chart-3 border-chart-3/30';
-    default: return 'bg-muted text-muted-foreground border-border';
+    case 'severe': return 'bg-sev-4 text-sev-4-foreground border-transparent';
+    case 'major': return 'bg-sev-3 text-sev-3-foreground border-transparent';
+    case 'moderate': return 'bg-sev-2 text-sev-2-foreground border-transparent';
+    default: return 'bg-sev-1 text-sev-1-foreground border-transparent';
   }
 };
 

@@ -13,9 +13,9 @@ const busColors: Record<string, string> = {
   'can': 'bg-chart-1/20 border-chart-1',
   'can-fd': 'bg-chart-1/30 border-chart-1',
   'lin': 'bg-muted border-muted-foreground',
-  'ethernet': 'bg-blue-500/20 border-blue-500',
-  'flexray': 'bg-purple-500/20 border-purple-500',
-  'most': 'bg-pink-500/20 border-pink-500',
+  'ethernet': 'bg-primary/20 border-primary',
+  'flexray': 'bg-muted border-foreground',
+  'most': 'bg-primary/10 border-primary/60',
 };
 
 function BusNodeComponent({ data, selected }: NodeProps<BusNodeData>) {

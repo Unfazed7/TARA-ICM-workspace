@@ -121,9 +121,9 @@ export function ThreatAnalysisGrid() {
 
   const getLikelihoodColor = (likelihood: string) => {
     switch (likelihood) {
-      case 'critical': return 'bg-destructive/15 text-destructive border-destructive/30';
-      case 'high': return 'bg-amber/15 text-amber border-amber/30';
-      case 'medium': return 'bg-chart-3/15 text-chart-3 border-chart-3/30';
+      case 'critical': return 'bg-sev-4 text-sev-4-foreground border-transparent';
+      case 'high': return 'bg-sev-3 text-sev-3-foreground border-transparent';
+      case 'medium': return 'bg-sev-2 text-sev-2-foreground border-transparent';
       default: return 'bg-muted text-muted-foreground border-border';
     }
   };
@@ -131,7 +131,7 @@ export function ThreatAnalysisGrid() {
   const getImpactIcon = (impact: string) => {
     switch (impact) {
       case 'safety': return <AlertTriangle className="w-3.5 h-3.5 text-destructive" />;
-      case 'financial': return <Zap className="w-3.5 h-3.5 text-amber" />;
+      case 'financial': return <Zap className="w-3.5 h-3.5 text-signal-ink" />;
       default: return <Shield className="w-3.5 h-3.5 text-muted-foreground" />;
     }
   };
@@ -139,14 +139,14 @@ export function ThreatAnalysisGrid() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'mitigated': return 'bg-primary/15 text-primary border-primary/30';
-      case 'analyzed': return 'bg-amber/15 text-amber border-amber/30';
+      case 'analyzed': return 'bg-signal/15 text-signal-ink border-signal/30';
       default: return 'bg-muted text-muted-foreground border-border';
     }
   };
 
   const getRiskColor = (risk: number) => {
     if (risk >= 8) return 'text-destructive';
-    if (risk >= 6) return 'text-amber';
+    if (risk >= 6) return 'text-signal-ink';
     if (risk >= 4) return 'text-chart-3';
     return 'text-muted-foreground';
   };

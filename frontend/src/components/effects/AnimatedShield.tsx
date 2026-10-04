@@ -7,44 +7,24 @@ interface AnimatedShieldProps {
 }
 
 const sizeClasses = {
-  sm: { container: 'w-8 h-8', icon: 'w-4 h-4', blur: 'blur-lg' },
-  md: { container: 'w-16 h-16', icon: 'w-8 h-8', blur: 'blur-xl' },
-  lg: { container: 'w-24 h-24', icon: 'w-12 h-12', blur: 'blur-2xl' },
+  sm: { container: 'w-8 h-8', icon: 'w-4 h-4' },
+  md: { container: 'w-14 h-14', icon: 'w-7 h-7' },
+  lg: { container: 'w-20 h-20', icon: 'w-10 h-10' },
 };
 
+// 3a Blueprint brand mark: flat primary block, no glow or motion.
 export function AnimatedShield({ size = 'md', className }: AnimatedShieldProps) {
   const sizes = sizeClasses[size];
-  
+
   return (
-    <div className={cn("relative shield-container", className)}>
-      {/* Outer glow ring */}
-      <div className={cn(
-        "absolute inset-0 rounded-xl",
-        sizes.blur,
-        "shield-outer-glow"
-      )} />
-      
-      {/* Rotating gradient background */}
-      <div className={cn(
-        "absolute inset-0 rounded-xl shield-gradient-rotate opacity-30"
-      )} />
-      
-      {/* Main shield container */}
-      <div className={cn(
+    <div
+      className={cn(
         sizes.container,
-        "relative rounded-xl bg-gradient-to-br from-primary/20 to-accent/10",
-        "border border-primary/30 flex items-center justify-center",
-        "shield-pulse"
-      )}>
-        {/* Inner glow */}
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-primary/10 rounded-xl" />
-        
-        {/* Shield icon with gradient */}
-        <Shield className={cn(
-          sizes.icon,
-          "relative z-10 text-primary drop-shadow-[0_0_8px_hsl(217_91%_60%/0.5)]"
-        )} />
-      </div>
+        'rounded bg-primary text-primary-foreground flex items-center justify-center',
+        className
+      )}
+    >
+      <Shield className={sizes.icon} />
     </div>
   );
 }

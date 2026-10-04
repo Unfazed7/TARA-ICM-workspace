@@ -90,7 +90,7 @@ export function AIScanOverlay({ isScanning, onComplete }: AIScanOverlayProps) {
         ))}
         
         {/* Center point */}
-        <div className="absolute w-4 h-4 rounded-full bg-primary shadow-lg shadow-primary/50">
+        <div className="absolute w-4 h-4 rounded-full bg-primary shadow-lg">
           <div className="absolute inset-0 rounded-full bg-primary animate-ping" />
         </div>
       </div>

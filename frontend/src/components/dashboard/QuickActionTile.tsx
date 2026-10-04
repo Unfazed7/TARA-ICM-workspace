@@ -97,21 +97,22 @@ function computeRisk(data: TaraReportData, threat: TaraThreat): number {
 function generatePDFReport(project: Project, data: TaraReportData) {
   const { assets, threats, impacts, attackPaths, feasibilities, treatments } = data;
   const css = `
-    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; color: #1a1a2e; font-size: 13px; }
-    h1 { color: #0f3460; border-bottom: 3px solid #0f3460; padding-bottom: 12px; font-size: 24px; }
-    h2 { color: #0f3460; margin-top: 35px; padding-bottom: 6px; border-bottom: 1px solid #cbd5e1; font-size: 16px; }
-    h3 { color: #16213e; margin-top: 20px; font-size: 14px; }
+    /* 3a Blueprint report palette (mirrors src/styles/aegis-tokens.css) */
+    body { font-family: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif; margin: 40px; color: #14213d; font-size: 13px; }
+    h1 { color: #14213d; border-bottom: 3px solid #1e4f9c; padding-bottom: 12px; font-size: 24px; }
+    h2 { color: #14213d; margin-top: 35px; padding-bottom: 6px; border-bottom: 1px solid #c9d3df; font-size: 16px; }
+    h3 { color: #14213d; margin-top: 20px; font-size: 14px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; page-break-inside: auto; }
-    th { background: #0f3460; color: white; padding: 8px 6px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-    td { padding: 6px; border-bottom: 1px solid #e2e8f0; font-size: 12px; vertical-align: top; }
-    tr:nth-child(even) { background: #f8fafc; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
-    .severe { background: #fee2e2; color: #dc2626; } .major { background: #fef3c7; color: #d97706; }
-    .moderate { background: #fef9c3; color: #ca8a04; } .negligible { background: #f1f5f9; color: #64748b; }
-    .risk-1,.risk-2 { color: #16a34a; } .risk-3 { color: #ca8a04; } .risk-4 { color: #ea580c; } .risk-5 { color: #dc2626; }
-    .meta { color: #64748b; font-size: 12px; } .footer { margin-top: 50px; border-top: 2px solid #0f3460; padding-top: 10px; font-size: 10px; color: #94a3b8; }
-    .check { color: #16a34a; } .cross { color: #94a3b8; }
-    .section-intro { color: #475569; margin-bottom: 10px; font-size: 12px; }
+    th { background: #14213d; color: #f6f8fa; padding: 8px 6px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 6px; border-bottom: 1px solid #c9d3df; font-size: 12px; vertical-align: top; }
+    tr:nth-child(even) { background: #f6f8fa; }
+    .badge { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+    .severe { background: #a8321a; color: #ffffff; } .major { background: #f08a64; color: #3b1206; }
+    .moderate { background: #fde4da; color: #7a2410; } .negligible { background: #e3e8ee; color: #2c3a4f; }
+    .risk-1,.risk-2 { color: #51607a; } .risk-3 { color: #b8401a; } .risk-4 { color: #a8321a; } .risk-5 { color: #7a2410; font-weight: 700; }
+    .meta { color: #51607a; font-size: 12px; } .footer { margin-top: 50px; border-top: 2px solid #14213d; padding-top: 10px; font-size: 10px; color: #51607a; }
+    .check { color: #1e4f9c; } .cross { color: #51607a; }
+    .section-intro { color: #51607a; margin-bottom: 10px; font-size: 12px; }
   `;
 
   const badge = (level: string) => `<span class="badge ${level}">${level}</span>`;
@@ -400,12 +401,12 @@ function generateDocxReport(project: Project, data: TaraReportData) {
   const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
 <head><meta charset="utf-8"><title>TARA Report</title>
 <style>
-  body { font-family: Calibri, sans-serif; margin: 40px; font-size: 11pt; }
-  h1 { color: #0f3460; font-size: 18pt; border-bottom: 2pt solid #0f3460; }
-  h2 { color: #0f3460; font-size: 14pt; margin-top: 24pt; border-bottom: 1pt solid #cbd5e1; }
+  body { font-family: 'IBM Plex Sans', Calibri, sans-serif; margin: 40px; font-size: 11pt; color: #14213d; }
+  h1 { color: #14213d; font-size: 18pt; border-bottom: 2pt solid #1e4f9c; }
+  h2 { color: #14213d; font-size: 14pt; margin-top: 24pt; border-bottom: 1pt solid #c9d3df; }
   table { width: 100%; border-collapse: collapse; }
-  th { background: #0f3460; color: white; padding: 6px; text-align: left; font-size: 9pt; }
-  td { padding: 4px 6px; border-bottom: 1px solid #e2e8f0; font-size: 10pt; }
+  th { background: #14213d; color: #f6f8fa; padding: 6px; text-align: left; font-size: 9pt; }
+  td { padding: 4px 6px; border-bottom: 1px solid #c9d3df; font-size: 10pt; }
 </style>
 </head><body>
 
@@ -524,8 +525,7 @@ export function QuickActionTile({ projects = [] }: QuickActionTileProps) {
   return (
     <>
       <div className="bento-tile group relative overflow-hidden flex flex-col items-center justify-center p-5 text-center">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_50%_50%,hsl(217_91%_60%/0.06),transparent_70%)] transition-opacity group-hover:bg-[radial-gradient(ellipse_at_50%_50%,hsl(217_91%_60%/0.12),transparent_70%)]" />
-        <div className="relative z-10 flex flex-col items-center gap-3">
+                <div className="relative z-10 flex flex-col items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center transition-transform group-hover:-translate-y-0.5">
             <FileText className="w-6 h-6 text-primary" />
           </div>
@@ -537,7 +537,7 @@ export function QuickActionTile({ projects = [] }: QuickActionTileProps) {
             onClick={handleOpenDialog}
             className={cn(
               'rounded-full px-5 gap-2',
-              'shadow-[0_0_15px_hsl(217_91%_60%/0.2)]'
+              ''
             )}
           >
             <Play className="w-3.5 h-3.5" />
@@ -582,7 +582,7 @@ export function QuickActionTile({ projects = [] }: QuickActionTileProps) {
                         <span className="flex items-center gap-2">
                           <span className={cn(
                             'w-2 h-2 rounded-full',
-                            p.status === 'active' ? 'bg-emerald-400' : 'bg-muted-foreground'
+                            p.status === 'active' ? 'bg-primary' : 'bg-muted-foreground'
                           )} />
                           {p.name}
                           <span className="text-muted-foreground text-xs ml-1">({p.completionPercentage ?? 0}%)</span>
@@ -614,7 +614,7 @@ export function QuickActionTile({ projects = [] }: QuickActionTileProps) {
                       className={cn(
                         'flex flex-col items-center gap-2 p-4 rounded-xl border transition-all',
                         selectedFormat === fmt
-                          ? 'border-primary/50 bg-primary/10 shadow-[0_0_15px_hsl(217_91%_60%/0.2)] ring-1 ring-primary/30'
+                          ? 'border-primary/50 bg-primary/10 ring-1 ring-primary/30'
                           : 'border-border/30 bg-card/30 hover:border-primary/30 hover:bg-primary/5'
                       )}
                     >
@@ -647,7 +647,7 @@ export function QuickActionTile({ projects = [] }: QuickActionTileProps) {
             <Button
               onClick={handleGenerate}
               disabled={!selectedProjectId || isGenerating || activeProjects.length === 0}
-              className="gap-2 btn-lift px-6 shadow-[0_0_20px_hsl(217_91%_60%/0.3)]"
+              className="gap-2 btn-lift px-6"
               size="lg"
             >
               {isDone ? (

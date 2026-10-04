@@ -14,27 +14,27 @@ import { Badge } from '@/components/ui/badge';
 
 // Asset group colors
 const assetGroupColors: Record<string, string> = {
-  powertrain: '#ef4444',
-  chassis: '#f59e0b',
-  infotainment: '#3b82f6',
-  body: '#8b5cf6',
-  networks: '#06b6d4',
-  adas: '#10b981',
+  powertrain: 'hsl(var(--foreground))',
+  chassis: 'hsl(var(--muted-foreground))',
+  infotainment: 'hsl(var(--primary))',
+  body: 'hsl(var(--primary) / 0.5)',
+  networks: 'hsl(var(--border))',
+  adas: 'hsl(var(--foreground) / 0.5)',
 };
 
 // Impact badge colors
 const impactColors: Record<ImpactLevel, { bg: string; text: string; label: string }> = {
-  severe: { bg: 'bg-red-500/20', text: 'text-red-400', label: 'Severe' },
-  major: { bg: 'bg-amber-500/20', text: 'text-amber-400', label: 'Major' },
-  moderate: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', label: 'Moderate' },
-  negligible: { bg: 'bg-slate-500/20', text: 'text-slate-400', label: 'Negligible' },
+  severe: { bg: 'bg-sev-4', text: 'text-sev-4-foreground', label: 'Severe' },
+  major: { bg: 'bg-sev-3', text: 'text-sev-3-foreground', label: 'Major' },
+  moderate: { bg: 'bg-sev-2', text: 'text-sev-2-foreground', label: 'Moderate' },
+  negligible: { bg: 'bg-sev-1', text: 'text-sev-1-foreground', label: 'Negligible' },
 };
 
 const feasibilityColors: Record<FeasibilityLevel, { bg: string; text: string; label: string }> = {
-  high: { bg: 'bg-red-500/20', text: 'text-red-400', label: 'High' },
-  medium: { bg: 'bg-amber-500/20', text: 'text-amber-400', label: 'Medium' },
-  low: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', label: 'Low' },
-  'very-low': { bg: 'bg-slate-500/20', text: 'text-slate-400', label: 'Very Low' },
+  high: { bg: 'bg-sev-4', text: 'text-sev-4-foreground', label: 'High' },
+  medium: { bg: 'bg-sev-3', text: 'text-sev-3-foreground', label: 'Medium' },
+  low: { bg: 'bg-sev-2', text: 'text-sev-2-foreground', label: 'Low' },
+  'very-low': { bg: 'bg-sev-1', text: 'text-sev-1-foreground', label: 'Very Low' },
 };
 
 const strideLabels: Record<StrideCategory, string> = {
@@ -82,12 +82,12 @@ function ImpactCalculatorPopover({ row, onChange }: { row: TaraRow; onChange: (f
           {style.label}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 bg-[#1a1f2e] border-white/10 p-4" side="right" align="start">
-        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono mb-3">Impact Calculator</p>
+      <PopoverContent className="w-80 bg-muted border-border p-4" side="right" align="start">
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono mb-3">Impact Calculator</p>
         <div className="space-y-2.5">
           {categories.map(cat => (
             <div key={cat.key} className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 w-20 shrink-0">{cat.full}</span>
+              <span className="text-xs text-muted-foreground w-20 shrink-0">{cat.full}</span>
               <div className="flex gap-1 flex-1">
                 {levels.map(level => (
                   <button
@@ -97,7 +97,7 @@ function ImpactCalculatorPopover({ row, onChange }: { row: TaraRow; onChange: (f
                       'flex-1 px-1.5 py-1 rounded text-[10px] font-medium transition-all',
                       row[cat.key] === level
                         ? cn(impactColors[level].bg, impactColors[level].text, 'ring-1 ring-current')
-                        : 'bg-white/5 text-slate-500 hover:bg-white/10'
+                        : 'bg-foreground/5 text-muted-foreground hover:bg-accent'
                     )}
                   >
                     {impactColors[level].label.slice(0, 3)}
@@ -123,14 +123,14 @@ function FeasibilityCalculatorPopover({ factors, onChange }: { factors: Feasibil
           {style.label}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-72 bg-[#1a1f2e] border-white/10 p-4" side="right" align="start">
-        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono mb-3">Attack Potential Calculator</p>
+      <PopoverContent className="w-72 bg-muted border-border p-4" side="right" align="start">
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono mb-3">Attack Potential Calculator</p>
         <div className="space-y-3">
           {feasibilitySliderLabels.map(({ key, label }) => (
             <div key={key}>
               <div className="flex justify-between mb-1">
-                <span className="text-xs text-slate-400">{label}</span>
-                <span className="text-xs text-slate-300 font-mono">{factors[key]}</span>
+                <span className="text-xs text-muted-foreground">{label}</span>
+                <span className="text-xs text-foreground font-mono">{factors[key]}</span>
               </div>
               <Slider
                 value={[factors[key]]}
@@ -142,8 +142,8 @@ function FeasibilityCalculatorPopover({ factors, onChange }: { factors: Feasibil
               />
             </div>
           ))}
-          <div className="pt-2 border-t border-white/5 flex justify-between items-center">
-            <span className="text-xs text-slate-500">Aggregate</span>
+          <div className="pt-2 border-t border-border flex justify-between items-center">
+            <span className="text-xs text-muted-foreground">Aggregate</span>
             <span className={cn('text-sm font-semibold', style.text)}>{style.label}</span>
           </div>
         </div>
@@ -163,7 +163,7 @@ function TreatmentDrawer({ type, value, onChange, open, onOpenChange }: {
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="bg-[#0f1219] border-white/10">
+      <DrawerContent className="bg-card border-border">
         <DrawerHeader>
           <DrawerTitle className="text-foreground">
             {type === 'goal' ? 'Cybersecurity Goal' : 'Cybersecurity Claim'}
@@ -179,7 +179,7 @@ function TreatmentDrawer({ type, value, onChange, open, onOpenChange }: {
             value={draft}
             onChange={e => setDraft(e.target.value)}
             placeholder={type === 'goal' ? 'The system shall...' : 'The risk is accepted because...'}
-            className="min-h-[120px] bg-[#05070a] border-white/10 text-foreground"
+            className="min-h-[120px] bg-background border-border text-foreground"
           />
         </div>
         <DrawerFooter>
@@ -226,29 +226,29 @@ export function TaraDataGrid() {
   }), [rows]);
 
   const columns = [
-    { header: 'Asset Context', width: 'w-[240px] min-w-[240px]', sticky: 'sticky left-0 z-20 bg-[#05070a]' },
+    { header: 'Asset Context', width: 'w-[240px] min-w-[240px]', sticky: 'sticky left-0 z-20 bg-background' },
     { header: 'Impact', width: 'w-[100px] min-w-[100px]', sticky: '' },
     { header: 'Threat Description', width: 'w-[220px] min-w-[220px]', sticky: '' },
     { header: 'Attack Vector', width: 'w-[130px] min-w-[130px]', sticky: '' },
     { header: 'Feasibility', width: 'w-[100px] min-w-[100px]', sticky: '' },
-    { header: 'Risk', width: 'w-[80px] min-w-[80px]', sticky: 'sticky right-0 z-20 bg-[#05070a]' },
+    { header: 'Risk', width: 'w-[80px] min-w-[80px]', sticky: 'sticky right-0 z-20 bg-background' },
     { header: 'Treatment', width: 'w-[130px] min-w-[130px]', sticky: '' },
   ];
 
   return (
-    <div className="h-full bg-[#05070a] flex flex-col">
+    <div className="h-full bg-background flex flex-col">
       <div className="flex-1 overflow-auto">
         <div className="min-w-max">
           {/* Header */}
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-30">
+          <div className="flex bg-card border-b border-border sticky top-0 z-30">
             {columns.map((col, i) => (
               <div
                 key={i}
                 className={cn(
-                  'px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium',
+                  'px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium',
                   col.width,
                   col.sticky,
-                  col.sticky && 'bg-[#080c14]'
+                  col.sticky && 'bg-card'
                 )}
               >
                 {col.header}
@@ -263,7 +263,7 @@ export function TaraDataGrid() {
 
             return (
               <div key={row.id}>
-                <div className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
+                <div className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors group">
                   {/* Col 1: Asset Context */}
                   <div className={cn('px-3 py-3 flex items-start gap-2', columns[0].width, columns[0].sticky)}>
                     <div
@@ -272,7 +272,7 @@ export function TaraDataGrid() {
                     />
                     <div className="min-w-0">
                       <div className="text-sm font-semibold text-foreground truncate">{row.assetName}</div>
-                      <div className="text-xs text-slate-500 truncate">{row.damageScenario}</div>
+                      <div className="text-xs text-muted-foreground truncate">{row.damageScenario}</div>
                     </div>
                   </div>
 
@@ -289,10 +289,10 @@ export function TaraDataGrid() {
                     <Textarea
                       value={row.threatDescription}
                       onChange={e => updateRow(row.id, { threatDescription: e.target.value })}
-                      className="bg-transparent border-transparent hover:border-white/10 focus:border-white/20 text-sm text-foreground resize-none min-h-[48px] p-1"
+                      className="bg-transparent border-transparent hover:border-border focus:border-border text-sm text-foreground resize-none min-h-[48px] p-1"
                       placeholder="Describe the threat..."
                     />
-                    <Badge variant="outline" className="mt-1 text-[10px] px-1.5 py-0 border-cyan-500/30 text-cyan-400 bg-cyan-500/10">
+                    <Badge variant="outline" className="mt-1 text-[10px] px-1.5 py-0 border-primary/30 text-primary bg-primary/10">
                       {strideLabels[row.strideCategory]}
                     </Badge>
                   </div>
@@ -304,10 +304,10 @@ export function TaraDataGrid() {
                         value={row.attackVector}
                         onValueChange={(v: AttackVector) => updateRow(row.id, { attackVector: v })}
                       >
-                        <SelectTrigger className="h-7 bg-[#0b0f17] border-white/10 text-xs w-24">
+                        <SelectTrigger className="h-7 bg-card border-border text-xs w-24">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#1a1f2e] border-white/10">
+                        <SelectContent className="bg-muted border-border">
                           <SelectItem value="network">Network</SelectItem>
                           <SelectItem value="adjacent">Adjacent</SelectItem>
                           <SelectItem value="local">Local</SelectItem>
@@ -316,7 +316,7 @@ export function TaraDataGrid() {
                       </Select>
                       <button
                         onClick={() => toggleExpand(row.id)}
-                        className="p-0.5 text-slate-500 hover:text-slate-300 transition-colors"
+                        className="p-0.5 text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                       </button>
@@ -336,7 +336,7 @@ export function TaraDataGrid() {
                     <span
                       className={cn(
                         'text-xl font-bold font-mono',
-                        row.riskValue === 5 && 'drop-shadow-[0_0_10px]'
+                        row.riskValue === 5 && ''
                       )}
                       style={{ color: riskColor, ...(row.riskValue === 5 ? { filter: `drop-shadow(0 0 20px ${riskColor})` } : {}) }}
                     >
@@ -358,10 +358,10 @@ export function TaraDataGrid() {
                         }
                       }}
                     >
-                      <SelectTrigger className="h-7 bg-[#0b0f17] border-white/10 text-xs w-24">
+                      <SelectTrigger className="h-7 bg-card border-border text-xs w-24">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#1a1f2e] border-white/10">
+                      <SelectContent className="bg-muted border-border">
                         <SelectItem value="reduce">Reduce</SelectItem>
                         <SelectItem value="avoid">Avoid</SelectItem>
                         <SelectItem value="share">Share</SelectItem>
@@ -373,14 +373,14 @@ export function TaraDataGrid() {
 
                 {/* Expanded Attack Path */}
                 {isExpanded && (
-                  <div className="flex border-b border-white/5 bg-[#080c14]">
-                    <div className={cn(columns[0].width, columns[0].sticky, 'bg-[#080c14]')} />
+                  <div className="flex border-b border-border bg-card">
+                    <div className={cn(columns[0].width, columns[0].sticky, 'bg-card')} />
                     <div className="flex-1 px-4 py-3">
-                      <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono mb-2">Attack Path Description</p>
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono mb-2">Attack Path Description</p>
                       <Textarea
                         value={row.attackPathDescription}
                         onChange={e => updateRow(row.id, { attackPathDescription: e.target.value })}
-                        className="bg-[#05070a] border-white/10 text-sm text-foreground min-h-[80px]"
+                        className="bg-background border-border text-sm text-foreground min-h-[80px]"
                         placeholder="Describe the step-by-step attack path..."
                       />
                     </div>

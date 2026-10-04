@@ -39,7 +39,7 @@ function CIAToggle({
         'w-8 h-8 rounded text-xs font-bold transition-all flex items-center justify-center',
         active
           ? colorClass
-          : 'text-slate-600 bg-white/5 hover:bg-white/10'
+          : 'text-muted-foreground/70 bg-foreground/5 hover:bg-accent'
       )}
     >
       {label}
@@ -56,7 +56,7 @@ export function AssetDefinitionPanel({
 }: Props) {
   if (!functionName) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-3">
+      <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-3">
         <ShieldQuestion className="w-10 h-10 opacity-30" />
         <p className="text-sm font-medium">Select a Function from the Matrix to define its Assets</p>
       </div>
@@ -64,14 +64,14 @@ export function AssetDefinitionPanel({
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0f17]">
+    <div className="flex flex-col h-full bg-card">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <div className="flex items-center gap-3">
-          <h3 className="text-sm font-medium text-slate-200">
-            Assets for: <span className="text-cyan-400">{functionName}</span>
+          <h3 className="text-sm font-medium text-foreground">
+            Assets for: <span className="text-primary">{functionName}</span>
           </h3>
-          <Badge variant="outline" className="text-[10px] text-slate-400 border-slate-700 px-2 py-0.5">
+          <Badge variant="outline" className="text-[10px] text-muted-foreground border-border px-2 py-0.5">
             ISO 21434 Clause 15.3
           </Badge>
         </div>
@@ -79,7 +79,7 @@ export function AssetDefinitionPanel({
           variant="outline"
           size="sm"
           onClick={onAddAsset}
-          className="text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/10 hover:border-cyan-500/50 text-xs"
+          className="text-primary border-primary/30 hover:bg-primary/10 hover:border-primary/50 text-xs"
         >
           <Plus className="w-3.5 h-3.5 mr-1" />
           Add New Asset
@@ -87,36 +87,36 @@ export function AssetDefinitionPanel({
       </div>
 
       {/* Column headers */}
-      <div className="grid grid-cols-[1fr_140px_100px_40px] gap-2 px-4 py-2 border-b border-white/5">
-        <span className="text-[10px] uppercase tracking-[0.12em] text-slate-500 font-medium">Asset Name</span>
-        <span className="text-[10px] uppercase tracking-[0.12em] text-slate-500 font-medium">Category</span>
-        <span className="text-[10px] uppercase tracking-[0.12em] text-slate-500 font-medium text-center">C · I · A</span>
+      <div className="grid grid-cols-[1fr_140px_100px_40px] gap-2 px-4 py-2 border-b border-border">
+        <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground font-medium">Asset Name</span>
+        <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground font-medium">Category</span>
+        <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground font-medium text-center">C · I · A</span>
         <span />
       </div>
 
       {/* Asset rows */}
       <div className="flex-1 overflow-auto">
         {assets.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-slate-600 text-xs">
+          <div className="flex items-center justify-center h-full text-muted-foreground/70 text-xs">
             No assets defined. Click "Add New Asset" to begin.
           </div>
         ) : (
           assets.map((asset) => (
             <div
               key={asset.id}
-              className="grid grid-cols-[1fr_140px_100px_40px] gap-2 px-4 py-2 items-center border-b border-white/5 hover:bg-white/[0.02] transition-colors"
+              className="grid grid-cols-[1fr_140px_100px_40px] gap-2 px-4 py-2 items-center border-b border-border hover:bg-foreground/[0.02] transition-colors"
             >
               <Input
                 value={asset.name}
                 onChange={(e) => onUpdateAsset(asset.id, { name: e.target.value })}
-                className="h-8 bg-white/5 border-white/10 text-sm text-slate-200 placeholder:text-slate-600"
+                className="h-8 bg-foreground/5 border-border text-sm text-foreground placeholder:text-muted-foreground/70"
                 placeholder="Asset name..."
               />
               <Select
                 value={asset.category}
                 onValueChange={(val) => onUpdateAsset(asset.id, { category: val as AssetCategory })}
               >
-                <SelectTrigger className="h-8 bg-white/5 border-white/10 text-xs text-slate-300">
+                <SelectTrigger className="h-8 bg-foreground/5 border-border text-xs text-foreground">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -132,24 +132,24 @@ export function AssetDefinitionPanel({
                   label="C"
                   active={asset.confidentiality}
                   onToggle={() => onUpdateAsset(asset.id, { confidentiality: !asset.confidentiality })}
-                  colorClass="text-blue-400 bg-blue-500/20 shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                  colorClass="text-primary bg-primary/20"
                 />
                 <CIAToggle
                   label="I"
                   active={asset.integrity}
                   onToggle={() => onUpdateAsset(asset.id, { integrity: !asset.integrity })}
-                  colorClass="text-purple-400 bg-purple-500/20 shadow-[0_0_8px_rgba(168,85,247,0.5)]"
+                  colorClass="text-foreground bg-muted"
                 />
                 <CIAToggle
                   label="A"
                   active={asset.availability}
                   onToggle={() => onUpdateAsset(asset.id, { availability: !asset.availability })}
-                  colorClass="text-orange-400 bg-orange-500/20 shadow-[0_0_8px_rgba(249,115,22,0.5)]"
+                  colorClass="text-signal-ink bg-signal/20"
                 />
               </div>
               <button
                 onClick={() => onDeleteAsset(asset.id)}
-                className="flex items-center justify-center text-slate-600 hover:text-red-400 transition-colors"
+                className="flex items-center justify-center text-muted-foreground/70 hover:text-destructive transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>

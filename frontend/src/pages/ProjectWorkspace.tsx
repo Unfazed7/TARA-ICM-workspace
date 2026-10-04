@@ -123,7 +123,7 @@ function StageRunnerPanel({ assessmentId }: { assessmentId: string }) {
           <Upload className="w-3.5 h-3.5" />
           {uploading ? 'Uploading...' : csvReady ? 'Replace CSV' : 'Upload Assets CSV'}
         </Button>
-        {csvReady && <span className="text-xs text-emerald-400">✓ CSV ready</span>}
+        {csvReady && <span className="text-xs text-primary">✓ CSV ready</span>}
       </div>
 
       {/* Stage rows */}
@@ -226,7 +226,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
       setShowSaveDialog(false);
       toast.success('Progress saved successfully', {
         description: `${project.name} — saved to database`,
-        icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
+        icon: <CheckCircle2 className="w-4 h-4 text-primary" />,
       });
     } catch {
       toast.error('Failed to save progress', {
@@ -237,55 +237,59 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
 
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden bg-background">
-      {/* Top Bar */}
-      <header className="h-11 flex items-center justify-between px-4 border-b border-border bg-card shrink-0">
-        <div className="flex items-center gap-3">
+      {/* Top Bar — 3a navy app bar */}
+      <header className="h-11 flex items-center justify-between gap-3 px-4 bg-bar text-bar-foreground shrink-0">
+        <div className="flex items-center gap-2.5 text-[13px] min-w-0">
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7"
+            className="h-7 w-7 text-bar-foreground hover:bg-bar-foreground/10 hover:text-bar-foreground"
             onClick={() => navigate('/dashboard')}
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <span className="font-semibold text-sm">AutoTARA</span>
-          <span className="text-muted-foreground">/</span>
-          <span className="text-sm text-muted-foreground">{project.name}</span>
-          <Badge variant="outline" className="text-xs font-mono">
+          <span className="aegis-wordmark">AutoTARA</span>
+          <span className="opacity-[0.55]">/</span>
+          <span className="truncate">{project.name}</span>
+          <span className="font-mono text-[11px] px-1.5 py-0.5 rounded border border-bar-foreground/30">
             {project.catalogVersion}
-          </Badge>
+          </span>
           {hasUnsavedChanges && (
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Unsaved changes" />
+            <span className="aegis-signal-pill px-2 py-0.5 text-[11px]">Unsaved</span>
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 gap-2"
+            className="h-[30px] gap-2 text-bar-foreground hover:bg-bar-foreground/10 hover:text-bar-foreground"
             onClick={handleSaveClick}
           >
             <Save className="w-4 h-4" />
             <span className="hidden sm:inline">Save</span>
           </Button>
-          <Button variant="ghost" size="sm" className="h-7 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-[30px] gap-2 bg-transparent border-bar-foreground text-bar-foreground font-semibold hover:bg-bar-foreground/10 hover:text-bar-foreground"
+          >
             <Play className="w-4 h-4" />
             <span className="hidden sm:inline">Validate</span>
           </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7">
+          <Button variant="ghost" size="icon" className="h-7 w-7 text-bar-foreground hover:bg-bar-foreground/10 hover:text-bar-foreground">
             <MoreHorizontal className="w-4 h-4" />
           </Button>
-          <div className="w-px h-5 bg-border mx-1" />
+          <div className="w-px h-5 bg-bar-foreground/25 mx-1" />
           {/* Account Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20"
+                className="w-8 h-8 rounded-full bg-bar-foreground/10 border border-bar-foreground/30 hover:bg-bar-foreground/20"
               >
-                <span className="text-xs font-bold text-primary">
+                <span className="text-xs font-bold text-bar-foreground">
                   {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || <UserCircle className="w-4 h-4" />}
                 </span>
               </Button>
@@ -304,7 +308,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
                 Change Password
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-400 focus:text-red-400">
+              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
                 <LogOut className="mr-2 w-4 h-4" />
                 Logout
               </DropdownMenuItem>
@@ -337,7 +341,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
       <footer className="h-6 flex items-center justify-between px-3 border-t border-border bg-card text-xs text-muted-foreground shrink-0">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-primary" />
             Connected
           </span>
           <span>
@@ -355,7 +359,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
         <DialogContent className="sm:max-w-md z-[100] glass-card-premium border-border/30">
           <DialogHeader className="text-center sm:text-center">
             <DialogTitle className="gradient-text flex items-center justify-center gap-2 text-xl">
-              <AlertTriangle className="w-6 h-6 text-amber-400" />
+              <AlertTriangle className="w-6 h-6 text-signal-ink" />
               Save Progress
             </DialogTitle>
             <DialogDescription className="text-center">
@@ -390,7 +394,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
             <Button
               onClick={handleConfirmSave}
               disabled={isSaving}
-              className="gap-2 px-6 shadow-[0_0_20px_hsl(217_91%_60%/0.3)]"
+              className="gap-2 px-6"
             >
               {isSaving ? (
                 <>
@@ -453,7 +457,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
             </div>
 
             {passwordError && (
-              <p className="text-sm text-red-400 text-center">{passwordError}</p>
+              <p className="text-sm text-destructive text-center">{passwordError}</p>
             )}
           </div>
 

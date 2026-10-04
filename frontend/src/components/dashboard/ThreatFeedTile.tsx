@@ -12,19 +12,19 @@ import {
 } from '@/components/ui/dialog';
 
 const riskColors: Record<string, string> = {
-  critical: 'bg-critical',
-  high: 'bg-amber',
-  medium: 'bg-amber/60',
+  critical: 'bg-sev-4',
+  high: 'bg-sev-3',
+  medium: 'bg-sev-2',
 };
 
 const riskLabels = ['', 'Low', 'Low', 'Medium', 'High', 'Critical'];
 
 const impactBadge = (level: string) => {
   const colors: Record<string, string> = {
-    severe: 'bg-red-500/10 text-red-400 border-red-500/20',
-    major: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-    moderate: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-    negligible: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
+    severe: 'bg-sev-4 text-sev-4-foreground border-transparent',
+    major: 'bg-sev-3 text-sev-3-foreground border-transparent',
+    moderate: 'bg-sev-2 text-sev-2-foreground border-transparent',
+    negligible: 'bg-sev-1 text-sev-1-foreground border-transparent',
   };
   return colors[level] || colors.moderate;
 };
@@ -44,8 +44,7 @@ export function ThreatFeedTile() {
       >
         {/* Danger ambient light */}
         <div className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-48 h-48 bg-[radial-gradient(circle,hsl(0_60%_55%/0.06),transparent_70%)] blur-2xl" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_100%,hsl(38_80%_55%/0.04),transparent_50%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_100%,hsl(38_80%_55%/0.04),transparent_50%)]" />
         </div>
 
         <div className="relative z-10 flex items-center gap-2 mb-4">
@@ -117,9 +116,9 @@ export function ThreatFeedTile() {
                   </div>
                   <p className={cn(
                     'text-sm font-bold',
-                    selectedThreat.riskValue >= 5 ? 'text-red-400' :
-                      selectedThreat.riskValue >= 4 ? 'text-amber-400' :
-                        selectedThreat.riskValue >= 3 ? 'text-yellow-400' : 'text-emerald-400'
+                    selectedThreat.riskValue >= 5 ? 'text-destructive' :
+                      selectedThreat.riskValue >= 4 ? 'text-signal-ink' :
+                        selectedThreat.riskValue >= 3 ? 'text-signal-ink' : 'text-primary'
                   )}>
                     {riskLabels[selectedThreat.riskValue] || 'Medium'} ({selectedThreat.riskValue}/5)
                   </p>

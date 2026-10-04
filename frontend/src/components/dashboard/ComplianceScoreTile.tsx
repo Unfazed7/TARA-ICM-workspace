@@ -17,15 +17,15 @@ interface ComplianceScoreTileProps {
 }
 
 const getScoreColor = (score: number) => {
-  if (score >= 70) return 'text-emerald-400';
-  if (score >= 40) return 'text-amber-400';
-  return 'text-red-400';
+  if (score >= 70) return 'text-primary';
+  if (score >= 40) return 'text-signal-ink';
+  return 'text-destructive';
 };
 
 const getStatusIcon = (pct: number) => {
-  if (pct >= 80) return <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />;
-  if (pct >= 40) return <Clock className="w-3.5 h-3.5 text-amber-400" />;
-  return <AlertTriangle className="w-3.5 h-3.5 text-red-400" />;
+  if (pct >= 80) return <CheckCircle2 className="w-3.5 h-3.5 text-primary" />;
+  if (pct >= 40) return <Clock className="w-3.5 h-3.5 text-signal-ink" />;
+  return <AlertTriangle className="w-3.5 h-3.5 text-destructive" />;
 };
 
 export function ComplianceScoreTile({ score, projects = [] }: ComplianceScoreTileProps) {
@@ -34,7 +34,7 @@ export function ComplianceScoreTile({ score, projects = [] }: ComplianceScoreTil
   return (
     <>
       <div
-        className="bento-tile group relative overflow-hidden flex flex-col justify-between p-5 bg-[hsl(0_0%_100%/0.03)] hover:bg-[hsl(0_0%_100%/0.07)] transition-colors cursor-pointer"
+        className="bento-tile group relative overflow-hidden flex flex-col justify-between p-5 bg-foreground/[0.03] hover:bg-foreground/[0.06] transition-colors cursor-pointer"
         onClick={() => setOpen(true)}
       >
         <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">

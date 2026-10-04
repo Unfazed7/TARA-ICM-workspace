@@ -362,7 +362,7 @@ function ArchitectureVisualizerInner({ onNodeSelect }: ArchitectureVisualizerInn
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 h-8 w-5 rounded-r-md rounded-l-none bg-[#0a0f16]/80 backdrop-blur-sm border border-l-0 border-white/5 text-muted-foreground hover:text-foreground hover:bg-[#0a0f16]"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 h-8 w-5 rounded-r-md rounded-l-none bg-muted/80 backdrop-blur-sm border border-l-0 border-border text-muted-foreground hover:text-foreground hover:bg-muted"
               style={{ left: libraryCollapsed ? 0 : '288px' }}
               onClick={() => setLibraryCollapsed(!libraryCollapsed)}
             >
@@ -374,7 +374,7 @@ function ArchitectureVisualizerInner({ onNodeSelect }: ArchitectureVisualizerInn
       )}
 
       {/* Main Canvas */}
-      <div className="flex-1 relative" style={{ backgroundColor: '#05070a' }}>
+      <div className="flex-1 relative" style={{ backgroundColor: 'hsl(var(--background))' }}>
         <div ref={reactFlowWrapper} className="h-full w-full">
           <ReactFlow
             nodes={styledNodes}
@@ -443,7 +443,7 @@ function ArchitectureVisualizerInner({ onNodeSelect }: ArchitectureVisualizerInn
         )}
       >
         {inspectorOpen && !zenMode && (
-          <div className="h-full w-96 bg-[#0a0f16]/95 backdrop-blur-xl border-l border-white/5">
+          <div className="h-full w-96 bg-muted/95 backdrop-blur-xl border-l border-border">
             <InspectorPanel
               open={true}
               onClose={() => setInspectorOpen(false)}

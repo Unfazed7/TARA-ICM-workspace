@@ -42,7 +42,7 @@ export interface ComponentTemplate {
 const layerBorderColors: Record<string, string> = {
   powertrain: 'border-t-primary',
   infotainment: 'border-t-chart-4',
-  chassis: 'border-t-amber',
+  chassis: 'border-t-signal',
   adas: 'border-t-chart-3',
   body: 'border-t-chart-5',
 };
@@ -50,7 +50,7 @@ const layerBorderColors: Record<string, string> = {
 const layerBgColors: Record<string, string> = {
   powertrain: 'bg-primary/15',
   infotainment: 'bg-chart-4/15',
-  chassis: 'bg-amber/15',
+  chassis: 'bg-signal/15',
   adas: 'bg-chart-3/15',
   body: 'bg-chart-5/15',
 };
@@ -58,13 +58,13 @@ const layerBgColors: Record<string, string> = {
 const layerIconColors: Record<string, string> = {
   powertrain: 'text-primary',
   infotainment: 'text-chart-4',
-  chassis: 'text-amber',
+  chassis: 'text-signal-ink',
   adas: 'text-chart-3',
   body: 'text-chart-5',
 };
 
 const busBorderColors: Record<string, string> = {
-  can: 'border-t-amber',
+  can: 'border-t-signal',
   'can-fd': 'border-t-primary',
   lin: 'border-t-muted-foreground',
   ethernet: 'border-t-chart-3',
@@ -73,7 +73,7 @@ const busBorderColors: Record<string, string> = {
 };
 
 const busBgColors: Record<string, string> = {
-  can: 'bg-amber/15',
+  can: 'bg-signal/15',
   'can-fd': 'bg-primary/15',
   lin: 'bg-muted-foreground/15',
   ethernet: 'bg-chart-3/15',
@@ -82,7 +82,7 @@ const busBgColors: Record<string, string> = {
 };
 
 const busIconColors: Record<string, string> = {
-  can: 'text-amber',
+  can: 'text-signal-ink',
   'can-fd': 'text-primary',
   lin: 'text-muted-foreground',
   ethernet: 'text-chart-3',
@@ -117,11 +117,11 @@ const nodeTypeIcons = {
 };
 
 const categoryColors: Record<string, string> = {
-  'Process': 'bg-blue-500/15 text-blue-400 border-blue-500/30',
-  'Data Flow': 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-  'Data Store': 'bg-violet-500/15 text-violet-400 border-violet-500/30',
-  'External Entity': 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-  'Boundary': 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+  'Process': 'bg-primary/15 text-primary border-primary/30',
+  'Data Flow': 'bg-primary/15 text-primary border-primary/30',
+  'Data Store': 'bg-muted text-foreground border-foreground/30',
+  'External Entity': 'bg-signal/15 text-signal-ink border-signal/30',
+  'Boundary': 'bg-destructive/15 text-destructive border-destructive/30',
   'Custom Components': 'bg-muted-foreground/20 text-muted-foreground border-muted-foreground/30',
 };
 
@@ -360,7 +360,7 @@ export function ComponentLibrary({ onDragStart }: ComponentLibraryProps) {
   }, {} as Record<string, ComponentTemplate[]>);
 
   return (
-    <div className="h-full flex flex-col backdrop-blur-xl bg-[#0b0f17]/80 border-r border-border/10">
+    <div className="h-full flex flex-col backdrop-blur-xl bg-card/80 border-r border-border/10">
       {/* Header */}
       <div className="p-4 border-b border-border/10">
         <div className="flex items-center justify-between mb-3">

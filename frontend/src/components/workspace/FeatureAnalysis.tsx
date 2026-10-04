@@ -70,8 +70,8 @@ function ConnectionLines({ containerRef, selections }: {
     <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
       <defs>
         <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="rgba(6,182,212,0.4)" />
-          <stop offset="100%" stopColor="rgba(6,182,212,0.1)" />
+          <stop offset="0%" stopColor="hsl(var(--primary) / 0.4)" />
+          <stop offset="100%" stopColor="hsl(var(--primary) / 0.1)" />
         </linearGradient>
       </defs>
       {paths.map((d, i) => (
@@ -98,7 +98,7 @@ function CiaaanDisplay({ item }: { item: CiaaanItem }) {
           key={p.key}
           className={`text-[9px] px-1.5 py-0.5 rounded font-mono ${
             p.val
-              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+              ? 'bg-primary/20 text-primary border border-primary/30'
               : 'bg-muted/30 text-muted-foreground/40 border border-transparent'
           }`}
         >
@@ -240,7 +240,7 @@ export function FeatureAnalysis() {
       {/* 2: Functions */}
       <div className="min-w-[220px] w-[12.5%] h-full relative z-20">
         <StreamColumn stepNumber={2} title="Functions"
-          subtitle={selectedFeature ? <span className="text-cyan-400/80">{mockFeatures.find((f) => f.id === selectedFeature)?.name}</span> : undefined}
+          subtitle={selectedFeature ? <span className="text-primary/80">{mockFeatures.find((f) => f.id === selectedFeature)?.name}</span> : undefined}
           emptyMessage="Select a Feature" onAdd={selectedFeature ? handleAddFunction : undefined} addLabel="Add Function">
           {!selectedFeature ? <StreamEmpty message="Select a Feature" /> : filteredFunctions.length === 0 ? <StreamEmpty message="No functions defined" /> : (
             filteredFunctions.map((fn) => (
@@ -256,7 +256,7 @@ export function FeatureAnalysis() {
       {/* 3: Abuse Cases */}
       <div className="min-w-[220px] w-[12.5%] h-full relative z-20">
         <StreamColumn stepNumber={3} title="Abuse Cases"
-          subtitle={selectedFunction ? <span className="text-cyan-400/80">{functions.find((f) => f.id === selectedFunction)?.name}</span> : undefined}
+          subtitle={selectedFunction ? <span className="text-primary/80">{functions.find((f) => f.id === selectedFunction)?.name}</span> : undefined}
           emptyMessage="Select a Function" onAdd={selectedFunction ? handleAddAbuseCase : undefined} addLabel="Add Abuse Case">
           {!selectedFunction ? <StreamEmpty message="Select a Function" /> : filteredAbuseCases.length === 0 ? <StreamEmpty message="No abuse cases" /> : (
             filteredAbuseCases.map((ac) => (
@@ -266,7 +266,7 @@ export function FeatureAnalysis() {
                 <div className="mt-1.5" onClick={(e) => e.stopPropagation()}>
                   <Select value={ac.stride} onValueChange={(val) => handleUpdateStride(ac.id, val as AbuseCase['stride'])}>
                     <SelectTrigger className="h-6 bg-background/5 border-border/10 text-[9px] text-muted-foreground w-full">
-                      <Badge variant="outline" className="text-[9px] border-amber-500/40 text-amber-400 px-1.5 py-0">
+                      <Badge variant="outline" className="text-[9px] border-signal/40 text-signal-ink px-1.5 py-0">
                         STRIDE: <SelectValue />
                       </Badge>
                     </SelectTrigger>
@@ -284,7 +284,7 @@ export function FeatureAnalysis() {
       {/* 4: Damage */}
       <div className="min-w-[220px] w-[12.5%] h-full relative z-20">
         <StreamColumn stepNumber={4} title="Damage"
-          subtitle={selectedAbuseCase ? <span className="text-cyan-400/80">{abuseCases.find((a) => a.id === selectedAbuseCase)?.name}</span> : undefined}
+          subtitle={selectedAbuseCase ? <span className="text-primary/80">{abuseCases.find((a) => a.id === selectedAbuseCase)?.name}</span> : undefined}
           emptyMessage="Select an Abuse Case" onAdd={selectedAbuseCase ? handleAddDamage : undefined} addLabel="Add Damage">
           {!selectedAbuseCase ? <StreamEmpty message="Select an Abuse Case" /> : filteredDamages.length === 0 ? <StreamEmpty message="No damage scenarios" /> : (
             filteredDamages.map((dmg) => (
@@ -294,7 +294,7 @@ export function FeatureAnalysis() {
                 <div className="mt-1.5" onClick={(e) => e.stopPropagation()}>
                   <Select value={dmg.impactArea} onValueChange={(val) => handleUpdateImpact(dmg.id, val as DamageScenarioItem['impactArea'])}>
                     <SelectTrigger className="h-6 bg-background/5 border-border/10 text-[9px] text-muted-foreground w-full">
-                      <Badge variant="outline" className="text-[9px] border-red-500/40 text-red-400 px-1.5 py-0">
+                      <Badge variant="outline" className="text-[9px] border-destructive/40 text-destructive px-1.5 py-0">
                         Impact: <SelectValue />
                       </Badge>
                     </SelectTrigger>
@@ -312,7 +312,7 @@ export function FeatureAnalysis() {
       {/* 5: Threats */}
       <div className="min-w-[220px] w-[12.5%] h-full relative z-20">
         <StreamColumn stepNumber={5} title="Threats"
-          subtitle={selectedDamage ? <span className="text-cyan-400/80">{damages.find((d) => d.id === selectedDamage)?.name}</span> : undefined}
+          subtitle={selectedDamage ? <span className="text-primary/80">{damages.find((d) => d.id === selectedDamage)?.name}</span> : undefined}
           emptyMessage="Select a Damage Scenario" onAdd={selectedDamage ? handleAddThreat : undefined} addLabel="Add Threat">
           {!selectedDamage ? <StreamEmpty message="Select a Damage Scenario" /> : filteredThreats.length === 0 ? <StreamEmpty message="No threats defined" /> : (
             filteredThreats.map((th) => (
@@ -320,7 +320,7 @@ export function FeatureAnalysis() {
                 <div className="text-xs font-medium">{th.name}</div>
                 <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{th.description}</div>
                 {th.attackVector && (
-                  <Badge variant="outline" className="text-[9px] border-purple-500/40 text-purple-400 mt-1 px-1.5 py-0">
+                  <Badge variant="outline" className="text-[9px] border-foreground/40 text-foreground mt-1 px-1.5 py-0">
                     {th.attackVector}
                   </Badge>
                 )}
@@ -333,7 +333,7 @@ export function FeatureAnalysis() {
       {/* 6: CIAAAN */}
       <div className="min-w-[220px] w-[12.5%] h-full relative z-20">
         <StreamColumn stepNumber={6} title="CIAAAN"
-          subtitle={selectedThreat ? <span className="text-cyan-400/80">{threats.find((t) => t.id === selectedThreat)?.name}</span> : undefined}
+          subtitle={selectedThreat ? <span className="text-primary/80">{threats.find((t) => t.id === selectedThreat)?.name}</span> : undefined}
           emptyMessage="Select a Threat" onAdd={selectedThreat ? handleAddCiaaan : undefined} addLabel="Add CIAAAN">
           {!selectedThreat ? <StreamEmpty message="Select a Threat" /> : filteredCiaaan.length === 0 ? <StreamEmpty message="No CIAAAN defined" /> : (
             filteredCiaaan.map((ci) => (
@@ -344,7 +344,7 @@ export function FeatureAnalysis() {
                   {(['confidentiality', 'integrity', 'availability', 'authenticity', 'authorization', 'nonRepudiation'] as const).map((prop) => (
                     <button key={prop} onClick={(e) => { e.stopPropagation(); handleToggleCiaaan(ci.id, prop); }}
                       className={`text-[8px] px-1 py-0.5 rounded border transition-all ${
-                        ci[prop] ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-300' : 'border-border/20 text-muted-foreground/50 hover:border-border/40'
+                        ci[prop] ? 'border-primary/50 bg-primary/10 text-primary' : 'border-border/20 text-muted-foreground/50 hover:border-border/40'
                       }`}>
                       {prop === 'nonRepudiation' ? 'NR' : prop.charAt(0).toUpperCase() + prop.slice(1, 4)}
                     </button>
@@ -359,13 +359,13 @@ export function FeatureAnalysis() {
       {/* 7: Assets */}
       <div className="min-w-[220px] w-[12.5%] h-full relative z-20">
         <StreamColumn stepNumber={7} title="Assets"
-          subtitle={selectedCiaaan ? <span className="text-cyan-400/80">CIAAAN Profile</span> : undefined}
+          subtitle={selectedCiaaan ? <span className="text-primary/80">CIAAAN Profile</span> : undefined}
           emptyMessage="Select a CIAAAN" onAdd={selectedCiaaan ? handleAddAsset : undefined} addLabel="Add Asset">
           {!selectedCiaaan ? <StreamEmpty message="Select a CIAAAN profile" /> : filteredAssets.length === 0 ? <StreamEmpty message="No assets defined" /> : (
             filteredAssets.map((asset) => (
               <StreamItem key={asset.id} id={asset.id} isSelected={selectedAsset === asset.id} onClick={() => selectAsset(asset.id)}>
                 <div className="text-xs font-medium">{asset.name}</div>
-                <Badge variant="outline" className="text-[9px] border-emerald-500/40 text-emerald-400 mt-1 px-1.5 py-0">
+                <Badge variant="outline" className="text-[9px] border-primary/40 text-primary mt-1 px-1.5 py-0">
                   {assetCategories.find((c) => c.value === asset.category)?.label}
                 </Badge>
               </StreamItem>
@@ -377,7 +377,7 @@ export function FeatureAnalysis() {
       {/* 8: Associated ECU */}
       <div className="min-w-[220px] w-[12.5%] h-full relative z-20">
         <StreamColumn stepNumber={8} title="Associated ECU" isLast
-          subtitle={selectedAsset ? <span className="text-cyan-400/80">{assets.find((a) => a.id === selectedAsset)?.name}</span> : undefined}
+          subtitle={selectedAsset ? <span className="text-primary/80">{assets.find((a) => a.id === selectedAsset)?.name}</span> : undefined}
           emptyMessage="Select an Asset" onAdd={selectedAsset ? handleAddEcu : undefined} addLabel="Add ECU">
           {!selectedAsset ? <StreamEmpty message="Select an Asset" /> : filteredEcus.length === 0 ? <StreamEmpty message="No ECUs linked" /> : (
             filteredEcus.map((ecu) => (
@@ -386,7 +386,7 @@ export function FeatureAnalysis() {
                 <div className="mt-1.5" onClick={(e) => e.stopPropagation()}>
                   <Select value={ecu.type} onValueChange={(val) => handleUpdateEcuType(ecu.id, val as AssociatedECU['type'])}>
                     <SelectTrigger className="h-6 bg-background/5 border-border/10 text-[9px] text-muted-foreground w-full">
-                      <Badge variant="outline" className="text-[9px] border-blue-500/40 text-blue-400 px-1.5 py-0">
+                      <Badge variant="outline" className="text-[9px] border-primary/40 text-primary px-1.5 py-0">
                         Type: <SelectValue />
                       </Badge>
                     </SelectTrigger>

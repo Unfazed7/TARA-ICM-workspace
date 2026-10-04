@@ -55,12 +55,12 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
         'bento-tile relative overflow-hidden',
         'col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-2',
         'flex flex-col p-6',
-        'shadow-[inset_0_0_20px_hsl(217_91%_60%/0.1)]'
+        ''
       )}
     >
       {/* Aurora gradient background */}
       <div className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(230_70%_55%/0.1)] via-[hsl(222_47%_8%/0.8)] to-[hsl(222_47%_8%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background/80 to-background" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,hsl(217_91%_60%/0.12),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_80%,hsl(199_89%_55%/0.08),transparent_50%)]" />
       </div>
@@ -131,7 +131,7 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
                 </p>
                 <Button
                   onClick={() => navigate(`/project/${currentProject.id}`)}
-                  className="group rounded-full px-6 gap-2 shadow-[0_0_20px_hsl(217_91%_60%/0.3)] mt-3 w-fit"
+                  className="group rounded-full px-6 gap-2 mt-3 w-fit"
                 >
                   <Play className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   Resume
@@ -145,11 +145,11 @@ export function ActiveAssessmentTile({ project, recentProjects = [], allProjects
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
               <defs>
                 <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="hsl(217 91% 60%)" />
-                  <stop offset="100%" stopColor="hsl(199 89% 55%)" />
+                  <stop offset="0%" stopColor="hsl(var(--primary))" />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" />
                 </linearGradient>
               </defs>
-              <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(217 33% 20%)" strokeWidth="6" />
+              <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(var(--border))" strokeWidth="6" />
               <circle
                 cx="50" cy="50" r="45" fill="none"
                 stroke="url(#progressGrad)" strokeWidth="6" strokeLinecap="round"

@@ -50,7 +50,7 @@ export function AttackTreeDesigner() {
     setEdges(eds => addEdge({
       ...params,
       type: 'smoothstep',
-      style: { stroke: 'rgba(59,130,246,0.5)', strokeWidth: 2 },
+      style: { stroke: 'hsl(var(--primary) / 0.6)', strokeWidth: 2 },
     }, eds));
   }, [setEdges]);
 
@@ -126,7 +126,7 @@ export function AttackTreeDesigner() {
   }, [nodes, edges, setNodes]);
 
   return (
-    <div className="h-full flex bg-[#05070a]">
+    <div className="h-full flex bg-background">
       {/* Canvas */}
       <div className="flex-1 relative">
         <ReactFlow
@@ -139,23 +139,23 @@ export function AttackTreeDesigner() {
           onPaneClick={onPaneClick}
           nodeTypes={attackTreeNodeTypes}
           connectionLineType={ConnectionLineType.SmoothStep}
-          connectionLineStyle={{ stroke: 'rgba(59,130,246,0.4)', strokeWidth: 2 }}
+          connectionLineStyle={{ stroke: 'hsl(var(--primary) / 0.5)', strokeWidth: 2 }}
           fitView
           fitViewOptions={{ padding: 0.3 }}
           proOptions={{ hideAttribution: true }}
-          className="bg-[#05070a]"
+          className="bg-background"
           snapToGrid
           snapGrid={[20, 20]}
         >
-          <Background color="rgba(255,255,255,0.03)" gap={20} />
-          <Controls className="!bg-[#0b0f17] !border-white/10 !rounded-lg [&>button]:!bg-[#0b0f17] [&>button]:!border-white/10 [&>button]:!text-slate-400 [&>button:hover]:!bg-white/5" />
+          <Background color="hsl(var(--primary) / 0.12)" gap={20} />
+          <Controls className="!bg-card !border-border !rounded-lg [&>button]:!bg-card [&>button]:!border-border [&>button]:!text-muted-foreground [&>button:hover]:!bg-foreground/5" />
 
           {/* Add Node Toolbar */}
           <Panel position="top-left" className="flex gap-1.5">
             <Button
               size="sm"
               variant="outline"
-              className="h-8 text-[10px] gap-1.5 bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+              className="h-8 text-[10px] gap-1.5 bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
               onClick={() => addNode('and-gate')}
             >
               <Shield className="h-3 w-3" /> AND Gate
@@ -163,7 +163,7 @@ export function AttackTreeDesigner() {
             <Button
               size="sm"
               variant="outline"
-              className="h-8 text-[10px] gap-1.5 bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+              className="h-8 text-[10px] gap-1.5 bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
               onClick={() => addNode('or-gate')}
             >
               <GitFork className="h-3 w-3" /> OR Gate
@@ -171,7 +171,7 @@ export function AttackTreeDesigner() {
             <Button
               size="sm"
               variant="outline"
-              className="h-8 text-[10px] gap-1.5 bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20"
+              className="h-8 text-[10px] gap-1.5 bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
               onClick={() => addNode('leaf')}
             >
               <Crosshair className="h-3 w-3" /> Attack Step
@@ -179,7 +179,7 @@ export function AttackTreeDesigner() {
             <Button
               size="sm"
               variant="ghost"
-              className="h-8 text-[10px] gap-1.5 text-slate-500 hover:text-slate-300"
+              className="h-8 text-[10px] gap-1.5 text-muted-foreground hover:text-foreground"
               onClick={resetDemo}
             >
               <RotateCcw className="h-3 w-3" /> Reset
@@ -188,8 +188,8 @@ export function AttackTreeDesigner() {
 
           {/* Feasibility Score */}
           <Panel position="bottom-center">
-            <div className="bg-[#0b0f17]/90 backdrop-blur-sm border border-white/10 rounded-xl px-6 py-3 flex items-center gap-4">
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">Path Feasibility</span>
+            <div className="bg-card/90 backdrop-blur-sm border border-border rounded-xl px-6 py-3 flex items-center gap-4">
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Path Feasibility</span>
               {feasInfo ? (
                 <>
                   <span className={cn('text-2xl font-bold font-mono', feasInfo.color)}>
@@ -200,7 +200,7 @@ export function AttackTreeDesigner() {
                   </span>
                 </>
               ) : (
-                <span className="text-xs text-slate-600">No complete path</span>
+                <span className="text-xs text-muted-foreground/70">No complete path</span>
               )}
             </div>
           </Panel>
@@ -208,7 +208,7 @@ export function AttackTreeDesigner() {
       </div>
 
       {/* Inspector Sidebar */}
-      <div className="w-72 border-l border-white/5 bg-[#080b12]">
+      <div className="w-72 border-l border-border bg-background">
         <AttackTreeInspector selectedNode={selectedNode} onUpdate={handleUpdateNode} />
       </div>
     </div>

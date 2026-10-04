@@ -235,9 +235,9 @@ export function InspectorPanel({ open, onClose, selectedNodeId }: InspectorPanel
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-destructive/15 text-destructive border-destructive/30';
-      case 'high': return 'bg-amber/15 text-amber border-amber/30';
-      case 'medium': return 'bg-chart-3/15 text-chart-3 border-chart-3/30';
+      case 'critical': return 'bg-sev-4 text-sev-4-foreground border-transparent';
+      case 'high': return 'bg-sev-3 text-sev-3-foreground border-transparent';
+      case 'medium': return 'bg-sev-2 text-sev-2-foreground border-transparent';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -245,7 +245,7 @@ export function InspectorPanel({ open, onClose, selectedNodeId }: InspectorPanel
   const getLevelColor = (level: string) => {
     switch (level.toLowerCase()) {
       case 'critical': return 'bg-primary/15 text-primary border-primary/30';
-      case 'high': return 'bg-amber/15 text-amber border-amber/30';
+      case 'high': return 'bg-signal/15 text-signal-ink border-signal/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -260,7 +260,7 @@ export function InspectorPanel({ open, onClose, selectedNodeId }: InspectorPanel
       {open && (
         <>
           {/* Header */}
-          <div className="h-14 px-5 flex items-center justify-between border-b border-white/5 shrink-0">
+          <div className="h-14 px-5 flex items-center justify-between border-b border-border shrink-0">
             <span className="text-sm font-semibold">Inspector</span>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
               <X className="w-4 h-4" />
@@ -353,7 +353,7 @@ export function InspectorPanel({ open, onClose, selectedNodeId }: InspectorPanel
                           <div className="flex items-center gap-3">
                             {goal.goal === 'Integrity' && <Lock className="w-4 h-4 text-primary" />}
                             {goal.goal === 'Availability' && <Database className="w-4 h-4 text-chart-3" />}
-                            {goal.goal === 'Authenticity' && <Shield className="w-4 h-4 text-amber" />}
+                            {goal.goal === 'Authenticity' && <Shield className="w-4 h-4 text-signal-ink" />}
                             {goal.goal === 'Confidentiality' && <Eye className="w-4 h-4 text-chart-4" />}
                             <span className="text-sm">{goal.goal}</span>
                           </div>
@@ -382,7 +382,7 @@ export function InspectorPanel({ open, onClose, selectedNodeId }: InspectorPanel
                             <AlertTriangle className={cn(
                               "w-4 h-4",
                               threat.severity === 'critical' ? 'text-destructive' :
-                              threat.severity === 'high' ? 'text-amber' : 'text-muted-foreground'
+                              threat.severity === 'high' ? 'text-signal-ink' : 'text-muted-foreground'
                             )} />
                             <span className="text-sm">{threat.name}</span>
                           </div>

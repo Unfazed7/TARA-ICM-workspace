@@ -14,14 +14,14 @@ const scopeColors: Record<string, string> = {
     vehicle: 'border-chart-4 bg-chart-4/10',
     domain: 'border-primary bg-primary/10',
     component: 'border-chart-3 bg-chart-3/10',
-    ecu: 'border-amber bg-amber/10',
+    ecu: 'border-signal bg-signal/10',
 };
 
 const scopeBadgeColors: Record<string, string> = {
     vehicle: 'border-chart-4/50 text-chart-4',
     domain: 'border-primary/50 text-primary',
     component: 'border-chart-3/50 text-chart-3',
-    ecu: 'border-amber/50 text-amber',
+    ecu: 'border-signal/50 text-signal-ink',
 };
 
 function AssetNodeComponent({ data, selected, id }: NodeProps<AssetNodeData>) {

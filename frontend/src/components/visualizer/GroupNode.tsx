@@ -13,7 +13,7 @@ export interface GroupNodeData {
 const layerColors: Record<string, string> = {
   powertrain: 'border-primary/50 bg-primary/5',
   infotainment: 'border-chart-4/50 bg-chart-4/5',
-  chassis: 'border-amber/50 bg-amber/5',
+  chassis: 'border-signal/50 bg-signal/5',
   adas: 'border-chart-3/50 bg-chart-3/5',
   body: 'border-chart-5/50 bg-chart-5/5',
 };

@@ -1,13 +1,13 @@
 import { useTara } from '@/contexts/TaraContext';
-import { getFeasibilityLevel, FeasibilityLevel, FeasibilityFactors, calculateRiskValue, impactToNumber, feasibilityLevelToNumber, getRiskColor, getRiskLabel } from '@/types/risk-assessment';
+import { getFeasibilityLevel, FeasibilityLevel, FeasibilityFactors, calculateRiskValue, impactToNumber, feasibilityLevelToNumber, getRiskColor, getRiskTextColor, getRiskLabel } from '@/types/risk-assessment';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const feasibilityColors: Record<FeasibilityLevel, { bg: string; text: string; label: string }> = {
-  high: { bg: 'bg-red-500/20', text: 'text-red-400', label: 'High' },
-  medium: { bg: 'bg-amber-500/20', text: 'text-amber-400', label: 'Medium' },
-  low: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', label: 'Low' },
-  'very-low': { bg: 'bg-slate-500/20', text: 'text-slate-400', label: 'Very Low' },
+  high: { bg: 'bg-sev-4', text: 'text-sev-4-foreground', label: 'High' },
+  medium: { bg: 'bg-sev-3', text: 'text-sev-3-foreground', label: 'Medium' },
+  low: { bg: 'bg-sev-2', text: 'text-sev-2-foreground', label: 'Low' },
+  'very-low': { bg: 'bg-sev-1', text: 'text-sev-1-foreground', label: 'Very Low' },
 };
 
 const timeOptions = [
@@ -75,31 +75,31 @@ export function ResidualRiskTab() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#05070a]">
-      <div className="px-4 py-3 border-b border-white/5">
-        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">Residual Risk — Post-treatment feasibility & risk assessment</p>
+    <div className="h-full flex flex-col bg-background">
+      <div className="px-4 py-3 border-b border-border">
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Residual Risk — Post-treatment feasibility & risk assessment</p>
       </div>
 
       <div className="flex-1 overflow-auto">
         <div className="min-w-max">
           {/* Header */}
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
-            <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Asset</div>
-            <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Attack Path</div>
+          <div className="flex bg-card border-b border-border sticky top-0 z-10">
+            <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Asset</div>
+            <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Attack Path</div>
             {/* Post Feasibility Rating group header */}
             <div className="flex flex-col">
-              <div className="px-3 py-1 text-[10px] uppercase tracking-widest text-slate-400 font-mono font-semibold border-b border-white/5 text-center" style={{ width: `${factorColumns.length * 140 + 100}px` }}>
+              <div className="px-3 py-1 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-semibold border-b border-border text-center" style={{ width: `${factorColumns.length * 140 + 100}px` }}>
                 Post Feasibility Rating
               </div>
               <div className="flex">
                 {factorColumns.map(f => (
-                  <div key={f.key} className="w-[140px] min-w-[140px] px-3 py-1.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">{f.label}</div>
+                  <div key={f.key} className="w-[140px] min-w-[140px] px-3 py-1.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">{f.label}</div>
                 ))}
-                <div className="w-[100px] min-w-[100px] px-3 py-1.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Score</div>
+                <div className="w-[100px] min-w-[100px] px-3 py-1.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Score</div>
               </div>
             </div>
-            <div className="w-[130px] min-w-[130px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Post Feasibility</div>
-            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Residual Risk</div>
+            <div className="w-[130px] min-w-[130px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Post Feasibility</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Residual Risk</div>
           </div>
 
           {/* Rows */}
@@ -116,17 +116,17 @@ export function ResidualRiskTab() {
             const riskLabel = getRiskLabel(residualRisk);
 
             return (
-              <div key={threat.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors items-center">
+              <div key={threat.id} className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors items-center">
                 {/* Asset */}
                 <div className="w-[200px] min-w-[200px] px-3 py-3">
                   <div className="text-sm text-foreground truncate">{asset?.name ?? '—'}</div>
-                  <div className="text-[10px] text-slate-500 font-mono">{asset?.assetId} · {threat.threatId}</div>
+                  <div className="text-[10px] text-muted-foreground font-mono">{asset?.assetId} · {threat.threatId}</div>
                 </div>
 
                 {/* Attack Path */}
                 <div className="w-[180px] min-w-[180px] px-3 py-3">
                   <div className="text-xs text-foreground capitalize">{ap?.attackVector ?? '—'}</div>
-                  <div className="text-[10px] text-slate-500 truncate">{ap?.description?.slice(0, 50) ?? '—'}{ap && ap.description.length > 50 ? '...' : ''}</div>
+                  <div className="text-[10px] text-muted-foreground truncate">{ap?.description?.slice(0, 50) ?? '—'}{ap && ap.description.length > 50 ? '...' : ''}</div>
                 </div>
 
                 {/* Post Feasibility Factor Selects */}
@@ -136,10 +136,10 @@ export function ResidualRiskTab() {
                       value={String(postFactors[col.key])}
                       onValueChange={v => treatment && handlePostFeasibilityChange(threat.id, treatment, col.key, Number(v))}
                     >
-                      <SelectTrigger className="h-8 bg-[#0b0f17] border-white/10 text-xs">
+                      <SelectTrigger className="h-8 bg-card border-border text-xs">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#1a1f2e] border-white/10">
+                      <SelectContent className="bg-muted border-border">
                         {col.options.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                       </SelectContent>
                     </Select>
@@ -161,12 +161,12 @@ export function ResidualRiskTab() {
                 {/* Residual Risk */}
                 <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center gap-2">
                   <span
-                    className={cn('text-xl font-bold font-mono', residualRisk >= 4 && 'drop-shadow-[0_0_10px]')}
-                    style={{ color: riskColor, ...(residualRisk >= 4 ? { filter: `drop-shadow(0 0 12px ${riskColor})` } : {}) }}
+                    className="inline-flex h-7 min-w-7 px-1.5 items-center justify-center rounded text-sm font-semibold font-mono"
+                    style={{ background: riskColor, color: getRiskTextColor(residualRisk) }}
                   >
                     {residualRisk}
                   </span>
-                  <span className="text-[10px] text-slate-500 uppercase">{riskLabel}</span>
+                  <span className="text-[10px] text-muted-foreground uppercase">{riskLabel}</span>
                 </div>
               </div>
             );

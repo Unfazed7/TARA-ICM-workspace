@@ -20,19 +20,20 @@ const nodeIcons = {
   actuator: CircuitBoard,
 };
 
+// Layer is a structural attribute: a left rule in the cool palette (signal is reserved for risk).
 const layerColors: Record<string, string> = {
-  powertrain: 'border-primary bg-primary/10',
-  infotainment: 'border-chart-4 bg-chart-4/10',
-  chassis: 'border-amber bg-amber/10',
-  adas: 'border-chart-3 bg-chart-3/10',
-  body: 'border-chart-5 bg-chart-5/10',
+  powertrain: 'border-l-primary',
+  infotainment: 'border-l-foreground',
+  chassis: 'border-l-muted-foreground',
+  adas: 'border-l-primary/50',
+  body: 'border-l-border',
 };
 
 const assetTagColors: Record<string, string> = {
-  'PII Data': 'bg-destructive/80',
-  'Safety Critical': 'bg-amber/80',
-  'Network Access': 'bg-chart-4/80',
-  'Crypto Keys': 'bg-primary/80',
+  'PII Data': 'bg-destructive',
+  'Safety Critical': 'bg-destructive',
+  'Network Access': 'bg-foreground',
+  'Crypto Keys': 'bg-primary',
 };
 
 function ECUNodeComponent({ data, selected }: NodeProps<ECUNodeData>) {
@@ -42,11 +43,12 @@ function ECUNodeComponent({ data, selected }: NodeProps<ECUNodeData>) {
   return (
     <div
       className={cn(
-        "relative px-4 py-3 rounded-lg border-2 min-w-[140px] transition-all duration-200",
+        "relative px-4 py-3 rounded border border-l-4 border-foreground bg-background min-w-[140px] transition-colors",
         colorClass,
-        selected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
+        // Fault Line: the selected (analysed) component sits on a block of signal colour.
+        selected && "aegis-fault",
         data.isScanning && "animate-pulse",
-        data.hasAISuggestion && "shadow-[0_0_20px_hsl(var(--primary)/0.5)]"
+        data.hasAISuggestion && ""
       )}
     >
       {/* Asset Tags */}
@@ -61,8 +63,8 @@ function ECUNodeComponent({ data, selected }: NodeProps<ECUNodeData>) {
               )}
               title={tag}
             >
-              {tag === 'PII Data' && <Eye className="w-2.5 h-2.5 text-white" />}
-              {tag === 'Safety Critical' && <Disc className="w-2.5 h-2.5 text-white" />}
+              {tag === 'PII Data' && <Eye className="w-2.5 h-2.5 text-primary-foreground" />}
+              {tag === 'Safety Critical' && <Disc className="w-2.5 h-2.5 text-primary-foreground" />}
             </div>
           ))}
         </div>

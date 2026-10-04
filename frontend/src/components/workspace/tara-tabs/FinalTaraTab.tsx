@@ -1,21 +1,21 @@
 import { useTara } from '@/contexts/TaraContext';
-import { getRiskColor, getFeasibilityLevel, ImpactLevel, impactToNumber } from '@/types/risk-assessment';
+import { getRiskColor, getRiskTextColor, getFeasibilityLevel, ImpactLevel, impactToNumber } from '@/types/risk-assessment';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 
 const impactLabelMap: Record<number, { label: string; className: string }> = {
-  1: { label: 'Negligible', className: 'text-emerald-400' },
-  2: { label: 'Moderate', className: 'text-yellow-400' },
-  3: { label: 'Major', className: 'text-orange-400' },
-  4: { label: 'Severe', className: 'text-red-400' },
+  1: { label: 'Negligible', className: 'aegis-sev-1' },
+  2: { label: 'Moderate', className: 'aegis-sev-2' },
+  3: { label: 'Major', className: 'aegis-sev-3' },
+  4: { label: 'Severe', className: 'aegis-sev-4' },
 };
 
 export function FinalTaraTab() {
   const { threats, assets, impacts, attackPaths, feasibilities, treatments, getRiskForThreat } = useTara();
 
   return (
-    <div className="h-full overflow-auto bg-[#05070a]">
-      <div className="px-4 py-3 border-b border-border/30 sticky top-0 z-20 bg-[#05070a]">
+    <div className="h-full overflow-auto bg-background">
+      <div className="px-4 py-3 border-b border-border/30 sticky top-0 z-20 bg-background">
         <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
           Final TARA Summary — Consolidated View (Clauses 15.3–15.9)
         </p>
@@ -23,7 +23,7 @@ export function FinalTaraTab() {
 
       <div className="min-w-max">
         {/* Header */}
-        <div className="flex bg-[#080c14] border-b border-border/30 sticky top-[41px] z-10">
+        <div className="flex bg-card border-b border-border/30 sticky top-[41px] z-10">
           <div className="w-[80px] min-w-[80px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Threat</div>
           <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Asset / Scenario</div>
           <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium text-center">Final Impact</div>
@@ -66,23 +66,23 @@ export function FinalTaraTab() {
                 <div className="text-[11px] text-muted-foreground truncate">{threat.scenario.slice(0, 55)}</div>
               </div>
               <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center justify-center">
-                <span className={cn('text-sm font-medium', impactInfo.className)}>{impactInfo.label}</span>
+                <span className={cn('rounded px-[7px] py-0.5 text-[11px] font-bold', impactInfo.className)}>{impactInfo.label}</span>
               </div>
               <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center justify-center">
                 <Badge variant="outline" className="text-xs font-mono capitalize border-border/50">{feasLevel}</Badge>
               </div>
               <div className="w-[100px] min-w-[100px] px-3 py-3 flex items-center justify-center">
-                <span className="text-xl font-bold font-mono" style={{ color: riskColor }}>{riskValue}</span>
+                <span className="inline-flex h-7 min-w-7 px-1.5 items-center justify-center rounded text-sm font-semibold font-mono" style={{ background: riskColor, color: getRiskTextColor(riskValue) }}>{riskValue}</span>
               </div>
               <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center justify-center">
                 <Badge
                   variant="outline"
                   className={cn(
                     'text-[10px] font-mono uppercase border-border/50',
-                    treatment?.decision === 'reduce' && 'text-blue-400 border-blue-400/30',
-                    treatment?.decision === 'avoid' && 'text-red-400 border-red-400/30',
-                    treatment?.decision === 'share' && 'text-yellow-400 border-yellow-400/30',
-                    treatment?.decision === 'accept' && 'text-emerald-400 border-emerald-400/30',
+                    treatment?.decision === 'reduce' && 'text-primary border-primary/30',
+                    treatment?.decision === 'avoid' && 'text-destructive border-destructive/30',
+                    treatment?.decision === 'share' && 'text-signal-ink border-sev-3/30',
+                    treatment?.decision === 'accept' && 'text-primary border-primary/30',
                   )}
                 >
                   {treatment?.decision ?? '—'}
@@ -92,7 +92,7 @@ export function FinalTaraTab() {
                 <span className="text-xs text-muted-foreground truncate">{treatment?.controls || '—'}</span>
               </div>
               <div className="w-[100px] min-w-[100px] px-3 py-3 flex items-center justify-center">
-                <span className="text-lg font-bold font-mono" style={{ color: residualColor }}>{residualRisk}</span>
+                <span className="inline-flex h-7 min-w-7 px-1.5 items-center justify-center rounded text-sm font-semibold font-mono" style={{ background: residualColor, color: getRiskTextColor(residualRisk) }}>{residualRisk}</span>
               </div>
               <div className="w-[240px] min-w-[240px] px-3 py-3 flex items-center">
                 <span className="text-xs text-muted-foreground truncate">

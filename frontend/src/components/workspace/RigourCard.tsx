@@ -7,25 +7,25 @@ const rigourData: Record<CALLevel, { title: string; description: string; icon: R
     title: 'CAL 4 — Maximum Rigour',
     description: 'Requires Penetration Testing (High Expertise) and Independent Assessment',
     icon: ShieldAlert,
-    color: 'border-red-500/40 bg-red-500/10 text-red-400',
+    color: 'border-destructive/40 bg-destructive/10 text-destructive',
   },
   3: {
     title: 'CAL 3 — High Rigour',
     description: 'Requires Vulnerability Analysis and Requirements-Based Testing',
     icon: ShieldCheck,
-    color: 'border-orange-500/40 bg-orange-500/10 text-orange-400',
+    color: 'border-signal/40 bg-signal/10 text-signal-ink',
   },
   2: {
     title: 'CAL 2 — Moderate Rigour',
     description: 'Requires Interface Testing and Integration Verification',
     icon: Shield,
-    color: 'border-yellow-500/40 bg-yellow-500/10 text-yellow-400',
+    color: 'border-sev-3/40 bg-sev-3/10 text-signal-ink',
   },
   1: {
     title: 'CAL 1 — Basic Rigour',
     description: 'Requires Functional Testing',
     icon: ShieldQuestion,
-    color: 'border-blue-500/40 bg-blue-500/10 text-blue-400',
+    color: 'border-primary/40 bg-primary/10 text-primary',
   },
 };
 

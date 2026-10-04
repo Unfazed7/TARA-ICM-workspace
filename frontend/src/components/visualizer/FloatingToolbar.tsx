@@ -54,7 +54,7 @@ export function FloatingToolbar({
   isZenMode,
 }: FloatingToolbarProps) {
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted backdrop-blur-md border border-border">
       {/* Tool Selection */}
       <div className="flex items-center gap-0.5">
         <Tooltip>
@@ -62,7 +62,7 @@ export function FloatingToolbar({
             <Button
               variant="ghost"
               size="icon"
-              className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", tool === 'select' && "bg-white/10 text-foreground")}
+              className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", tool === 'select' && "bg-muted/70 text-foreground")}
               onClick={() => onToolChange('select')}
             >
               <MousePointer2 className="w-4 h-4" />
@@ -75,7 +75,7 @@ export function FloatingToolbar({
             <Button
               variant="ghost"
               size="icon"
-              className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", tool === 'pan' && "bg-white/10 text-foreground")}
+              className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", tool === 'pan' && "bg-muted/70 text-foreground")}
               onClick={() => onToolChange('pan')}
             >
               <Move className="w-4 h-4" />
@@ -85,7 +85,7 @@ export function FloatingToolbar({
         </Tooltip>
       </div>
 
-      <div className="w-px h-5 bg-white/10" />
+      <div className="w-px h-5 bg-muted/70" />
 
       {/* Grid & Layout */}
       <Tooltip>
@@ -93,7 +93,7 @@ export function FloatingToolbar({
           <Button
             variant="ghost"
             size="icon"
-            className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", showGrid && "bg-white/10 text-foreground")}
+            className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", showGrid && "bg-muted/70 text-foreground")}
             onClick={onToggleGrid}
           >
             <Grid3X3 className="w-4 h-4" />
@@ -125,7 +125,7 @@ export function FloatingToolbar({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <div className="w-px h-5 bg-white/10" />
+      <div className="w-px h-5 bg-muted/70" />
 
       {/* AI Scan */}
       <Tooltip>
@@ -135,7 +135,7 @@ export function FloatingToolbar({
             size="sm"
             className={cn(
               "h-8 gap-1.5 rounded-full font-medium text-muted-foreground hover:text-foreground px-3",
-              isScanning && "bg-white/10 text-foreground animate-pulse"
+              isScanning && "bg-muted/70 text-foreground animate-pulse"
             )}
             onClick={onAIScan}
             disabled={isScanning}
@@ -153,7 +153,7 @@ export function FloatingToolbar({
         <TooltipContent>Discover Assets with AI</TooltipContent>
       </Tooltip>
 
-      <div className="w-px h-5 bg-white/10" />
+      <div className="w-px h-5 bg-muted/70" />
 
       {/* Zoom Controls */}
       <Tooltip>
@@ -184,7 +184,7 @@ export function FloatingToolbar({
         <TooltipContent>Fit to View</TooltipContent>
       </Tooltip>
 
-      <div className="w-px h-5 bg-white/10" />
+      <div className="w-px h-5 bg-muted/70" />
 
       {/* Zen Mode */}
       <Tooltip>
@@ -192,7 +192,7 @@ export function FloatingToolbar({
           <Button
             variant="ghost"
             size="icon"
-            className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", isZenMode && "bg-white/10 text-foreground")}
+            className={cn("h-8 w-8 rounded-full text-muted-foreground hover:text-foreground", isZenMode && "bg-muted/70 text-foreground")}
             onClick={onZenMode}
           >
             <Maximize className="w-4 h-4" />

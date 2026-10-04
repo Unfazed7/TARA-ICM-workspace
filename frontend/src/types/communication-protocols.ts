@@ -66,7 +66,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'Automotive Ethernet',
     shortLabel: 'ETH',
     category: 'wired',
-    color: 'hsl(220, 70%, 55%)',
+    color: 'hsl(var(--primary))',
     strokeWidth: 4,
     description: 'High-bandwidth vehicle networking'
   },
@@ -75,7 +75,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'SPI (Serial Peripheral Interface)',
     shortLabel: 'SPI',
     category: 'internal',
-    color: 'hsl(180, 60%, 45%)',
+    color: 'hsl(var(--muted-foreground))',
     strokeWidth: 2,
     strokeDasharray: '2 2',
     description: 'Short-distance chip-to-chip communication'
@@ -85,7 +85,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'I²C (Inter-Integrated Circuit)',
     shortLabel: 'I²C',
     category: 'internal',
-    color: 'hsl(160, 50%, 45%)',
+    color: 'hsl(var(--muted-foreground))',
     strokeWidth: 2,
     strokeDasharray: '3 2',
     description: 'Multi-master serial bus for ICs'
@@ -105,7 +105,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'Wi-Fi',
     shortLabel: 'WiFi',
     category: 'wireless',
-    color: 'hsl(45, 80%, 50%)',
+    color: 'hsl(var(--foreground))',
     strokeWidth: 2,
     strokeDasharray: '6 3',
     description: 'Wireless LAN connectivity'
@@ -115,7 +115,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'Bluetooth',
     shortLabel: 'BT',
     category: 'wireless',
-    color: 'hsl(210, 80%, 55%)',
+    color: 'hsl(var(--foreground) / 0.75)',
     strokeWidth: 2,
     strokeDasharray: '6 3',
     description: 'Short-range wireless connectivity'
@@ -125,7 +125,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'Cellular (4G/5G)',
     shortLabel: 'CELL',
     category: 'wireless',
-    color: 'hsl(0, 70%, 55%)',
+    color: 'hsl(var(--foreground))',
     strokeWidth: 3,
     strokeDasharray: '8 4',
     description: 'Mobile network connectivity'
@@ -135,7 +135,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'V2X (Vehicle-to-Everything)',
     shortLabel: 'V2X',
     category: 'wireless',
-    color: 'hsl(280, 70%, 55%)',
+    color: 'hsl(var(--foreground) / 0.75)',
     strokeWidth: 3,
     strokeDasharray: '8 4',
     description: 'Vehicle-to-infrastructure/vehicle communication'
@@ -145,7 +145,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'MOST (Media Oriented Systems Transport)',
     shortLabel: 'MOST',
     category: 'wired',
-    color: 'hsl(320, 60%, 50%)',
+    color: 'hsl(var(--primary) / 0.6)',
     strokeWidth: 3,
     description: 'High-bandwidth multimedia network'
   },
@@ -154,7 +154,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'FlexRay',
     shortLabel: 'FLEX',
     category: 'wired',
-    color: 'hsl(280, 60%, 55%)',
+    color: 'hsl(var(--primary) / 0.8)',
     strokeWidth: 2,
     strokeDasharray: '8 4',
     description: 'High-speed, deterministic network for x-by-wire'
@@ -164,7 +164,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'SENT (Single Edge Nibble Transmission)',
     shortLabel: 'SENT',
     category: 'wired',
-    color: 'hsl(100, 50%, 45%)',
+    color: 'hsl(var(--muted-foreground) / 0.8)',
     strokeWidth: 2,
     strokeDasharray: '3 3',
     description: 'Point-to-point sensor interface'
@@ -174,7 +174,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'RS-232',
     shortLabel: 'RS232',
     category: 'wired',
-    color: 'hsl(30, 50%, 45%)',
+    color: 'hsl(var(--muted-foreground) / 0.8)',
     strokeWidth: 2,
     strokeDasharray: '5 2',
     description: 'Serial communication standard'
@@ -184,7 +184,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'Virtual Ethernet',
     shortLabel: 'V-ETH',
     category: 'internal',
-    color: 'hsl(200, 70%, 50%)',
+    color: 'hsl(var(--primary) / 0.7)',
     strokeWidth: 3,
     strokeDasharray: '4 4',
     description: 'Virtualized Ethernet connections'
@@ -194,7 +194,7 @@ export const PROTOCOL_CONFIGS: Record<CommunicationProtocol, ProtocolConfig> = {
     label: 'LVDS (Low-Voltage Differential Signaling)',
     shortLabel: 'LVDS',
     category: 'wired',
-    color: 'hsl(260, 60%, 55%)',
+    color: 'hsl(var(--primary) / 0.6)',
     strokeWidth: 3,
     description: 'High-speed video/data transmission'
   },

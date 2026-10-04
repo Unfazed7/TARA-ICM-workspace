@@ -23,25 +23,24 @@ export function ModuleSidebar({ activeModule, onModuleChange }: ModuleSidebarPro
   return (
     <div
       className={cn(
-        'shrink-0 flex flex-col h-full bg-[#05070a]/80 backdrop-blur-[20px] border-r border-white/5 transition-all duration-300 overflow-hidden',
+        'shrink-0 flex flex-col h-full bg-muted border-r border-border transition-all duration-300 overflow-hidden',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
       {/* Logo / Brand Area */}
       <div className="flex items-center gap-3 px-4 pt-5 pb-4">
-        <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.15)]">
-          <Shield className="w-4 h-4 text-cyan-400" />
+        <div className="w-8 h-8 rounded bg-primary text-primary-foreground flex items-center justify-center">
+          <Shield className="w-4 h-4" />
         </div>
         {!collapsed && (
-          <span className="text-xs font-semibold tracking-[0.2em] uppercase text-slate-300 whitespace-nowrap">
+          <span className="aegis-wordmark text-[13px] text-foreground whitespace-nowrap">
             AutoTARA
           </span>
         )}
       </div>
 
-      {/* Tech Separator — fades at both ends */}
-      <div className="px-3 mb-4">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="px-3 mb-3">
+        <div className="h-px bg-border" />
       </div>
 
       {/* Navigation Items */}
@@ -55,28 +54,25 @@ export function ModuleSidebar({ activeModule, onModuleChange }: ModuleSidebarPro
               key={mod.id}
               onClick={() => onModuleChange(mod.id)}
               className={cn(
-                'group relative flex items-center gap-3 rounded-md transition-all duration-200 min-h-[40px] w-full',
+                'group relative flex items-center gap-3 rounded transition-colors min-h-[38px] w-full',
                 collapsed ? 'justify-center px-0' : 'px-3',
                 active
-                  ? 'bg-gradient-to-r from-cyan-500/10 to-transparent text-white'
-                  : 'text-slate-400/80 hover:text-white hover:translate-x-1'
+                  ? 'bg-primary-soft text-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background'
               )}
             >
-              {/* Active laser line */}
               {active && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-5 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.7),0_0_20px_rgba(6,182,212,0.3)]" />
+                <div className="absolute left-0 inset-y-0 w-[3px] rounded-l bg-primary" />
               )}
 
               <Icon
                 className={cn(
                   'w-[18px] h-[18px] shrink-0 transition-all duration-200',
-                  active
-                    ? 'text-white drop-shadow-[0_0_6px_rgba(6,182,212,0.6)]'
-                    : 'group-hover:text-white'
+                  active ? 'text-primary' : 'group-hover:text-foreground'
                 )}
               />
               {!collapsed && (
-                <span className="text-[11px] font-medium tracking-[0.12em] uppercase whitespace-nowrap">
+                <span className="text-[13px] whitespace-nowrap">
                   {mod.label}
                 </span>
               )}
@@ -96,11 +92,11 @@ export function ModuleSidebar({ activeModule, onModuleChange }: ModuleSidebarPro
 
       {/* Bottom separator + collapse toggle */}
       <div className="px-3 mt-auto pt-2">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-2" />
+        <div className="h-px bg-border mb-2" />
       </div>
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center w-full h-9 mb-2 text-slate-500 hover:text-slate-300 transition-colors"
+        className="flex items-center justify-center w-full h-9 mb-2 text-muted-foreground hover:text-foreground transition-colors"
       >
         {collapsed ? <ChevronsRight className="w-4 h-4" /> : <ChevronsLeft className="w-4 h-4" />}
       </button>

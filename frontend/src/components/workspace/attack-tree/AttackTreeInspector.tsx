@@ -15,8 +15,8 @@ interface Props {
 export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
   if (!selectedNode) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-slate-500 px-4 text-center gap-3">
-        <Crosshair className="h-8 w-8 text-slate-600" />
+      <div className="h-full flex flex-col items-center justify-center text-muted-foreground px-4 text-center gap-3">
+        <Crosshair className="h-8 w-8 text-muted-foreground/70" />
         <p className="text-xs">Select a node to inspect its properties</p>
       </div>
     );
@@ -28,10 +28,10 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
   const isRoot = data.type === 'root';
 
   const typeConfig = {
-    root: { icon: Target, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', label: 'Threat Scenario' },
-    'and-gate': { icon: Shield, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30', label: 'AND Gate' },
-    'or-gate': { icon: GitFork, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30', label: 'OR Gate' },
-    leaf: { icon: Crosshair, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', label: 'Attack Step' },
+    root: { icon: Target, color: 'text-destructive', bg: 'bg-destructive/10', border: 'border-destructive/30', label: 'Threat Scenario' },
+    'and-gate': { icon: Shield, color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30', label: 'AND Gate' },
+    'or-gate': { icon: GitFork, color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30', label: 'OR Gate' },
+    leaf: { icon: Crosshair, color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30', label: 'Attack Step' },
   };
 
   const config = typeConfig[data.type];
@@ -40,7 +40,7 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className={cn('px-4 py-3 border-b border-white/5 flex items-center gap-2', config.bg)}>
+      <div className={cn('px-4 py-3 border-b border-border flex items-center gap-2', config.bg)}>
         <Icon className={cn('h-4 w-4', config.color)} />
         <span className={cn('text-xs font-semibold uppercase tracking-wider', config.color)}>{config.label}</span>
       </div>
@@ -48,22 +48,22 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
       <div className="flex-1 overflow-y-auto p-4 space-y-5">
         {/* Label */}
         <div className="space-y-1.5">
-          <Label className="text-[10px] uppercase tracking-widest text-slate-500">Label</Label>
+          <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Label</Label>
           <Input
             value={data.label}
             onChange={(e) => onUpdate(selectedNode.id, { label: e.target.value })}
-            className="h-8 text-xs bg-white/5 border-white/10"
+            className="h-8 text-xs bg-foreground/5 border-border"
             readOnly={isRoot}
           />
         </div>
 
         {/* Detail / Description */}
         <div className="space-y-1.5">
-          <Label className="text-[10px] uppercase tracking-widest text-slate-500">Description</Label>
+          <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Description</Label>
           <Textarea
             value={data.detail ?? ''}
             onChange={(e) => onUpdate(selectedNode.id, { detail: e.target.value })}
-            className="text-xs bg-white/5 border-white/10 min-h-[60px] resize-none"
+            className="text-xs bg-foreground/5 border-border min-h-[60px] resize-none"
             placeholder="Optional description..."
           />
         </div>
@@ -71,7 +71,7 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
         {/* Gate Type Toggle */}
         {isGate && (
           <div className="space-y-1.5">
-            <Label className="text-[10px] uppercase tracking-widest text-slate-500">Gate Type</Label>
+            <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Gate Type</Label>
             <div className="flex gap-2">
               {(['and-gate', 'or-gate'] as const).map(gt => (
                 <button
@@ -80,8 +80,8 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
                   className={cn(
                     'flex-1 py-2 px-3 rounded-lg border text-xs font-semibold uppercase tracking-wider transition-all',
                     data.type === gt
-                      ? 'border-blue-500/50 bg-blue-500/20 text-blue-300'
-                      : 'border-white/10 bg-white/5 text-slate-500 hover:bg-white/10'
+                      ? 'border-primary/50 bg-primary/20 text-primary'
+                      : 'border-border bg-foreground/5 text-muted-foreground hover:bg-accent'
                   )}
                 >
                   {gt === 'and-gate' ? (
@@ -92,7 +92,7 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
                 </button>
               ))}
             </div>
-            <p className="text-[10px] text-slate-600 mt-1">
+            <p className="text-[10px] text-muted-foreground/70 mt-1">
               {data.type === 'and-gate' ? 'ALL children must succeed (scores summed)' : 'ANY child can succeed (minimum score)'}
             </p>
           </div>
@@ -101,7 +101,7 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
         {/* Difficulty Score */}
         {isLeaf && (
           <div className="space-y-3">
-            <Label className="text-[10px] uppercase tracking-widest text-slate-500">Difficulty Score</Label>
+            <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Difficulty Score</Label>
             <div className="flex items-center gap-3">
               <Slider
                 value={[data.difficulty ?? 1]}
@@ -111,11 +111,11 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
                 onValueChange={([v]) => onUpdate(selectedNode.id, { difficulty: v })}
                 className="flex-1"
               />
-              <span className="text-lg font-bold text-emerald-300 font-mono w-6 text-center">
+              <span className="text-lg font-bold text-primary font-mono w-6 text-center">
                 {data.difficulty ?? 1}
               </span>
             </div>
-            <div className="flex justify-between text-[9px] text-slate-600 font-mono">
+            <div className="flex justify-between text-[9px] text-muted-foreground/70 font-mono">
               <span>Easy (1)</span>
               <span>Hard (5)</span>
             </div>
@@ -128,8 +128,8 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
                   className={cn(
                     'flex-1 h-8 rounded-md text-xs font-bold transition-all',
                     i <= (data.difficulty ?? 0)
-                      ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-white/5 text-slate-600 border border-white/10 hover:bg-white/10'
+                      ? 'bg-primary/30 text-primary border border-primary/40'
+                      : 'bg-foreground/5 text-muted-foreground/70 border border-border hover:bg-accent'
                   )}
                 >
                   {i}
@@ -140,9 +140,9 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
         )}
 
         {/* Node ID (read-only info) */}
-        <div className="space-y-1.5 pt-3 border-t border-white/5">
-          <Label className="text-[10px] uppercase tracking-widest text-slate-600">Node ID</Label>
-          <p className="text-[10px] text-slate-600 font-mono">{selectedNode.id}</p>
+        <div className="space-y-1.5 pt-3 border-t border-border">
+          <Label className="text-[10px] uppercase tracking-widest text-muted-foreground/70">Node ID</Label>
+          <p className="text-[10px] text-muted-foreground/70 font-mono">{selectedNode.id}</p>
         </div>
       </div>
     </div>

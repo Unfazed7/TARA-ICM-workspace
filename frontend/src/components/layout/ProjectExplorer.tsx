@@ -58,9 +58,9 @@ const nodeIcons: Record<NodeType, typeof Cpu> = {
 };
 
 const layerColors: Record<string, string> = {
-  powertrain: 'text-emerald',
+  powertrain: 'text-primary',
   infotainment: 'text-chart-3',
-  chassis: 'text-amber',
+  chassis: 'text-signal-ink',
   adas: 'text-chart-4',
   body: 'text-chart-5',
 };

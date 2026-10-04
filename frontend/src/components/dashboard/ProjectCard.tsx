@@ -44,7 +44,7 @@ const vehicleIcons: Record<VehicleType, typeof Car> = {
 const statusColors: Record<string, string> = {
   draft: 'bg-muted text-muted-foreground',
   active: 'bg-primary/10 text-primary',
-  completed: 'bg-emerald-500/10 text-emerald-500',
+  completed: 'bg-primary/10 text-primary',
   archived: 'bg-muted text-muted-foreground',
 };
 

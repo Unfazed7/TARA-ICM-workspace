@@ -134,14 +134,18 @@ export const calculateRiskValue = (impact: number, feasibility: number): number 
 
 export const getRiskColor = (riskValue: number): string => {
   const colors: Record<number, string> = {
-    1: 'hsl(var(--sage))',
-    2: 'hsl(142, 71%, 45%)',
-    3: 'hsl(var(--dusty-amber))',
-    4: 'hsl(38, 92%, 50%)',
-    5: 'hsl(0, 72%, 51%)'
+    1: 'hsl(var(--aegis-scale-1))',
+    2: 'hsl(var(--aegis-scale-2))',
+    3: 'hsl(var(--aegis-scale-3))',
+    4: 'hsl(var(--aegis-scale-4))',
+    5: 'hsl(var(--aegis-scale-5))'
   };
   return colors[riskValue] || colors[3];
 };
+
+// Text colour that sits on getRiskColor(riskValue) as a fill.
+export const getRiskTextColor = (riskValue: number): string =>
+  `hsl(var(--aegis-scale-${riskValue >= 1 && riskValue <= 5 ? riskValue : 3}-text))`;
 
 export const getRiskLabel = (riskValue: number): string => {
   const labels: Record<number, string> = {

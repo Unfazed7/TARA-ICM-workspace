@@ -109,9 +109,9 @@ export function calculateFeasibility(
 }
 
 export function feasibilityLabel(score: number): { label: string; color: string } {
-  if (score <= 2) return { label: 'Very High', color: 'text-red-400' };
-  if (score <= 5) return { label: 'High', color: 'text-amber-400' };
-  if (score <= 9) return { label: 'Medium', color: 'text-yellow-400' };
-  if (score <= 14) return { label: 'Low', color: 'text-cyan-400' };
-  return { label: 'Very Low', color: 'text-slate-400' };
+  if (score <= 2) return { label: 'Very High', color: 'text-destructive' };
+  if (score <= 5) return { label: 'High', color: 'text-signal-ink' };
+  if (score <= 9) return { label: 'Medium', color: 'text-signal-ink' };
+  if (score <= 14) return { label: 'Low', color: 'text-primary' };
+  return { label: 'Very Low', color: 'text-muted-foreground' };
 }

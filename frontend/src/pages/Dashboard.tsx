@@ -22,11 +22,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { PageTransition } from '@/components/layout/PageTransition';
-import { NetworkParticles } from '@/components/effects/NetworkParticles';
-import { MeshGradient } from '@/components/effects/MeshGradient';
-import { VignetteOverlay } from '@/components/effects/VignetteOverlay';
-import { LightRays } from '@/components/effects/LightRays';
-import { NoiseTexture } from '@/components/effects/NoiseTexture';
 import { AnimatedShield } from '@/components/effects/AnimatedShield';
 import { BentoGrid } from '@/components/dashboard/BentoGrid';
 import { ActiveAssessmentTile } from '@/components/dashboard/ActiveAssessmentTile';
@@ -132,12 +127,7 @@ export default function Dashboard() {
         </a>
 
         {/* Background layers */}
-        <div className="fixed inset-0 animated-grid gradient-shift pointer-events-none" style={{ maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)' }} />
-        <MeshGradient enableParallax={false} />
-        <LightRays />
-        <NetworkParticles count={10} enableParallax={false} />
-        <VignetteOverlay />
-        <NoiseTexture />
+        <div className="fixed inset-0 animated-grid pointer-events-none" style={{ maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)' }} />
 
         <div className="fixed inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5" />
@@ -213,7 +203,7 @@ export default function Dashboard() {
                     Change Password
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-400 focus:text-red-400">
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
                     <LogOut className="mr-2 w-4 h-4" />
                     Logout
                   </DropdownMenuItem>
@@ -259,7 +249,7 @@ export default function Dashboard() {
                 value={pendingReviewsCount}
                 icon={ClipboardCheck}
                 subtitle="Awaiting approval"
-                accentClass="text-amber"
+                accentClass="text-signal-ink"
                 dialogTitle="Pending Reviews"
                 dialogDescription={`${pendingReviewsCount} project${pendingReviewsCount !== 1 ? 's' : ''} awaiting review`}
                 projects={pendingReviewProjects}
@@ -320,7 +310,7 @@ export default function Dashboard() {
               </div>
 
               {passwordError && (
-                <p className="text-sm text-red-400 text-center">{passwordError}</p>
+                <p className="text-sm text-destructive text-center">{passwordError}</p>
               )}
             </div>
 

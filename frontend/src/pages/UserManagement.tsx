@@ -3,11 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types/tara';
 import { PageTransition } from '@/components/layout/PageTransition';
-import { NetworkParticles } from '@/components/effects/NetworkParticles';
-import { MeshGradient } from '@/components/effects/MeshGradient';
-import { VignetteOverlay } from '@/components/effects/VignetteOverlay';
-import { LightRays } from '@/components/effects/LightRays';
-import { NoiseTexture } from '@/components/effects/NoiseTexture';
 import { AnimatedShield } from '@/components/effects/AnimatedShield';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,9 +37,9 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const roleConfig: Record<UserRole, { label: string; icon: typeof Shield; colorClass: string }> = {
-    admin: { label: 'Admin', icon: ShieldCheck, colorClass: 'text-emerald-400' },
-    engineer: { label: 'Engineer', icon: Wrench, colorClass: 'text-blue-400' },
-    analyst: { label: 'Analyst', icon: Search, colorClass: 'text-amber-400' },
+    admin: { label: 'Admin', icon: ShieldCheck, colorClass: 'text-primary' },
+    engineer: { label: 'Engineer', icon: Wrench, colorClass: 'text-primary' },
+    analyst: { label: 'Analyst', icon: Search, colorClass: 'text-signal-ink' },
 };
 
 export default function UserManagement() {
@@ -116,14 +111,9 @@ export default function UserManagement() {
             <div className="h-screen w-screen overflow-hidden relative">
                 {/* Background layers */}
                 <div
-                    className="fixed inset-0 animated-grid gradient-shift pointer-events-none"
+                    className="fixed inset-0 animated-grid pointer-events-none"
                     style={{ maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)' }}
                 />
-                <MeshGradient enableParallax={false} />
-                <LightRays />
-                <NetworkParticles count={10} enableParallax={false} />
-                <VignetteOverlay />
-                <NoiseTexture />
 
                 <div className="fixed inset-0 pointer-events-none">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5" />
@@ -165,7 +155,7 @@ export default function UserManagement() {
                                 </p>
                             </div>
                             <Button
-                                className="gap-2 btn-lift btn-shine shadow-[0_0_20px_hsl(217_91%_60%/0.2)]"
+                                className="gap-2 btn-lift btn-shine"
                                 onClick={() => {
                                     resetForm();
                                     setShowCreateDialog(true);
@@ -239,9 +229,9 @@ export default function UserManagement() {
                                                         <span
                                                             className={cn(
                                                                 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border',
-                                                                u.role === 'admin' && 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
-                                                                u.role === 'engineer' && 'bg-blue-500/10 border-blue-500/20 text-blue-400',
-                                                                u.role === 'analyst' && 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                                                                u.role === 'admin' && 'bg-primary/10 border-primary/20 text-primary',
+                                                                u.role === 'engineer' && 'bg-primary/10 border-primary/20 text-primary',
+                                                                u.role === 'analyst' && 'bg-signal/10 border-signal/20 text-signal-ink'
                                                             )}
                                                         >
                                                             <Icon className="w-3 h-3" />
@@ -345,19 +335,19 @@ export default function UserManagement() {
                                     <SelectContent>
                                         <SelectItem value="engineer">
                                             <span className="flex items-center gap-2">
-                                                <Wrench className="w-3.5 h-3.5 text-blue-400" />
+                                                <Wrench className="w-3.5 h-3.5 text-primary" />
                                                 Engineer
                                             </span>
                                         </SelectItem>
                                         <SelectItem value="analyst">
                                             <span className="flex items-center gap-2">
-                                                <Search className="w-3.5 h-3.5 text-amber-400" />
+                                                <Search className="w-3.5 h-3.5 text-signal-ink" />
                                                 Analyst
                                             </span>
                                         </SelectItem>
                                         <SelectItem value="admin">
                                             <span className="flex items-center gap-2">
-                                                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                                                <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                                                 Admin
                                             </span>
                                         </SelectItem>

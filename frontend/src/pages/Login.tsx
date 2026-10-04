@@ -2,11 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { PageTransition } from '@/components/layout/PageTransition';
-import { NetworkParticles } from '@/components/effects/NetworkParticles';
-import { MeshGradient } from '@/components/effects/MeshGradient';
-import { VignetteOverlay } from '@/components/effects/VignetteOverlay';
-import { LightRays } from '@/components/effects/LightRays';
-import { NoiseTexture } from '@/components/effects/NoiseTexture';
 import { AnimatedShield } from '@/components/effects/AnimatedShield';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Input } from '@/components/ui/input';
@@ -86,12 +81,7 @@ export default function Login() {
         </a>
 
         {/* Background layers with parallax */}
-        <div className="absolute inset-0 animated-grid gradient-shift" />
-        <MeshGradient enableParallax />
-        <LightRays />
-        <NetworkParticles count={15} enableParallax />
-        <VignetteOverlay />
-        <NoiseTexture />
+        <div className="absolute inset-0 animated-grid" />
 
         {/* Gradient overlays */}
         <div className="absolute inset-0 pointer-events-none">
@@ -103,8 +93,8 @@ export default function Login() {
           <svg viewBox="0 0 800 400" className="w-full h-full">
             <defs>
               <linearGradient id="wireGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(217 91% 60%)" />
-                <stop offset="100%" stopColor="hsl(199 89% 55%)" />
+                <stop offset="0%" stopColor="hsl(var(--primary))" />
+                <stop offset="100%" stopColor="hsl(var(--primary))" />
               </linearGradient>
             </defs>
             <path
@@ -204,7 +194,7 @@ export default function Login() {
                   disabled={isLoading}
                   className={cn(
                     'w-full gap-2 relative overflow-hidden btn-lift btn-shine',
-                    email && password && 'shadow-[0_0_20px_hsl(217_91%_60%/0.3)]',
+                    email && password && '',
                     (!email || !password) && 'opacity-70'
                   )}
                   size="lg"

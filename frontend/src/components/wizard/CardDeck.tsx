@@ -72,24 +72,10 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
           50% { transform: translateX(-50%) scale(1.04); }
         }
       `}</style>
-      {/* Single centered orb with smudge */}
-      <div
-        className="pointer-events-none absolute left-1/2"
-        style={{
-          top: '-30%',
-          width: '550px',
-          height: '550px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, rgba(100,60,220,0.85) 0%, rgba(50,100,255,0.8) 40%, rgba(40,160,255,0.7) 70%, rgba(60,200,240,0.6) 100%)',
-          boxShadow: '0 0 80px 20px rgba(50,100,255,0.15), 0 0 160px 60px rgba(40,80,200,0.08)',
-          filter: 'blur(30px)',
-          animation: 'orb-breathe 8s ease-in-out infinite',
-        }}
-      />
 
       {/* Heading */}
       {heading && (
-        <h1 className="text-2xl font-bold tracking-tight mb-6 text-foreground drop-shadow-[0_0_12px_rgba(255,255,255,0.3)] relative z-10 text-center">
+        <h1 className="text-2xl font-bold tracking-tight mb-6 text-foreground relative z-10 text-center">
           {heading}
         </h1>
       )}
@@ -112,7 +98,7 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
           let transform = '';
           let opacity = 1;
           let zIndex = steps.length - i;
-          let boxShadow = 'inset 0 1px 0 0 rgba(255,255,255,0.06), 0 25px 60px rgba(0,0,0,0.4)';
+          let boxShadow = 'var(--shadow-elevated)';
           let transition = 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.45s ease-out';
 
           if (isHero) {
@@ -133,11 +119,11 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
               transform = 'translateX(-110%) rotate(-6deg) scale(0.95)';
               opacity = 0;
               transition = 'none';
-              boxShadow = 'inset 0 1px 0 0 rgba(255,255,255,0.06), 0 25px 60px rgba(0,0,0,0.4)';
+              boxShadow = 'var(--shadow-elevated)';
             } else {
               transform = 'translateX(0) rotate(0deg) scale(1)';
               opacity = 1;
-              boxShadow = 'inset 0 1px 0 0 rgba(255,255,255,0.06), 0 25px 60px rgba(0,0,0,0.4), -30px 0 60px -10px rgba(0,0,0,0.5)';
+              boxShadow = 'var(--shadow-elevated)';
             }
           }
 
@@ -166,10 +152,8 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
                 isExiting || isBehind ? "pointer-events-none" : ""
               )}
               style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: isHero ? '1px solid rgba(255, 255, 255, 0.10)' : '1px solid rgba(255, 255, 255, 0.06)',
+                background: 'hsl(var(--card))',
+                border: isHero ? '1px solid hsl(var(--primary) / 0.5)' : '1px solid hsl(var(--border))',
                 boxShadow,
                 transform,
                 opacity,
@@ -184,7 +168,7 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
                   <Icon className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono block" style={{ color: 'hsl(210, 40%, 98%)' }}>
+                  <span className="text-[10px] font-mono block" >
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <h2 className="text-base font-semibold tracking-tight">{step.title}</h2>
@@ -212,14 +196,14 @@ export function CardDeck({ steps, canAdvance, onComplete, onStepChange, heading 
           Back
         </Button>
 
-        <span className="text-xs font-mono tabular-nums" style={{ color: 'hsl(210, 40%, 98%)' }}>
+        <span className="text-xs font-mono tabular-nums" >
           Step {current + 1} of {steps.length}
         </span>
 
         <Button
           onClick={handleNext}
           disabled={!canAdvance[current] || animState !== 'idle'}
-          className="gap-1.5 px-6 shadow-lg shadow-primary/10"
+          className="gap-1.5 px-6 shadow-lg"
         >
           {isLast ? 'Create Project' : 'Next'}
           <ChevronRight className="w-4 h-4" />

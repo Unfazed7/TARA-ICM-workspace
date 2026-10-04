@@ -19,9 +19,9 @@ interface Assumption {
 
 const statusColors: Record<Assumption['status'], string> = {
   draft: 'bg-muted text-muted-foreground border-border',
-  accepted: 'bg-green-500/10 text-green-400 border-green-500/20',
+  accepted: 'bg-primary/10 text-primary border-primary/20',
   rejected: 'bg-destructive/10 text-destructive border-destructive/20',
-  'under-review': 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  'under-review': 'bg-signal/10 text-signal-ink border-signal/20',
 };
 
 const emptyAssumption = (): Assumption => ({

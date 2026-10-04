@@ -38,23 +38,23 @@ export function StatsCards({ projects }: StatsCardsProps) {
       description: 'Awaiting completion',
       color: 'text-warning',
       bgColor: 'bg-warning/10',
-      borderAccent: 'border-b-amber',
+      borderAccent: 'border-b-signal',
     },
     {
       label: 'Completed',
       value: completedProjects,
       icon: CheckCircle2,
       description: 'Fully assessed',
-      color: 'text-emerald',
-      bgColor: 'bg-emerald/10',
-      borderAccent: 'border-b-emerald',
+      color: 'text-primary',
+      bgColor: 'bg-primary/10',
+      borderAccent: 'border-b-primary',
     },
   ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat) => (
-        <Card key={stat.label} className={`bg-white/5 backdrop-blur-md border border-white/10 border-b-2 ${stat.borderAccent}`}>
+        <Card key={stat.label} className={`bg-foreground/5 backdrop-blur-md border border-border border-b-2 ${stat.borderAccent}`}>
           <CardContent className="p-4">
             <div className="flex items-start justify-between">
               <div>

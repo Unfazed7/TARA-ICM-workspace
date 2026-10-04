@@ -46,10 +46,10 @@ const checklistItems = [
 
 const getRiskColor = (level: string) => {
   switch (level) {
-    case 'critical': return 'text-[hsl(0,72%,51%)] bg-[hsl(0,72%,51%)]/10 border-[hsl(0,72%,51%)]/30';
-    case 'high': return 'text-[hsl(38,92%,50%)] bg-[hsl(38,92%,50%)]/10 border-[hsl(38,92%,50%)]/30';
-    case 'medium': return 'text-[hsl(45,93%,47%)] bg-[hsl(45,93%,47%)]/10 border-[hsl(45,93%,47%)]/30';
-    default: return 'text-primary bg-primary/10 border-primary/30';
+    case 'critical': return 'bg-sev-4 text-sev-4-foreground border-transparent';
+    case 'high': return 'bg-sev-3 text-sev-3-foreground border-transparent';
+    case 'medium': return 'bg-sev-2 text-sev-2-foreground border-transparent';
+    default: return 'bg-sev-1 text-sev-1-foreground border-transparent';
   }
 };
 

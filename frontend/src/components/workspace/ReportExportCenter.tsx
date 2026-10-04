@@ -342,11 +342,11 @@ function generateReportContent(template: ExportTemplate, scenarios: ThreatScenar
               <div class="text-xs text-muted-foreground">Critical Risks</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl font-bold text-amber-500">${highRisks.length}</div>
+              <div class="text-2xl font-bold text-signal-ink">${highRisks.length}</div>
               <div class="text-xs text-muted-foreground">High Risks</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl font-bold text-green-500">${totalApproved}</div>
+              <div class="text-2xl font-bold text-primary">${totalApproved}</div>
               <div class="text-xs text-muted-foreground">Approved</div>
             </div>
           </div>
@@ -378,9 +378,9 @@ function generateReportContent(template: ExportTemplate, scenarios: ThreatScenar
         
         <div>
           <h2 class="text-lg font-semibold border-b pb-2 mb-4">Compliance Status</h2>
-          <p class="text-green-600">✓ Threat Analysis completed per Clause 15</p>
-          <p class="text-green-600">✓ Risk Assessment completed per Clause 15.8</p>
-          <p class="text-amber-600">⚠ Risk Treatment plan in progress</p>
+          <p class="text-primary">✓ Threat Analysis completed per Clause 15</p>
+          <p class="text-primary">✓ Risk Assessment completed per Clause 15.8</p>
+          <p class="text-signal-ink">⚠ Risk Treatment plan in progress</p>
         </div>
       </div>
     `;

@@ -12,10 +12,10 @@ const calMap: Record<ImpactLevel, Record<AttackVector, CALLevel>> = {
 };
 
 const calColors: Record<CALLevel, { bg: string; border: string; ring: string }> = {
-  4: { bg: 'bg-red-500/20', border: 'border-red-500/40', ring: 'ring-red-500' },
-  3: { bg: 'bg-orange-500/20', border: 'border-orange-500/40', ring: 'ring-orange-500' },
-  2: { bg: 'bg-yellow-500/20', border: 'border-yellow-500/40', ring: 'ring-yellow-500' },
-  1: { bg: 'bg-blue-500/20', border: 'border-blue-500/40', ring: 'ring-blue-500' },
+  4: { bg: 'bg-sev-4 text-sev-4-foreground', border: 'border-transparent', ring: 'ring-primary' },
+  3: { bg: 'bg-sev-3 text-sev-3-foreground', border: 'border-transparent', ring: 'ring-primary' },
+  2: { bg: 'bg-sev-2 text-sev-2-foreground', border: 'border-transparent', ring: 'ring-primary' },
+  1: { bg: 'bg-sev-1 text-sev-1-foreground', border: 'border-transparent', ring: 'ring-primary' },
 };
 
 interface CALMatrixProps {

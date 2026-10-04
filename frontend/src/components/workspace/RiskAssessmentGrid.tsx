@@ -90,10 +90,10 @@ const ImpactCell = memo(function ImpactCell({
   disabled?: boolean;
 }) {
   const colorMap: Record<ImpactLevel, string> = {
-    negligible: 'bg-sage/20 text-sage border-sage/30',
-    moderate: 'bg-dusty-amber/20 text-dusty-amber border-dusty-amber/30',
-    major: 'bg-[hsl(38,92%,50%)]/20 text-[hsl(38,92%,50%)] border-[hsl(38,92%,50%)]/30',
-    severe: 'bg-destructive/20 text-destructive border-destructive/30',
+    negligible: 'bg-sev-1 text-sev-1-foreground border-transparent',
+    moderate: 'bg-sev-2 text-sev-2-foreground border-transparent',
+    major: 'bg-sev-3 text-sev-3-foreground border-transparent',
+    severe: 'bg-sev-4 text-sev-4-foreground border-transparent',
   };
 
   return (
@@ -114,11 +114,11 @@ const ImpactCell = memo(function ImpactCell({
 
 const RiskBadge = memo(function RiskBadge({ value }: { value: number }) {
   const bgColors: Record<number, string> = {
-    1: 'bg-sage/20 text-sage border-sage/30',
-    2: 'bg-[hsl(142,71%,45%)]/20 text-[hsl(142,71%,45%)] border-[hsl(142,71%,45%)]/30',
-    3: 'bg-dusty-amber/20 text-dusty-amber border-dusty-amber/30',
-    4: 'bg-[hsl(38,92%,50%)]/20 text-[hsl(38,92%,50%)] border-[hsl(38,92%,50%)]/30',
-    5: 'bg-destructive/20 text-destructive border-destructive/30',
+    1: 'bg-sev-1 text-sev-1-foreground border-transparent',
+    2: 'bg-sev-2 text-sev-2-foreground border-transparent',
+    3: 'bg-sev-3 text-sev-3-foreground border-transparent',
+    4: 'bg-sev-4 text-sev-4-foreground border-transparent',
+    5: 'bg-[hsl(var(--aegis-scale-5))] text-[hsl(var(--aegis-scale-5-text))] border-transparent',
   };
 
   return (

@@ -64,11 +64,11 @@ const workflowOptions: { id: WorkflowMode; label: string; icon: typeof Sparkles;
   { id: 'manual', label: 'Manual', icon: Hammer, desc: 'Expert-driven analysis' },
 ];
 
-const GLASS_INPUT = "font-medium bg-[rgba(0,0,0,0.4)] border-0 ring-1 ring-white/[0.06] backdrop-blur-sm focus-visible:ring-0 focus-visible:outline-none wizard-input";
+const GLASS_INPUT = "font-medium bg-muted border-0 ring-1 ring-foreground/[0.06] backdrop-blur-sm focus-visible:ring-0 focus-visible:outline-none wizard-input";
 const GLASS_INPUT_SM = `${GLASS_INPUT} h-9 text-sm`;
 const GLASS_INPUT_XS = `${GLASS_INPUT} h-8 text-xs`;
 const LABEL_CLS = "text-[10px] uppercase tracking-wider font-medium";
-const LABEL_STYLE = { color: 'hsl(210, 40%, 98%)' } as const;
+const LABEL_STYLE = { color: 'hsl(var(--foreground))' } as const;
 
 export default function NewProject() {
   const navigate = useNavigate();
@@ -263,7 +263,7 @@ export default function NewProject() {
             <Label className={LABEL_CLS} style={LABEL_STYLE}>Assessment Scope</Label>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: 'hsl(210, 40%, 98%)' }}>OEM Level</span>
+                <span className="text-[10px] font-mono uppercase tracking-widest">OEM Level</span>
                 <div className="space-y-2">
                   {scopeOptions.filter(o => o.id === 'vehicle' || o.id === 'domain').map(opt => (
                     <button
@@ -272,21 +272,21 @@ export default function NewProject() {
                       className={cn(
                         "flex items-center gap-2.5 w-full p-3 rounded-lg border transition-all text-left",
                         scope === opt.id
-                          ? "border-primary/40 bg-primary/5 shadow-[0_0_12px_-4px_hsl(var(--primary)/0.2)]"
+                          ? "border-primary/40 bg-primary/5"
                           : "border-border/50 hover:border-muted-foreground/20"
                       )}
                     >
                       <opt.icon className={cn("w-4 h-4 shrink-0", scope === opt.id ? "text-primary" : "text-muted-foreground")} />
                       <div>
-                         <span className={cn("text-xs font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.label}</span>
-                         <span className="text-[10px]" style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.desc}</span>
+                         <span className={cn("text-xs font-medium block")}>{opt.label}</span>
+                         <span className="text-[10px]">{opt.desc}</span>
                       </div>
                     </button>
                   ))}
                 </div>
               </div>
               <div className="space-y-2">
-                <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: 'hsl(210, 40%, 98%)' }}>Supplier Level</span>
+                <span className="text-[10px] font-mono uppercase tracking-widest">Supplier Level</span>
                 <div className="space-y-2">
                   {scopeOptions.filter(o => o.id === 'component' || o.id === 'ecu').map(opt => (
                     <button
@@ -295,14 +295,14 @@ export default function NewProject() {
                       className={cn(
                         "flex items-center gap-2.5 w-full p-3 rounded-lg border transition-all text-left",
                         scope === opt.id
-                          ? "border-primary/40 bg-primary/5 shadow-[0_0_12px_-4px_hsl(var(--primary)/0.2)]"
+                          ? "border-primary/40 bg-primary/5"
                           : "border-border/50 hover:border-muted-foreground/20"
                       )}
                     >
                       <opt.icon className={cn("w-4 h-4 shrink-0", scope === opt.id ? "text-primary" : "text-muted-foreground")} />
                       <div>
-                         <span className={cn("text-xs font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.label}</span>
-                         <span className="text-[10px]" style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.desc}</span>
+                         <span className={cn("text-xs font-medium block")}>{opt.label}</span>
+                         <span className="text-[10px]">{opt.desc}</span>
                       </div>
                     </button>
                   ))}
@@ -319,14 +319,14 @@ export default function NewProject() {
               className={cn(
                 "flex items-center gap-3 w-full p-3 rounded-lg border transition-all text-left",
                 includeWebApp
-                  ? "border-primary/40 bg-primary/5 shadow-[0_0_12px_-4px_hsl(var(--primary)/0.2)]"
+                  ? "border-primary/40 bg-primary/5"
                   : "border-border/50 hover:border-muted-foreground/20"
               )}
             >
               <Globe className={cn("w-4 h-4 shrink-0", includeWebApp ? "text-primary" : "text-muted-foreground")} />
               <div className="flex-1">
-                <span className={cn("text-xs font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>Web-Based Application</span>
-                <span className="text-[10px]" style={{ color: 'hsl(210, 40%, 98%)' }}>Combinable with any OEM or Supplier level scope</span>
+                <span className={cn("text-xs font-medium block")}>Web-Based Application</span>
+                <span className="text-[10px]">Combinable with any OEM or Supplier level scope</span>
               </div>
               <div className={cn(
                 "w-4 h-4 rounded border flex items-center justify-center transition-all shrink-0",
@@ -350,14 +350,14 @@ export default function NewProject() {
                   className={cn(
                     "flex items-center gap-3 p-3.5 rounded-lg border transition-all text-left",
                     workflowMode === opt.id
-                      ? "border-primary/40 bg-primary/5 shadow-[0_0_12px_-4px_hsl(var(--primary)/0.2)]"
+                      ? "border-primary/40 bg-primary/5"
                       : "border-border/50 hover:border-muted-foreground/20"
                   )}
                 >
                   <opt.icon className={cn("w-5 h-5 shrink-0", workflowMode === opt.id ? "text-primary" : "text-muted-foreground")} />
                   <div>
-                     <span className={cn("text-sm font-medium block")} style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.label}</span>
-                     <span className="text-[11px]" style={{ color: 'hsl(210, 40%, 98%)' }}>{opt.desc}</span>
+                     <span className={cn("text-sm font-medium block")}>{opt.label}</span>
+                     <span className="text-[11px]">{opt.desc}</span>
                   </div>
                 </button>
               ))}
@@ -373,38 +373,35 @@ export default function NewProject() {
 
   return (
     <PageTransition variant="slide">
-      <div className="h-screen bg-[#0a0e1a] flex flex-col relative overflow-hidden" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+      <div className="h-screen bg-background flex flex-col relative overflow-hidden">
         <style>{`
           .wizard-input:focus {
-            box-shadow: 0 0 0 1px rgba(59,130,246,0.5), 0 0 12px -2px rgba(59,130,246,0.3) !important;
+            box-shadow: 0 0 0 1px hsl(var(--primary)) !important;
           }
           @keyframes shield-glow {
-            0%, 100% { box-shadow: 0 0 8px rgba(59,130,246,0.3), 0 0 20px rgba(59,130,246,0.1); }
-            50% { box-shadow: 0 0 14px rgba(59,130,246,0.5), 0 0 30px rgba(59,130,246,0.15); }
+            0%, 100% { box-shadow: none; }
           }
         `}</style>
 
-        {/* Navy radial glow */}
-        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_50%_20%,rgba(59,130,246,0.07)_0%,transparent_70%)]" />
 
         {/* Smudge orb effects */}
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
           <div className="absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-primary/[0.04] blur-[120px] animate-[pulse_8s_ease-in-out_infinite]" />
-          <div className="absolute top-[30%] right-[10%] w-[400px] h-[400px] rounded-full bg-blue-500/[0.03] blur-[100px] animate-[pulse_10s_ease-in-out_infinite_2s]" />
-          <div className="absolute bottom-[10%] left-[30%] w-[350px] h-[350px] rounded-full bg-indigo-500/[0.03] blur-[90px] animate-[pulse_12s_ease-in-out_infinite_4s]" />
+          <div className="absolute top-[30%] right-[10%] w-[400px] h-[400px] rounded-full bg-primary/[0.03] blur-[100px] animate-[pulse_10s_ease-in-out_infinite_2s]" />
+          <div className="absolute bottom-[10%] left-[30%] w-[350px] h-[350px] rounded-full bg-primary/[0.03] blur-[90px] animate-[pulse_12s_ease-in-out_infinite_4s]" />
         </div>
 
         {/* Fixed HUD Navbar */}
-        <nav className="fixed top-0 w-full h-20 z-50 flex items-center justify-between px-8 backdrop-blur-md bg-black/20 border-b border-white/5">
+        <nav className="fixed top-0 w-full h-20 z-50 flex items-center justify-between px-8 backdrop-blur-md bg-muted/70 border-b border-border">
           {/* Left: Glowing shield + title */}
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center"
               style={{ animation: 'shield-glow 3s ease-in-out infinite' }}
             >
-              <Shield className="w-4 h-4 text-primary drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]" />
+              <Shield className="w-4 h-4 text-primary" />
             </div>
-            <span className="font-mono tracking-[0.3em] uppercase text-sm" style={{ color: 'hsl(210, 40%, 98%)' }}>
+            <span className="font-mono tracking-[0.3em] uppercase text-sm">
               AUTO TARA
             </span>
           </div>
@@ -418,7 +415,7 @@ export default function NewProject() {
           <div className="absolute bottom-0 left-0 h-[1px] bg-primary/60 transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
-          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/[0.03]" />
+          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-foreground/[0.03]" />
         </nav>
 
         {/* Content area - centered below navbar */}

@@ -28,13 +28,13 @@ export function ComponentColumn({
 
   if (!selectedFunctionId) {
     return (
-      <div className="flex flex-col h-full bg-[#0b0f17] border-r border-white/5">
-        <div className="flex items-center px-4 py-3 border-b border-white/5">
-          <h3 className="text-[11px] uppercase tracking-[0.12em] text-slate-400 font-medium">
+      <div className="flex flex-col h-full bg-card border-r border-border">
+        <div className="flex items-center px-4 py-3 border-b border-border">
+          <h3 className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground font-medium">
             Allocated Components
           </h3>
         </div>
-        <div className="flex-1 flex items-center justify-center text-slate-600 text-xs px-6 text-center">
+        <div className="flex-1 flex items-center justify-center text-muted-foreground/70 text-xs px-6 text-center">
           Select a function to view component allocation
         </div>
       </div>
@@ -42,14 +42,14 @@ export function ComponentColumn({
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0f17] border-r border-white/5">
+    <div className="flex flex-col h-full bg-card border-r border-border">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-white/5">
-        <h3 className="text-[11px] uppercase tracking-[0.12em] text-slate-400 font-medium">
+      <div className="px-4 py-3 border-b border-border">
+        <h3 className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground font-medium">
           Allocated Components
         </h3>
-        <div className="text-[10px] text-slate-600 mt-1">
-          Realized by: <span className="text-cyan-400/80">{functionName}</span>
+        <div className="text-[10px] text-muted-foreground/70 mt-1">
+          Realized by: <span className="text-primary/80">{functionName}</span>
         </div>
       </div>
 
@@ -70,28 +70,28 @@ export function ComponentColumn({
                 onSelectComponent(comp.id);
               }}
               className={cn(
-                'w-full text-left px-4 py-3 border-b border-white/5 transition-all flex items-center gap-3 relative',
+                'w-full text-left px-4 py-3 border-b border-border transition-all flex items-center gap-3 relative',
                 isSelected && mapped
-                  ? 'bg-cyan-500/10 text-cyan-300'
+                  ? 'bg-primary/10 text-primary'
                   : mapped
-                  ? 'text-slate-200 hover:bg-white/[0.03]'
-                  : 'text-slate-500 hover:bg-white/[0.03]'
+                  ? 'text-foreground hover:bg-foreground/[0.03]'
+                  : 'text-muted-foreground hover:bg-foreground/[0.03]'
               )}
             >
               {isSelected && mapped && (
-                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-cyan-500 shadow-[0_0_10px_cyan]" />
+                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary" />
               )}
               <Checkbox
                 checked={mapped}
                 onCheckedChange={() => onToggleMapping(selectedFunctionId, comp.id)}
                 onClick={(e) => e.stopPropagation()}
                 className={cn(
-                  'border-slate-600 data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500',
+                  'border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary',
                 )}
               />
               <span className="text-xs font-medium">{comp.name}</span>
               {mapped && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_6px_cyan]" />
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
               )}
             </button>
           );
