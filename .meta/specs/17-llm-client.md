@@ -25,7 +25,7 @@ WILL touch: `llm-client.js`, `models.json`, `tests/unit/llm-client.test.js`, the
 
 Resolution: provider from `LLM_PROVIDER` (default `openrouter`). Model: `models.json` stage entry, else `models.json` `default`, else error. `LLM_MODEL` overrides for local experiments and is recorded. On the legacy `anthropic` provider, `params.model` is still honoured.
 
-OpenRouter request adds `provider: {order: [<pinned provider>], allow_fallbacks: false}` when a provider is pinned, and `response_format: {type: "json_schema", json_schema: {name, strict: true, schema}}` when `response_schema` is given. `temperature` is sent only when `models.json` sets a number (current Claude models reject non-default sampling).
+OpenRouter request adds `provider: {only: [<pinned provider>], allow_fallbacks: false}` when a provider is pinned (D-48: `google-vertex/global`), and `response_format: {type: "json_schema", json_schema: {name, strict: true, schema}}` when `response_schema` is given. `temperature` is sent only when `models.json` sets a number (current Claude models reject non-default sampling).
 
 Returns the Anthropic-style `{content, stop_reason, model, provider, usage, id}`; `stop_reason` is `refusal` when the model declined (`content_filter` or `refusal`).
 

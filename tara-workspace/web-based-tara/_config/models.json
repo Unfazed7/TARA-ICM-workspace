@@ -1,12 +1,12 @@
 {
-  "_note": "Filled in C1 (D-40): Claude Sonnet 5.5 via OpenRouter, Anthropic as the pinned provider. temperature null means not sent (current Claude models reject non-default sampling). prompt_version is set when each stage's prompt is written (C4, C8). LLM_MODEL overrides the model for local experiments and is recorded in the audit log.",
+  "_note": "Filled in C1 (D-40): Claude Sonnet 5.5 via OpenRouter. D-48: served only by Google Vertex (global), no fallbacks. temperature null means not sent (current Claude models reject non-default sampling). prompt_version is set when each stage's prompt is written (C4, C8). LLM_MODEL overrides the model for local experiments and is recorded in the audit log.",
   "provider_routing": {
     "service": "openrouter",
     "allow_fallbacks": false
   },
   "default": {
     "model": "anthropic/claude-sonnet-5.5",
-    "provider": "anthropic",
+    "provider": "google-vertex/global",
     "temperature": null,
     "max_tokens": 16000,
     "prompt_version": "UNSET"
@@ -14,63 +14,63 @@
   "stages": {
     "01-extract-text": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "extract-v1"
     },
     "01-extract-image": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "image-v1"
     },
     "01-reconcile-leftovers": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 16000,
       "prompt_version": "compare-v1"
     },
     "02-build": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 32000,
       "prompt_version": "build-v1"
     },
     "02-generate-questions": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "suggest-v1"
     },
     "02-answer-check": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "answer-v1"
     },
     "02-explain": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 4000,
       "prompt_version": "explain-v1"
     },
     "03-assets": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "UNSET"
     },
     "review-assistant": {
       "model": "anthropic/claude-sonnet-5.5",
-      "provider": "anthropic",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 2000,
       "prompt_version": "UNSET"

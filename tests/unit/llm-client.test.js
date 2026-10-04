@@ -18,9 +18,9 @@ const { callLLM, isRefusal } = require('../../tara-workspace/web-based-tara/stag
 function writeModels(overrides = {}) {
   const models = {
     provider_routing: { service: 'openrouter', allow_fallbacks: false },
-    default: { model: 'anthropic/claude-sonnet-5.5', provider: 'anthropic', temperature: null, max_tokens: 1000, prompt_version: 'UNSET' },
+    default: { model: 'anthropic/claude-sonnet-5.5', provider: 'google-vertex/global', temperature: null, max_tokens: 1000, prompt_version: 'UNSET' },
     stages: {
-      '01-extract-text': { model: 'anthropic/claude-sonnet-5.5', provider: 'anthropic', temperature: null, max_tokens: 8000, prompt_version: 'extract-v1' },
+      '01-extract-text': { model: 'anthropic/claude-sonnet-5.5', provider: 'google-vertex/global', temperature: null, max_tokens: 8000, prompt_version: 'extract-v1' },
       'unset-stage': { model: 'UNSET', provider: 'UNSET', temperature: 0, max_tokens: 100, prompt_version: 'UNSET' },
       ...overrides,
     },
@@ -71,7 +71,7 @@ test('sends the pinned model and provider with fallbacks off', async () => {
   await callLLM({ stage: '01-extract-text', system: 'sys', messages: [{ role: 'user', content: 'hi' }] }, fakeFetch(okResponse, cap));
   assert.equal(cap.url, 'https://openrouter.ai/api/v1/chat/completions');
   assert.equal(cap.body.model, 'anthropic/claude-sonnet-5.5');
-  assert.deepEqual(cap.body.provider, { order: ['anthropic'], allow_fallbacks: false });
+  assert.deepEqual(cap.body.provider, { only: ['google-vertex/global'], allow_fallbacks: false });
   assert.equal(cap.body.max_tokens, 8000);
   assert.equal('temperature' in cap.body, false);
   assert.equal(cap.headers.Authorization, 'Bearer test-key');
@@ -100,7 +100,7 @@ test('writes one audit record per call', async () => {
   assert.equal(rec.stage, '01-extract-text');
   assert.equal(rec.model_requested, 'anthropic/claude-sonnet-5.5');
   assert.equal(rec.model_served, 'anthropic/claude-sonnet-5.5');
-  assert.equal(rec.provider_pinned, 'anthropic');
+  assert.equal(rec.provider_pinned, 'google-vertex/global');
   assert.equal(rec.provider_served, 'Anthropic');
   assert.equal(rec.prompt_version, 'extract-v1');
   assert.equal(rec.input_tokens, 120);

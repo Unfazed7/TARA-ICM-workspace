@@ -242,7 +242,7 @@ async function callModel(params, fetchImpl) {
     };
     if (settings.temperature !== null) body.temperature = settings.temperature;
     if (config.provider === 'openrouter' && settings.provider) {
-      body.provider = { order: [settings.provider], allow_fallbacks: settings.allowFallbacks };
+      body.provider = { only: [settings.provider], allow_fallbacks: settings.allowFallbacks };
     }
     if (params.response_schema) {
       body.response_format = {
