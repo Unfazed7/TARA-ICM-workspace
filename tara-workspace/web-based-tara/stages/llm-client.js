@@ -161,6 +161,77 @@ function usageCounts(usage) {
   };
 }
 
+// ── Transport ─────────────────────────────────────────────────────────────────
+
+const RETRY_STATUS = new Set([408, 429, 500, 502, 503, 504, 520, 522, 524, 529]);
+const retryDelays = () => (process.env.LLM_RETRY_DELAYS_MS || '3000,10000').split(',').map(Number);
+
+/** Network drops ("terminated", reset sockets) and busy-host replies are retried with a pause. */
+async function withRetries(send, stage) {
+  const delays = retryDelays();
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await send();
+    } catch (err) {
+      const network = !('retryable' in err) && (err.name === 'TypeError' || /terminated|ECONNRESET|socket|fetch failed|other side closed|timeout/i.test(`${err.message} ${err.cause ? err.cause.message : ''}`));
+      if (err.cause && !String(err.message).includes(String(err.cause.message))) err.message = `${err.message} (${err.cause.message || err.cause.code})`;
+      if (!(network || err.retryable) || attempt >= delays.length) throw err;
+      progress(`Model call ${stage || 'default'}: ${err.message}; trying again in ${delays[attempt] / 1000} s`);
+      await new Promise((resolve) => setTimeout(resolve, delays[attempt]));
+    }
+  }
+}
+
+/** Reads an OpenAI-style server-sent event stream into the same shape as a non-streamed reply. */
+async function readStream(stream) {
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let text = '';
+  let finish = null;
+  let nativeFinish = null;
+  let refusal = null;
+  const out = { id: null, model: null, provider: null, usage: null };
+  const handle = (line) => {
+    if (!line.startsWith('data:')) return;
+    const payload = line.slice(5).trim();
+    if (!payload || payload === '[DONE]') return;
+    const chunk = JSON.parse(payload);
+    if (chunk.error) {
+      const err = new Error(`LLM API error ${chunk.error.code || ''}: ${JSON.stringify(chunk)}`.replace('error :', 'error:'));
+      err.retryable = RETRY_STATUS.has(Number(chunk.error.code));
+      throw err;
+    }
+    out.id = out.id || chunk.id || null;
+    out.model = out.model || chunk.model || null;
+    out.provider = out.provider || chunk.provider || null;
+    if (chunk.usage) out.usage = chunk.usage;
+    const choice = (chunk.choices || [])[0];
+    if (!choice) return;
+    if (choice.delta && typeof choice.delta.content === 'string') text += choice.delta.content;
+    if (choice.delta && choice.delta.refusal) refusal = choice.delta.refusal;
+    if (choice.finish_reason) finish = choice.finish_reason;
+    if (choice.native_finish_reason) nativeFinish = choice.native_finish_reason;
+  };
+  for await (const part of stream) {
+    buffer += decoder.decode(part, { stream: true });
+    let newline;
+    while ((newline = buffer.indexOf('\n')) >= 0) {
+      const line = buffer.slice(0, newline).replace(/\r$/, '');
+      buffer = buffer.slice(newline + 1);
+      handle(line);
+    }
+  }
+  if (buffer.trim()) handle(buffer.trim());
+  if (!finish) {
+    const err = new Error('terminated: the stream ended before the reply was complete');
+    throw err;
+  }
+  return {
+    ...out,
+    choices: [{ finish_reason: finish, native_finish_reason: nativeFinish, message: { content: text, refusal } }],
+  };
+}
+
 // ── Strict schema ─────────────────────────────────────────────────────────────
 
 /**
@@ -417,17 +488,27 @@ async function callModel(params, fetchImpl) {
       headers['X-Title'] = 'TARA Aegis';
     }
 
-    const res = await fetchImpl(`${config.baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      throw new Error(`LLM API error ${res.status}: ${text}`);
+    // Long answers are streamed so the connection never sits idle long enough to be closed.
+    if (!body.tools && process.env.LLM_STREAM !== '0') {
+      body.stream = true;
+      body.usage = { include: true };
     }
-    result = openAIResponseToAnthropic(await res.json());
+    const data = await withRetries(async () => {
+      const res = await fetchImpl(`${config.baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        const err = new Error(`LLM API error ${res.status}: ${text}`);
+        err.retryable = RETRY_STATUS.has(res.status);
+        throw err;
+      }
+      const type = (res.headers && typeof res.headers.get === 'function' && res.headers.get('content-type')) || '';
+      return type.includes('text/event-stream') && res.body ? readStream(res.body) : res.json();
+    }, params.stage);
+    result = openAIResponseToAnthropic(data);
     if (prepared && prepared.flattened) {
       for (const part of result.content || []) {
         if (part.type !== 'text') continue;
@@ -462,4 +543,4 @@ function isRefusal(response) {
   return Boolean(response) && response.stop_reason === 'refusal';
 }
 
-module.exports = { callLLM, jsonFromText, SCHEMA_TOO_BIG, getConfig, resolveStageSettings, isRefusal, toStrictSchema, prepareSchema, restoreNulls, countUnions, UNION_LIMIT };
+module.exports = { callLLM, readStream, withRetries, jsonFromText, SCHEMA_TOO_BIG, getConfig, resolveStageSettings, isRefusal, toStrictSchema, prepareSchema, restoreNulls, countUnions, UNION_LIMIT };

@@ -286,3 +286,64 @@ test('a reply cut off at the output limit says so', async () => {
     /cut off at the output limit \(8000 tokens\)/,
   );
 });
+
+function sseResponse(lines) {
+  const encoder = new TextEncoder();
+  return {
+    ok: true,
+    headers: { get: (name) => (name.toLowerCase() === 'content-type' ? 'text/event-stream' : null) },
+    body: (async function* chunks() { for (const line of lines) yield encoder.encode(line); })(),
+  };
+}
+
+test('a streamed reply is read into the same shape as a normal one', async () => {
+  const cap = {};
+  const fetchImpl = async (_url, init) => {
+    cap.body = JSON.parse(init.body);
+    return sseResponse([
+      ': OPENROUTER PROCESSING\n\n',
+      'data: {"id":"gen-1","model":"deepseek/deepseek-v4-pro-0813","provider":"Host","choices":[{"delta":{"content":"{\\"facts\\":"}}]}\n\n',
+      'data: {"choices":[{"delta":{"content":"[]}"},"finish_reason":"stop"}]}\n\n',
+      'data: {"choices":[],"usage":{"prompt_tokens":10,"completion_tokens":4}}\n\ndata: [DONE]\n\n',
+    ]);
+  };
+  const result = await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }] }, fetchImpl);
+  assert.equal(cap.body.stream, true);
+  assert.equal(result.content[0].text, '{"facts":[]}');
+  assert.equal(result.stop_reason, 'stop');
+  assert.equal(result.provider, 'Host');
+  const audit = fs.readFileSync(auditFile, 'utf8').trim().split('\n').map((l) => JSON.parse(l)).at(-1);
+  assert.equal(audit.output_tokens, 4);
+});
+
+test('a dropped connection is tried again, a refused request is not', async () => {
+  process.env.LLM_RETRY_DELAYS_MS = '1,1';
+  try {
+    let call = 0;
+    const flaky = async () => {
+      call += 1;
+      if (call === 1) throw new TypeError('terminated');
+      return { ok: true, json: async () => okResponse };
+    };
+    const result = await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }] }, flaky);
+    assert.equal(call, 2);
+    assert.equal(result.content[0].text, '{"facts":[]}');
+
+    let busy = 0;
+    const always = async () => { busy += 1; return { ok: false, status: 503, text: async () => 'busy' }; };
+    await assert.rejects(callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }] }, always), /503/);
+    assert.equal(busy, 3);
+  } finally {
+    delete process.env.LLM_RETRY_DELAYS_MS;
+  }
+});
+
+test('a stream that ends before the reply is complete is reported', async () => {
+  process.env.LLM_RETRY_DELAYS_MS = '1';
+  try {
+    const fetchImpl = async () => sseResponse(['data: {"choices":[{"delta":{"content":"{\\"fa"}}]}\n\n']);
+    await assert.rejects(callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }] }, fetchImpl), /ended before the reply was complete/);
+  } finally {
+    delete process.env.LLM_RETRY_DELAYS_MS;
+  }
+});
