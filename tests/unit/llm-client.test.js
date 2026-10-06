@@ -222,3 +222,30 @@ test('a flattened schema sends "" for none and the caller still gets null', asyn
   assert.equal(out.mode, null);
   assert.deepEqual(out.list, [{ port: null, name: '' }]);
 });
+
+test('a schema the provider refuses for size falls back to JSON in the prompt, checked by code', async () => {
+  const schema = { type: 'object', additionalProperties: false, required: ['name', 'port'], properties: { name: { type: 'string' }, port: { type: ['string', 'null'] } } };
+  const bodies = [];
+  let call = 0;
+  const fetchImpl = async (_url, init) => {
+    bodies.push(JSON.parse(init.body));
+    call += 1;
+    if (call === 1) return { ok: false, status: 400, text: async () => '{"error":{"message":"The compiled grammar is too large, which would cause performance issues."}}' };
+    if (call === 2) return { ok: true, json: async () => ({ ...okResponse, choices: [{ finish_reason: 'stop', message: { content: 'Here it is: {"name": 5}' } }] }) };
+    return { ok: true, json: async () => ({ ...okResponse, choices: [{ finish_reason: 'stop', message: { content: '```json\n{"name":"gateway","port":null,"extra":"dropped"}\n```' } }] }) };
+  };
+  const result = await callLLM({ stage: '01-extract-text', system: 'sys', messages: [{ role: 'user', content: 'hi' }], response_schema: { name: 'x', schema } }, fetchImpl);
+  assert.equal(call, 3);
+  assert.ok(bodies[0].response_format);
+  assert.equal(bodies[1].response_format, undefined);
+  assert.match(bodies[1].messages[0].content, /matches this JSON Schema/);
+  assert.match(bodies[2].messages.at(-1).content, /does not match the schema/);
+  assert.deepEqual(JSON.parse(result.content[0].text), { name: 'gateway', port: null });
+});
+
+test('other provider errors are not retried', async () => {
+  let call = 0;
+  const fetchImpl = async () => { call += 1; return { ok: false, status: 400, text: async () => 'bad request' }; };
+  await assert.rejects(callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }], response_schema: { name: 'x', schema: { type: 'object', properties: {} } } }, fetchImpl), /LLM API error 400/);
+  assert.equal(call, 1);
+});

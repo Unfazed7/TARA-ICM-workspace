@@ -260,13 +260,65 @@ async function callLLM(params, fetchImpl = fetch) {
   const started = Date.now();
   progress(`Model call ${params.stage || 'default'} started`);
   try {
-    const result = await callModel(params, fetchImpl);
+    let result;
+    try {
+      result = await callModel(params, fetchImpl);
+    } catch (err) {
+      if (!params.response_schema || !SCHEMA_TOO_BIG.test(err.message)) throw err;
+      progress(`Model call ${params.stage || 'default'}: the provider refused the strict format for its size; asking for the same JSON in the prompt instead`);
+      result = await callWithSchemaInPrompt(params, fetchImpl);
+    }
     progress(`Model call ${params.stage || 'default'} finished in ${((Date.now() - started) / 1000).toFixed(1)} s (${result.model || 'model'}, ${result.stop_reason})`);
     return result;
   } catch (err) {
     progress(`Model call ${params.stage || 'default'} failed after ${((Date.now() - started) / 1000).toFixed(1)} s: ${err.message}`);
     throw err;
   }
+}
+
+/** Provider errors that mean "this schema is too big to enforce", not "this request is wrong". */
+const SCHEMA_TOO_BIG = /grammar is too large|too many parameters with union types|schema is too (large|complex)/i;
+
+function jsonFromText(text) {
+  const body = String(text || '').replace(/^\s*```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '');
+  const start = body.indexOf('{');
+  const end = body.lastIndexOf('}');
+  if (start < 0 || end < start) throw new Error('the reply held no JSON object');
+  return JSON.parse(body.slice(start, end + 1));
+}
+
+/**
+ * Fallback when a provider will not enforce a schema: the schema goes into the prompt and code
+ * checks the reply against it (extra fields dropped). One repair attempt with the errors listed.
+ */
+async function callWithSchemaInPrompt(params, fetchImpl) {
+  const Ajv = require('ajv');
+  const schema = toStrictSchema(params.response_schema.schema);
+  const validate = new Ajv({ allErrors: true, strict: false, removeAdditional: 'all' }).compile(schema);
+  const rule = `\n\nReply with one JSON object only, no other text, that matches this JSON Schema exactly (every listed field present; use null where the schema allows it and nothing is known):\n${JSON.stringify(schema)}`;
+  const { response_schema: _drop, ...plain } = params;
+  let messages = params.messages;
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    const result = await callModel({ ...plain, system: `${params.system || ''}${rule}`, messages }, fetchImpl);
+    if (isRefusal(result)) return result;
+    const text = (result.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('');
+    let data;
+    let problem;
+    try {
+      data = jsonFromText(text);
+      if (!validate(data)) problem = validate.errors.slice(0, 10).map((e) => `${e.instancePath || '/'} ${e.message}`).join('; ');
+    } catch (err) {
+      problem = err.message;
+    }
+    if (!problem) {
+      result.content = [{ type: 'text', text: JSON.stringify(data) }];
+      return result;
+    }
+    if (attempt === 2) throw new Error(`the reply did not match the expected format: ${problem}`);
+    progress(`Reply did not match the format (${problem}); asking once more`);
+    messages = [...params.messages, { role: 'assistant', content: text }, { role: 'user', content: `That reply does not match the schema: ${problem}. Send the corrected JSON object only.` }];
+  }
+  return null;
 }
 
 async function callModel(params, fetchImpl) {
@@ -391,4 +443,4 @@ function isRefusal(response) {
   return Boolean(response) && response.stop_reason === 'refusal';
 }
 
-module.exports = { callLLM, getConfig, resolveStageSettings, isRefusal, toStrictSchema, prepareSchema, restoreNulls, countUnions, UNION_LIMIT };
+module.exports = { callLLM, jsonFromText, SCHEMA_TOO_BIG, getConfig, resolveStageSettings, isRefusal, toStrictSchema, prepareSchema, restoreNulls, countUnions, UNION_LIMIT };
