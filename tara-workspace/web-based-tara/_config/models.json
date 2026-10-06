@@ -1,5 +1,5 @@
 {
-  "_note": "D-49: text steps use DeepSeek V4 Pro through OpenRouter, any host that supports the request's parameters and does not keep data (routing: data_collection deny, require_parameters); steps that read images or scanned PDF pages stay on Claude Sonnet 5.5 served only by Google Vertex (global, D-48). temperature null means not sent. LLM_MODEL overrides the model for local experiments and is recorded in the audit log.",
+  "_note": "D-50: every step uses Claude Sonnet 5.5 via OpenRouter, served only by Google Vertex (global), no fallbacks (D-48). DeepSeek (D-49) was tried and withdrawn. temperature null means not sent (current Claude models reject non-default sampling). prompt_version is set when each stage's prompt is written. LLM_MODEL overrides the model for local experiments and is recorded in the audit log.",
   "provider_routing": {
     "service": "openrouter",
     "allow_fallbacks": false
@@ -13,15 +13,11 @@
   },
   "stages": {
     "01-extract-text": {
-      "model": "deepseek/deepseek-v4-pro-0813",
-      "provider": null,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 16000,
-      "prompt_version": "extract-v1",
-      "routing": {
-        "data_collection": "deny",
-        "require_parameters": true
-      }
+      "prompt_version": "extract-v1"
     },
     "01-extract-image": {
       "model": "anthropic/claude-sonnet-5.5",
@@ -38,59 +34,39 @@
       "prompt_version": "extract-v1"
     },
     "01-reconcile-leftovers": {
-      "model": "deepseek/deepseek-v4-pro-0813",
-      "provider": null,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 16000,
-      "prompt_version": "compare-v1",
-      "routing": {
-        "data_collection": "deny",
-        "require_parameters": true
-      }
+      "prompt_version": "compare-v1"
     },
     "02-build": {
-      "model": "deepseek/deepseek-v4-pro-0813",
-      "provider": null,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 32000,
-      "prompt_version": "build-v1",
-      "routing": {
-        "data_collection": "deny",
-        "require_parameters": true
-      }
+      "prompt_version": "build-v1"
     },
     "02-generate-questions": {
-      "model": "deepseek/deepseek-v4-pro-0813",
-      "provider": null,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 8000,
-      "prompt_version": "suggest-v1",
-      "routing": {
-        "data_collection": "deny",
-        "require_parameters": true
-      }
+      "prompt_version": "suggest-v1"
     },
     "02-answer-check": {
-      "model": "deepseek/deepseek-v4-pro-0813",
-      "provider": null,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 8000,
-      "prompt_version": "answer-v1",
-      "routing": {
-        "data_collection": "deny",
-        "require_parameters": true
-      }
+      "prompt_version": "answer-v1"
     },
     "02-explain": {
-      "model": "deepseek/deepseek-v4-pro-0813",
-      "provider": null,
+      "model": "anthropic/claude-sonnet-5.5",
+      "provider": "google-vertex/global",
       "temperature": null,
       "max_tokens": 4000,
-      "prompt_version": "explain-v1",
-      "routing": {
-        "data_collection": "deny",
-        "require_parameters": true
-      }
+      "prompt_version": "explain-v1"
     },
     "03-assets": {
       "model": "anthropic/claude-sonnet-5.5",
