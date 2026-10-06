@@ -153,6 +153,11 @@ test('the repo models.json pins a model for every stage', () => {
   for (const [stage, entry] of Object.entries({ default: real.default, ...real.stages })) {
     assert.notEqual(entry.model, 'UNSET', `${stage} has no model`);
     assert.notEqual(entry.provider, 'UNSET', `${stage} has no provider`);
+    assert.ok(entry.provider || entry.routing, `${stage} has neither a pinned host nor routing rules`);
+  }
+  // Steps that send images or scanned PDF pages stay on a model that reads them (D-49).
+  for (const stage of ['01-extract-image', '01-extract-pdf-page']) {
+    assert.match(real.stages[stage].model, /^anthropic\//, `${stage} must read images`);
   }
   assert.equal(real.provider_routing.allow_fallbacks, false);
 });
@@ -248,4 +253,12 @@ test('other provider errors are not retried', async () => {
   const fetchImpl = async () => { call += 1; return { ok: false, status: 400, text: async () => 'bad request' }; };
   await assert.rejects(callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }], response_schema: { name: 'x', schema: { type: 'object', properties: {} } } }, fetchImpl), /LLM API error 400/);
   assert.equal(call, 1);
+});
+
+test('a step without a pinned host sends its routing rules instead', async () => {
+  writeModels({ 'routed': { model: 'deepseek/deepseek-v4-pro-0813', provider: null, routing: { data_collection: 'deny', require_parameters: true }, temperature: null, max_tokens: 100, prompt_version: 'x' } });
+  const cap = {};
+  await callLLM({ stage: 'routed', messages: [{ role: 'user', content: 'hi' }] }, fakeFetch(okResponse, cap));
+  assert.equal(cap.body.model, 'deepseek/deepseek-v4-pro-0813');
+  assert.deepEqual(cap.body.provider, { data_collection: 'deny', require_parameters: true });
 });

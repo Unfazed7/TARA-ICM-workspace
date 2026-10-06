@@ -62,6 +62,7 @@ function resolveStageSettings(stage) {
     model,
     modelOverridden: Boolean(process.env.LLM_MODEL),
     provider: isUnset(entry.provider) ? null : entry.provider,
+    routing: entry.routing && typeof entry.routing === 'object' ? entry.routing : null,
     allowFallbacks: config.provider_routing ? config.provider_routing.allow_fallbacks === true : false,
     temperature: typeof entry.temperature === 'number' ? entry.temperature : null,
     maxTokens: entry.max_tokens,
@@ -276,8 +277,8 @@ async function callLLM(params, fetchImpl = fetch) {
   }
 }
 
-/** Provider errors that mean "this schema is too big to enforce", not "this request is wrong". */
-const SCHEMA_TOO_BIG = /grammar is too large|too many parameters with union types|schema is too (large|complex)/i;
+/** Provider errors that mean "no host will enforce this schema", not "this request is wrong". */
+const SCHEMA_TOO_BIG = /grammar is too large|too many parameters with union types|schema is too (large|complex)|no endpoints found that can handle the requested parameters/i;
 
 function jsonFromText(text) {
   const body = String(text || '').replace(/^\s*```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '');
@@ -376,6 +377,9 @@ async function callModel(params, fetchImpl) {
     if (settings.temperature !== null) body.temperature = settings.temperature;
     if (config.provider === 'openrouter' && settings.provider) {
       body.provider = { only: [settings.provider], allow_fallbacks: settings.allowFallbacks };
+    } else if (config.provider === 'openrouter' && settings.routing) {
+      // No single host pinned: OpenRouter picks among hosts that meet these rules (D-49).
+      body.provider = { ...settings.routing };
     }
     if (params.response_schema) {
       prepared = prepareSchema(params.response_schema.schema);

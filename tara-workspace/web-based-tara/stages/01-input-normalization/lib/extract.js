@@ -201,7 +201,7 @@ async function readTextPieces({ doc, pieces, redactor, fetchImpl }) {
 /** Reads one PDF page that has no usable text layer. Quotes cannot be checked, so confidence is capped at medium. */
 async function readPdfPageWithModel({ doc, pageNumber, pdfBytes, fetchImpl }) {
   const response = await callLLM({
-    stage: '01-extract-text',
+    stage: '01-extract-pdf-page',
     system: prompt('extract-text.md'),
     messages: [{
       role: 'user',
