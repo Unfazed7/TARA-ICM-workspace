@@ -181,6 +181,65 @@ function toStrictSchema(schema) {
   return out;
 }
 
+/** Strict providers compile at most this many nullable or union-typed fields per schema. */
+const UNION_LIMIT = 16;
+
+const isNullable = (node) => Boolean(node) && (
+  (Array.isArray(node.type) && node.type.includes('null')) ||
+  (Array.isArray(node.anyOf) && node.anyOf.some((o) => o && o.type === 'null'))
+);
+
+function countUnions(node) {
+  if (Array.isArray(node)) return node.reduce((n, x) => n + countUnions(x), 0);
+  if (!node || typeof node !== 'object') return 0;
+  const own = Array.isArray(node.type) || Array.isArray(node.anyOf) ? 1 : 0;
+  return own + Object.values(node).reduce((n, v) => n + countUnions(v), 0);
+}
+
+/**
+ * Over the limit, nullable strings are sent as plain strings where "" means none, and nullable
+ * enums gain the value "". `restoreNulls` turns those "" back into null in the reply.
+ */
+function flattenNullable(node) {
+  if (Array.isArray(node)) return node.map(flattenNullable);
+  if (!node || typeof node !== 'object') return node;
+  if (Array.isArray(node.anyOf) && isNullable(node)) {
+    const choices = node.anyOf.filter((o) => o && o.type !== 'null');
+    if (choices.length === 1 && choices[0].type === 'string') {
+      const one = flattenNullable(choices[0]);
+      return one.enum ? { ...one, enum: [...one.enum, ''] } : one;
+    }
+  }
+  if (Array.isArray(node.type) && isNullable(node)) {
+    const types = node.type.filter((t) => t !== 'null');
+    if (types.length === 1 && types[0] === 'string') {
+      const { type, ...rest } = node;
+      const one = flattenNullable({ ...rest, type: 'string' });
+      return one.enum ? { ...one, enum: [...one.enum.filter((v) => v !== null), ''] } : one;
+    }
+  }
+  const out = {};
+  for (const [key, value] of Object.entries(node)) out[key] = flattenNullable(value);
+  return out;
+}
+
+function restoreNulls(value, schema) {
+  if (!schema || value === null || value === undefined) return value;
+  if (value === '' && isNullable(schema)) return null;
+  if (Array.isArray(value)) return value.map((v) => restoreNulls(v, schema.items));
+  if (typeof value === 'object' && schema.properties) {
+    for (const key of Object.keys(value)) value[key] = restoreNulls(value[key], schema.properties[key]);
+  }
+  return value;
+}
+
+/** The schema to send, and whether replies need their nulls restored. */
+function prepareSchema(schema) {
+  const strict = toStrictSchema(schema);
+  if (countUnions(strict) <= UNION_LIMIT) return { send: strict, flattened: false, original: strict };
+  return { send: flattenNullable(strict), flattened: true, original: strict };
+}
+
 // ── Main call ─────────────────────────────────────────────────────────────────
 
 /**
@@ -220,6 +279,7 @@ async function callModel(params, fetchImpl) {
   let result;
   let requestedModel;
   let settings = null;
+  let prepared = null;
 
   if (config.provider === 'anthropic') {
     requestedModel = process.env.LLM_MODEL || params.model;
@@ -266,9 +326,10 @@ async function callModel(params, fetchImpl) {
       body.provider = { only: [settings.provider], allow_fallbacks: settings.allowFallbacks };
     }
     if (params.response_schema) {
+      prepared = prepareSchema(params.response_schema.schema);
       body.response_format = {
         type: 'json_schema',
-        json_schema: { name: params.response_schema.name, strict: true, schema: toStrictSchema(params.response_schema.schema) },
+        json_schema: { name: params.response_schema.name, strict: true, schema: prepared.send },
       };
     }
     if (params.tools && params.tools.length > 0) {
@@ -296,6 +357,16 @@ async function callModel(params, fetchImpl) {
       throw new Error(`LLM API error ${res.status}: ${text}`);
     }
     result = openAIResponseToAnthropic(await res.json());
+    if (prepared && prepared.flattened) {
+      for (const part of result.content || []) {
+        if (part.type !== 'text') continue;
+        try {
+          part.text = JSON.stringify(restoreNulls(JSON.parse(part.text), prepared.original));
+        } catch {
+          // Not JSON: leave it for the caller, which reports the parse error.
+        }
+      }
+    }
   }
 
   writeAudit({
@@ -320,4 +391,4 @@ function isRefusal(response) {
   return Boolean(response) && response.stop_reason === 'refusal';
 }
 
-module.exports = { callLLM, getConfig, resolveStageSettings, isRefusal, toStrictSchema };
+module.exports = { callLLM, getConfig, resolveStageSettings, isRefusal, toStrictSchema, prepareSchema, restoreNulls, countUnions, UNION_LIMIT };

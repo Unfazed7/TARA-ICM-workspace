@@ -179,3 +179,46 @@ test('every Stage 02 model schema has no enum on a type list', () => {
   const src = require('fs').readFileSync(require('path').resolve(__dirname, '../../tara-workspace/web-based-tara/stages/02-item-definition/lib/model.js'), 'utf8');
   assert.ok(!/type: \[[^\]]*\], enum/.test(src));
 });
+
+test('every model schema the stages send stays within the provider union limit', () => {
+  const { prepareSchema, countUnions, UNION_LIMIT } = require('../../tara-workspace/web-based-tara/stages/llm-client');
+  const stage02 = require('../../tara-workspace/web-based-tara/stages/02-item-definition/lib/model');
+  const extract = require('../../tara-workspace/web-based-tara/stages/01-input-normalization/lib/extract');
+  const reconcile = require('../../tara-workspace/web-based-tara/_engines/fact-reconcile');
+  const schemas = {
+    BUILD: stage02.BUILD_SCHEMA, SUGGEST: stage02.SUGGEST_SCHEMA, ANSWER: stage02.ANSWER_SCHEMA, REASON: stage02.REASON_SCHEMA,
+    TEXT: extract.TEXT_SCHEMA, IMAGE_INVENTORY: extract.IMAGE_INVENTORY_SCHEMA, IMAGE_LINKS: extract.IMAGE_LINKS_SCHEMA,
+    COMPARE: reconcile.COMPARE_SCHEMA,
+  };
+  for (const [name, schema] of Object.entries(schemas)) {
+    assert.ok(countUnions(prepareSchema(schema).send) <= UNION_LIMIT, `${name} sends too many union fields`);
+  }
+  assert.ok(countUnions(stage02.BUILD_SCHEMA) > UNION_LIMIT, 'the build schema is the case that needs flattening');
+});
+
+test('a flattened schema sends "" for none and the caller still gets null', async () => {
+  const nullable = { type: ['string', 'null'] };
+  const fields = Object.fromEntries(Array.from({ length: 17 }, (_, i) => [`f${i}`, nullable]));
+  const schema = {
+    type: 'object', additionalProperties: false, required: [...Object.keys(fields), 'mode', 'list'],
+    properties: {
+      ...fields,
+      mode: { anyOf: [{ type: 'string', enum: ['sync', 'async'] }, { type: 'null' }] },
+      list: { type: 'array', items: { type: 'object', properties: { port: nullable, name: { type: 'string' } } } },
+    },
+  };
+  const reply = { ...Object.fromEntries(Object.keys(fields).map((k) => [k, ''])), f0: 'kept', mode: '', list: [{ port: '', name: '' }] };
+  const cap = {};
+  const response = await callLLM(
+    { stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }], response_schema: { name: 'x', schema } },
+    fakeFetch({ ...okResponse, choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(reply) } }] }, cap),
+  );
+  const sent = cap.body.response_format.json_schema.schema;
+  assert.deepEqual(sent.properties.f1, { type: 'string' });
+  assert.deepEqual(sent.properties.mode, { type: 'string', enum: ['sync', 'async', ''] });
+  const out = JSON.parse(response.content[0].text);
+  assert.equal(out.f0, 'kept');
+  assert.equal(out.f1, null);
+  assert.equal(out.mode, null);
+  assert.deepEqual(out.list, [{ port: null, name: '' }]);
+});
