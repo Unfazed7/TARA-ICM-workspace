@@ -262,3 +262,27 @@ test('a step without a pinned host sends its routing rules instead', async () =>
   assert.equal(cap.body.model, 'deepseek/deepseek-v4-pro-0813');
   assert.deepEqual(cap.body.provider, { data_collection: 'deny', require_parameters: true });
 });
+
+test('a schema reply wrapped in text is cleaned, and an unreadable one is asked for again', async () => {
+  const schema = { type: 'object', properties: { facts: { type: 'array' } } };
+  const replies = ['Sure! ```json\n{"facts":[1]}\n```', 'I could not do that.', '{"facts":[]}'];
+  let call = 0;
+  const fetchImpl = async () => {
+    const content = replies[call];
+    call += 1;
+    return { ok: true, json: async () => ({ ...okResponse, choices: [{ finish_reason: 'stop', message: { content } }] }) };
+  };
+  const first = await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }], response_schema: { name: 'x', schema } }, fetchImpl);
+  assert.deepEqual(JSON.parse(first.content[0].text), { facts: [1] });
+  const second = await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }], response_schema: { name: 'x', schema } }, fetchImpl);
+  assert.deepEqual(JSON.parse(second.content[0].text), { facts: [] });
+  assert.equal(call, 3);
+});
+
+test('a reply cut off at the output limit says so', async () => {
+  const fetchImpl = async () => ({ ok: true, json: async () => ({ ...okResponse, choices: [{ finish_reason: 'length', message: { content: '{"facts":[{"a"' } }] }) });
+  await assert.rejects(
+    callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'hi' }], response_schema: { name: 'x', schema: { type: 'object' } } }, fetchImpl),
+    /cut off at the output limit \(8000 tokens\)/,
+  );
+});

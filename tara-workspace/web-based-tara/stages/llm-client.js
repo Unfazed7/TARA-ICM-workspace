@@ -262,12 +262,16 @@ async function callLLM(params, fetchImpl = fetch) {
   progress(`Model call ${params.stage || 'default'} started`);
   try {
     let result;
-    try {
+    if (!params.response_schema) {
       result = await callModel(params, fetchImpl);
-    } catch (err) {
-      if (!params.response_schema || !SCHEMA_TOO_BIG.test(err.message)) throw err;
-      progress(`Model call ${params.stage || 'default'}: the provider refused the strict format for its size; asking for the same JSON in the prompt instead`);
-      result = await callWithSchemaInPrompt(params, fetchImpl);
+    } else {
+      try {
+        result = await callForJson(params, fetchImpl, false);
+      } catch (err) {
+        if (!SCHEMA_TOO_BIG.test(err.message)) throw err;
+        progress(`Model call ${params.stage || 'default'}: no host would enforce the format; asking for the same JSON in the prompt instead`);
+        result = await callForJson(params, fetchImpl, true);
+      }
     }
     progress(`Model call ${params.stage || 'default'} finished in ${((Date.now() - started) / 1000).toFixed(1)} s (${result.model || 'model'}, ${result.stop_reason})`);
     return result;
@@ -288,26 +292,37 @@ function jsonFromText(text) {
   return JSON.parse(body.slice(start, end + 1));
 }
 
+const CUT_OFF = new Set(['length', 'max_tokens']);
+
 /**
- * Fallback when a provider will not enforce a schema: the schema goes into the prompt and code
- * checks the reply against it (extra fields dropped). One repair attempt with the errors listed.
+ * Every call with a schema gets its reply cleaned by code: fences and stray text around the JSON
+ * are removed, and one repair request is sent when no JSON object can be read. In prompt mode the
+ * object is also checked against the schema (extra fields dropped). `inPrompt` sends the schema in the instructions instead of as a
+ * strict format, for hosts that will not enforce it. A reply cut off at the output limit is
+ * reported as such, not retried.
  */
-async function callWithSchemaInPrompt(params, fetchImpl) {
+async function callForJson(params, fetchImpl, inPrompt) {
   const Ajv = require('ajv');
   const schema = toStrictSchema(params.response_schema.schema);
   const validate = new Ajv({ allErrors: true, strict: false, removeAdditional: 'all' }).compile(schema);
   const rule = `\n\nReply with one JSON object only, no other text, that matches this JSON Schema exactly (every listed field present; use null where the schema allows it and nothing is known):\n${JSON.stringify(schema)}`;
   const { response_schema: _drop, ...plain } = params;
+  const base = inPrompt ? { ...plain, system: `${params.system || ''}${rule}` } : params;
   let messages = params.messages;
   for (let attempt = 1; attempt <= 2; attempt += 1) {
-    const result = await callModel({ ...plain, system: `${params.system || ''}${rule}`, messages }, fetchImpl);
+    const result = await callModel({ ...base, messages }, fetchImpl);
     if (isRefusal(result)) return result;
+    if (CUT_OFF.has(String(result.stop_reason))) {
+      const limit = params.max_tokens || resolveStageSettings(params.stage).maxTokens;
+      throw new Error(`the reply was cut off at the output limit (${limit} tokens); the part was too long for one answer`);
+    }
     const text = (result.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('');
     let data;
     let problem;
     try {
       data = jsonFromText(text);
-      if (!validate(data)) problem = validate.errors.slice(0, 10).map((e) => `${e.instancePath || '/'} ${e.message}`).join('; ');
+      // With an enforced format the callers check the content themselves (some keep unexpected values on purpose).
+      if (inPrompt && !validate(data)) problem = validate.errors.slice(0, 10).map((e) => `${e.instancePath || '/'} ${e.message}`).join('; ');
     } catch (err) {
       problem = err.message;
     }
