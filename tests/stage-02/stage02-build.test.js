@@ -357,3 +357,16 @@ test('the rules come from scoping-facts.md: every asset type in the schema has a
   for (const k of kinds) assert.ok(rules.kinds[k], `no rule row for ${k}`);
   for (const t of Object.values(rules.kinds).flatMap((k) => k.topics)) assert.ok(rules.topics[t], `no wording for topic "${t}"`);
 });
+
+test('the scoping rules table reads the same with Windows line endings', () => {
+  const fsx = require('fs');
+  const osx = require('os');
+  const pathx = require('path');
+  const scopeRules = require('../../tara-workspace/web-based-tara/_engines/scope-rules');
+  const source = pathx.resolve(__dirname, '../../tara-workspace/web-based-tara/_config/scoping-facts.md');
+  const crlf = pathx.join(fsx.mkdtempSync(pathx.join(osx.tmpdir(), 'crlf-')), 'scoping-facts.md');
+  fsx.writeFileSync(crlf, fsx.readFileSync(source, 'utf8').replace(/\n/g, '\r\n'));
+  const unix = scopeRules.loadRules(source);
+  const windows = scopeRules.loadRules(crlf);
+  assert.deepEqual(windows, unix);
+});

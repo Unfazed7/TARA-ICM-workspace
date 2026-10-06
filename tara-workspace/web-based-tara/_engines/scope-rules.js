@@ -39,7 +39,8 @@ let cache = null;
 /** Parses the rule tables. Throws with a plain message if a table is missing. */
 function loadRules(file = process.env.SCOPING_FACTS_FILE || CONFIG) {
   if (cache && cache.file === file) return cache.rules;
-  const text = fs.readFileSync(file, 'utf8');
+  // Windows checkouts may have \r\n line endings; the tables are parsed line by line.
+  const text = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
   const kinds = {};
   for (const [kindCell, factsCell, rulesCell] of tableRows(text, '## 3. Triggers per asset type')) {
     const kind = kindCell.replace(/`/g, '');
