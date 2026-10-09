@@ -150,7 +150,43 @@ function extractToolUse(response) {
   return toolUse.input?.damage_scenarios || null;
 }
 
-async function callClaudeForAsset(asset, properties, fetchImpl = fetch) {
+function buildFallbackDamageScenariosForAsset(asset, properties) {
+  return properties.map((property) => ({
+    property,
+    damage_scenario: createScenarioText(asset, property),
+    stakeholder_affected: STAKEHOLDER_BY_PROPERTY[property]
+  }));
+}
+
+function isUsableDamagePayload(scenarios, properties) {
+  if (!Array.isArray(scenarios) || scenarios.length !== properties.length) return false;
+  const expected = new Set(properties);
+  const returned = new Set();
+  for (const scenario of scenarios) {
+    if (!scenario || !expected.has(scenario.property) || returned.has(scenario.property)) return false;
+    if (typeof scenario.damage_scenario !== 'string' || !scenario.damage_scenario.trim()) return false;
+    if (hasAttackerLanguage(scenario.damage_scenario)) return false;
+    if (!STAKEHOLDERS.includes(scenario.stakeholder_affected)) return false;
+    returned.add(scenario.property);
+  }
+  return returned.size === expected.size;
+}
+
+function formatRequestError(error) {
+  const details = [error?.message || String(error)];
+  if (error?.cause?.code) details.push(error.cause.code);
+  if (error?.cause?.message && error.cause.message !== error.message) {
+    details.push(error.cause.message);
+  }
+  return details.join(' — ');
+}
+
+function isNonRecoverableRequestError(error) {
+  const message = error?.message || String(error);
+  return /API key not set|LLM API error (400|401|403|404)\b|Configured LLM model .* is unavailable/i.test(message);
+}
+
+async function callModelForAsset(asset, properties, fetchImpl = fetch) {
   return callLLM({
     model: MODEL,
     max_tokens: 2048,
@@ -162,20 +198,34 @@ async function callClaudeForAsset(asset, properties, fetchImpl = fetch) {
 }
 
 async function generateDamageScenariosForAsset(asset, properties, fetchImpl) {
+  let lastIssue = `the model returned text instead of the required ${TOOL_NAME} tool call`;
+  let lastRequestError = null;
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await callClaudeForAsset(asset, properties, fetchImpl);
+    let response;
+    try {
+      response = await callModelForAsset(asset, properties, fetchImpl);
+      lastRequestError = null;
+    } catch (error) {
+      lastRequestError = error;
+      lastIssue = `the model request failed (${formatRequestError(error)})`;
+      continue;
+    }
     const scenarios = extractToolUse(response);
+    if (isUsableDamagePayload(scenarios, properties)) return scenarios;
     if (Array.isArray(scenarios)) {
-      if (scenarios.length !== properties.length) {
-        throw new Error(`Wrong scenario count returned for ${asset.asset_id}: expected ${properties.length}, got ${scenarios.length}`);
-      }
-      return scenarios;
+      lastIssue = `the model returned an invalid damage-scenario payload (expected one valid scenario for each of: ${properties.join(', ')})`;
     }
   }
-  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${asset.asset_id}`);
+  if (lastRequestError && isNonRecoverableRequestError(lastRequestError)) {
+    throw new Error(
+      `LLM request failed for ${asset.asset_id} after two attempts: ${formatRequestError(lastRequestError)}`
+    );
+  }
+  console.warn(`Using deterministic Stage 4 fallback for ${asset.asset_id} because ${lastIssue}.`);
+  return buildFallbackDamageScenariosForAsset(asset, properties);
 }
 
-async function buildDamageScenariosWithClaude(assets, options = {}) {
+async function buildDamageScenariosWithModel(assets, options = {}) {
   if (!Array.isArray(assets) || assets.length === 0) {
     throw new Error('asset-register.json is empty');
   }
@@ -211,7 +261,7 @@ async function run(options) {
   const assets = readJson(options.assets);
   const scenarios = options.useDeterministic
     ? buildDamageScenarios(assets)
-    : await buildDamageScenariosWithClaude(assets, { fetchImpl: options.fetchImpl });
+    : await buildDamageScenariosWithModel(assets, { fetchImpl: options.fetchImpl });
   writeJson(options.out, scenarios);
   await submitCheckpoint(options.assessmentId, {
     stage_num: 4,
@@ -242,15 +292,19 @@ if (require.main === module) {
 }
 
 module.exports = {
+  buildDamageScenariosWithModel,
   buildDamageScenarioTool,
   buildDamageScenarios,
-  buildDamageScenariosWithClaude,
+  buildDamageScenariosWithClaude: buildDamageScenariosWithModel,
+  buildFallbackDamageScenariosForAsset,
   buildSystemPrompt,
   buildUserMessage,
-  callClaudeForAsset,
+  callModelForAsset,
+  callClaudeForAsset: callModelForAsset,
   createScenarioText,
   extractToolUse,
   generateDamageScenariosForAsset,
+  isUsableDamagePayload,
   run,
   validateDamageScenarios
 };

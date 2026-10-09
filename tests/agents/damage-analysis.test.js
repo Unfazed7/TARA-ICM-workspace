@@ -4,8 +4,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   buildDamageScenarios,
-  buildDamageScenariosWithClaude,
-  callClaudeForAsset,
+  buildDamageScenariosWithModel,
+  callModelForAsset,
+  generateDamageScenariosForAsset,
   validateDamageScenarios
 } = require('../../tara-workspace/web-based-tara/stages/04-damage-analysis/agent');
 const { readJson, fixturePath, validateSchema, schemaPath } = require('../helpers/schema-validation');
@@ -40,7 +41,7 @@ test('damage analysis rejects duplicate asset/property pairs', () => {
   assert.throws(() => validateDamageScenarios(scenarios, assets), /Duplicate damage scenario/);
 });
 
-test('damage analysis uses forced Claude tool_choice per asset', async () => {
+test('damage analysis uses a forced model tool_choice per asset', async () => {
   const assets = readJson(fixturePath('valid', 'stage-03-asset-register.json'));
   const previousKey = process.env.ANTHROPIC_API_KEY;
   process.env.ANTHROPIC_API_KEY = 'test-key';
@@ -65,7 +66,7 @@ test('damage analysis uses forced Claude tool_choice per asset', async () => {
     };
   };
 
-  const scenarios = await buildDamageScenariosWithClaude([{
+  const scenarios = await buildDamageScenariosWithModel([{
     ...assets[0],
     ciaaan: {
       confidentiality: false,
@@ -91,7 +92,7 @@ test('damage analysis uses forced Claude tool_choice per asset', async () => {
   assert.equal(validateSchema(scenarios, readJson(schemaPath(4))).valid, true);
 });
 
-test('damage analysis rejects wrong Claude scenario count', async () => {
+test('damage analysis falls back when the model repeatedly returns the wrong scenario count', async () => {
   const assets = readJson(fixturePath('valid', 'stage-03-asset-register.json'));
   const previousKey = process.env.ANTHROPIC_API_KEY;
   process.env.ANTHROPIC_API_KEY = 'test-key';
@@ -106,23 +107,53 @@ test('damage analysis rejects wrong Claude scenario count', async () => {
     })
   });
 
-  await assert.rejects(
-    () => buildDamageScenariosWithClaude([assets[0]], { fetchImpl: fakeFetch }),
-    /Wrong scenario count/
-  );
+  const scenarios = await buildDamageScenariosWithModel([assets[0]], { fetchImpl: fakeFetch });
+
+  const expectedProperties = Object.entries(assets[0].ciaaan)
+    .filter(([, enabled]) => enabled === true)
+    .map(([property]) => property);
+  assert.deepEqual(scenarios.map((scenario) => scenario.property), expectedProperties);
+  assert.equal(validateSchema(scenarios, readJson(schemaPath(4))).valid, true);
   restoreEnv('ANTHROPIC_API_KEY', previousKey);
 });
 
-test('damage analysis Claude path fails without API key', async () => {
+test('damage analysis falls back for AS_04 after repeated free-text model responses', async () => {
+  const [fixtureAsset] = readJson(fixturePath('valid', 'stage-03-asset-register.json'));
+  const asset = { ...fixtureAsset, asset_id: 'AS_04' };
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  let attempts = 0;
+  const fakeFetch = async () => {
+    attempts += 1;
+    return {
+      ok: true,
+      json: async () => ({
+        content: [{ type: 'text', text: 'Here are the requested damage scenarios in prose.' }]
+      })
+    };
+  };
+
+  const scenarios = await generateDamageScenariosForAsset(asset, ['authorization'], fakeFetch);
+
+  assert.equal(attempts, 2);
+  assert.deepEqual(scenarios, [{
+    property: 'authorization',
+    damage_scenario: 'If the Authorization of Diagnostic API Endpoint is compromised, privileged diagnostic functionality is used outside the permitted access boundary affecting organization in the context of Diagnostic API Endpoint operations.',
+    stakeholder_affected: 'organization'
+  }]);
+  restoreEnv('ANTHROPIC_API_KEY', previousKey);
+});
+
+test('damage analysis model path fails without an API key', async () => {
   const previousKey = process.env.ANTHROPIC_API_KEY;
   delete process.env.ANTHROPIC_API_KEY;
   await assert.rejects(
-    () => callClaudeForAsset(
+    () => callModelForAsset(
       readJson(fixturePath('valid', 'stage-03-asset-register.json'))[0],
       ['authorization'],
       async () => { throw new Error('not called'); }
     ),
-    /ANTHROPIC_API_KEY is required/
+    /LLM API key not set/
   );
   restoreEnv('ANTHROPIC_API_KEY', previousKey);
 });

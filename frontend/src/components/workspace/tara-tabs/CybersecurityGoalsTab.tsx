@@ -28,9 +28,9 @@ export function CybersecurityGoalsTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
+        <div className="stage-result-table">
           {/* Header */}
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
+          <div className="stage-result-header bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
             <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Asset</div>
             <div className="w-[100px] min-w-[100px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Risk</div>
             <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Risk Decision</div>
@@ -49,7 +49,7 @@ export function CybersecurityGoalsTab() {
             const decision = treatment?.decision ?? 'reduce';
 
             return (
-              <div key={threat.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+              <div key={threat.id} className="stage-result-row border-b border-white/5 transition-colors">
                 {/* Asset */}
                 <div className="w-[200px] min-w-[200px] px-3 py-3">
                   <div className="text-sm text-foreground truncate">{asset?.name ?? '—'}</div>

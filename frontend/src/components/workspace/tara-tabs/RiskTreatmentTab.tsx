@@ -49,14 +49,14 @@ export function RiskTreatmentTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
+        <div className="stage-result-table">
+          <div className="stage-result-header bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
             <div className="w-[100px] min-w-[100px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">ID</div>
             <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Asset / Threat</div>
             <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Decision</div>
             <div className="w-[100px] min-w-[100px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Residual</div>
             <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Controls</div>
-            <div className="flex-1 min-w-[300px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Goal / Claim</div>
+            <div className="w-[380px] min-w-[380px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Goal / Claim</div>
           </div>
 
           {treatments.map((t) => {
@@ -64,7 +64,7 @@ export function RiskTreatmentTab() {
             const asset  = threat ? assetById.get(threat.linkedAssetId) : undefined;
             const decisionClass = DECISION_STYLE[t.decision] ?? 'bg-slate-500/20 text-slate-400';
             return (
-              <div key={t.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+              <div key={t.id} className="stage-result-row border-b border-white/5 transition-colors">
                 <div className="w-[100px] min-w-[100px] px-3 py-3 flex items-start pt-3.5">
                   <span className="text-xs font-mono text-primary">{t.id}</span>
                 </div>
@@ -86,7 +86,7 @@ export function RiskTreatmentTab() {
                 <div className="w-[200px] min-w-[200px] px-3 py-3">
                   <p className="text-xs font-mono text-slate-400">{t.controls || '—'}</p>
                 </div>
-                <div className="flex-1 min-w-[300px] px-3 py-3">
+                <div className="w-[380px] min-w-[380px] px-3 py-3">
                   {t.cybersecurityGoal && (
                     <p className="text-xs text-slate-300 leading-relaxed mb-1">
                       <span className="text-[10px] font-mono text-primary/70 mr-1">Goal:</span>

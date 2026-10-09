@@ -52,12 +52,12 @@ export function DamageAnalysisTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
+        <div className="stage-result-table">
+          <div className="stage-result-header bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
             <div className="w-[90px] min-w-[90px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">ID</div>
             <div className="w-[190px] min-w-[190px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Asset</div>
             <div className="w-[150px] min-w-[150px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Property</div>
-            <div className="flex-1 min-w-[520px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Damage Scenario</div>
+            <div className="w-[560px] min-w-[560px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Damage Scenario</div>
             <div className="w-[170px] min-w-[170px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Stakeholder</div>
           </div>
 
@@ -65,7 +65,7 @@ export function DamageAnalysisTab() {
             const asset = assetById.get(damage.linkedAssetId);
             const propertyStyle = PROPERTY_STYLES[damage.property] ?? 'bg-slate-500/20 text-slate-400';
             return (
-              <div key={damage.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+              <div key={damage.id} className="stage-result-row border-b border-white/5 transition-colors">
                 <div className="w-[90px] min-w-[90px] px-3 py-3">
                   <span className="text-xs font-mono text-primary">{damage.damageId}</span>
                 </div>
@@ -80,7 +80,7 @@ export function DamageAnalysisTab() {
                     {formatLabel(damage.property)}
                   </span>
                 </div>
-                <div className="flex-1 min-w-[520px] px-3 py-3">
+                <div className="w-[560px] min-w-[560px] px-3 py-3">
                   <p className="text-xs text-slate-300 leading-relaxed whitespace-normal">{damage.scenario}</p>
                 </div>
                 <div className="w-[170px] min-w-[170px] px-3 py-3">

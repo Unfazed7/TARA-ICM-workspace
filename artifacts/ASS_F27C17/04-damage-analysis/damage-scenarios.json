@@ -1,0 +1,101 @@
+[
+  {
+    "damage_id": "DS_01",
+    "asset_id": "AS_01",
+    "asset_title": "EKS Kubernetes API server",
+    "property": "availability",
+    "damage_scenario": "The EKS Kubernetes API server exposes the control-plane endpoint that allows operators to create, update, and delete cluster resources. If its availability is compromised, the endpoint becomes unreachable, preventing any resource changes and halting deployment pipelines, which forces the platform to operate in a stagnant state.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_02",
+    "asset_id": "AS_01",
+    "asset_title": "EKS Kubernetes API server",
+    "property": "authorization",
+    "damage_scenario": "The API server enforces IAM/OIDC and Kubernetes RBAC to decide which principals may create or modify workloads. If its authorization is compromised, a principal with inadequate privileges can exceed its permitted scope, allowing creation or alteration of workloads that should be restricted, potentially introducing malicious code or data exposure.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_03",
+    "asset_id": "AS_02",
+    "asset_title": "EKS worker nodes",
+    "property": "confidentiality",
+    "damage_scenario": "The EKS worker nodes run all platform workloads and expose OS, kubelet, and instance metadata endpoint to the internal cluster network. If its confidentiality is compromised, unauthorized users can discover internal cluster topology and service addresses, threatening the overall security posture of the platform.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_04",
+    "asset_id": "AS_02",
+    "asset_title": "EKS worker nodes",
+    "property": "integrity",
+    "damage_scenario": "The EKS worker nodes host containerized vehicle platform services and enforce security policies via kubelet and cluster configurations. If its integrity is compromised, unauthorized configuration changes can be injected into the cluster, causing workloads to behave unexpectedly and risking exposure of vehicle control data.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_05",
+    "asset_id": "AS_03",
+    "asset_title": "Envoy Gateway + public NLB (envoy-gateway-lb)",
+    "property": "integrity",
+    "damage_scenario": "The Envoy Gateway processes and validates inbound TLS traffic for the cloud API, applying layer‑7 routing rules based on request metadata. If its integrity is compromised, routing rules may be modified, causing API requests to be misdirected to unintended internal services.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_06",
+    "asset_id": "AS_03",
+    "asset_title": "Envoy Gateway + public NLB (envoy-gateway-lb)",
+    "property": "availability",
+    "damage_scenario": "The public NLB accepts all inbound HTTPS traffic and distributes it to the Envoy instances. If its availability is compromised, the gateway becomes unreachable, causing all external API calls to fail with connection timeouts, effectively taking the cloud API offline for all external clients.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_07",
+    "asset_id": "AS_04",
+    "asset_title": "Kong API gateway",
+    "property": "authorization",
+    "damage_scenario": "If the Authorization of Kong API gateway is compromised, privileged diagnostic functionality is used outside the permitted access boundary affecting organization in the context of Kong API gateway operations.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_08",
+    "asset_id": "AS_05",
+    "asset_title": "Hasura GraphQL engine",
+    "property": "authorization",
+    "damage_scenario": "The Hasura GraphQL engine centralizes database access through GraphQL queries, enforcing role-based permissions that restrict each caller to their assigned tenant's data. If its authorization is compromised, callers could circumvent these tenant isolation rules and read or write database rows belonging to other tenants, breaking the multi-tenant data segregation guarantees the platform relies on.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_09",
+    "asset_id": "AS_06",
+    "asset_title": "Aurora cloudapi database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora PostgreSQL database stores the platform's core authorization records including role definitions, policy rules, and tenant bindings that all access control decisions depend on. If the integrity of this database is compromised, stored role and policy records could be altered without detection, causing the authorization subsystem to evaluate access requests against corrupted data and produce incorrect permission decisions.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_10",
+    "asset_id": "AS_07",
+    "asset_title": "Aurora directordb database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora PostgreSQL database stores the authoritative record of installed ECU versions per vehicle for the OTA update‑instruction signing service. If its integrity is compromised, the recorded ECU version data may be altered, causing the signing service to generate or accept invalid update signatures.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  },
+  {
+    "damage_id": "DS_11",
+    "asset_id": "AS_08",
+    "asset_title": "Aurora pandoradb database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora PostgreSQL database stores the authoritative mapping of enrolled vehicle identities to their associated device certificates for the vehicle provisioning and PKI system. If its integrity is compromised, the vehicle-to-certificate bindings may be altered, causing the provisioning system to accept devices with fraudulent certificates as legitimate enrolled vehicles.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-06T14:38:44.344Z"
+  }
+]

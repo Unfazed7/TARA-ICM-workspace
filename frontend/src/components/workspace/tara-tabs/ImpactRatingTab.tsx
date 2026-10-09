@@ -49,9 +49,9 @@ export function ImpactRatingTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
+        <div className="stage-result-table">
           {/* Column headers */}
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
+          <div className="stage-result-header bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
             <div className="w-[90px]  min-w-[90px]  px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">IM ID</div>
             <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Asset</div>
             <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Safety</div>
@@ -63,7 +63,7 @@ export function ImpactRatingTab() {
           {impacts.map((impact) => {
             const asset = assetById.get(impact.linkedAssetId);
             return (
-              <div key={impact.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+              <div key={impact.id} className="stage-result-row border-b border-white/5 transition-colors">
                 <div className="w-[90px] min-w-[90px] px-3 py-3 flex items-center">
                   <span className="text-xs font-mono text-primary">{impact.id}</span>
                 </div>

@@ -21,9 +21,9 @@ export function FinalTaraTab() {
         </p>
       </div>
 
-      <div className="min-w-max">
+      <div className="stage-result-table">
         {/* Header */}
-        <div className="flex bg-[#080c14] border-b border-border/30 sticky top-[41px] z-10">
+        <div className="stage-result-header bg-[#080c14] border-b border-border/30 sticky top-[41px] z-10">
           <div className="w-[80px] min-w-[80px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Threat</div>
           <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Asset / Scenario</div>
           <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium text-center">Final Impact</div>
@@ -57,13 +57,13 @@ export function FinalTaraTab() {
           const impactInfo = impactLabelMap[maxImpact] ?? impactLabelMap[1];
 
           return (
-            <div key={threat.id} className="flex border-b border-border/20 hover:bg-muted/5 transition-colors">
+            <div key={threat.id} className="stage-result-row border-b border-border/20 transition-colors">
               <div className="w-[80px] min-w-[80px] px-3 py-3 flex items-center">
                 <span className="text-sm font-mono text-primary font-medium">{threat.threatId}</span>
               </div>
               <div className="w-[200px] min-w-[200px] px-3 py-3">
                 <div className="text-sm text-foreground font-medium truncate">{asset?.name ?? '—'}</div>
-                <div className="text-[11px] text-muted-foreground truncate">{threat.scenario.slice(0, 55)}</div>
+                <div className="text-[11px] text-muted-foreground leading-relaxed">{threat.scenario}</div>
               </div>
               <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center justify-center">
                 <span className={cn('text-sm font-medium', impactInfo.className)}>{impactInfo.label}</span>

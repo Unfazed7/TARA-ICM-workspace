@@ -34,7 +34,7 @@ UPLOAD_DIR = os.getenv("UPLOAD_DIR", os.path.join(WORKSPACE_ROOT, "uploads"))
 # OpenRouter is the default provider; the key is read from LLM_API_KEY or
 # OPENROUTER_API_KEY. ANTHROPIC_API_KEY is still forwarded for the legacy
 # Stage 01 diagram mode, which reads it directly.
-DEFAULT_OPENROUTER_MODEL = "qwen/qwen3.8-max-0902"
+DEFAULT_OPENROUTER_MODEL = "nvidia/nemotron-3.5-lightning:free"
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 LLM_PROVIDER = os.getenv("LLM_PROVIDER") or "openrouter"

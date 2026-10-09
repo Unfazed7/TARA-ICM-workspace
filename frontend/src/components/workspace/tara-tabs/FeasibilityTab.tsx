@@ -84,8 +84,8 @@ export function FeasibilityTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
-          <div className="flex bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
+        <div className="stage-result-table">
+          <div className="stage-result-header bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
             <div className="w-[250px] min-w-[250px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">Attack Path Reference</div>
             {factorColumns.map(f => (
               <div key={f.key} className="w-[150px] min-w-[150px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono font-medium">{f.label}</div>
@@ -99,13 +99,13 @@ export function FeasibilityTab() {
             const style = feasibilityColors[level];
 
             return (
-              <div key={feas.id} className="flex border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+              <div key={feas.id} className="stage-result-row border-b border-white/5 transition-colors">
                 <div className="w-[250px] min-w-[250px] px-3 py-3">
                   <div className="text-sm text-foreground font-medium truncate">
                     {ctx?.threat ? ctx.threat.threatId : '—'}
                   </div>
                   <div className="text-xs text-slate-500 truncate">
-                    {ctx?.ap ? `${ctx.ap.attackVector} — ${ctx.ap.description.slice(0, 40)}...` : '—'}
+                    {ctx?.ap ? `${ctx.ap.attackVector} — ${ctx.ap.description}` : '—'}
                   </div>
                 </div>
                 {factorColumns.map(col => (

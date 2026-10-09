@@ -17,7 +17,7 @@
 
 const DEFAULT_MODELS = {
   anthropic: 'claude-opus-4-8',
-  openrouter: 'nousresearch/hermes-3-llama-3.1-405b:free',
+  openrouter: 'nvidia/nemotron-3.5-lightning:free',
   openai: 'gpt-4o-mini',
 };
 
@@ -171,6 +171,12 @@ async function callLLM(params, fetchImpl = fetch) {
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');
+    if (config.provider === 'openrouter' && res.status === 404 && /no endpoints found/i.test(text)) {
+      throw new Error(
+        `Configured LLM model "${config.model}" is unavailable on OpenRouter. `
+        + 'Set LLM_MODEL to a currently available model with tool-calling support, then retry the stage.'
+      );
+    }
     throw new Error(`LLM API error ${res.status}: ${text}`);
   }
 

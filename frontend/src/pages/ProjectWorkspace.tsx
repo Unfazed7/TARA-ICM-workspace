@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
@@ -62,6 +62,15 @@ const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | '
   failed: 'destructive',
 };
 
+function displayStageError(message: string | null | undefined) {
+  if (!message) return null;
+  const unavailableModel = message.match(/No endpoints found for ([^."}]+)/i);
+  if (unavailableModel) {
+    return `Configured AI model "${unavailableModel[1]}" is unavailable. Update LLM_MODEL to an available tool-calling model and restart the backend.`;
+  }
+  return message.length > 500 ? `${message.slice(0, 497)}...` : message;
+}
+
 function StageRunnerPanel({ assessmentId, stageNums, onStageStart }: { assessmentId: string; stageNums: number[]; onStageStart: (stageNum: number) => void }) {
   const { stageStatuses, runStage, pauseStage, resumeStage, cancelStage } = useTara();
   const queryClient = useQueryClient();
@@ -77,6 +86,14 @@ function StageRunnerPanel({ assessmentId, stageNums, onStageStart }: { assessmen
     queryKey: ['asset-register-upload', assessmentId],
     queryFn: () => api.uploads.assetRegisterStatus(assessmentId),
     enabled: !!assessmentId && stageNums.includes(3),
+  });
+  const stageRunQueries = useQueries({
+    queries: stageNums.map((stageNum) => ({
+      queryKey: ['stage-status', assessmentId, stageNum],
+      queryFn: () => api.pipeline.status(assessmentId, stageNum),
+      enabled: !!assessmentId && stageStatuses[String(stageNum).padStart(2, '0')] === 'failed',
+      retry: false,
+    })),
   });
 
   const handleAssetRegisterUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,6 +228,8 @@ function StageRunnerPanel({ assessmentId, stageNums, onStageStart }: { assessmen
       {stages.filter((stage) => stageNums.includes(stage.stage_num)).map((stage) => {
         const key = String(stage.stage_num).padStart(2, '0');
         const status = stageStatuses[key] ?? 'not_started';
+        const stageRun = stageRunQueries[stageNums.indexOf(stage.stage_num)]?.data;
+        const stageError = status === 'failed' ? displayStageError(stageRun?.error_message) : null;
         const blockingDependency = stage.dependencies.find((dependency) => {
           const dependencyKey = String(dependency).padStart(2, '0');
           return stageStatuses[dependencyKey] !== 'complete';
@@ -219,45 +238,52 @@ function StageRunnerPanel({ assessmentId, stageNums, onStageStart }: { assessmen
           && blockingDependency === undefined
           && (status === 'not_started' || status === 'failed' || status === 'cancelled');
         return (
-          <div key={stage.stage_num} className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <span className="min-w-0 flex-1 text-xs text-muted-foreground sm:w-52 sm:flex-none">
-              {key} — {stage.name}
-            </span>
-            <Badge variant={stage.available || status === 'complete' ? STATUS_VARIANT[status] : 'outline'}>
-              {(status === 'running' || status === 'pending') && <LoaderCircle className="mr-1 size-3 animate-spin" aria-hidden="true" />}
-              {stage.available || status === 'complete'
-                ? status === 'running' || status === 'pending' ? 'Running...' : status.replace('_', ' ')
-                : 'unavailable'}
-            </Badge>
-            {canRun && (
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-6 text-xs px-2"
-                onClick={() => handleRun(stage.stage_num)}
-              >
-                Run
-              </Button>
-            )}
-            {status === 'running' && (
-              <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'pause')}>
-                <Pause className="size-3.5" aria-hidden="true" /> Pause
-              </Button>
-            )}
-            {status === 'paused' && (
-              <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'resume')}>
-                <Play className="size-3.5" aria-hidden="true" /> Resume
-              </Button>
-            )}
-            {(status === 'pending' || status === 'running' || status === 'paused') && (
-              <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs text-destructive hover:text-destructive" onClick={() => handleControl(stage.stage_num, 'cancel')}>
-                <Square className="size-3.5" aria-hidden="true" /> Cancel
-              </Button>
-            )}
-            {stage.available && blockingDependency !== undefined && status === 'not_started' && (
-              <span className="text-[10px] text-muted-foreground">
-                Waiting on {String(blockingDependency).padStart(2, '0')}
+          <div key={stage.stage_num} className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <span className="min-w-0 flex-1 text-xs text-muted-foreground sm:w-52 sm:flex-none">
+                {key} — {stage.name}
               </span>
+              <Badge variant={stage.available || status === 'complete' ? STATUS_VARIANT[status] : 'outline'}>
+                {(status === 'running' || status === 'pending') && <LoaderCircle className="mr-1 size-3 animate-spin" aria-hidden="true" />}
+                {stage.available || status === 'complete'
+                  ? status === 'running' || status === 'pending' ? 'Running...' : status.replace('_', ' ')
+                  : 'unavailable'}
+              </Badge>
+              {canRun && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-6 text-xs px-2"
+                  onClick={() => handleRun(stage.stage_num)}
+                >
+                  Run
+                </Button>
+              )}
+              {status === 'running' && (
+                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'pause')}>
+                  <Pause className="size-3.5" aria-hidden="true" /> Pause
+                </Button>
+              )}
+              {status === 'paused' && (
+                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'resume')}>
+                  <Play className="size-3.5" aria-hidden="true" /> Resume
+                </Button>
+              )}
+              {(status === 'pending' || status === 'running' || status === 'paused') && (
+                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs text-destructive hover:text-destructive" onClick={() => handleControl(stage.stage_num, 'cancel')}>
+                  <Square className="size-3.5" aria-hidden="true" /> Cancel
+                </Button>
+              )}
+              {stage.available && blockingDependency !== undefined && status === 'not_started' && (
+                <span className="text-[10px] text-muted-foreground">
+                  Waiting on {String(blockingDependency).padStart(2, '0')}
+                </span>
+              )}
+            </div>
+            {stageError && (
+              <p className="rounded-md border border-destructive/30 bg-destructive/5 px-2.5 py-2 text-xs text-destructive" role="alert">
+                {stageError}
+              </p>
             )}
           </div>
         );
