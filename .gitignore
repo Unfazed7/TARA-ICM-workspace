@@ -1,0 +1,25 @@
+.env
+.env.local
+checkpoint-api/.env
+node_modules/
+frontend/node_modules/
+frontend/dist/
+uploads/
+.pytest_cache/
+__pycache__/
+*.pyc
+tara_aegis.db
+*.db
+test-risk-register.tmp.json
+tests/.tmp-*/
+/private-eval/
+
+# Model call audit log (C1)
+tara-workspace/web-based-tara/audit/
+
+# Stage run outputs may hold client-derived content (DR-10, C4)
+tara-workspace/web-based-tara/stages/*/output/*
+!tara-workspace/web-based-tara/stages/*/output/.gitkeep
+
+# Run log (local only)
+logs/

@@ -1,0 +1,18 @@
+[
+  {
+    "risk_id": "RSK_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "attack_id": "AT_01",
+    "impact_id": "IM_01",
+    "asset_id": "AS_01",
+    "impact_rating_value": 2,
+    "impact_rating_label": "Major",
+    "afr_value": 4,
+    "afr_label": "high",
+    "risk_score": 7.5,
+    "risk_level": "medium",
+    "risk_rank": 1,
+    "created_timestamp": "2026-06-01T10:05:00Z"
+  }
+]

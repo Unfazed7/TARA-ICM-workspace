@@ -1,0 +1,343 @@
+/* Aegis — 3a "Blueprint" theme
+ *
+ * Source: Claude Design handoff "Aegis Theme Directions" → 3a Blueprint.
+ * Looks like an engineering drawing: precise, technical, credible with auditors.
+ *
+ *   IBM Plex Sans + IBM Plex Mono · 3px radius
+ *   Ground #F6F8FA · Surface #EDF1F5 · Ink #14213D · Primary #1E4F9C · Signal #E4572E
+ *
+ * Single source of truth for colour. index.css and tailwind.config.ts only
+ * reference these variables (HSL channels, shadcn convention).
+ *
+ * Rules encoded here:
+ *   - A cool primary carries the interface; the warm signal only marks risk
+ *     or "a human must decide".
+ *   - Severity (Negligible → Severe) is one warm ramp, monotonic in lightness,
+ *     so it survives greyscale print. Always paired with its label.
+ *   - Fault Line: the component under attack sits out of line, with a block
+ *     of signal colour behind it (see .aegis-fault).
+ *   - Depth comes from rules and zones, not elevation or glow.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@400;600&display=swap');
+
+:root {
+  /* --- Base ---------------------------------------------------------------- */
+  --background: 210 29% 97%;         /* #F6F8FA ground                       */
+  --foreground: 221 51% 16%;         /* #14213D ink                          */
+  --card: 0 0% 100%;
+  --card-foreground: 221 51% 16%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 221 51% 16%;
+
+  --muted: 210 29% 95%;              /* #EDF1F5 surface                      */
+  --muted-foreground: 218 20% 40%;   /* #51607A muted text, 6.0:1 on ground  */
+  --border: 213 26% 83%;             /* #C9D3DF line                         */
+  --input: 213 26% 83%;
+  --ring: 217 68% 36%;
+
+  --primary: 217 68% 36%;            /* #1E4F9C blueprint blue               */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 210 29% 95%;          /* surface                              */
+  --secondary-foreground: 221 51% 16%;
+  --accent: 217 56% 92%;             /* #DFE8F6 primary-soft (hover, select) */
+  --accent-foreground: 221 51% 16%;
+
+  --destructive: 10 73% 38%;         /* #A8321A = severe                     */
+  --destructive-foreground: 0 0% 100%;
+
+  /* --- 3a structural tokens ------------------------------------------------ */
+  --zone: 210 32% 93%;               /* #E6ECF2 grouped regions              */
+  --bar: 221 51% 16%;                /* #14213D app bar                      */
+  --bar-foreground: 210 29% 97%;
+  --primary-soft: 217 56% 92%;       /* #DFE8F6                              */
+
+  /* Signal: risk, and "needs you". Fill colour — use signal-ink for text.  */
+  --signal: 14 77% 54%;              /* #E4572E                              */
+  --signal-foreground: 13 74% 6%;    /* #1B0904                              */
+  --signal-ink: 14 75% 41%;          /* #B8401A, 5.2:1 on ground             */
+
+  /* --- Severity ramp (impact: Negligible / Moderate / Major / Severe) ------ */
+  --sev-1: 213 24% 91%;              /* #E3E8EE negligible                   */
+  --sev-1-foreground: 216 28% 24%;   /* #2C3A4F                              */
+  --sev-2: 17 90% 92%;               /* #FDE4DA moderate                     */
+  --sev-2-foreground: 11 77% 27%;    /* #7A2410                              */
+  --sev-3: 16 82% 67%;               /* #F08A64 major                        */
+  --sev-3-foreground: 14 82% 13%;    /* #3B1206                              */
+  --sev-4: 10 73% 38%;               /* #A8321A severe                       */
+  --sev-4-foreground: 0 0% 100%;
+
+  /* --- Legacy semantic names, remapped onto 3a ----------------------------- */
+  /* "ok / complete" is structural, so it is primary — never green.        */
+  --emerald: 217 68% 36%;
+  --emerald-foreground: 0 0% 100%;
+  --sage: 217 68% 36%;
+  --sage-foreground: 0 0% 100%;
+  --amber: 14 75% 41%;               /* = signal-ink                         */
+  --amber-foreground: 0 0% 100%;
+  --dusty-amber: 14 75% 41%;
+  --dusty-amber-foreground: 0 0% 100%;
+  --warning: 14 75% 41%;
+  --critical: 10 73% 38%;            /* = severe                             */
+  --critical-foreground: 0 0% 100%;
+
+  /* Role tokens used by the Item Definition screens. */
+  --aegis-decide: 14 77% 54%;        /* human must decide → signal           */
+  --aegis-decide-fill: 17 90% 95%;
+  --aegis-decide-text: 11 77% 27%;
+  --aegis-conflict: 10 73% 38%;      /* contradiction → severe               */
+  --aegis-conflict-fill: 12 70% 96%;
+  --aegis-conflict-text: 11 77% 27%;
+  --aegis-interface: 217 68% 36%;    /* boundary interface → primary         */
+  --aegis-interface-fill: 217 56% 92%;
+  --aegis-interface-text: 217 70% 28%;
+
+  /* 5-step ordinal scale (risk 1–5). Steps 1–4 are the severity ramp. */
+  --aegis-scale-1: var(--sev-1);
+  --aegis-scale-2: var(--sev-2);
+  --aegis-scale-3: var(--sev-3);
+  --aegis-scale-4: var(--sev-4);
+  --aegis-scale-5: 11 77% 27%;       /* #7A2410 critical                     */
+  --aegis-scale-1-text: var(--sev-1-foreground);
+  --aegis-scale-2-text: var(--sev-2-foreground);
+  --aegis-scale-3-text: var(--sev-3-foreground);
+  --aegis-scale-4-text: var(--sev-4-foreground);
+  --aegis-scale-5-text: 0 0% 100%;
+
+  /* 4-step scales (CAL 1–4, impact rating) map 1:1 onto the severity ramp. */
+  --aegis-cal-1: var(--sev-1);
+  --aegis-cal-2: var(--sev-2);
+  --aegis-cal-3: var(--sev-3);
+  --aegis-cal-4: var(--sev-4);
+
+  /* Charts: structure in blues, risk in the warm ramp. */
+  --chart-1: 217 68% 36%;
+  --chart-2: 221 51% 16%;
+  --chart-3: 218 20% 40%;
+  --chart-4: 16 82% 67%;
+  --chart-5: 10 73% 38%;
+
+  --sidebar-background: 210 29% 95%;
+  --sidebar-foreground: 221 51% 16%;
+  --sidebar-primary: 217 68% 36%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 217 56% 92%;
+  --sidebar-accent-foreground: 221 51% 16%;
+  --sidebar-border: 213 26% 83%;
+  --sidebar-ring: 217 68% 36%;
+
+  /* --- Geometry ------------------------------------------------------------ */
+  --radius: 3px;
+  --radius-frame: 6px;
+  --aegis-hairline: 1px;
+  --aegis-rule: hsl(213 26% 83%);
+  --aegis-grid: hsl(217 68% 36% / 0.05);
+
+  --shadow-card: none;
+  --shadow-card-hover: none;
+  --shadow-elevated: 0 8px 24px -12px hsl(221 51% 16% / 0.25);
+
+  /* --- Typography ---------------------------------------------------------- */
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+
+  --aegis-dash-derived: 5 3;
+  --aegis-dash-lowconf: 2 3;
+  --aegis-opacity-lowconf: 0.55;
+}
+
+/* Dark: 3d "Night Shift" palette, which the design names as the dark mode
+ * for 3a. Opt-in via the .dark class; the app ships light. */
+.dark {
+  --background: 220 17% 7%;          /* #0F1115                              */
+  --foreground: 225 18% 92%;         /* #E6E8EE                              */
+  --card: 222 16% 11%;               /* #161920                              */
+  --card-foreground: 225 18% 92%;
+  --popover: 222 16% 11%;
+  --popover-foreground: 225 18% 92%;
+  --muted: 220 18% 13%;              /* #1B1F27                              */
+  --muted-foreground: 219 10% 61%;   /* #9198A6                              */
+  --border: 221 16% 20%;             /* #2B303B                              */
+  --input: 221 16% 20%;
+  --ring: 197 64% 58%;
+  --primary: 197 64% 58%;            /* #4FB3D9                              */
+  --primary-foreground: 200 60% 6%;
+  --secondary: 220 18% 13%;
+  --secondary-foreground: 225 18% 92%;
+  --accent: 199 50% 12%;             /* #10252F                              */
+  --accent-foreground: 225 18% 92%;
+  --destructive: 21 75% 45%;         /* #C8571C                              */
+  --destructive-foreground: 0 0% 100%;
+
+  --zone: 220 18% 13%;
+  --bar: 225 17% 5%;                 /* #0A0B0E                              */
+  --bar-foreground: 225 18% 92%;
+  --primary-soft: 199 50% 12%;
+  --signal: 24 100% 62%;             /* #FF8A3D                              */
+  --signal-foreground: 26 100% 5%;
+  --signal-ink: 24 100% 62%;
+
+  --sev-1: 221 19% 17%;
+  --sev-1-foreground: 219 15% 80%;
+  --sev-2: 25 46% 16%;
+  --sev-2-foreground: 27 100% 83%;
+  --sev-3: 21 75% 45%;
+  --sev-3-foreground: 0 0% 100%;
+  --sev-4: 24 100% 62%;
+  --sev-4-foreground: 26 100% 5%;
+
+  --emerald: 197 64% 58%;
+  --emerald-foreground: 200 60% 6%;
+  --sage: 197 64% 58%;
+  --sage-foreground: 200 60% 6%;
+  --amber: 24 100% 62%;
+  --amber-foreground: 26 100% 5%;
+  --dusty-amber: 24 100% 62%;
+  --dusty-amber-foreground: 26 100% 5%;
+  --warning: 24 100% 62%;
+  --critical: 24 100% 62%;
+  --critical-foreground: 26 100% 5%;
+
+  --aegis-decide: 24 100% 62%;
+  --aegis-decide-fill: 25 46% 16%;
+  --aegis-decide-text: 27 100% 83%;
+  --aegis-conflict: 21 75% 45%;
+  --aegis-conflict-fill: 25 46% 16%;
+  --aegis-conflict-text: 27 100% 83%;
+  --aegis-interface: 197 64% 58%;
+  --aegis-interface-fill: 199 50% 12%;
+  --aegis-interface-text: 197 64% 72%;
+  --aegis-scale-5: 24 100% 70%;
+  --aegis-scale-5-text: 26 100% 5%;
+
+  --chart-1: 197 64% 58%;
+  --chart-2: 225 18% 92%;
+  --chart-3: 219 10% 61%;
+  --chart-4: 21 75% 45%;
+  --chart-5: 24 100% 62%;
+
+  --sidebar-background: 222 16% 11%;
+  --sidebar-foreground: 225 18% 92%;
+  --sidebar-primary: 197 64% 58%;
+  --sidebar-primary-foreground: 200 60% 6%;
+  --sidebar-accent: 199 50% 12%;
+  --sidebar-accent-foreground: 225 18% 92%;
+  --sidebar-border: 221 16% 20%;
+  --sidebar-ring: 197 64% 58%;
+
+  --aegis-rule: hsl(221 16% 20%);
+  --aegis-grid: hsl(197 64% 58% / 0.05);
+}
+
+/* --- Utility classes ------------------------------------------------------ */
+
+.aegis-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+}
+
+.aegis-doc {
+  font-family: var(--font-serif);
+  line-height: 1.6;
+}
+
+/* Identifiers (TS-014, RAT-201): mono, tabular, muted. */
+.aegis-id {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: hsl(var(--muted-foreground));
+  letter-spacing: 0.02em;
+}
+
+/* Section label in the drafting register (INTERNET, PRIVATE SUBNET). */
+.aegis-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Wordmark: TARA AEGIS in the app bar. */
+.aegis-wordmark {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.aegis-ruled {
+  border: var(--aegis-hairline) solid var(--aegis-rule);
+  box-shadow: none;
+}
+
+/* Grouped region (INTERNET, MANAGED). */
+.aegis-zone {
+  background: hsl(var(--zone));
+  border-radius: var(--radius);
+}
+
+/* Fault Line: the component under attack sits out of line, with a block of
+ * signal colour behind it. Use on exactly one element per view. */
+.aegis-fault {
+  border: 2px solid hsl(var(--primary));
+  background: hsl(var(--background));
+  box-shadow: 4px 4px 0 hsl(var(--signal));
+  font-weight: 600;
+}
+
+/* "5 need you" pill. */
+.aegis-signal-pill {
+  background: hsl(var(--signal));
+  color: hsl(var(--signal-foreground));
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+
+/* Severity badges: always fill + label. */
+.aegis-sev-1 { background: hsl(var(--sev-1)); color: hsl(var(--sev-1-foreground)); }
+.aegis-sev-2 { background: hsl(var(--sev-2)); color: hsl(var(--sev-2-foreground)); }
+.aegis-sev-3 { background: hsl(var(--sev-3)); color: hsl(var(--sev-3-foreground)); }
+.aegis-sev-4 { background: hsl(var(--sev-4)); color: hsl(var(--sev-4-foreground)); }
+
+/* Active stage tab: 3px primary underline. */
+.aegis-tab-active {
+  font-weight: 600;
+  box-shadow: inset 0 -3px 0 hsl(var(--primary));
+}
+
+.aegis-blocking {
+  border: 1.5px solid hsl(var(--aegis-decide));
+  background: hsl(var(--aegis-decide-fill));
+  color: hsl(var(--aegis-decide-text));
+}
+
+.aegis-interface-mark {
+  border: 1.5px dashed hsl(var(--aegis-interface));
+  background: hsl(var(--aegis-interface-fill));
+  color: hsl(var(--aegis-interface-text));
+}
+
+.aegis-conflict-mark {
+  border: 1px solid hsl(var(--aegis-conflict));
+  color: hsl(var(--aegis-conflict-text));
+}
+
+.aegis-derived {
+  border-style: dashed;
+}
+
+.aegis-lowconf {
+  opacity: var(--aegis-opacity-lowconf);
+  border-style: dashed;
+}
+
+.aegis-scope .animate-pulse,
+.aegis-scope .animate-ping {
+  animation: none;
+}

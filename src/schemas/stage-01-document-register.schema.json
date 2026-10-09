@@ -1,0 +1,607 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-01-document-register.schema.json",
+  "title": "Stage 01 Document Register",
+  "description": "One entry per client document. Spec: .meta/specs/12a-document-register-and-facts.md",
+  "type": "array",
+  "minItems": 1,
+  "uniqueItemProperties": [
+    "doc_id",
+    "sha256"
+  ],
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "doc_id",
+      "title",
+      "date_received",
+      "owner",
+      "environment",
+      "doc_type",
+      "sha256",
+      "read_status",
+      "reading_method",
+      "precedence_rank",
+      "used_for",
+      "ignored_and_why"
+    ],
+    "properties": {
+      "doc_id": {
+        "type": "string",
+        "pattern": "^DOC-\\d{2,}$"
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "client_doc_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "date_on_document": {
+        "type": "string",
+        "format": "date"
+      },
+      "date_received": {
+        "type": "string",
+        "format": "date"
+      },
+      "owner": {
+        "type": "string",
+        "enum": [
+          "client",
+          "supplier",
+          "assessor"
+        ]
+      },
+      "environment": {
+        "type": "string",
+        "enum": [
+          "prod",
+          "staging",
+          "dev",
+          "unknown"
+        ]
+      },
+      "doc_type": {
+        "type": "string",
+        "enum": [
+          "diagram",
+          "qa",
+          "functional",
+          "api_spec",
+          "infra",
+          "manual",
+          "config_export",
+          "srs",
+          "existing_item_definition",
+          "asset_list",
+          "other"
+        ]
+      },
+      "sha256": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "read_status": {
+        "type": "string",
+        "enum": [
+          "parsed",
+          "partial",
+          "failed"
+        ]
+      },
+      "read_status_reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "reading_method": {
+        "type": "string",
+        "enum": [
+          "parsed",
+          "text_layer",
+          "image_model",
+          "mixed"
+        ]
+      },
+      "page_methods": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "page",
+            "method"
+          ],
+          "properties": {
+            "page": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "method": {
+              "type": "string",
+              "enum": [
+                "parsed",
+                "text_layer",
+                "image_model"
+              ]
+            }
+          }
+        }
+      },
+      "unread_parts": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "reader_version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "precedence_rank": {
+        "type": "integer",
+        "minimum": 2,
+        "maximum": 9
+      },
+      "used_for": {
+        "type": "string"
+      },
+      "ignored_and_why": {
+        "type": "string"
+      },
+      "doc_type_label": {
+        "type": "string",
+        "minLength": 1
+      },
+      "rank_override_decision_id": {
+        "type": "string",
+        "pattern": "^AD-\\d{3,}$"
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "read_status": {
+              "type": "string",
+              "enum": [
+                "partial",
+                "failed"
+              ]
+            }
+          },
+          "required": [
+            "read_status"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "required": [
+            "read_status_reason"
+          ],
+          "properties": {
+            "read_status_reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "other"
+            }
+          },
+          "required": [
+            "doc_type"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "required": [
+            "doc_type_label"
+          ],
+          "properties": {
+            "doc_type_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "config_export"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 2
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "qa"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 3
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "existing_item_definition"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 4
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "diagram"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 5
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "infra"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 6
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "functional"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "srs"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "api_spec"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "asset_list"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 7
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "manual"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 8
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "doc_type": {
+              "type": "string",
+              "const": "other"
+            }
+          },
+          "required": [
+            "doc_type"
+          ],
+          "not": {
+            "type": "object",
+            "required": [
+              "rank_override_decision_id"
+            ],
+            "properties": {
+              "rank_override_decision_id": {
+                "type": "string",
+                "pattern": "^AD-\\d{3,}$"
+              }
+            }
+          }
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "precedence_rank": {
+              "type": "integer",
+              "const": 8
+            }
+          }
+        }
+      }
+    ]
+  }
+}
