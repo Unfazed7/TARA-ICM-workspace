@@ -35,4 +35,5 @@ Tracks tasks from `.meta/CLAUDE-CODE-INSTRUCTIONS.md`. Status values: `pending`,
 | C12 | on-hold | 2026-10-01 | | D-41. |
 | C13 | on-hold | 2026-10-01 | | D-41. Note from C1: legacy stages force a tool choice that current Claude models reject. |
 | C14 | on-hold | 2026-10-01 | | D-41. |
+| C15 | in progress | 2026-10-20 | | App theme and stage restyle from the analyst's Claude Design redesign (D-51, spec 24 updated). Steps, one commit each: 1 decision and spec; 2 theme tokens, fonts, motion and shared controls; 3 Stage 01 Documents; 4 Stage 02 Item Definition on React Flow with elkjs. Step 1 is the commit that adds this row. |
 | D1 (future) | not started | | | Production feedback loop and guardrails, PART 6 of the instructions (D-39). |
