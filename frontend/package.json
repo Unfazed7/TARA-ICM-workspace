@@ -49,7 +49,6 @@
     "cmdk": "^1.1.1",
     "dagre": "^0.8.5",
     "date-fns": "^3.6.0",
-    "elkjs": "^0.9.3",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^11.18.2",
     "input-otp": "^1.4.2",

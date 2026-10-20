@@ -1,6 +1,8 @@
-/** Details of the selected element or connection, with the quotes it rests on (spec 24). */
+/**
+ * Details of the selected element or connection, with the quotes it rests on (spec 24, D-51).
+ * Content of the Details tab in the Stage 02 side panel.
+ */
 
-import { X } from 'lucide-react';
 import type { Element, Fact, Link, RegisterEntry, ScopeDecision, Stage02Output } from '@/types/stages';
 import { assetWords, SCOPE_WORDS } from './words';
 
@@ -14,29 +16,26 @@ interface Props {
   exposureAssumed: boolean;
   onShowAssumptions: () => void;
   onSelect: (id: string) => void;
-  onClose: () => void;
 }
 
 export function DetailsDrawer(props: Props) {
-  const { def, selectedId, onClose } = props;
+  const { def, selectedId } = props;
   const element = def.elements.find((e) => e.element_id === selectedId);
   const link = def.links.find((l) => l.link_id === selectedId);
   if (!element && !link) return null;
   const name = (id: string) => def.elements.find((e) => e.element_id === id)?.name || id;
 
   return (
-    <aside aria-label="Details" className="flex w-[380px] shrink-0 flex-col gap-5 overflow-y-auto border-l border-foreground bg-card p-6">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="aegis-label">{element ? 'Component' : 'Connection'}</div>
-          <h2 className="mt-1 text-lg font-semibold leading-6">{element ? element.name : `${name(link!.source_id)} to ${name(link!.destination_id)}`}</h2>
-        </div>
-        <button type="button" aria-label="Close details" onClick={onClose} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-foreground hover:bg-accent">
-          <X className="h-4 w-4" aria-hidden="true" />
-        </button>
+    <div aria-label="Details" className="flex flex-col gap-5 px-5 py-5 text-sm">
+      <div className="flex flex-col gap-1.5">
+        <span className={`self-start rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-[.05em] ${element ? 'bg-state-grey text-state-grey-foreground' : 'bg-state-blue text-state-blue-foreground'}`}>
+          {element ? 'Component' : 'Connection'}
+          {link ? ` ${link.link_id}` : ''}
+        </span>
+        <h2 className="m-0 text-lg font-semibold leading-snug tracking-tight">{element ? element.name : `${name(link!.source_id)} to ${name(link!.destination_id)}`}</h2>
       </div>
       {element ? <ElementDetails {...props} element={element} name={name} /> : <LinkDetails {...props} link={link!} />}
-    </aside>
+    </div>
   );
 }
 
@@ -50,7 +49,7 @@ function Row({ term, children }: { term: string; children: React.ReactNode }) {
 }
 
 function Assumed() {
-  return <span className="aegis-label ml-1.5 text-signal-ink">Assumed</span>;
+  return <span className="ml-1.5 rounded-full bg-state-yellow px-1.5 py-px text-[10.5px] font-medium uppercase tracking-[.05em] text-state-yellow-foreground">Assumed</span>;
 }
 
 function ElementDetails({
@@ -88,12 +87,13 @@ function ElementDetails({
       {links.length > 0 && (
         <div>
           <div className="aegis-label mb-1.5">Connections ({links.length})</div>
-          <ul className="m-0 flex list-none flex-col gap-1 p-0">
+          <ul className="m-0 flex list-none flex-col overflow-hidden rounded-[10px] border border-border p-0">
             {links.map((l) => {
               const out = l.source_id === element.element_id;
               return (
-                <li key={l.link_id}>
-                  <button type="button" onClick={() => onSelect(l.link_id)} className="text-left underline decoration-border underline-offset-4 hover:decoration-primary">
+                <li key={l.link_id} className="border-b border-rule last:border-b-0">
+                  <button type="button" onClick={() => onSelect(l.link_id)} className="flex min-h-10 w-full items-center gap-2 px-3 py-2 text-left transition-colors hover:bg-accent">
+                    <span className="aegis-mono text-[11.5px] text-muted-foreground">{l.link_id}</span>
                     {out ? 'To' : 'From'} {name(out ? l.destination_id : l.source_id)}
                     {l.protocol && l.protocol !== 'unknown' ? `, ${protocolWords(l.protocol)}` : ''}
                   </button>
@@ -105,7 +105,8 @@ function ElementDetails({
       )}
       <Quotes factIds={element.fact_ids} facts={facts} docs={docs} />
       {assumptionCount > 0 && (
-        <button type="button" onClick={onShowAssumptions} className="self-start rounded-md border border-foreground px-4 py-2.5 hover:bg-accent">
+        <button type="button" onClick={onShowAssumptions} className="inline-flex min-h-10 items-center gap-2 self-start rounded-[10px] border border-state-yellow-border bg-state-yellow px-3.5 font-medium text-[hsl(var(--aegis-decide-text))] transition-transform active:scale-[0.98]">
+          <span className="h-2 w-2 rounded-full bg-state-yellow-foreground" aria-hidden="true" />
           See the {assumptionCount} assumption{assumptionCount > 1 ? 's' : ''} about this
         </button>
       )}
@@ -133,7 +134,8 @@ function LinkDetails({ link, facts, docs, assumptionCount, onShowAssumptions }: 
       {link.remark && <p className="m-0 text-muted-foreground">{link.remark}</p>}
       <Quotes factIds={link.fact_ids} facts={facts} docs={docs} />
       {assumptionCount > 0 && (
-        <button type="button" onClick={onShowAssumptions} className="self-start rounded-md border border-foreground px-4 py-2.5 hover:bg-accent">
+        <button type="button" onClick={onShowAssumptions} className="inline-flex min-h-10 items-center gap-2 self-start rounded-[10px] border border-state-yellow-border bg-state-yellow px-3.5 font-medium text-[hsl(var(--aegis-decide-text))] transition-transform active:scale-[0.98]">
+          <span className="h-2 w-2 rounded-full bg-state-yellow-foreground" aria-hidden="true" />
           See the {assumptionCount} assumption{assumptionCount > 1 ? 's' : ''} about this
         </button>
       )}

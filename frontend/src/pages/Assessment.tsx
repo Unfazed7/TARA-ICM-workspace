@@ -6,7 +6,10 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown, Info, PanelLeft } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useMotionPreset } from '@/lib/motion';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
 import type { RationaleItem, ScopeStatus, StageKey } from '@/types/stages';
 import { DocumentsStage } from '@/components/stages/DocumentsStage';
@@ -38,6 +41,9 @@ export default function Assessment() {
   const [openCard, setOpenCard] = useState<Card | null>(null);
   const [filterId, setFilterId] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [sideOpen, setSideOpen] = useState(true);
+  const [boundaryOpen, setBoundaryOpen] = useState(false);
+  const { easeOut } = useMotionPreset();
 
   const assessment = useQuery({ queryKey: ['assessment', assessmentId], queryFn: () => stagesApi.assessment(assessmentId) });
   const stage01 = useQuery({ queryKey: ['stage01', assessmentId], queryFn: () => orNothing(stagesApi.stage01(assessmentId)) });
@@ -75,6 +81,12 @@ export default function Assessment() {
     setFilterId(about);
     setOpenCard(null);
     setPanelOpen(true);
+    setSideOpen(true);
+  };
+  const selectOnDiagram = (id: string) => {
+    setSelectedId(id);
+    setPanelOpen(false);
+    setSideOpen(true);
   };
   const filterName = filterId ? elements.find((e) => e.element_id === filterId)?.name || 'this connection' : null;
   const project = assessment.data?.name ?? '...';
@@ -94,7 +106,7 @@ export default function Assessment() {
         onStage={goTo}
         needCount={needCount}
         assumptionsOpen={panelOpen}
-        onAssumptions={() => (panelOpen ? setPanelOpen(false) : openAssumptions())}
+        onAssumptions={() => (panelOpen && (tab === '01' || sideOpen) ? setPanelOpen(false) : openAssumptions())}
         onSettings={() => setSettingsOpen(true)}
       />
 
@@ -115,71 +127,151 @@ export default function Assessment() {
               </div>
             </div>
           ) : (
-            <div className="mx-auto flex max-w-[1600px] flex-col gap-4 px-[clamp(16px,2.5vw,32px)] pb-12 pt-7">
+            <div className="mx-auto flex max-w-[1600px] flex-col px-[clamp(16px,2.5vw,32px)] pb-12 pt-7">
               <PageHeader
                 project={project}
                 title="Item definition"
                 right={
-                  <span className="inline-flex items-center gap-1.5">
-                    <StatusDot tone="green" />
-                    Built {new Date(stage02.data!.created_at).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}{' '}
-                    <span className="aegis-mono text-[11.5px]">run {stage02.data!.run_number}</span>
-                  </span>
+                  <>
+                    <span className="inline-flex items-center gap-1.5">
+                      <StatusDot tone="green" />
+                      Built {new Date(stage02.data!.created_at).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}{' '}
+                      <span className="aegis-mono text-[11.5px]">run {stage02.data!.run_number}</span>
+                    </span>
+                    <button
+                      type="button"
+                      aria-expanded={boundaryOpen}
+                      aria-controls="boundary-text"
+                      onClick={() => setBoundaryOpen((v) => !v)}
+                      className="inline-flex min-h-[34px] items-center gap-1.5 rounded-[10px] border border-border bg-card px-3 text-[13px] font-medium text-foreground hover:bg-accent active:scale-[0.98]"
+                    >
+                      Boundary
+                      <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', boundaryOpen && 'rotate-180')} aria-hidden="true" />
+                    </button>
+                  </>
+                }
+                below={
+                  <AnimatePresence initial={false}>
+                    {boundaryOpen && (
+                      <motion.p
+                        id="boundary-text"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={easeOut}
+                        className="m-0 mt-3 max-w-[90ch] overflow-hidden rounded-xl border border-rule bg-card px-4 py-3 text-sm leading-relaxed text-foreground/85"
+                      >
+                        {def.boundary_statement.text}
+                        {def.boundary_statement.proposed ? ' (proposed)' : ''}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 }
               />
-              <p className="m-0 max-w-[900px] text-muted-foreground">
-                {def.boundary_statement.text}
-                {def.boundary_statement.proposed ? ' (proposed)' : ''}
-              </p>
-              <Legend />
               {highlight && (
-                <p className="m-0 text-[14px]">
-                  Showing what <b>{openCard?.item.title}</b> affects.{' '}
-                  <button type="button" onClick={() => setOpenCard(null)} className="underline underline-offset-4">Show everything</button>
-                </p>
+                <div role="status" className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-state-yellow-border bg-state-yellow py-2 pl-4 pr-2 text-sm text-[hsl(var(--aegis-decide-text))]">
+                  <span>Showing what <b className="font-semibold">{openCard?.item.title}</b> affects.</span>
+                  <button type="button" onClick={() => setOpenCard(null)} className="min-h-[34px] rounded-[10px] border border-border bg-card px-3 font-medium text-foreground hover:bg-accent">Show everything</button>
+                </div>
               )}
-              <Diagram def={def} scope={scope} selectedId={selectedId} highlight={highlight} onSelect={(id) => setSelectedId(id)} />
+
+              <section className="aegis-card" aria-label="Item definition workspace">
+                <div className="aegis-card-head">
+                  <span className="inline-flex items-center gap-3">
+                    <button
+                      type="button"
+                      aria-controls="side-panel"
+                      aria-expanded={sideOpen}
+                      aria-label={sideOpen ? 'Collapse the side panel' : 'Expand the side panel'}
+                      title={sideOpen ? 'Collapse the side panel' : 'Expand the side panel'}
+                      onClick={() => setSideOpen((v) => !v)}
+                      className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-border bg-card hover:bg-accent active:scale-[0.98]"
+                    >
+                      <PanelLeft className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                    </button>
+                    <span className="text-[15px] font-semibold">Diagram</span>
+                    <span className="aegis-mono text-xs text-muted-foreground">{elements.length} components · {links.length} connections</span>
+                  </span>
+                  <Legend />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-[var(--side)_minmax(0,1fr)]" style={{ ['--side' as string]: sideOpen ? '380px' : '60px' }}>
+                  <aside id="side-panel" className={cn('min-w-0 border-b border-border md:border-b-0 md:border-r', sideOpen ? 'bg-[hsl(var(--well))]' : 'bg-muted')}>
+                    {sideOpen ? (
+                      <>
+                        <div role="tablist" aria-label="Side panel" className="m-3 grid grid-cols-2 gap-1 rounded-xl bg-[hsl(var(--state-grey))] p-1">
+                          {(['details', 'assumptions'] as const).map((t) => {
+                            const on = t === 'assumptions' ? panelOpen : !panelOpen;
+                            return (
+                              <button
+                                key={t}
+                                type="button"
+                                role="tab"
+                                aria-selected={on}
+                                onClick={() => (t === 'assumptions' ? openAssumptions(filterId) : setPanelOpen(false))}
+                                className={cn('relative flex min-h-9 items-center justify-center gap-2 rounded-[9px] text-[13.5px] transition-colors', on ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground')}
+                              >
+                                {on && <motion.span layoutId="side-tab" transition={easeOut} className="absolute inset-0 rounded-[9px] bg-card shadow-[0_1px_2px_hsl(40_6%_10%/0.08)]" aria-hidden="true" />}
+                                <span className="relative">{t === 'details' ? 'Details' : 'Assumptions'}</span>
+                                {t === 'assumptions' && needCount > 0 && <span className="aegis-mono relative rounded-full bg-state-yellow px-1.5 text-[11px] text-state-yellow-foreground">{needCount}</span>}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div className="max-h-[860px] overflow-y-auto border-t border-border bg-card">
+                          {panelOpen ? (
+                            <AssumptionsList
+                              assessmentId={assessmentId}
+                              cards={viewCards}
+                              questions={questions}
+                              docs={docs}
+                              openId={openCard?.id ?? null}
+                              onOpen={setOpenCard}
+                              filterName={filterName}
+                              onClearFilter={() => setFilterId(null)}
+                            />
+                          ) : selectedId ? (
+                            <DetailsDrawer
+                              def={def}
+                              selectedId={selectedId}
+                              decisions={decisions}
+                              facts={facts}
+                              docs={docs}
+                              assumptionCount={cardsAbout(selectedId).length}
+                              exposureAssumed={cardsAbout(selectedId).some((c) => c.item.topic === 'exposure')}
+                              onShowAssumptions={() => openAssumptions(selectedId)}
+                              onSelect={setSelectedId}
+                            />
+                          ) : (
+                            <div className="flex flex-col gap-1.5 px-5 py-6">
+                              <span className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-muted text-muted-foreground" aria-hidden="true">
+                                <Info className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                              </span>
+                              <span className="mt-2 text-[15px] font-medium">Nothing selected</span>
+                              <span className="text-[13px] leading-relaxed text-muted-foreground">Click a component or a connection on the diagram to see where it sits, why it is in scope and what the documents say.</span>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-row gap-2 p-2.5 md:flex-col md:items-center">
+                        <button type="button" aria-label="Show details" title="Details" onClick={() => { setSideOpen(true); setPanelOpen(false); }} className="flex h-10 w-10 items-center justify-center rounded-[10px] border border-border bg-card hover:bg-accent">
+                          <Info className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                        </button>
+                        <button type="button" aria-label="Show assumptions" title="Assumptions" onClick={() => openAssumptions()} className="relative flex h-10 w-10 items-center justify-center rounded-[10px] border border-border bg-card text-xs font-semibold hover:bg-accent">
+                          A
+                          {needCount > 0 && <span className="aegis-mono absolute -right-1.5 -top-1.5 rounded-full bg-state-yellow px-1.5 text-[10px] text-state-yellow-foreground">{needCount}</span>}
+                        </button>
+                      </div>
+                    )}
+                  </aside>
+                  <div className="min-w-0">
+                    <Diagram def={def} scope={scope} selectedId={selectedId} highlight={highlight} onSelect={selectOnDiagram} fitKey={sideOpen ? 'open' : 'closed'} />
+                  </div>
+                </div>
+              </section>
             </div>
           )}
         </main>
-
-        {tab === '02' && panelOpen ? (
-          <aside aria-label="Assumptions" className="aegis-card sticky top-24 m-4 ml-0 max-h-[calc(100dvh-112px)] w-[420px] shrink-0 overflow-y-auto">
-            <div className="aegis-card-head">
-              <span className="text-base font-semibold">Assumptions</span>
-              <button type="button" aria-label="Close assumptions" onClick={() => { setPanelOpen(false); setOpenCard(null); }} className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-border bg-card hover:bg-accent">
-                <X className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </div>
-            <AssumptionsList
-              assessmentId={assessmentId}
-              cards={viewCards}
-              questions={questions}
-              docs={docs}
-              openId={openCard?.id ?? null}
-              onOpen={setOpenCard}
-              filterName={filterName}
-              onClearFilter={() => setFilterId(null)}
-            />
-          </aside>
-        ) : (
-          tab === '02' &&
-          def &&
-          selectedId && (
-            <DetailsDrawer
-              def={def}
-              selectedId={selectedId}
-              decisions={decisions}
-              facts={facts}
-              docs={docs}
-              assumptionCount={cardsAbout(selectedId).length}
-              exposureAssumed={cardsAbout(selectedId).some((c) => c.item.topic === 'exposure')}
-              onShowAssumptions={() => openAssumptions(selectedId)}
-              onSelect={setSelectedId}
-              onClose={() => setSelectedId(null)}
-            />
-          )
-        )}
       </div>
 
       <SideSheet

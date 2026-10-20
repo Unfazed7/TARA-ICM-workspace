@@ -1,14 +1,23 @@
 /**
- * Item Definition diagram (spec 24): zones as bands, containers as nested frames, elements as
- * boxes and links as arrows. Laid out by the browser (flex), arrows drawn after layout. No
- * canvas library and no animation.
+ * Item Definition diagram (D-51, spec 24). Our layout engine (`diagram/`) places zones,
+ * containers and components and routes every connection with right-angle lines; React Flow
+ * draws the result and handles zoom and pan. A crossing the engine could not avoid is drawn with
+ * a small jump.
  */
 
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
-import type { Container, Element, Link, ScopeStatus, Stage02Output, Zone } from '@/types/stages';
-import { ACTOR_TYPES, EXTERNAL_ZONES } from './words';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import ReactFlow, { BaseEdge, Controls, Handle, Position, ReactFlowProvider, useReactFlow, type Edge, type EdgeProps, type Node, type NodeProps } from 'reactflow';
+import 'reactflow/dist/style.css';
+import { cn } from '@/lib/utils';
+import type { ScopeStatus, Stage02Output } from '@/types/stages';
+import type { LayoutBox } from './diagram/layout';
+import type { Crossing, Point } from './diagram/route';
+import { useDiagramLayout } from './diagram/useDiagramLayout';
+import { ACTOR_TYPES } from './words';
 
 type Def = Stage02Output['item_definition'];
+
+const MIN_ZOOM = 0.72;
 
 interface Props {
   def: Def;
@@ -16,230 +25,332 @@ interface Props {
   selectedId: string | null;
   highlight: Set<string> | null;
   onSelect: (id: string) => void;
+  /** Changes when the space around the diagram changes, so it fits again. */
+  fitKey?: string | number;
 }
 
-const LEFT_ZONES = ['internet_external', 'corporate_it'];
+/** Box look by what the box stands for. Colour marks state only, so zones stay pastel and quiet. */
+function boxLook(b: LayoutBox): { cls: string; label: string } {
+  if (b.kind === 'internet_external') return { cls: 'bg-state-red border border-state-red-border', label: 'text-state-red-foreground' };
+  if (b.kind === 'cloud_account') return { cls: 'bg-card border border-[hsl(47_8%_78%)]', label: 'text-foreground' };
+  if (b.kind === 'vpc') return { cls: 'border border-[hsl(47_8%_78%)]', label: 'text-foreground' };
+  if (b.kind === 'cluster') return { cls: 'border-[1.25px] border-dashed border-[hsl(122_17%_67%)] bg-card/60', label: 'text-state-green-foreground' };
+  if (b.kind === 'subnet' && b.zoneKind?.includes('public')) return { cls: 'bg-state-yellow border border-state-yellow-border', label: 'text-state-yellow-foreground' };
+  if (b.kind === 'subnet') return { cls: 'bg-state-green border border-state-green-border', label: 'text-state-green-foreground' };
+  if (b.kind.includes('managed')) return { cls: 'bg-state-blue border border-state-blue-border', label: 'text-state-blue-foreground' };
+  if (b.kind === 'none') return { cls: 'border border-dashed border-border', label: 'text-muted-foreground' };
+  return { cls: 'bg-state-grey border border-border', label: 'text-state-grey-foreground' };
+}
 
-export function Diagram({ def, scope, selectedId, highlight, onSelect }: Props) {
+type BoxData = { box: LayoutBox };
+const BoxNode = memo(({ data }: NodeProps<BoxData>) => {
+  const { box } = data;
+  const look = boxLook(box);
+  return (
+    <div className={cn('pointer-events-none relative h-full w-full rounded-[12px]', look.cls)} style={{ width: box.w, height: box.h }}>
+      <span className={cn('aegis-label absolute left-3 top-2.5 text-[10px]', look.label)}>{box.label}</span>
+    </div>
+  );
+});
+BoxNode.displayName = 'BoxNode';
+
+type ElementData = {
+  name: string;
+  actor: boolean;
+  status?: ScopeStatus;
+  exposed: boolean;
+  selected: boolean;
+  marked: boolean;
+  dimmed: boolean;
+  onSelect: () => void;
+  w: number;
+  h: number;
+};
+const handle = { opacity: 0, width: 1, height: 1, minWidth: 0, minHeight: 0, border: 0, top: '50%', left: '50%' } as const;
+const ElementNode = memo(({ data }: NodeProps<ElementData>) => {
+  const look = data.selected
+    ? 'bg-foreground text-primary-foreground shadow-[4px_4px_0_hsl(var(--state-blue-foreground))] font-medium'
+    : data.marked
+      ? 'bg-state-yellow text-[hsl(var(--aegis-decide-text))] shadow-[0_0_0_2px_hsl(var(--state-yellow-foreground))] font-medium'
+      : data.status === 'interface'
+        ? 'bg-card/70 text-foreground/90 outline-dashed outline-[1.25px] -outline-offset-[1.25px] outline-[hsl(var(--aegis-interface))]'
+        : data.status === 'out_of_scope'
+          ? 'bg-state-grey text-muted-foreground'
+          : data.status === 'ambiguous'
+            ? 'bg-card text-foreground outline-dotted outline-[1.5px] -outline-offset-[1.5px] outline-foreground'
+            : 'bg-card text-foreground shadow-[0_0_0_1px_hsl(47_6%_80%),0_2px_4px_-2px_hsl(40_6%_10%/0.12)]';
+  return (
+    <>
+      <Handle type="target" position={Position.Left} isConnectable={false} style={handle} />
+      <button
+        type="button"
+        aria-pressed={data.selected}
+        onClick={data.onSelect}
+        style={{ width: data.w, height: data.h }}
+        className={cn(
+          'nodrag flex items-center gap-1.5 px-2.5 text-left text-[12.5px] leading-tight transition-[opacity,box-shadow,background-color,transform] duration-300 hover:-translate-y-px motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+          data.actor ? 'justify-center rounded-full text-center' : 'rounded-[10px]',
+          look,
+          data.dimmed && 'opacity-30',
+        )}
+      >
+        <span className="min-w-0 flex-1">{data.name}</span>
+        {data.exposed && <span title="Reachable from the internet" className={cn('h-[7px] w-[7px] shrink-0 rounded-full', data.selected ? 'bg-[hsl(2_77%_83%)]' : 'bg-state-red-foreground')} />}
+      </button>
+      <Handle type="source" position={Position.Right} isConnectable={false} style={handle} />
+    </>
+  );
+});
+ElementNode.displayName = 'ElementNode';
+
+/** Rounded right-angle path through the points, with a small jump at each listed crossing. */
+function pathOf(points: Point[], jumps: Point[]): string {
+  const R = 6;
+  const J = 5;
+  let d = `M${points[0][0]} ${points[0][1]}`;
+  for (let i = 1; i < points.length; i++) {
+    const [px, py] = points[i - 1];
+    const [x, y] = points[i];
+    const last = i === points.length - 1;
+    const next = points[i + 1];
+    const len = Math.abs(x - px) + Math.abs(y - py);
+    const r = last ? 0 : Math.min(R, len / 2, (Math.abs(next[0] - x) + Math.abs(next[1] - y)) / 2);
+    const ux = Math.sign(x - px);
+    const uy = Math.sign(y - py);
+    if (uy === 0) {
+      // Horizontal run: jump over crossings in the order they are met.
+      const hops = jumps.filter(([jx, jy]) => jy === y && (jx - px) * ux > J && (x - jx) * ux > J + r).sort((a, b) => (a[0] - b[0]) * ux);
+      for (const [jx] of hops) d += ` L${jx - ux * J} ${y} A${J} ${J} 0 0 ${ux > 0 ? 1 : 0} ${jx + ux * J} ${y}`;
+    }
+    d += ` L${x - ux * r} ${y - uy * r}`;
+    if (!last && r > 0) d += ` Q${x} ${y} ${x + Math.sign(next[0] - x) * r} ${y + Math.sign(next[1] - y) * r}`;
+  }
+  return d;
+}
+
+type RoutedData = { points: Point[]; jumps: Point[]; tone: 'grey' | 'blue' | 'amber'; dim: boolean; label: string; bidirectional: boolean; onSelect: () => void };
+const TONE = { grey: '#A3A29D', blue: 'hsl(var(--state-blue-foreground))', amber: 'hsl(var(--state-yellow-foreground))' };
+const RoutedEdge = memo(({ id, data }: EdgeProps<RoutedData>) => {
+  if (!data) return null;
+  const d = pathOf(data.points, data.jumps);
+  const strong = data.tone !== 'grey';
+  return (
+    <g style={{ opacity: data.dim ? 0.15 : 1, transition: 'opacity .3s cubic-bezier(.16,1,.3,1)' }}>
+      <BaseEdge
+        id={id}
+        path={d}
+        markerEnd={`url(#arrow-${data.tone})`}
+        markerStart={data.bidirectional ? `url(#arrow-start-${data.tone})` : undefined}
+        style={{ stroke: TONE[data.tone], strokeWidth: strong ? 2 : 1.25, strokeLinejoin: 'round', fill: 'none' }}
+      />
+      <path d={d} fill="none" stroke="transparent" strokeWidth={12} className="cursor-pointer" onClick={data.onSelect}>
+        <title>{data.label}</title>
+      </path>
+    </g>
+  );
+});
+RoutedEdge.displayName = 'RoutedEdge';
+
+const nodeTypes = { box: BoxNode, element: ElementNode };
+const edgeTypes = { routed: RoutedEdge };
+
+function Markers() {
+  return (
+    <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute' }}>
+      <defs>
+        {(Object.keys(TONE) as (keyof typeof TONE)[]).map((t) => (
+          <g key={t}>
+            <marker id={`arrow-${t}`} viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+              <path d="M0 0.5 L8 4 L0 7.5 z" fill={t === 'grey' ? '#8E8D89' : TONE[t]} />
+            </marker>
+            <marker id={`arrow-start-${t}`} viewBox="0 0 8 8" refX="0" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+              <path d="M8 0.5 L0 4 L8 7.5 z" fill={t === 'grey' ? '#8E8D89' : TONE[t]} />
+            </marker>
+          </g>
+        ))}
+      </defs>
+    </svg>
+  );
+}
+
+export function Diagram(props: Props) {
+  return (
+    <ReactFlowProvider>
+      <DiagramCanvas {...props} />
+    </ReactFlowProvider>
+  );
+}
+
+function DiagramCanvas({ def, scope, selectedId, highlight, onSelect, fitKey }: Props) {
+  const state = useDiagramLayout(def);
+  const flow = useReactFlow();
   const frame = useRef<HTMLDivElement>(null);
-  const boxes = useRef(new Map<string, HTMLElement>());
-  const [lines, setLines] = useState<{ id: string; x1: number; y1: number; x2: number; y2: number }[]>([]);
+  const [frameWidth, setFrameWidth] = useState(0);
 
-  const register = useCallback((id: string) => (el: HTMLElement | null) => {
-    if (el) boxes.current.set(id, el);
-    else boxes.current.delete(id);
+  useEffect(() => {
+    const el = frame.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => setFrameWidth(entry.contentRect.width));
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
-  // Arrows go from edge to edge of the two boxes, along the line between their centres.
-  const measure = useCallback(() => {
-    const root = frame.current;
-    if (!root) return;
-    const origin = root.getBoundingClientRect();
-    const rect = (id: string) => {
-      const el = boxes.current.get(id);
-      if (!el) return null;
-      const r = el.getBoundingClientRect();
-      return { x: r.left - origin.left, y: r.top - origin.top, w: r.width, h: r.height };
-    };
-    const next = [];
-    for (const l of def.links) {
-      const a = rect(l.source_id);
-      const b = rect(l.destination_id);
-      if (!a || !b) continue;
-      const [x1, y1] = edgePoint(a, b);
-      const [x2, y2] = edgePoint(b, a);
-      next.push({ id: l.link_id, x1, y1, x2, y2 });
-    }
-    setLines(next);
-  }, [def.links]);
+  const result = state.status === 'ready' ? state.result : null;
+  const elementById = useMemo(() => new Map(def.elements.map((e) => [e.element_id, e])), [def]);
+  const linkById = useMemo(() => new Map(def.links.map((l) => [l.link_id, l])), [def]);
 
-  useLayoutEffect(() => {
-    measure();
-    const root = frame.current;
-    if (!root) return;
-    const observer = new ResizeObserver(measure);
-    observer.observe(root);
-    return () => observer.disconnect();
-  }, [measure, def]);
+  const nodes = useMemo<Node[]>(() => {
+    if (!result) return [];
+    const boxes: Node[] = result.layout.boxes.map((b) => ({
+      id: `box:${b.id}`,
+      type: 'box',
+      position: { x: b.x, y: b.y },
+      data: { box: b },
+      draggable: false,
+      selectable: false,
+      focusable: false,
+      zIndex: -10 + b.depth,
+      style: { width: b.w, height: b.h },
+    }));
+    const elements: Node[] = result.layout.nodes.map((n) => {
+      const e = elementById.get(n.id)!;
+      const marked = !!highlight && highlight.has(n.id);
+      return {
+        id: n.id,
+        type: 'element',
+        position: { x: n.x, y: n.y },
+        draggable: false,
+        selectable: false,
+        focusable: false,
+        zIndex: 10,
+        data: {
+          name: e.name,
+          actor: ACTOR_TYPES.has(e.asset_type),
+          status: scope.get(n.id),
+          exposed: e.internet_exposed?.value === 'yes',
+          selected: selectedId === n.id,
+          marked,
+          dimmed: (!!highlight && !marked) || (!!selectedId && selectedId !== n.id && !touches(selectedId, n.id, def)),
+          onSelect: () => onSelect(n.id),
+          w: n.w,
+          h: n.h,
+        } satisfies ElementData,
+      };
+    });
+    return [...boxes, ...elements];
+  }, [result, elementById, highlight, scope, selectedId, onSelect, def]);
 
-  const elementsIn = (pred: (e: Element) => boolean) => def.elements.filter(pred);
-  const zoneOf = new Map(def.zones.map((z) => [z.zone_id, z]));
-  const external = def.zones.filter((z) => EXTERNAL_ZONES.has(z.kind));
-  const left = external.filter((z) => LEFT_ZONES.includes(z.kind));
-  const right = external.filter((z) => !LEFT_ZONES.includes(z.kind));
-  const roots = def.containers.filter((c) => !c.parent_id);
-  const placed = new Set(def.elements.filter((e) => e.parent_container_id || EXTERNAL_ZONES.has(zoneOf.get(e.zone_id)?.kind || '')).map((e) => e.element_id));
-  const orphans = def.elements.filter((e) => !placed.has(e.element_id));
+  const edges = useMemo<Edge[]>(() => {
+    if (!result) return [];
+    const jumpsFor = (id: string): Point[] => result.crossings.filter((c: Crossing) => c.a === id).map((c) => [c.x, c.y] as Point);
+    return result.routes.map((r) => {
+      const l = linkById.get(r.id)!;
+      const from = elementById.get(l.source_id)?.name ?? l.source_id;
+      const to = elementById.get(l.destination_id)?.name ?? l.destination_id;
+      const touched = !!selectedId && (selectedId === r.id || l.source_id === selectedId || l.destination_id === selectedId);
+      const marked = !!highlight && highlight.has(r.id);
+      const tone: RoutedData['tone'] = marked ? 'amber' : touched ? 'blue' : 'grey';
+      return {
+        id: r.id,
+        source: l.source_id,
+        target: l.destination_id,
+        type: 'routed',
+        zIndex: tone === 'grey' ? 1 : 2,
+        data: {
+          points: r.points,
+          jumps: jumpsFor(r.id),
+          tone,
+          dim: (!!highlight && !marked) || (!!selectedId && !touched),
+          label: `${r.id}: ${from} to ${to}`,
+          bidirectional: l.direction === 'bidirectional',
+          onSelect: () => onSelect(r.id),
+        } satisfies RoutedData,
+      };
+    });
+  }, [result, linkById, elementById, selectedId, highlight, onSelect]);
 
-  const box = (e: Element) => (
-    <ElementBox
-      key={e.element_id}
-      element={e}
-      status={scope.get(e.element_id)}
-      selected={selectedId === e.element_id}
-      dimmed={!!highlight && !highlight.has(e.element_id)}
-      marked={!!highlight && highlight.has(e.element_id)}
-      onSelect={onSelect}
-      boxRef={register(e.element_id)}
-    />
-  );
+  // Fit the whole diagram whenever it is laid out or the space around it changes.
+  useEffect(() => {
+    if (!result) return;
+    // Names stay readable: never shrink below MIN_ZOOM. A wider diagram starts at its left edge
+    // and pans; a narrower one is centred.
+    const t = window.setTimeout(() => {
+      const { width: w } = result.layout;
+      const z = Math.max(MIN_ZOOM, Math.min(1, (frameWidth || 1) / w));
+      const x = w * z <= frameWidth ? (frameWidth - w * z) / 2 : 0;
+      flow.setViewport({ x, y: 4, zoom: z }, { duration: 300 });
+    }, 30);
+    return () => window.clearTimeout(t);
+  }, [result, frameWidth, fitKey, flow]);
 
-  const zoneBand = (z: Zone) => (
-    <section key={z.zone_id} aria-label={z.name} className="aegis-zone flex min-w-[180px] flex-col gap-2.5 p-3">
-      <span className="aegis-label">{z.name}</span>
-      {elementsIn((e) => e.zone_id === z.zone_id && !e.parent_container_id).map(box)}
-    </section>
-  );
-
-  const containerFrame = (c: Container, depth: number): JSX.Element => {
-    const kids = def.containers.filter((k) => k.parent_id === c.container_id);
-    const els = elementsIn((e) => e.parent_container_id === c.container_id);
-    const zoned = !!c.zone_id;
-    const style =
-      c.kind === 'cluster'
-        ? 'border border-dashed border-muted-foreground bg-card/60'
-        : zoned
-          ? 'aegis-zone'
-          : depth === 0
-            ? 'border border-foreground bg-card'
-            : 'border border-border bg-card';
-    const leaf = kids.length === 0;
-    const cols = leaf && els.length > 3 ? 'grid-cols-2' : leaf ? 'grid-cols-1' : 'grid-cols-[repeat(auto-fill,minmax(150px,1fr))]';
-    return (
-      <section
-        key={c.container_id}
-        aria-label={c.name}
-        className={`flex flex-col gap-2.5 rounded-md p-3 ${style} ${leaf ? 'shrink-0' : 'min-w-[300px] flex-1'}`}
-      >
-        <span className="aegis-label">{c.name}</span>
-        <div className="flex flex-wrap items-start gap-3">
-          {kids.map((k) => containerFrame(k, depth + 1))}
-          {els.length > 0 && <div className={`grid ${cols} gap-2.5 ${leaf ? '' : 'min-w-[160px] flex-1'}`}>{els.map(box)}</div>}
-        </div>
-      </section>
-    );
-  };
+  const zoom = result ? Math.max(MIN_ZOOM, Math.min(1, (frameWidth || 1) / result.layout.width)) : 1;
+  const height = result ? Math.min(Math.max(420, result.layout.height * zoom + 8), 900) : 480;
 
   return (
-    <div ref={frame} className="relative">
-      <div className="flex items-stretch gap-4">
-        {left.length > 0 && <div className="flex flex-col gap-4">{left.map(zoneBand)}</div>}
-        <div className="flex min-w-0 flex-1 flex-col gap-4">
-          {roots.map((c) => containerFrame(c, 0))}
-          {orphans.length > 0 && (
-            <section aria-label="Not placed" className="flex flex-col gap-2.5 rounded-md border border-dashed border-border p-3">
-              <span className="aegis-label">Not placed in a container</span>
-              <div className="flex flex-wrap gap-2.5">{orphans.map(box)}</div>
-            </section>
-          )}
+    <div ref={frame} className="relative w-full" style={{ height }}>
+      <Markers />
+      {state.status === 'working' && (
+        <div className="absolute inset-0 flex flex-col gap-3 p-6" aria-live="polite">
+          <span className="text-[13px] text-muted-foreground">Laying out the item definition</span>
+          <span className="h-24 w-1/3 animate-pulse rounded-xl bg-muted motion-reduce:animate-none" />
+          <span className="h-40 w-2/3 animate-pulse rounded-xl bg-muted motion-reduce:animate-none" />
         </div>
-        {right.length > 0 && <div className="flex flex-col gap-4">{right.map(zoneBand)}</div>}
-      </div>
-      <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full overflow-visible" aria-hidden="false" role="group" aria-label="Connections">
-        <defs>
-          {['line', 'strong', 'mark'].map((k) => (
-            <marker key={k} id={`arrow-${k}`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0 0 L10 5 L0 10 z" className={k === 'mark' ? 'fill-signal-ink' : k === 'strong' ? 'fill-primary' : 'fill-muted-foreground'} />
-            </marker>
-          ))}
-        </defs>
-        {lines.map((ln) => {
-          const link = def.links.find((l) => l.link_id === ln.id) as Link;
-          const touches = selectedId && (selectedId === ln.id || link.source_id === selectedId || link.destination_id === selectedId);
-          const marked = !!highlight && highlight.has(ln.id);
-          const dim = !!highlight && !marked;
-          const kind = marked ? 'mark' : touches ? 'strong' : 'line';
-          return (
-            <g key={ln.id} className={dim ? 'opacity-20' : ''}>
-              <line
-                x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2}
-                className={kind === 'mark' ? 'stroke-signal-ink' : kind === 'strong' ? 'stroke-primary' : 'stroke-muted-foreground/60'}
-                strokeWidth={kind === 'line' ? 1.2 : 2}
-                markerEnd={`url(#arrow-${kind})`}
-                markerStart={link.direction === 'bidirectional' ? `url(#arrow-${kind})` : undefined}
-              />
-              <line
-                x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2}
-                stroke="transparent" strokeWidth={10}
-                className="pointer-events-auto cursor-pointer"
-                onClick={() => onSelect(ln.id)}
-              >
-                <title>{link.usage_at_destination || 'Connection'}</title>
-              </line>
-            </g>
-          );
-        })}
-      </svg>
+      )}
+      {state.status === 'failed' && <p className="m-0 p-6 text-state-red-foreground">{state.message}</p>}
+      {result && (
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          nodesDraggable={false}
+          nodesConnectable={false}
+          elementsSelectable={false}
+          zoomOnScroll={false}
+          zoomOnPinch
+          panOnDrag
+          preventScrolling={false}
+          minZoom={0.2}
+          maxZoom={1.6}
+          onNodeClick={(_, node) => node.type === 'element' && onSelect(node.id)}
+          onEdgeClick={(_, edge) => onSelect(edge.id)}
+          proOptions={{ hideAttribution: true }}
+          aria-label="Item definition diagram"
+        >
+          <Controls showInteractive={false} position="bottom-right" />
+        </ReactFlow>
+      )}
     </div>
   );
 }
 
-function edgePoint(a: { x: number; y: number; w: number; h: number }, b: { x: number; y: number; w: number; h: number }): [number, number] {
-  const ax = a.x + a.w / 2, ay = a.y + a.h / 2;
-  const dx = b.x + b.w / 2 - ax, dy = b.y + b.h / 2 - ay;
-  if (dx === 0 && dy === 0) return [ax, ay];
-  const sx = dx === 0 ? Infinity : (a.w / 2 + 3) / Math.abs(dx);
-  const sy = dy === 0 ? Infinity : (a.h / 2 + 3) / Math.abs(dy);
-  const s = Math.min(sx, sy);
-  return [ax + dx * s, ay + dy * s];
-}
-
-function ElementBox({
-  element,
-  status,
-  selected,
-  dimmed,
-  marked,
-  onSelect,
-  boxRef,
-}: {
-  element: Element;
-  status?: ScopeStatus;
-  selected: boolean;
-  dimmed: boolean;
-  marked: boolean;
-  onSelect: (id: string) => void;
-  boxRef: (el: HTMLElement | null) => void;
-}) {
-  const actor = ACTOR_TYPES.has(element.asset_type);
-  const look = selected
-    ? 'aegis-fault'
-    : status === 'interface'
-      ? 'aegis-interface-mark'
-      : status === 'out_of_scope'
-        ? 'border border-border bg-muted text-muted-foreground'
-        : status === 'ambiguous'
-          ? 'border border-dotted border-foreground bg-card'
-          : 'border border-foreground bg-card';
-  return (
-    <button
-      ref={boxRef}
-      type="button"
-      onClick={() => onSelect(element.element_id)}
-      aria-pressed={selected}
-      className={`relative z-[2] min-h-[40px] px-3 py-2 text-left text-[13px] leading-4 ${actor ? 'rounded-full text-center' : 'rounded-md'} ${look} ${
-        marked && !selected ? 'ring-2 ring-signal ring-offset-2' : ''
-      } ${dimmed ? 'opacity-30' : ''} hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
-    >
-      {element.name}
-    </button>
+/** Whether an element is one end of the selected connection or connected to the selected element. */
+function touches(selectedId: string, elementId: string, def: Def): boolean {
+  return def.links.some(
+    (l) =>
+      (l.link_id === selectedId && (l.source_id === elementId || l.destination_id === elementId)) ||
+      (l.source_id === selectedId && l.destination_id === elementId) ||
+      (l.destination_id === selectedId && l.source_id === elementId),
   );
 }
 
 export function Legend() {
   const item = (cls: string, label: string) => (
-    <span className="flex items-center gap-2">
-      <span className={`inline-block h-4 w-7 ${cls}`} aria-hidden="true" />
+    <span className="inline-flex items-center gap-2">
+      <span className={cn('inline-block h-[13px] w-6', cls)} aria-hidden="true" />
       {label}
     </span>
   );
   return (
-    <div className="flex flex-wrap items-center gap-5 text-[13px] text-muted-foreground">
-      {item('rounded-sm border border-foreground bg-card', 'In scope')}
-      {item('rounded-sm aegis-interface-mark', 'Interface (connects to the item, not assessed inside)')}
-      {item('rounded-sm border border-border bg-muted', 'Out of scope')}
-      {item('rounded-full border border-foreground bg-card', 'People and outside systems')}
-      {item('rounded-sm aegis-fault', 'Selected')}
+    <div className="flex flex-wrap items-center gap-x-[18px] gap-y-2 text-[12.5px] text-muted-foreground">
+      {item('rounded border border-[hsl(47_6%_80%)] bg-card', 'In scope')}
+      {item('rounded border-[1.25px] border-dashed border-[hsl(var(--aegis-interface))] bg-card/60', 'Interface')}
+      {item('rounded bg-state-grey', 'Out of scope')}
+      {item('rounded-full border border-[hsl(47_6%_80%)] bg-card', 'People and outside systems')}
+      <span className="inline-flex items-center gap-2">
+        <span className="h-2 w-2 rounded-full bg-state-red-foreground" aria-hidden="true" />
+        Reachable from the internet
+      </span>
     </div>
   );
 }

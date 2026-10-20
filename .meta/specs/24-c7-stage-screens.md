@@ -37,7 +37,7 @@ Note: `tsc` reports 46 errors, all in legacy files and present before C7; the ne
 
 **02 Item Definition**
 - Full-width diagram with a collapsible side panel on its left (Details, Assumptions tabs; a narrow rail when collapsed).
-- React Flow, laid out by elkjs left to right, right-angle connections that never cross or overlap:
+- React Flow, laid out by our engine (`components/stages/diagram/`): columns follow the data flow; a zone or container is drawn in labelled parts when its components sit at separate points in the flow; right-angle connections never overlap or pass through a component; crossings are the fewest found, each with a small jump. Checked by `tests/diagram-layout.test.js`:
   - zones as bands, and containers as nested frames;
   - elements as boxes: solid when in scope, dashed with a primary tint for interfaces, grey when out of scope, rounded for actors;
   - links as arrows;
