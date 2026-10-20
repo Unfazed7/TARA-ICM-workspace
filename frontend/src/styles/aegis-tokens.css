@@ -413,3 +413,13 @@
   -webkit-mask-image: linear-gradient(#000, transparent 55%);
   mask-image: linear-gradient(#000, transparent 55%);
 }
+
+/* Document row: type / file / actions; one column on phones. */
+.drow {
+  grid-template-columns: minmax(170px, 1fr) minmax(0, 1.6fr) auto;
+  gap: 14px;
+  align-items: center;
+}
+@media (max-width: 767px) {
+  .drow { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,11 +1,17 @@
 /**
- * 01 Documents: what is being assessed, the two document groups, Execute and live status (spec 24).
+ * 01 Documents: what is being assessed, the two document groups, Execute and live status (spec 24, D-51).
  * Uploads go straight to the server (spec 23), so the screen always shows what Stage 01 will read.
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, ChevronDown, Loader2, Plus, Upload, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowRight, Check, ChevronDown, Loader2, Plus, Upload, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { PageHeader, StatusDot } from '@/components/layout/StageShell';
+import { useMotionPreset } from '@/lib/motion';
+import { cn } from '@/lib/utils';
 import { stagesApi } from '@/lib/stagesApi';
 import type { DocGroup, PipelineStatus, UploadedDocument } from '@/types/stages';
 import { DOC_LABELS, GROUP_TITLE, groupOfType } from './words';
@@ -41,8 +47,9 @@ function rowsFrom(docs: UploadedDocument[]): Record<DocGroup, Row[]> {
 const typeOf = (r: Row) => (r.other ? r.otherText.trim() : r.label);
 const isActive = (p?: PipelineStatus) => !!p?.stages.some((s) => s.status === 'pending' || s.status === 'running');
 
-export function DocumentsStage({ assessmentId, onOpenItemDefinition }: { assessmentId: string; onOpenItemDefinition: () => void }) {
+export function DocumentsStage({ assessmentId, project, onOpenItemDefinition }: { assessmentId: string; project: string; onOpenItemDefinition: () => void }) {
   const queryClient = useQueryClient();
+  const { riseList, riseItem, easeOut } = useMotionPreset();
   const docs = useQuery({ queryKey: ['documents', assessmentId], queryFn: () => stagesApi.documents(assessmentId) });
   const boundary = useQuery({ queryKey: ['boundary', assessmentId], queryFn: () => stagesApi.boundary(assessmentId) });
   const pipeline = useQuery({
@@ -153,89 +160,164 @@ export function DocumentsStage({ assessmentId, onOpenItemDefinition }: { assessm
   if (docs.isLoading || boundary.isLoading || !rows) {
     return <p className="p-10 text-muted-foreground">Loading the documents...</p>;
   }
-  if (docs.error) return <p className="p-10 text-signal-ink">{(docs.error as Error).message}</p>;
+  if (docs.error) return <p className="p-10 text-state-red-foreground">{(docs.error as Error).message}</p>;
+
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  const boundaryDone = !!savedText.trim() && !unsavedBoundary && !boundaryError;
+  const added = (g: DocGroup) => rows[g].filter((r) => r.file).length;
+  const groupsReady = (['components', 'behaviour'] as DocGroup[]).filter((g) => added(g) > 0).length;
+  const docCount = added('components') + added('behaviour');
+  const lastRun = stage('01')?.started_at;
 
   return (
-    <div className="mx-auto w-full max-w-[960px] px-6 py-10 flex flex-col gap-9">
-      <div className="flex flex-col gap-1.5">
-        <h1 className="text-[28px] leading-9 font-semibold">Start the assessment</h1>
-        <p className="text-muted-foreground">Say what is being assessed, add the client's documents in the two groups below, then execute.</p>
-      </div>
+    <div className="mx-auto w-full max-w-[1400px] px-[clamp(16px,3vw,32px)] pb-20 pt-7">
+      <PageHeader
+        project={project}
+        title="Documents"
+        right={
+          <>
+            <span className="inline-flex items-center gap-1.5">
+              <StatusDot tone={groupsReady === 2 ? 'green' : 'yellow'} />
+              {groupsReady} of 2 groups ready
+            </span>
+            <span><span className="aegis-mono text-foreground">{docCount}</span> documents</span>
+            {lastRun && <span>Last run {new Date(lastRun).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>}
+          </>
+        }
+      />
 
-      {(locked || stage('01')?.status === 'complete' || failed) && (
-        <RunStatus pipeline={pipeline.data} starting={starting} done={done} onOpen={onOpenItemDefinition} />
-      )}
+      <div className="flex flex-wrap items-start gap-6">
+        <motion.div variants={riseList} initial="hidden" animate="show" className="flex min-w-0 flex-[999_1_640px] flex-col gap-6">
+          <motion.section variants={riseItem} className="aegis-card">
+            <div className={cn('aegis-card-head', !boundaryDone && 'aegis-open-edge')}>
+              <span className="flex min-w-0 items-center gap-3">
+                <StepChip n="1" />
+                <span className="flex min-w-0 flex-col">
+                  <span className="aegis-label">Step 1 · Boundary</span>
+                  <label htmlFor="boundary" className="text-[15px] font-semibold leading-snug">
+                    What is being assessed?
+                    <span className="sr-only"> (required)</span>
+                  </label>
+                </span>
+              </span>
+              <span className="flex items-center gap-2.5">
+                <span className="aegis-mono text-xs text-muted-foreground">{words} words</span>
+                <Badge variant={boundaryDone ? 'green' : 'yellow'}>{boundaryDone ? 'Done' : 'Required'}</Badge>
+              </span>
+            </div>
+            <div className="flex flex-col gap-2 px-6 pb-5 pt-4">
+              <span id="boundary-help" className="text-[13.5px] text-muted-foreground">The system's name and one sentence on what it covers. Every later stage is built inside this boundary.</span>
+              <textarea
+                id="boundary"
+                rows={3}
+                aria-describedby="boundary-help"
+                value={text}
+                disabled={locked}
+                onChange={(e) => setText(e.target.value)}
+                onBlur={saveBoundary}
+                placeholder="For example: This is a key management system and we need to assess everything deployed in its cloud account."
+                className={cn('aegis-well min-h-[96px] w-full resize-y rounded-xl px-3.5 py-3 text-[15px] leading-relaxed disabled:bg-[hsl(var(--state-grey))] disabled:text-muted-foreground', boundaryError && 'border-state-red-foreground')}
+              />
+              {boundaryError ? (
+                <p className="m-0 text-[13px] text-state-red-foreground" role="alert">{boundaryError}</p>
+              ) : boundaryDone ? (
+                <span className="inline-flex items-center gap-1.5 text-[13px] text-state-green-foreground">
+                  <Check className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
+                  Saved
+                </span>
+              ) : null}
+            </div>
+          </motion.section>
 
-      <section className="flex flex-col gap-2.5">
-        <label htmlFor="boundary" className="text-lg font-semibold">
-          What is being assessed? <span className="text-signal-ink" aria-hidden="true">*</span>
-          <span className="sr-only">(required)</span>
-        </label>
-        <textarea
-          id="boundary"
-          rows={3}
-          value={text}
-          disabled={locked}
-          onChange={(e) => setText(e.target.value)}
-          onBlur={saveBoundary}
-          placeholder="The system's name and one sentence on what it covers, for example: This is a key management system and we need to assess everything deployed in its cloud account."
-          className="w-full min-h-[72px] rounded-md border border-input bg-card px-3.5 py-3 text-[15px] leading-[22px] focus:outline-none focus:ring-2 focus:ring-ring disabled:bg-muted disabled:text-muted-foreground"
-        />
-        {boundaryError && <p className="text-sm text-signal-ink">{boundaryError}</p>}
-      </section>
-
-      {(['components', 'behaviour'] as DocGroup[]).map((group) => (
-        <section key={group} className="flex flex-col gap-3" aria-labelledby={`group-${group}`}>
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 id={`group-${group}`} className="text-lg font-semibold">
-              {GROUP_TITLE[group]} <span className="text-signal-ink" aria-hidden="true">*</span>
-            </h2>
-            <span className="aegis-label">{rows[group].filter((r) => r.file).length} added</span>
-          </div>
-          {rows[group].map((row) => (
-            <DocumentRow
-              key={row.key}
-              group={group}
-              row={row}
-              locked={locked}
-              onChange={(change) => update(group, row.key, change)}
-              onFile={(file) => uploadFile(group, row, file)}
-              onRemove={() => removeRow(group, row)}
-            />
+          {(['components', 'behaviour'] as DocGroup[]).map((group, i) => (
+            <motion.section key={group} variants={riseItem} className="aegis-card" aria-labelledby={`group-${group}`}>
+              <div className={cn('aegis-card-head', !added(group) && 'aegis-open-edge')}>
+                <span className="flex min-w-0 items-center gap-3">
+                  <StepChip n={String(i + 2)} />
+                  <span className="flex min-w-0 flex-col">
+                    <span className="aegis-label">Step {i + 2} · {group === 'components' ? 'Architecture' : 'Behaviour'}</span>
+                    <h2 id={`group-${group}`} className="m-0 text-[15px] font-semibold leading-snug">
+                      {GROUP_TITLE[group]}
+                      <span className="sr-only"> (required)</span>
+                    </h2>
+                  </span>
+                </span>
+                <Badge variant={added(group) ? 'green' : 'yellow'}>{added(group)} added</Badge>
+              </div>
+              <div className="drow aegis-label hidden border-b border-rule bg-[hsl(var(--well))] px-6 py-2 md:grid">
+                <span>Type</span>
+                <span>File</span>
+                <span>Actions</span>
+              </div>
+              <AnimatePresence initial={false}>
+                {rows[group].map((row) => (
+                  <motion.div key={row.key} initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={easeOut} className="overflow-hidden">
+                    <DocumentRow
+                      group={group}
+                      row={row}
+                      locked={locked}
+                      onChange={(change) => update(group, row.key, change)}
+                      onFile={(file) => uploadFile(group, row, file)}
+                      onRemove={() => removeRow(group, row)}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              <div className="bg-[hsl(var(--well))] px-6 py-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={locked}
+                  onClick={() => setRows((prev) => prev && { ...prev, [group]: [...prev[group], newRow()] })}
+                  className="border-dashed border-[hsl(47_8%_78%)]"
+                >
+                  <Plus aria-hidden="true" />
+                  Add another document
+                </Button>
+              </div>
+            </motion.section>
           ))}
-          <button
-            type="button"
-            disabled={locked}
-            onClick={() => setRows((prev) => prev && { ...prev, [group]: [...prev[group], newRow()] })}
-            className="self-start inline-flex min-h-[44px] items-center gap-2 rounded-md border border-dashed border-foreground/60 bg-card px-3.5 text-[15px] hover:bg-accent disabled:opacity-50"
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add another document
-          </button>
-        </section>
-      ))}
+        </motion.div>
 
-      <section className="flex flex-wrap items-center justify-between gap-4 border-t border-foreground pt-6">
-        <p className="m-0 text-muted-foreground max-w-[640px]">
-          {locked
-            ? 'Documents are locked while the run is going.'
-            : missing.length
-              ? `Required: ${missing.map((m) => m.replace(/\.$/, '')).join('; ')}.`
-              : unsavedBoundary
-                ? 'Click outside the box to save what is being assessed.'
-                : 'Ready. Both stages run one after the other; you can leave this page.'}
-        </p>
-        <button
-          type="button"
-          onClick={execute}
-          disabled={!canExecute}
-          className="min-h-[48px] rounded-md bg-primary px-7 font-semibold text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
-        >
-          {locked ? 'Running' : failed ? 'Execute again' : done ? 'Execute again' : 'Execute'}
-        </button>
-      </section>
-      {runError && <p className="text-signal-ink" role="alert">{runError}</p>}
+        <aside className="sticky top-24 flex min-w-0 flex-[1_1_340px] flex-col gap-3.5" aria-labelledby="run-h">
+          <RunCard
+            pipeline={pipeline.data}
+            starting={starting}
+            locked={locked}
+            done={done}
+            checks={[
+              { label: 'What is being assessed', ok: boundaryDone },
+              { label: 'A document describing the components or architecture', ok: added('components') > 0 },
+              { label: 'A document describing what the system does', ok: added('behaviour') > 0 },
+            ]}
+            footer={
+              locked
+                ? 'Documents are locked while the run is going. You can leave this page.'
+                : missing.length
+                  ? `Required: ${missing.map((m) => m.replace(/\.$/, '')).join('; ')}.`
+                  : unsavedBoundary
+                    ? 'Click outside the box to save what is being assessed.'
+                    : done
+                      ? 'Both stages finished. Execute again if you change a document.'
+                      : 'Both stages run one after the other. You can leave this page.'
+            }
+            canExecute={canExecute}
+            executeLabel={failed || done ? 'Execute again' : 'Execute'}
+            onExecute={execute}
+            onOpen={onOpenItemDefinition}
+            runError={runError}
+          />
+        </aside>
+      </div>
     </div>
+  );
+}
+
+function StepChip({ n }: { n: string }) {
+  return (
+    <span className="aegis-mono flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-lg border border-border bg-card text-[13px] font-medium text-foreground" aria-hidden="true">
+      {n}
+    </span>
   );
 }
 
@@ -260,12 +342,14 @@ function DocumentRow({
   const typeLocked = locked || !!row.file || row.busy;
   const selectId = `${row.key}-type`;
 
+  const ext = row.file ? row.file.split('.').pop()?.toUpperCase() || '' : '';
+
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-border bg-card p-3">
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-[1_1_260px]">
+    <div className="flex flex-col gap-2 border-b border-rule px-6 py-3 transition-colors hover:bg-[hsl(var(--well))]">
+      <div className="drow grid">
+        <div className="relative min-w-0">
           {row.other ? (
-            <div className="flex min-h-[44px] items-center gap-1.5 rounded-md border border-foreground bg-card pl-3.5">
+            <div className="aegis-well flex h-10 items-center gap-1.5 rounded-[10px] pl-3 focus-within:border-ring focus-within:bg-card">
               <span className="aegis-label shrink-0">Other:</span>
               <input
                 aria-label="Name the document type"
@@ -274,14 +358,14 @@ function DocumentRow({
                 maxLength={60}
                 disabled={typeLocked}
                 onChange={(e) => onChange({ otherText: e.target.value })}
-                className="min-w-0 flex-1 bg-transparent text-[15px] outline-none disabled:text-muted-foreground"
+                className="min-w-0 flex-1 bg-transparent text-sm outline-none disabled:text-muted-foreground"
               />
               <button
                 type="button"
                 aria-label="Choose a listed type instead"
                 disabled={typeLocked}
                 onClick={() => onChange({ other: false, otherText: '' })}
-                className="flex h-[42px] w-11 items-center justify-center disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center disabled:opacity-40"
               >
                 <ChevronDown className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -297,7 +381,7 @@ function DocumentRow({
                 onChange={(e) =>
                   e.target.value === OTHER ? onChange({ other: true, label: '' }) : onChange({ label: e.target.value })
                 }
-                className="h-11 w-full appearance-none rounded-md border border-foreground bg-card px-3.5 pr-10 text-[15px] disabled:border-border disabled:text-foreground disabled:opacity-100"
+                className={cn('aegis-well h-10 w-full cursor-pointer appearance-none rounded-[10px] pl-3 pr-9 text-sm disabled:cursor-default', row.label ? 'text-foreground' : 'text-muted-foreground')}
               >
                 <option value="">Choose document type</option>
                 {DOC_LABELS[group].map((l) => (
@@ -305,11 +389,11 @@ function DocumentRow({
                 ))}
                 <option value={OTHER}>Other (specify)</option>
               </select>
-              <ChevronDown className="pointer-events-none absolute right-3.5 top-3.5 h-4 w-4" aria-hidden="true" />
+              <ChevronDown className="pointer-events-none absolute right-3 top-3 h-4 w-4 text-muted-foreground" aria-hidden="true" />
             </>
           )}
         </div>
-        <div className="flex min-w-0 flex-[2_1_320px] items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           <input
             ref={input}
             type="file"
@@ -321,91 +405,160 @@ function DocumentRow({
               e.target.value = '';
             }}
           />
-          <button
+          {row.busy ? (
+            <>
+              <span className="h-10 w-10 shrink-0 animate-pulse rounded-[10px] bg-muted motion-reduce:animate-none" aria-hidden="true" />
+              <span className="flex flex-1 flex-col gap-1.5" aria-live="polite">
+                <span className="h-2.5 w-1/2 animate-pulse rounded bg-muted motion-reduce:animate-none" aria-hidden="true" />
+                <span className="text-xs text-muted-foreground">Uploading</span>
+              </span>
+            </>
+          ) : row.file ? (
+            <>
+              <span className="aegis-mono flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-state-grey text-[9.5px] font-semibold text-state-grey-foreground" aria-hidden="true">{ext.slice(0, 6)}</span>
+              <span className="aegis-mono min-w-0 truncate text-[13px] text-foreground">{row.file}</span>
+            </>
+          ) : (
+            <span className="text-[13.5px] text-muted-foreground">{typeChosen ? 'No file yet' : 'Choose the type, then upload'}</span>
+          )}
+        </div>
+        <div className="flex gap-1.5">
+          <Button
             type="button"
+            variant="outline"
             disabled={locked || row.busy || !typeChosen}
             title={!typeChosen ? 'Choose the document type first.' : undefined}
             onClick={() => input.current?.click()}
-            className="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-foreground bg-card px-4 text-[15px] hover:bg-accent disabled:cursor-not-allowed disabled:border-border disabled:text-muted-foreground"
           >
-            {row.busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Upload className="h-4 w-4" aria-hidden="true" />}
+            {row.busy ? <Loader2 className="animate-spin" aria-hidden="true" /> : <Upload aria-hidden="true" />}
             {row.file ? 'Replace' : 'Upload'}
-          </button>
-          {row.file ? (
-            <span className="aegis-mono truncate text-foreground">{row.file}</span>
-          ) : (
-            <span className="text-muted-foreground">{typeChosen ? 'No file yet' : 'Choose the type, then upload'}</span>
-          )}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            aria-label={row.file ? `Remove ${row.file}` : 'Remove this row'}
+            disabled={locked || row.busy}
+            onClick={onRemove}
+          >
+            <X aria-hidden="true" />
+          </Button>
         </div>
-        <button
-          type="button"
-          aria-label={row.file ? `Remove ${row.file}` : 'Remove this row'}
-          disabled={locked || row.busy}
-          onClick={onRemove}
-          className="flex h-11 w-11 items-center justify-center rounded-md border border-border bg-card hover:bg-accent disabled:opacity-40"
-        >
-          <X className="h-4 w-4" aria-hidden="true" />
-        </button>
       </div>
-      {row.error && <p className="text-sm text-signal-ink" role="alert">{row.error}</p>}
+      {row.error && (
+        <p className="m-0 flex items-start gap-2 rounded-[10px] bg-state-red px-3 py-2 text-[13px] text-state-red-foreground" role="alert">
+          {row.error}
+        </p>
+      )}
     </div>
   );
 }
 
-function RunStatus({ pipeline, starting, done, onOpen }: { pipeline?: PipelineStatus; starting: boolean; done: boolean; onOpen: () => void }) {
+const TONE = {
+  idle: { head: 'bg-state-blue text-state-blue-foreground', dot: 'bg-state-blue-foreground', title: 'Ready to execute' },
+  running: { head: 'bg-state-yellow text-state-yellow-foreground', dot: 'bg-state-yellow-foreground', title: 'Running' },
+  done: { head: 'bg-state-green text-state-green-foreground', dot: 'bg-state-green-foreground', title: 'Done' },
+  failed: { head: 'bg-state-red text-state-red-foreground', dot: 'bg-state-red-foreground', title: '' },
+} as const;
+
+function RunCard({
+  pipeline,
+  starting,
+  locked,
+  done,
+  checks,
+  footer,
+  canExecute,
+  executeLabel,
+  onExecute,
+  onOpen,
+  runError,
+}: {
+  pipeline?: PipelineStatus;
+  starting: boolean;
+  locked: boolean;
+  done: boolean;
+  checks: { label: string; ok: boolean }[];
+  footer: string;
+  canExecute: boolean;
+  executeLabel: string;
+  onExecute: () => void;
+  onOpen: () => void;
+  runError: string;
+}) {
   const s01 = pipeline?.stages.find((s) => s.stage === '01');
   const s02 = pipeline?.stages.find((s) => s.stage === '02');
   const failed = [s01, s02].find((s) => s?.status === 'failed');
+  const state = failed ? 'failed' : locked ? 'running' : done ? 'done' : 'idle';
+  const tone = TONE[state];
+  const title = failed ? `Stopped while ${failed.stage === '01' ? 'reading documents' : 'building the item definition'}` : tone.title;
   const steps = [
     { n: '1', label: 'Reading documents', s: s01 },
     { n: '2', label: 'Building the item definition', s: s02 },
   ];
   const words = (status?: string) =>
-    ({ complete: 'Done.', running: 'In progress. This usually takes a few minutes.', pending: 'Waiting to start.', failed: 'Stopped.', not_started: 'Not started.' })[
-      status || 'not_started'
-    ];
+    ({ complete: 'Done.', running: 'In progress. This usually takes a few minutes.', pending: 'Waiting to start.', failed: 'Stopped.', not_started: 'Not started.' })[status || 'not_started'];
+  const showSteps = locked || failed || done;
 
   return (
-    <section
-      aria-live="polite"
-      className={`flex flex-col gap-3.5 rounded-lg border-2 p-5 ${failed ? 'aegis-blocking' : 'border-foreground bg-card'}`}
-    >
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-lg font-semibold">
-          {failed ? `Stopped while ${failed.stage === '01' ? 'reading documents' : 'building the item definition'}` : done ? 'Done' : 'Running'}
-        </h2>
-        {(starting || s01?.started_at) && <span className="aegis-label">{s01?.started_at ? `Started ${new Date(s01.started_at).toLocaleTimeString()}` : 'Starting'}</span>}
+    <section className="aegis-card" aria-live="polite">
+      <div className={cn('flex items-center justify-between gap-3 border-b border-border px-6 py-3.5 transition-colors duration-500', tone.head)}>
+        <span className="flex items-center gap-2.5">
+          <span className={cn('h-2 w-2 rounded-full', tone.dot, state === 'running' && 'animate-pulse motion-reduce:animate-none')} aria-hidden="true" />
+          <h2 id="run-h" className="m-0 text-base font-semibold">{title}</h2>
+        </span>
+        <span className="aegis-mono text-xs">
+          {starting && !s01?.started_at ? 'Starting' : s01?.started_at && state !== 'idle' ? `Started ${new Date(s01.started_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '2 steps'}
+        </span>
       </div>
-      {failed?.error && <p className="m-0 whitespace-pre-line text-foreground">{failed.error}</p>}
-      {failed && (
-        <p className="m-0 text-muted-foreground">
-          {failed.stage === '01' && /could not be read|Missing input/.test(failed.error || '')
-            ? 'Fix or replace the documents named above, then execute again.'
-            : 'Execute again. If it stops the same way, send the last lines of logs/aegis.log.'}{' '}
-          Your documents and the text above are kept.
-        </p>
-      )}
-      {steps.map(({ n, label, s }) => (
-        <div key={n} className="flex items-start gap-3">
-          <span
-            className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold ${
-              s?.status === 'complete' ? 'border-primary bg-primary text-primary-foreground' : s?.status === 'running' ? 'border-dashed border-primary' : s?.status === 'failed' ? 'border-signal bg-signal text-signal-foreground' : 'border-border text-muted-foreground'
-            }`}
-            aria-hidden="true"
-          >
-            {s?.status === 'complete' ? <Check className="h-3 w-3" /> : n}
-          </span>
-          <div>
-            <div className="font-semibold">{label}</div>
-            <div className="text-muted-foreground">{words(s?.status)}</div>
-          </div>
-        </div>
-      ))}
-      {done && (
-        <button type="button" onClick={onOpen} className="self-start rounded-md bg-primary px-5 py-2.5 font-semibold text-primary-foreground hover:bg-primary/90">
-          Open the item definition
-        </button>
-      )}
+      <div className="flex flex-col gap-4 px-6 py-5">
+        {failed?.error && <p className="m-0 whitespace-pre-line rounded-[10px] bg-state-red px-3 py-2.5 text-sm text-state-red-foreground">{failed.error}</p>}
+        {failed && (
+          <p className="m-0 text-sm text-muted-foreground">
+            {failed.stage === '01' && /could not be read|Missing input/.test(failed.error || '')
+              ? 'Fix or replace the documents named above, then execute again.'
+              : 'Execute again. If it stops the same way, send the last lines of logs/aegis.log.'}{' '}
+            Your documents and the text are kept.
+          </p>
+        )}
+        <ul className="m-0 flex list-none flex-col p-0">
+          {(showSteps
+            ? steps.map(({ n, label, s }) => ({ key: n, label, sub: words(s?.status), status: s?.status }))
+            : checks.map((c) => ({ key: c.label, label: c.label, sub: '', status: c.ok ? 'complete' : 'missing' }))
+          ).map((r) => (
+            <li key={r.key} className="flex items-start gap-3 border-b border-rule py-3 text-sm last:border-b-0">
+              <StepDot status={r.status} />
+              <span className="flex flex-col">
+                <span className={r.status === 'missing' ? 'text-state-red-foreground' : 'text-foreground'}>{r.label}</span>
+                {r.sub && <span className="text-[13px] text-muted-foreground">{r.sub}</span>}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="m-0 text-[13.5px] text-muted-foreground">{footer}</p>
+        {done && !locked && (
+          <Button type="button" onClick={onOpen} className="h-12 justify-between rounded-xl px-[18px] text-[15px]">
+            Open the item definition
+            <ArrowRight aria-hidden="true" />
+          </Button>
+        )}
+        <Button type="button" variant={done ? 'outline' : 'default'} onClick={onExecute} disabled={!canExecute} className={cn('rounded-xl text-[15px]', done ? 'h-11' : 'h-12 justify-between px-[18px]')}>
+          {locked ? 'Running' : executeLabel}
+          {!done && (locked ? <Loader2 className="animate-spin" aria-hidden="true" /> : <ArrowRight aria-hidden="true" />)}
+        </Button>
+        {runError && <p className="m-0 text-sm text-state-red-foreground" role="alert">{runError}</p>}
+      </div>
+      <div className="border-t border-rule bg-[hsl(var(--well))] px-6 py-3 text-[12.5px] leading-normal text-muted-foreground">
+        Accepted: draw.io, Markdown, text, HTML, Word, Excel, PDF, PNG and JPEG.
+      </div>
     </section>
   );
+}
+
+function StepDot({ status }: { status?: string }) {
+  const base = 'mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[11px] font-semibold';
+  if (status === 'complete') return <span className={cn(base, 'bg-state-green text-state-green-foreground')} aria-label="Done"><Check className="h-3 w-3" strokeWidth={2.5} /></span>;
+  if (status === 'running') return <span className={cn(base, 'bg-state-yellow text-state-yellow-foreground')} aria-label="In progress"><Loader2 className="h-3 w-3 animate-spin motion-reduce:animate-none" /></span>;
+  if (status === 'failed' || status === 'missing') return <span className={cn(base, 'bg-state-red text-state-red-foreground')} aria-label={status === 'missing' ? 'Missing' : 'Stopped'}><X className="h-3 w-3" strokeWidth={2.5} /></span>;
+  return <span className={cn(base, 'bg-state-grey text-state-grey-foreground')} aria-label="Not started" />;
 }

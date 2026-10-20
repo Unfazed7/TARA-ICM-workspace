@@ -100,6 +100,7 @@ export default {
 				'4-foreground': 'hsl(var(--sev-4-foreground))'
 			},
 			well: 'hsl(var(--well))',
+			rule: 'var(--aegis-rule)',
 			state: {
 				yellow: 'hsl(var(--state-yellow))',
 				'yellow-foreground': 'hsl(var(--state-yellow-foreground))',

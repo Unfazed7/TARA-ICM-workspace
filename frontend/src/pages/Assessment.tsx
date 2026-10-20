@@ -1,28 +1,30 @@
 /**
- * Stage screens for stages 01 and 02 (D-46, spec 24): 01 Documents, 02 Item Definition, the
- * Assumptions panel from the top bar, and Settings with "What I read". Light only, 3a theme.
+ * Stage screens for stages 01 and 02 (D-46, D-51, spec 24): 01 Documents, 02 Item Definition,
+ * the Assumptions of the current stage from the top bar, and Settings with "What I read".
  */
 
 import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ChevronLeft, Settings } from 'lucide-react';
+import { X } from 'lucide-react';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
 import type { RationaleItem, ScopeStatus, StageKey } from '@/types/stages';
 import { DocumentsStage } from '@/components/stages/DocumentsStage';
 import { Diagram, Legend } from '@/components/stages/Diagram';
 import { DetailsDrawer } from '@/components/stages/DetailsDrawer';
-import { AssumptionsPanel } from '@/components/stages/AssumptionsPanel';
+import { AssumptionsList } from '@/components/stages/AssumptionsPanel';
+import { PageHeader, StageTopBar, StatusDot } from '@/components/layout/StageShell';
+import { SideSheet } from '@/components/layout/SideSheet';
 import { WhatIRead } from '@/components/stages/WhatIRead';
 import { affectedIds, buildCards, type Card, needsYou } from '@/components/stages/assumptions';
 
-const TABS: { key: StageKey | string; label: string; ready: boolean }[] = [
+const TABS: { key: StageKey | string; label: string; ready: boolean; note?: string }[] = [
   { key: '01', label: 'Documents', ready: true },
   { key: '02', label: 'Item Definition', ready: true },
-  { key: '03', label: 'Assets', ready: false },
-  { key: '04', label: 'Damage', ready: false },
-  { key: '05', label: 'Threats', ready: false },
-  { key: '06', label: 'Risk', ready: false },
+  { key: '03', label: 'Assets', ready: false, note: 'Comes later' },
+  { key: '04', label: 'Damage', ready: false, note: 'Comes later' },
+  { key: '05', label: 'Threats', ready: false, note: 'Comes later' },
+  { key: '06', label: 'Risk', ready: false, note: 'Comes later' },
 ];
 
 /** A stage that has not run yet answers 404; that is "nothing yet", not an error. */
@@ -33,7 +35,6 @@ export default function Assessment() {
   const [tab, setTab] = useState<StageKey>('01');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
-  const [view, setView] = useState<StageKey | 'all'>('all');
   const [openCard, setOpenCard] = useState<Card | null>(null);
   const [filterId, setFilterId] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -57,99 +58,75 @@ export default function Assessment() {
   const decisions = useMemo(() => new Map((def?.scope_decisions ?? []).map((d) => [d.element_id, d])), [def]);
   const scope = useMemo(() => new Map<string, ScopeStatus>([...decisions].map(([k, d]) => [k, d.status])), [decisions]);
 
-  const allCards = useMemo(() => buildCards(items01, items02, 'all'), [items01, items02]);
-  const needCount = allCards.filter(needsYou).length;
-  const viewCards = useMemo(() => {
-    const cards = buildCards(items01, items02, view);
-    if (!filterId) return cards;
-    return cards.filter((c) => affectedIds(c, elements, links).has(filterId));
-  }, [items01, items02, view, filterId, elements, links]);
+  // Each stage shows only its own Assumptions (D-51).
+  const stageCards = useMemo(() => buildCards(items01, items02, tab), [items01, items02, tab]);
+  const cards02 = useMemo(() => buildCards(items01, items02, '02'), [items01, items02]);
+  const needCount = stageCards.filter(needsYou).length;
+  const viewCards = useMemo(
+    () => (filterId ? stageCards.filter((c) => affectedIds(c, elements, links).has(filterId)) : stageCards),
+    [stageCards, filterId, elements, links],
+  );
 
   // The open card's targets are highlighted on the diagram and everything else dimmed.
   const highlight = useMemo(() => (panelOpen && openCard ? affectedIds(openCard, elements, links) : null), [panelOpen, openCard, elements, links]);
-  const cardsAbout = (id: string) => allCards.filter((c) => affectedIds(c, elements, links).has(id));
+  const cardsAbout = (id: string) => cards02.filter((c) => affectedIds(c, elements, links).has(id));
 
   const openAssumptions = (about: string | null = null) => {
     setFilterId(about);
-    setView(about ? 'all' : tab);
     setOpenCard(null);
     setPanelOpen(true);
   };
   const filterName = filterId ? elements.find((e) => e.element_id === filterId)?.name || 'this connection' : null;
-  const stageName = TABS.find((t) => t.key === tab)?.label;
+  const project = assessment.data?.name ?? '...';
+  const goTo = (key: string) => {
+    setTab(key as StageKey);
+    setSelectedId(null);
+    setOpenCard(null);
+    setFilterId(null);
+  };
 
   return (
-    <div className="flex h-screen flex-col bg-background text-foreground">
-      <header className="flex shrink-0 flex-wrap items-center justify-between gap-4 bg-bar px-6 py-3 text-bar-foreground">
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-3">
-          <Link to="/dashboard" className="flex items-center gap-1 text-bar-foreground/80 hover:text-bar-foreground" aria-label="Back to the dashboard">
-            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-          </Link>
-          <span className="aegis-wordmark">TARA Aegis</span>
-          <span className="opacity-60">/</span>
-          <span>{assessment.data?.name ?? '...'}</span>
-          <span className="opacity-60">/</span>
-          <span className="font-semibold">{stageName}</span>
-        </nav>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            aria-expanded={panelOpen}
-            onClick={() => (panelOpen ? setPanelOpen(false) : openAssumptions())}
-            className={`flex min-h-[44px] items-center gap-2.5 rounded-md border border-bar-foreground px-3.5 font-semibold ${panelOpen ? 'bg-bar-foreground text-bar' : ''}`}
-          >
-            Assumptions
-            {needCount > 0 && <span className="aegis-signal-pill px-2 py-0.5 text-[13px]">{needCount} need you</span>}
-          </button>
-          <button type="button" aria-label="Settings: what I read" onClick={() => setSettingsOpen(true)} className="flex h-11 w-11 items-center justify-center rounded-md border border-bar-foreground">
-            <Settings className="h-5 w-5" aria-hidden="true" />
-          </button>
-        </div>
-      </header>
+    <div className="relative min-h-[100dvh] bg-background text-foreground">
+      <div className="aegis-canvas-grid pointer-events-none fixed inset-0" aria-hidden="true" />
+      <StageTopBar
+        stages={TABS}
+        current={tab}
+        onStage={goTo}
+        needCount={needCount}
+        assumptionsOpen={panelOpen}
+        onAssumptions={() => (panelOpen ? setPanelOpen(false) : openAssumptions())}
+        onSettings={() => setSettingsOpen(true)}
+      />
 
-      <nav aria-label="Stages" className="flex shrink-0 gap-1 overflow-x-auto border-b border-border bg-card px-6">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            disabled={!t.ready}
-            aria-current={tab === t.key ? 'page' : undefined}
-            title={t.ready ? undefined : 'Comes later'}
-            onClick={() => {
-              setTab(t.key as StageKey);
-              setSelectedId(null);
-              setOpenCard(null);
-              if (view !== 'all') setView(t.key as StageKey);
-            }}
-            className={`whitespace-nowrap px-3.5 py-3 ${tab === t.key ? 'aegis-tab-active' : t.ready ? 'text-muted-foreground hover:text-foreground' : 'cursor-not-allowed text-muted-foreground/60'}`}
-          >
-            <span className="aegis-mono mr-1.5">{t.key}</span>
-            {t.label}
-          </button>
-        ))}
-      </nav>
-
-      <div className="flex min-h-0 flex-1">
-        <main className="min-w-0 flex-1 overflow-auto">
+      <div className="relative flex min-h-0">
+        <main className="min-w-0 flex-1">
           {tab === '01' ? (
-            <DocumentsStage assessmentId={assessmentId} onOpenItemDefinition={() => setTab('02')} />
+            <DocumentsStage assessmentId={assessmentId} project={project} onOpenItemDefinition={() => goTo('02')} />
           ) : stage02.isLoading ? (
             <p className="p-10 text-muted-foreground">Loading the item definition...</p>
           ) : stage02.error ? (
-            <p className="p-10 text-signal-ink">{(stage02.error as Error).message}</p>
+            <p className="p-10 text-state-red-foreground">{(stage02.error as Error).message}</p>
           ) : !def ? (
-            <div className="p-10">
-              <p className="m-0">There is no item definition yet.</p>
-              <button type="button" onClick={() => setTab('01')} className="mt-3 underline underline-offset-4">Add the documents and execute on 01 Documents</button>
+            <div className="mx-auto max-w-[1600px] px-[clamp(16px,2.5vw,32px)] pt-7">
+              <PageHeader project={project} title="Item definition" />
+              <div className="aegis-card px-6 py-5">
+                <p className="m-0">There is no item definition yet.</p>
+                <button type="button" onClick={() => goTo('01')} className="mt-3 font-medium underline underline-offset-4">Add the documents and execute on 01 Documents</button>
+              </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4 px-8 py-6">
-              <div className="flex flex-wrap items-baseline justify-between gap-3">
-                <h1 className="text-[22px] font-semibold leading-[30px]">Item definition</h1>
-                <span className="text-muted-foreground">
-                  {elements.length} components, {links.length} connections. Run {stage02.data!.run_number}, built {new Date(stage02.data!.created_at).toLocaleString()}.
-                </span>
-              </div>
+            <div className="mx-auto flex max-w-[1600px] flex-col gap-4 px-[clamp(16px,2.5vw,32px)] pb-12 pt-7">
+              <PageHeader
+                project={project}
+                title="Item definition"
+                right={
+                  <span className="inline-flex items-center gap-1.5">
+                    <StatusDot tone="green" />
+                    Built {new Date(stage02.data!.created_at).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}{' '}
+                    <span className="aegis-mono text-[11.5px]">run {stage02.data!.run_number}</span>
+                  </span>
+                }
+              />
               <p className="m-0 max-w-[900px] text-muted-foreground">
                 {def.boundary_statement.text}
                 {def.boundary_statement.proposed ? ' (proposed)' : ''}
@@ -166,27 +143,25 @@ export default function Assessment() {
           )}
         </main>
 
-        {panelOpen ? (
-          <AssumptionsPanel
-            assessmentId={assessmentId}
-            stage={tab}
-            view={view}
-            onView={(v) => {
-              setView(v);
-              setOpenCard(null);
-            }}
-            cards={viewCards}
-            questions={questions}
-            docs={docs}
-            openId={openCard?.id ?? null}
-            onOpen={setOpenCard}
-            filterName={filterName}
-            onClearFilter={() => setFilterId(null)}
-            onClose={() => {
-              setPanelOpen(false);
-              setOpenCard(null);
-            }}
-          />
+        {tab === '02' && panelOpen ? (
+          <aside aria-label="Assumptions" className="aegis-card sticky top-24 m-4 ml-0 max-h-[calc(100dvh-112px)] w-[420px] shrink-0 overflow-y-auto">
+            <div className="aegis-card-head">
+              <span className="text-base font-semibold">Assumptions</span>
+              <button type="button" aria-label="Close assumptions" onClick={() => { setPanelOpen(false); setOpenCard(null); }} className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-border bg-card hover:bg-accent">
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+            <AssumptionsList
+              assessmentId={assessmentId}
+              cards={viewCards}
+              questions={questions}
+              docs={docs}
+              openId={openCard?.id ?? null}
+              onOpen={setOpenCard}
+              filterName={filterName}
+              onClearFilter={() => setFilterId(null)}
+            />
+          </aside>
         ) : (
           tab === '02' &&
           def &&
@@ -206,6 +181,18 @@ export default function Assessment() {
           )
         )}
       </div>
+
+      <SideSheet
+        open={tab === '01' && panelOpen}
+        onOpenChange={(o) => { setPanelOpen(o); if (!o) setOpenCard(null); }}
+        eyebrow={`Stage 01 · ${stageCards.length} items`}
+        title="Assumptions"
+        description="What Stage 01 assumed while reading the documents."
+        width={520}
+        badge={needCount > 0 ? <span className="aegis-signal-pill px-2.5 py-0.5 text-xs">{needCount} need you</span> : undefined}
+      >
+        <AssumptionsList assessmentId={assessmentId} cards={stageCards} questions={questions} docs={docs} openId={openCard?.id ?? null} onOpen={setOpenCard} />
+      </SideSheet>
 
       <WhatIRead open={settingsOpen} onOpenChange={setSettingsOpen} stage01={stage01.data ?? undefined} boundary={boundary.data?.text} />
     </div>

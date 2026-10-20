@@ -13,11 +13,11 @@ const badgeVariants = cva(
         destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
         // D-51 state tags: colour marks state only.
-        yellow: "border-transparent bg-state-yellow text-state-yellow-foreground",
-        green: "border-transparent bg-state-green text-state-green-foreground",
-        blue: "border-transparent bg-state-blue text-state-blue-foreground",
-        red: "border-transparent bg-state-red text-state-red-foreground",
-        grey: "border-transparent bg-state-grey text-state-grey-foreground",
+        yellow: "border-state-yellow-border bg-state-yellow text-state-yellow-foreground",
+        green: "border-state-green-border bg-state-green text-state-green-foreground",
+        blue: "border-state-blue-border bg-state-blue text-state-blue-foreground",
+        red: "border-state-red-border bg-state-red text-state-red-foreground",
+        grey: "border-border bg-state-grey text-state-grey-foreground",
       },
     },
     defaultVariants: {

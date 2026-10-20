@@ -166,7 +166,7 @@ export function Quotes({ factIds, facts, docs, title = 'What the documents say' 
 
 export function SourceQuote({ quote, doc, location }: { quote: string; doc: string; location: string }) {
   return (
-    <blockquote className="m-0 rounded-md border border-border p-2.5">
+    <blockquote className="m-0 rounded-[10px] border border-rule bg-[hsl(var(--well))] px-3 py-2.5">
       <p className="m-0">"{quote}"</p>
       <footer className="aegis-id mt-1">{doc}, {location}</footer>
     </blockquote>
