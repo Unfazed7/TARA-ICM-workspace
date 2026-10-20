@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/geist-mono": "^5.1.0",
+    "@fontsource/geist-sans": "^5.1.0",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -47,7 +49,9 @@
     "cmdk": "^1.1.1",
     "dagre": "^0.8.5",
     "date-fns": "^3.6.0",
+    "elkjs": "^0.9.3",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^11.18.2",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",

@@ -98,9 +98,27 @@ export default {
 				'3-foreground': 'hsl(var(--sev-3-foreground))',
 				4: 'hsl(var(--sev-4))',
 				'4-foreground': 'hsl(var(--sev-4-foreground))'
+			},
+			well: 'hsl(var(--well))',
+			state: {
+				yellow: 'hsl(var(--state-yellow))',
+				'yellow-foreground': 'hsl(var(--state-yellow-foreground))',
+				'yellow-border': 'hsl(var(--state-yellow-border))',
+				'yellow-edge': 'hsl(var(--state-yellow-edge))',
+				green: 'hsl(var(--state-green))',
+				'green-foreground': 'hsl(var(--state-green-foreground))',
+				'green-border': 'hsl(var(--state-green-border))',
+				blue: 'hsl(var(--state-blue))',
+				'blue-foreground': 'hsl(var(--state-blue-foreground))',
+				'blue-border': 'hsl(var(--state-blue-border))',
+				red: 'hsl(var(--state-red))',
+				'red-foreground': 'hsl(var(--state-red-foreground))',
+				'red-border': 'hsl(var(--state-red-border))',
+				grey: 'hsl(var(--state-grey))',
+				'grey-foreground': 'hsl(var(--state-grey-foreground))'
 			}
 		},
-  		// 3a: 3px everywhere; outer frames 6px. Pills keep rounded-full.
+  		// D-51: 10px controls, 14px frames. Pills keep rounded-full.
   		borderRadius: {
   			sm: '2px',
   			md: 'var(--radius)',
@@ -132,39 +150,9 @@ export default {
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
   		fontFamily: {
-  			sans: [
-  				'IBM Plex Sans',
-  				'ui-sans-serif',
-  				'system-ui',
-  				'-apple-system',
-  				'BlinkMacSystemFont',
-  				'Segoe UI',
-  				'Roboto',
-  				'Helvetica Neue',
-  				'Arial',
-  				'Noto Sans',
-  				'sans-serif'
-  			],
-  			serif: [
-  				'IBM Plex Serif',
-  				'ui-serif',
-  				'Georgia',
-  				'Cambria',
-  				'Times New Roman',
-  				'Times',
-  				'serif'
-  			],
-  			mono: [
-  				'IBM Plex Mono',
-  				'ui-monospace',
-  				'SFMono-Regular',
-  				'Menlo',
-  				'Monaco',
-  				'Consolas',
-  				'Liberation Mono',
-  				'Courier New',
-  				'monospace'
-  			]
+  			sans: ['var(--font-sans)'],
+  			serif: ['var(--font-serif)'],
+  			mono: ['var(--font-mono)']
   		},
   		boxShadow: {
   			'2xs': 'var(--shadow-2xs)',

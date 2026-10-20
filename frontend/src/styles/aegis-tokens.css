@@ -1,147 +1,170 @@
-/* Aegis — 3a "Blueprint" theme
+/* Aegis: the D-51 theme (C15)
  *
- * Source: Claude Design handoff "Aegis Theme Directions" → 3a Blueprint.
- * Looks like an engineering drawing: precise, technical, credible with auditors.
+ * Source: the analyst's Claude Design redesign, 2026-10-20 (FINAL boards).
+ * A warm grey canvas with white cards that have visible edges, so every
+ * region can be found at a glance.
  *
- *   IBM Plex Sans + IBM Plex Mono · 3px radius
- *   Ground #F6F8FA · Surface #EDF1F5 · Ink #14213D · Primary #1E4F9C · Signal #E4572E
+ *   Geist + Geist Mono (self-hosted, imported in main.tsx) · 10px radius, 14px frames
+ *   Canvas #ECEAE4 · Card #FFFFFF · Edge #DAD8D1 · Ink #1C1B19
  *
  * Single source of truth for colour. index.css and tailwind.config.ts only
  * reference these variables (HSL channels, shadcn convention).
  *
  * Rules encoded here:
- *   - A cool primary carries the interface; the warm signal only marks risk
- *     or "a human must decide".
- *   - Severity (Negligible → Severe) is one warm ramp, monotonic in lightness,
- *     so it survives greyscale print. Always paired with its label.
- *   - Fault Line: the component under attack sits out of line, with a block
- *     of signal colour behind it (see .aegis-fault).
- *   - Depth comes from rules and zones, not elevation or glow.
+ *   - Colour marks state only: yellow needs you or required, green done,
+ *     blue running or information, red failed. Everything else is neutral.
+ *   - The interface itself is ink on white; the primary action is ink.
+ *   - Inputs are filled wells that turn white on focus.
+ *   - Severity (Negligible to Severe) stays one warm ramp, always with its label.
+ *   - Variable names are kept from 3a so existing screens keep working.
  */
-
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@400;600&display=swap');
 
 :root {
   /* --- Base ---------------------------------------------------------------- */
-  --background: 210 29% 97%;         /* #F6F8FA ground                       */
-  --foreground: 221 51% 16%;         /* #14213D ink                          */
+  --background: 45 17% 91%;          /* #ECEAE4 canvas                       */
+  --foreground: 40 6% 10%;           /* #1C1B19 ink                          */
   --card: 0 0% 100%;
-  --card-foreground: 221 51% 16%;
+  --card-foreground: 40 6% 10%;
   --popover: 0 0% 100%;
-  --popover-foreground: 221 51% 16%;
+  --popover-foreground: 40 6% 10%;
 
-  --muted: 210 29% 95%;              /* #EDF1F5 surface                      */
-  --muted-foreground: 218 20% 40%;   /* #51607A muted text, 6.0:1 on ground  */
-  --border: 213 26% 83%;             /* #C9D3DF line                         */
-  --input: 213 26% 83%;
-  --ring: 217 68% 36%;
+  --muted: 43 23% 94%;               /* #F3F1EC header strip                 */
+  --muted-foreground: 47 2% 39%;     /* #65645F, 4.8:1 on canvas             */
+  --border: 47 11% 84%;              /* #DAD8D1 card edge                    */
+  --input: 47 11% 84%;
+  --ring: 204 67% 37%;               /* #1F6C9F focus ring                   */
 
-  --primary: 217 68% 36%;            /* #1E4F9C blueprint blue               */
+  --primary: 40 6% 10%;              /* ink: the primary action              */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 210 29% 95%;          /* surface                              */
-  --secondary-foreground: 221 51% 16%;
-  --accent: 217 56% 92%;             /* #DFE8F6 primary-soft (hover, select) */
-  --accent-foreground: 221 51% 16%;
+  --secondary: 43 23% 94%;
+  --secondary-foreground: 40 6% 10%;
+  --accent: 45 17% 93%;              /* #F1EFEA hover                        */
+  --accent-foreground: 40 6% 10%;
 
-  --destructive: 10 73% 38%;         /* #A8321A = severe                     */
+  --destructive: 1 56% 40%;          /* #9F2F2D failed                       */
   --destructive-foreground: 0 0% 100%;
 
-  /* --- 3a structural tokens ------------------------------------------------ */
-  --zone: 210 32% 93%;               /* #E6ECF2 grouped regions              */
-  --bar: 221 51% 16%;                /* #14213D app bar                      */
-  --bar-foreground: 210 29% 97%;
-  --primary-soft: 217 56% 92%;       /* #DFE8F6                              */
+  /* --- State colours (the only colour on screen) --------------------------- */
+  --state-yellow: 45 80% 92%;        /* #FBF3DB needs you, required          */
+  --state-yellow-foreground: 40 100% 29%;  /* #956400                         */
+  --state-yellow-border: 45 70% 85%;
+  --state-yellow-edge: 42 72% 57%;   /* #E0B243 open-section edge            */
+  --state-green: 111 23% 94%;        /* #EDF3EC done                         */
+  --state-green-foreground: 125 32% 30%;   /* #346538                         */
+  --state-green-border: 111 23% 88%;
+  --state-blue: 203 94% 94%;         /* #E1F3FE running, information         */
+  --state-blue-foreground: 204 67% 37%;    /* #1F6C9F                         */
+  --state-blue-border: 204 75% 89%;
+  --state-red: 357 82% 96%;          /* #FDEBEC failed                       */
+  --state-red-foreground: 1 56% 40%;       /* #9F2F2D                         */
+  --state-red-border: 358 63% 89%;
+  --state-grey: 48 15% 94%;          /* #F1F0EC neutral tag                  */
+  --state-grey-foreground: 45 2% 36%;      /* #5F5E5B                         */
 
-  /* Signal: risk, and "needs you". Fill colour — use signal-ink for text.  */
-  --signal: 14 77% 54%;              /* #E4572E                              */
-  --signal-foreground: 13 74% 6%;    /* #1B0904                              */
-  --signal-ink: 14 75% 41%;          /* #B8401A, 5.2:1 on ground             */
+  /* --- Structural tokens --------------------------------------------------- */
+  --well: 40 23% 97%;                /* #FAF9F7 input fill                   */
+  --zone: 48 15% 94%;                /* grouped regions                      */
+  --bar: 40 6% 10%;                  /* legacy dark app bars                 */
+  --bar-foreground: 45 17% 96%;
+  --primary-soft: 203 94% 94%;
+
+  /* Signal: "needs you". Fill colour; use signal-ink for text.             */
+  --signal: 42 72% 57%;              /* #E0B243                              */
+  --signal-foreground: 41 100% 15%;  /* #4F3600                              */
+  --signal-ink: 40 100% 29%;         /* #956400, 4.6:1 on its fill           */
 
   /* --- Severity ramp (impact: Negligible / Moderate / Major / Severe) ------ */
-  --sev-1: 213 24% 91%;              /* #E3E8EE negligible                   */
-  --sev-1-foreground: 216 28% 24%;   /* #2C3A4F                              */
-  --sev-2: 17 90% 92%;               /* #FDE4DA moderate                     */
-  --sev-2-foreground: 11 77% 27%;    /* #7A2410                              */
-  --sev-3: 16 82% 67%;               /* #F08A64 major                        */
-  --sev-3-foreground: 14 82% 13%;    /* #3B1206                              */
-  --sev-4: 10 73% 38%;               /* #A8321A severe                       */
+  --sev-1: 213 24% 91%;
+  --sev-1-foreground: 216 28% 24%;
+  --sev-2: 17 90% 92%;
+  --sev-2-foreground: 11 77% 27%;
+  --sev-3: 16 82% 67%;
+  --sev-3-foreground: 14 82% 13%;
+  --sev-4: 10 73% 38%;
   --sev-4-foreground: 0 0% 100%;
 
-  /* --- Legacy semantic names, remapped onto 3a ----------------------------- */
-  /* "ok / complete" is structural, so it is primary — never green.        */
-  --emerald: 217 68% 36%;
+  /* --- Legacy semantic names, mapped onto the state colours --------------- */
+  --emerald: 125 32% 30%;
   --emerald-foreground: 0 0% 100%;
-  --sage: 217 68% 36%;
+  --sage: 125 32% 30%;
   --sage-foreground: 0 0% 100%;
-  --amber: 14 75% 41%;               /* = signal-ink                         */
+  --amber: 40 100% 29%;
   --amber-foreground: 0 0% 100%;
-  --dusty-amber: 14 75% 41%;
+  --dusty-amber: 40 100% 29%;
   --dusty-amber-foreground: 0 0% 100%;
-  --warning: 14 75% 41%;
-  --critical: 10 73% 38%;            /* = severe                             */
+  --warning: 40 100% 29%;
+  --critical: 1 56% 40%;
   --critical-foreground: 0 0% 100%;
 
   /* Role tokens used by the Item Definition screens. */
-  --aegis-decide: 14 77% 54%;        /* human must decide → signal           */
-  --aegis-decide-fill: 17 90% 95%;
-  --aegis-decide-text: 11 77% 27%;
-  --aegis-conflict: 10 73% 38%;      /* contradiction → severe               */
-  --aegis-conflict-fill: 12 70% 96%;
-  --aegis-conflict-text: 11 77% 27%;
-  --aegis-interface: 217 68% 36%;    /* boundary interface → primary         */
-  --aegis-interface-fill: 217 56% 92%;
-  --aegis-interface-text: 217 70% 28%;
+  --aegis-decide: 42 72% 57%;        /* human must decide: yellow            */
+  --aegis-decide-fill: 45 80% 92%;
+  --aegis-decide-text: 41 100% 15%;
+  --aegis-conflict: 1 56% 40%;       /* contradiction: red                   */
+  --aegis-conflict-fill: 357 82% 96%;
+  --aegis-conflict-text: 1 56% 40%;
+  --aegis-interface: 48 2% 55%;      /* interface: dashed neutral            */
+  --aegis-interface-fill: 0 0% 100%;
+  --aegis-interface-text: 45 4% 18%;
 
-  /* 5-step ordinal scale (risk 1–5). Steps 1–4 are the severity ramp. */
+  /* 5-step ordinal scale (risk 1 to 5). Steps 1 to 4 are the severity ramp. */
   --aegis-scale-1: var(--sev-1);
   --aegis-scale-2: var(--sev-2);
   --aegis-scale-3: var(--sev-3);
   --aegis-scale-4: var(--sev-4);
-  --aegis-scale-5: 11 77% 27%;       /* #7A2410 critical                     */
+  --aegis-scale-5: 11 77% 27%;
   --aegis-scale-1-text: var(--sev-1-foreground);
   --aegis-scale-2-text: var(--sev-2-foreground);
   --aegis-scale-3-text: var(--sev-3-foreground);
   --aegis-scale-4-text: var(--sev-4-foreground);
   --aegis-scale-5-text: 0 0% 100%;
 
-  /* 4-step scales (CAL 1–4, impact rating) map 1:1 onto the severity ramp. */
+  /* 4-step scales (CAL 1 to 4, impact rating) map 1:1 onto the severity ramp. */
   --aegis-cal-1: var(--sev-1);
   --aegis-cal-2: var(--sev-2);
   --aegis-cal-3: var(--sev-3);
   --aegis-cal-4: var(--sev-4);
 
-  /* Charts: structure in blues, risk in the warm ramp. */
-  --chart-1: 217 68% 36%;
-  --chart-2: 221 51% 16%;
-  --chart-3: 218 20% 40%;
+  /* Charts: structure in neutrals and blue, risk in the warm ramp. */
+  --chart-1: 204 67% 37%;
+  --chart-2: 40 6% 10%;
+  --chart-3: 47 2% 39%;
   --chart-4: 16 82% 67%;
   --chart-5: 10 73% 38%;
 
-  --sidebar-background: 210 29% 95%;
-  --sidebar-foreground: 221 51% 16%;
-  --sidebar-primary: 217 68% 36%;
+  --sidebar-background: 43 23% 94%;
+  --sidebar-foreground: 40 6% 10%;
+  --sidebar-primary: 40 6% 10%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 217 56% 92%;
-  --sidebar-accent-foreground: 221 51% 16%;
-  --sidebar-border: 213 26% 83%;
-  --sidebar-ring: 217 68% 36%;
+  --sidebar-accent: 45 17% 93%;
+  --sidebar-accent-foreground: 40 6% 10%;
+  --sidebar-border: 47 11% 84%;
+  --sidebar-ring: 204 67% 37%;
 
   /* --- Geometry ------------------------------------------------------------ */
-  --radius: 3px;
-  --radius-frame: 6px;
+  --radius: 10px;
+  --radius-frame: 14px;
   --aegis-hairline: 1px;
-  --aegis-rule: hsl(213 26% 83%);
-  --aegis-grid: hsl(217 68% 36% / 0.05);
+  --aegis-rule: hsl(45 14% 89%);     /* #E6E4DE row divider                  */
+  --aegis-grid: hsl(40 6% 10% / 0.035);
 
-  --shadow-card: none;
-  --shadow-card-hover: none;
-  --shadow-elevated: 0 8px 24px -12px hsl(221 51% 16% / 0.25);
+  /* Tinted shadows: a contact shadow plus a soft lift. */
+  --shadow-2xs: 0 1px 1px hsl(40 6% 10% / 0.04);
+  --shadow-xs: 0 1px 2px hsl(40 6% 10% / 0.06);
+  --shadow-sm: 0 1px 2px hsl(40 6% 10% / 0.06), 0 10px 24px -14px hsl(40 6% 10% / 0.16);
+  --shadow-md: 0 1px 2px hsl(40 6% 10% / 0.06), 0 14px 30px -16px hsl(40 6% 10% / 0.2);
+  --shadow-lg: 0 2px 4px hsl(40 6% 10% / 0.06), 0 18px 40px -22px hsl(40 6% 10% / 0.28);
+  --shadow-xl: 0 2px 6px hsl(40 6% 10% / 0.08), 0 24px 64px -32px hsl(40 6% 10% / 0.35);
+  --shadow-2xl: 0 4px 8px hsl(40 6% 10% / 0.08), 0 32px 80px -36px hsl(40 6% 10% / 0.4);
+  --shadow-card: var(--shadow-sm);
+  --shadow-card-hover: var(--shadow-md);
+  --shadow-elevated: var(--shadow-lg);
 
   /* --- Typography ---------------------------------------------------------- */
-  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-sans: 'Geist Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: 'Geist Sans', ui-sans-serif, system-ui, sans-serif;
 
   --aegis-dash-derived: 5 3;
   --aegis-dash-lowconf: 2 3;
@@ -263,7 +286,7 @@
   color: hsl(var(--muted-foreground));
 }
 
-/* Wordmark: TARA AEGIS in the app bar. */
+/* Wordmark in the top bar. */
 .aegis-wordmark {
   font-family: var(--font-mono);
   font-weight: 600;
@@ -279,24 +302,25 @@
 /* Grouped region (INTERNET, MANAGED). */
 .aegis-zone {
   background: hsl(var(--zone));
-  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-frame);
 }
 
-/* Fault Line: the component under attack sits out of line, with a block of
- * signal colour behind it. Use on exactly one element per view. */
+/* Selected element: dark fill with a blue offset block. One per view. */
 .aegis-fault {
-  border: 2px solid hsl(var(--primary));
-  background: hsl(var(--background));
-  box-shadow: 4px 4px 0 hsl(var(--signal));
-  font-weight: 600;
+  border: 1px solid hsl(var(--foreground));
+  background: hsl(var(--foreground));
+  color: hsl(var(--primary-foreground));
+  box-shadow: 4px 4px 0 hsl(var(--state-blue-foreground));
+  font-weight: 500;
 }
 
 /* "5 need you" pill. */
 .aegis-signal-pill {
-  background: hsl(var(--signal));
-  color: hsl(var(--signal-foreground));
-  border-radius: var(--radius);
-  font-weight: 700;
+  background: hsl(var(--state-yellow));
+  color: hsl(var(--state-yellow-foreground));
+  border-radius: 9999px;
+  font-weight: 600;
 }
 
 /* Severity badges: always fill + label. */
@@ -305,10 +329,11 @@
 .aegis-sev-3 { background: hsl(var(--sev-3)); color: hsl(var(--sev-3-foreground)); }
 .aegis-sev-4 { background: hsl(var(--sev-4)); color: hsl(var(--sev-4-foreground)); }
 
-/* Active stage tab: 3px primary underline. */
+/* Active stage tab: a raised white pill. */
 .aegis-tab-active {
-  font-weight: 600;
-  box-shadow: inset 0 -3px 0 hsl(var(--primary));
+  font-weight: 500;
+  background: hsl(var(--card));
+  box-shadow: 0 0 0 1px hsl(40 6% 10% / 0.08), 0 6px 12px -8px hsl(40 6% 10% / 0.35);
 }
 
 .aegis-blocking {
@@ -340,4 +365,51 @@
 .aegis-scope .animate-pulse,
 .aegis-scope .animate-ping {
   animation: none;
+}
+
+/* --- D-51 additions --------------------------------------------------------- */
+
+/* Filled input well; white on focus. Used by the shared input controls. */
+.aegis-well {
+  background: hsl(var(--well));
+  border: 1px solid hsl(var(--border));
+  transition: background-color .2s, border-color .2s, box-shadow .2s;
+}
+.aegis-well:focus,
+.aegis-well:focus-visible {
+  outline: none;
+  background: hsl(var(--card));
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--state-blue));
+}
+
+/* Card with a visible edge and a header strip. */
+.aegis-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-frame);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  min-width: 0;
+}
+.aegis-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 12px 24px;
+  background: hsl(var(--muted));
+  border-bottom: 1px solid hsl(var(--border));
+}
+/* A section that still needs required input. */
+.aegis-open-edge { box-shadow: inset 3px 0 0 hsl(var(--state-yellow-edge)); }
+
+/* Canvas texture: faint grid at the top of the page. */
+.aegis-canvas-grid {
+  background-image:
+    repeating-linear-gradient(0deg, hsl(40 6% 10% / 0.035) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, hsl(40 6% 10% / 0.035) 0 1px, transparent 1px 40px);
+  -webkit-mask-image: linear-gradient(#000, transparent 55%);
+  mask-image: linear-gradient(#000, transparent 55%);
 }
