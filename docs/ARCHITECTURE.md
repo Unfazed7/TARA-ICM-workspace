@@ -1,3 +1,5 @@
+> **SUPERSEDED** on 2026-09-25 by tara-workspace/web-based-tara/CONTEXT.md. Kept for history. Do not use for new work.
+
 # TARA ICM Architecture Map
 
 ## System Overview

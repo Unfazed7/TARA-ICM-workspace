@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-01-facts.schema.json",
+  "title": "Stage 01 Facts and Conflicts",
+  "description": "Facts read from client documents, and conflicts between them. Spec: .meta/specs/12a-document-register-and-facts.md",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "facts",
+    "conflicts"
+  ],
+  "definitions": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "doc_id",
+        "location",
+        "quote"
+      ],
+      "properties": {
+        "doc_id": {
+          "type": "string",
+          "pattern": "^DOC-\\d{2,}$"
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      }
+    }
+  },
+  "properties": {
+    "facts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItemProperties": [
+        "fact_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fact_id",
+          "subject",
+          "fact_type",
+          "value",
+          "source_refs",
+          "confidence",
+          "status"
+        ],
+        "properties": {
+          "fact_id": {
+            "type": "string",
+            "pattern": "^FCT-\\d{3,}$"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fact_type": {
+            "type": "string",
+            "enum": [
+              "component_exists",
+              "link_exists",
+              "attribute",
+              "function",
+              "actor",
+              "assumption_stated",
+              "control_stated",
+              "absence_stated",
+              "data",
+              "environment",
+              "responsibility",
+              "legal_context",
+              "constraint",
+              "client_requirement"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_refs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/definitions/source_ref"
+            }
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "group": {
+            "type": "string",
+            "enum": [
+              "agreed",
+              "single_source",
+              "needs_you"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "proposed",
+              "confirmed",
+              "rejected",
+              "overridden"
+            ]
+          }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "uniqueItemProperties": [
+        "conflict_id"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conflict_id",
+          "fact_ids",
+          "kind",
+          "proposed_resolution",
+          "auto_resolved",
+          "loser_fact_ids"
+        ],
+        "properties": {
+          "conflict_id": {
+            "type": "string",
+            "pattern": "^CNF-\\d{3,}$"
+          },
+          "fact_ids": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string",
+              "pattern": "^FCT-\\d{3,}$"
+            }
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "internet_exposure",
+              "environment",
+              "component_existence",
+              "ownership",
+              "entry_point_authentication",
+              "older_higher_precedence",
+              "naming",
+              "instance_size",
+              "count",
+              "version",
+              "other"
+            ]
+          },
+          "proposed_resolution": {
+            "type": "string",
+            "minLength": 1
+          },
+          "auto_resolved": {
+            "type": "boolean"
+          },
+          "loser_fact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^FCT-\\d{3,}$"
+            }
+          },
+          "description": {
+            "type": "string",
+            "minLength": 5
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "type": "object",
+              "properties": {
+                "auto_resolved": {
+                  "type": "boolean",
+                  "const": true
+                }
+              },
+              "required": [
+                "auto_resolved"
+              ]
+            },
+            "then": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "naming",
+                    "instance_size",
+                    "count",
+                    "version"
+                  ]
+                },
+                "loser_fact_ids": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "other"
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "type": "object",
+              "required": [
+                "description"
+              ],
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "minLength": 5
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

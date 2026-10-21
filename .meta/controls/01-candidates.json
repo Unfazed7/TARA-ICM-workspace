@@ -1,0 +1,2262 @@
+[
+  {
+    "name": "analyzing-active-directory-acl-abuse",
+    "description": "Detect dangerous ACL misconfigurations in Active Directory using ldap3",
+    "path": "skills/analyzing-active-directory-acl-abuse"
+  },
+  {
+    "name": "analyzing-api-gateway-access-logs",
+    "description": "'Parses API Gateway access logs (AWS API Gateway, Kong, Nginx) to detect",
+    "path": "skills/analyzing-api-gateway-access-logs"
+  },
+  {
+    "name": "analyzing-azure-activity-logs-for-threats",
+    "description": "'Queries Azure Monitor activity logs and sign-in logs via azure-monitor-query",
+    "path": "skills/analyzing-azure-activity-logs-for-threats"
+  },
+  {
+    "name": "analyzing-certificate-transparency-for-phishing",
+    "description": "Monitor Certificate Transparency logs using crt.sh and Certstream to",
+    "path": "skills/analyzing-certificate-transparency-for-phishing"
+  },
+  {
+    "name": "analyzing-cloud-storage-access-patterns",
+    "description": "Detect abnormal access patterns in AWS S3, GCS, and Azure Blob Storage",
+    "path": "skills/analyzing-cloud-storage-access-patterns"
+  },
+  {
+    "name": "analyzing-dns-logs-for-exfiltration",
+    "description": "'Analyzes DNS query logs to detect data exfiltration via DNS tunneling,",
+    "path": "skills/analyzing-dns-logs-for-exfiltration"
+  },
+  {
+    "name": "analyzing-email-headers-for-phishing-investigation",
+    "description": "Parse and analyze email headers to trace the origin of phishing emails,",
+    "path": "skills/analyzing-email-headers-for-phishing-investigation"
+  },
+  {
+    "name": "analyzing-heap-spray-exploitation",
+    "description": "Detect and analyze heap spray attacks in memory dumps using Volatility3",
+    "path": "skills/analyzing-heap-spray-exploitation"
+  },
+  {
+    "name": "analyzing-kubernetes-audit-logs",
+    "description": "'Parses Kubernetes API server audit logs (JSON lines) to detect exec-into-pod,",
+    "path": "skills/analyzing-kubernetes-audit-logs"
+  },
+  {
+    "name": "analyzing-linux-audit-logs-for-intrusion",
+    "description": "'Uses the Linux Audit framework (auditd) with ausearch and aureport utilities",
+    "path": "skills/analyzing-linux-audit-logs-for-intrusion"
+  },
+  {
+    "name": "analyzing-linux-kernel-rootkits",
+    "description": "Detect kernel-level rootkits in Linux memory dumps using Volatility3",
+    "path": "skills/analyzing-linux-kernel-rootkits"
+  },
+  {
+    "name": "analyzing-linux-system-artifacts",
+    "description": "Examine Linux system artifacts including auth logs, cron jobs, shell",
+    "path": "skills/analyzing-linux-system-artifacts"
+  },
+  {
+    "name": "analyzing-malware-family-relationships-with-malpedia",
+    "description": "Use the Malpedia platform and API to research malware family relationships,",
+    "path": "skills/analyzing-malware-family-relationships-with-malpedia"
+  },
+  {
+    "name": "analyzing-malware-sandbox-evasion-techniques",
+    "description": "Detect sandbox evasion techniques in malware samples by analyzing timing",
+    "path": "skills/analyzing-malware-sandbox-evasion-techniques"
+  },
+  {
+    "name": "analyzing-network-covert-channels-in-malware",
+    "description": "Detect and analyze covert communication channels used by malware including",
+    "path": "skills/analyzing-network-covert-channels-in-malware"
+  },
+  {
+    "name": "analyzing-network-flow-data-with-netflow",
+    "description": "Parse NetFlow v9 and IPFIX records to detect volumetric anomalies, port",
+    "path": "skills/analyzing-network-flow-data-with-netflow"
+  },
+  {
+    "name": "analyzing-office365-audit-logs-for-compromise",
+    "description": "Parse Office 365 Unified Audit Logs via Microsoft Graph API to detect",
+    "path": "skills/analyzing-office365-audit-logs-for-compromise"
+  },
+  {
+    "name": "analyzing-persistence-mechanisms-in-linux",
+    "description": "Detect and analyze Linux persistence mechanisms including crontab entries,",
+    "path": "skills/analyzing-persistence-mechanisms-in-linux"
+  },
+  {
+    "name": "analyzing-powershell-empire-artifacts",
+    "description": "Detect PowerShell Empire framework artifacts in Windows event logs by",
+    "path": "skills/analyzing-powershell-empire-artifacts"
+  },
+  {
+    "name": "analyzing-powershell-script-block-logging",
+    "description": "Parse Windows PowerShell Script Block Logs (Event ID 4104) from EVTX",
+    "path": "skills/analyzing-powershell-script-block-logging"
+  },
+  {
+    "name": "analyzing-ransomware-encryption-mechanisms",
+    "description": "'Analyzes encryption algorithms, key management, and file encryption",
+    "path": "skills/analyzing-ransomware-encryption-mechanisms"
+  },
+  {
+    "name": "analyzing-ransomware-leak-site-intelligence",
+    "description": "Monitor and analyze ransomware group data leak sites (DLS) to track victim",
+    "path": "skills/analyzing-ransomware-leak-site-intelligence"
+  },
+  {
+    "name": "analyzing-security-logs-with-splunk",
+    "description": "'Leverages Splunk Enterprise Security and SPL (Search Processing Language)",
+    "path": "skills/analyzing-security-logs-with-splunk"
+  },
+  {
+    "name": "analyzing-threat-actor-ttps-with-mitre-attack",
+    "description": "MITRE ATT&CK is a globally-accessible knowledge base of adversary tactics,",
+    "path": "skills/analyzing-threat-actor-ttps-with-mitre-attack"
+  },
+  {
+    "name": "analyzing-tls-certificate-transparency-logs",
+    "description": "'Queries Certificate Transparency logs via crt.sh and pycrtsh to detect",
+    "path": "skills/analyzing-tls-certificate-transparency-logs"
+  },
+  {
+    "name": "analyzing-typosquatting-domains-with-dnstwist",
+    "description": "Detect typosquatting, homograph phishing, and brand impersonation domains",
+    "path": "skills/analyzing-typosquatting-domains-with-dnstwist"
+  },
+  {
+    "name": "analyzing-web-server-logs-for-intrusion",
+    "description": "Parse Apache and Nginx access logs to detect SQL injection attempts,",
+    "path": "skills/analyzing-web-server-logs-for-intrusion"
+  },
+  {
+    "name": "analyzing-windows-event-logs-in-splunk",
+    "description": "'Analyzes Windows Security, System, and Sysmon event logs in Splunk to",
+    "path": "skills/analyzing-windows-event-logs-in-splunk"
+  },
+  {
+    "name": "auditing-aws-s3-bucket-permissions",
+    "description": "'Systematically audit AWS S3 bucket permissions to identify publicly",
+    "path": "skills/auditing-aws-s3-bucket-permissions"
+  },
+  {
+    "name": "auditing-azure-active-directory-configuration",
+    "description": "'Auditing Microsoft Entra ID (Azure Active Directory) configuration to",
+    "path": "skills/auditing-azure-active-directory-configuration"
+  },
+  {
+    "name": "auditing-cloud-with-cis-benchmarks",
+    "description": "'This skill details how to conduct cloud security audits using Center",
+    "path": "skills/auditing-cloud-with-cis-benchmarks"
+  },
+  {
+    "name": "auditing-gcp-iam-permissions",
+    "description": "'Auditing Google Cloud Platform IAM permissions to identify overly permissive",
+    "path": "skills/auditing-gcp-iam-permissions"
+  },
+  {
+    "name": "auditing-kubernetes-cluster-rbac",
+    "description": "'Auditing Kubernetes cluster RBAC configurations to identify overly permissive",
+    "path": "skills/auditing-kubernetes-cluster-rbac"
+  },
+  {
+    "name": "auditing-terraform-infrastructure-for-security",
+    "description": "'Auditing Terraform infrastructure-as-code for security misconfigurations",
+    "path": "skills/auditing-terraform-infrastructure-for-security"
+  },
+  {
+    "name": "auditing-tls-certificate-transparency-logs",
+    "description": "'Monitors Certificate Transparency (CT) logs to detect unauthorized certificate",
+    "path": "skills/auditing-tls-certificate-transparency-logs"
+  },
+  {
+    "name": "building-attack-pattern-library-from-cti-reports",
+    "description": "Extract and catalog attack patterns from cyber threat intelligence reports",
+    "path": "skills/building-attack-pattern-library-from-cti-reports"
+  },
+  {
+    "name": "building-cloud-siem-with-sentinel",
+    "description": "'This skill covers deploying Microsoft Sentinel as a cloud-native SIEM",
+    "path": "skills/building-cloud-siem-with-sentinel"
+  },
+  {
+    "name": "building-detection-rule-with-splunk-spl",
+    "description": "Build effective detection rules using Splunk Search Processing Language",
+    "path": "skills/building-detection-rule-with-splunk-spl"
+  },
+  {
+    "name": "building-detection-rules-with-sigma",
+    "description": "'Builds vendor-agnostic detection rules using the Sigma rule format for",
+    "path": "skills/building-detection-rules-with-sigma"
+  },
+  {
+    "name": "building-identity-federation-with-saml-azure-ad",
+    "description": "Establish SAML 2.0 identity federation between on-premises Active Directory",
+    "path": "skills/building-identity-federation-with-saml-azure-ad"
+  },
+  {
+    "name": "building-identity-governance-lifecycle-process",
+    "description": "'Builds comprehensive identity governance and lifecycle management processes",
+    "path": "skills/building-identity-governance-lifecycle-process"
+  },
+  {
+    "name": "building-red-team-c2-infrastructure-with-havoc",
+    "description": "Deploy and configure the Havoc C2 framework with teamserver, HTTPS listeners,",
+    "path": "skills/building-red-team-c2-infrastructure-with-havoc"
+  },
+  {
+    "name": "building-role-mining-for-rbac-optimization",
+    "description": "Apply bottom-up and top-down role mining techniques to discover optimal",
+    "path": "skills/building-role-mining-for-rbac-optimization"
+  },
+  {
+    "name": "bypassing-authentication-with-forced-browsing",
+    "description": "Discovering and accessing unprotected pages, APIs, and administrative",
+    "path": "skills/bypassing-authentication-with-forced-browsing"
+  },
+  {
+    "name": "conducting-api-security-testing",
+    "description": "'Conducts security testing of REST, GraphQL, and gRPC APIs to identify",
+    "path": "skills/conducting-api-security-testing"
+  },
+  {
+    "name": "conducting-cloud-incident-response",
+    "description": "'Responds to security incidents in cloud environments (AWS, Azure, GCP) by performing identity-based containment,",
+    "path": "skills/conducting-cloud-incident-response"
+  },
+  {
+    "name": "conducting-cloud-penetration-testing",
+    "description": "'This skill outlines methodologies for performing authorized penetration",
+    "path": "skills/conducting-cloud-penetration-testing"
+  },
+  {
+    "name": "conducting-domain-persistence-with-dcsync",
+    "description": "Perform DCSync attacks to replicate Active Directory credentials and",
+    "path": "skills/conducting-domain-persistence-with-dcsync"
+  },
+  {
+    "name": "conducting-malware-incident-response",
+    "description": "'Responds to malware infections across enterprise endpoints by identifying the malware family, determining infection",
+    "path": "skills/conducting-malware-incident-response"
+  },
+  {
+    "name": "conducting-network-penetration-test",
+    "description": "'Conducts comprehensive network penetration tests against authorized",
+    "path": "skills/conducting-network-penetration-test"
+  },
+  {
+    "name": "conducting-social-engineering-pretext-call",
+    "description": "Plan and execute authorized vishing (voice phishing) pretext calls to",
+    "path": "skills/conducting-social-engineering-pretext-call"
+  },
+  {
+    "name": "conducting-wireless-network-penetration-test",
+    "description": "'Conducts authorized wireless network penetration tests to assess the",
+    "path": "skills/conducting-wireless-network-penetration-test"
+  },
+  {
+    "name": "configuring-aws-verified-access-for-ztna",
+    "description": "Configure AWS Verified Access to provide VPN-less zero trust network",
+    "path": "skills/configuring-aws-verified-access-for-ztna"
+  },
+  {
+    "name": "configuring-certificate-authority-with-openssl",
+    "description": "A Certificate Authority (CA) is the trust anchor in a PKI hierarchy,",
+    "path": "skills/configuring-certificate-authority-with-openssl"
+  },
+  {
+    "name": "configuring-host-based-intrusion-detection",
+    "description": "'Configures host-based intrusion detection systems (HIDS) to monitor",
+    "path": "skills/configuring-host-based-intrusion-detection"
+  },
+  {
+    "name": "configuring-identity-aware-proxy-with-google-iap",
+    "description": "'Configuring Google Cloud Identity-Aware Proxy (IAP) to enforce per-request",
+    "path": "skills/configuring-identity-aware-proxy-with-google-iap"
+  },
+  {
+    "name": "configuring-ldap-security-hardening",
+    "description": "Harden LDAP directory services against common attacks including credential",
+    "path": "skills/configuring-ldap-security-hardening"
+  },
+  {
+    "name": "configuring-microsegmentation-for-zero-trust",
+    "description": "Configure microsegmentation policies to enforce least-privilege workload-to-workload",
+    "path": "skills/configuring-microsegmentation-for-zero-trust"
+  },
+  {
+    "name": "configuring-multi-factor-authentication-with-duo",
+    "description": "Deploy Cisco Duo multi-factor authentication across enterprise applications,",
+    "path": "skills/configuring-multi-factor-authentication-with-duo"
+  },
+  {
+    "name": "configuring-oauth2-authorization-flow",
+    "description": "Configure secure OAuth 2.0 authorization flows including Authorization",
+    "path": "skills/configuring-oauth2-authorization-flow"
+  },
+  {
+    "name": "configuring-pfsense-firewall-rules",
+    "description": "'Configures pfSense firewall rules, NAT policies, VPN tunnels, and traffic",
+    "path": "skills/configuring-pfsense-firewall-rules"
+  },
+  {
+    "name": "configuring-snort-ids-for-intrusion-detection",
+    "description": "'Installs, configures, and tunes Snort 3 intrusion detection system to",
+    "path": "skills/configuring-snort-ids-for-intrusion-detection"
+  },
+  {
+    "name": "configuring-suricata-for-network-monitoring",
+    "description": "'Deploys and configures Suricata IDS/IPS with Emerging Threats rulesets,",
+    "path": "skills/configuring-suricata-for-network-monitoring"
+  },
+  {
+    "name": "configuring-tls-1-3-for-secure-communications",
+    "description": "TLS 1.3 (RFC 8446) is the latest version of the Transport Layer Security",
+    "path": "skills/configuring-tls-1-3-for-secure-communications"
+  },
+  {
+    "name": "configuring-windows-defender-advanced-settings",
+    "description": "'Configures Microsoft Defender for Endpoint (MDE) advanced protection",
+    "path": "skills/configuring-windows-defender-advanced-settings"
+  },
+  {
+    "name": "configuring-windows-event-logging-for-detection",
+    "description": "'Configures Windows Event Logging with advanced audit policies to generate",
+    "path": "skills/configuring-windows-event-logging-for-detection"
+  },
+  {
+    "name": "configuring-zscaler-private-access-for-ztna",
+    "description": "'Configuring Zscaler Private Access (ZPA) to replace traditional VPN",
+    "path": "skills/configuring-zscaler-private-access-for-ztna"
+  },
+  {
+    "name": "correlating-security-events-in-qradar",
+    "description": "'Correlates security events in IBM QRadar SIEM using AQL (Ariel Query",
+    "path": "skills/correlating-security-events-in-qradar"
+  },
+  {
+    "name": "deobfuscating-javascript-malware",
+    "description": "'Deobfuscates malicious JavaScript code used in web-based attacks, phishing",
+    "path": "skills/deobfuscating-javascript-malware"
+  },
+  {
+    "name": "deploying-active-directory-honeytokens",
+    "description": "'Deploys deception-based honeytokens in Active Directory including fake",
+    "path": "skills/deploying-active-directory-honeytokens"
+  },
+  {
+    "name": "deploying-cloudflare-access-for-zero-trust",
+    "description": "'Deploying Cloudflare Access with Cloudflare Tunnel to provide zero trust",
+    "path": "skills/deploying-cloudflare-access-for-zero-trust"
+  },
+  {
+    "name": "deploying-decoy-files-for-ransomware-detection",
+    "description": "'Deploys canary files (honeytokens) across file systems to detect ransomware",
+    "path": "skills/deploying-decoy-files-for-ransomware-detection"
+  },
+  {
+    "name": "deploying-osquery-for-endpoint-monitoring",
+    "description": "'Deploys and configures osquery for real-time endpoint monitoring using",
+    "path": "skills/deploying-osquery-for-endpoint-monitoring"
+  },
+  {
+    "name": "deploying-palo-alto-prisma-access-zero-trust",
+    "description": "'Deploying Palo Alto Networks Prisma Access for SASE-based zero trust",
+    "path": "skills/deploying-palo-alto-prisma-access-zero-trust"
+  },
+  {
+    "name": "deploying-ransomware-canary-files",
+    "description": "'Deploys and monitors ransomware canary files across critical directories",
+    "path": "skills/deploying-ransomware-canary-files"
+  },
+  {
+    "name": "detecting-ai-model-prompt-injection-attacks",
+    "description": "'Detects prompt injection attacks targeting LLM-based applications using",
+    "path": "skills/detecting-ai-model-prompt-injection-attacks"
+  },
+  {
+    "name": "detecting-anomalies-in-industrial-control-systems",
+    "description": "'This skill covers deploying anomaly detection systems for industrial",
+    "path": "skills/detecting-anomalies-in-industrial-control-systems"
+  },
+  {
+    "name": "detecting-anomalous-authentication-patterns",
+    "description": "'Detects anomalous authentication patterns using UEBA analytics, statistical",
+    "path": "skills/detecting-anomalous-authentication-patterns"
+  },
+  {
+    "name": "detecting-api-enumeration-attacks",
+    "description": "Detect and prevent API enumeration attacks including BOLA and IDOR exploitation",
+    "path": "skills/detecting-api-enumeration-attacks"
+  },
+  {
+    "name": "detecting-arp-poisoning-in-network-traffic",
+    "description": "Detect and prevent ARP spoofing attacks using ARPWatch, Dynamic ARP Inspection,",
+    "path": "skills/detecting-arp-poisoning-in-network-traffic"
+  },
+  {
+    "name": "detecting-attacks-on-historian-servers",
+    "description": "'Detect cyber attacks targeting OT historian servers (OSIsoft PI, Ignition,",
+    "path": "skills/detecting-attacks-on-historian-servers"
+  },
+  {
+    "name": "detecting-attacks-on-scada-systems",
+    "description": "'This skill covers detecting cyber attacks targeting Supervisory Control",
+    "path": "skills/detecting-attacks-on-scada-systems"
+  },
+  {
+    "name": "detecting-aws-cloudtrail-anomalies",
+    "description": "Detect unusual API call patterns in AWS CloudTrail logs using boto3,",
+    "path": "skills/detecting-aws-cloudtrail-anomalies"
+  },
+  {
+    "name": "detecting-aws-credential-exposure-with-trufflehog",
+    "description": "'Detecting exposed AWS credentials in source code repositories, CI/CD",
+    "path": "skills/detecting-aws-credential-exposure-with-trufflehog"
+  },
+  {
+    "name": "detecting-aws-guardduty-findings-automation",
+    "description": "Automate AWS GuardDuty threat detection findings processing using EventBridge",
+    "path": "skills/detecting-aws-guardduty-findings-automation"
+  },
+  {
+    "name": "detecting-aws-iam-privilege-escalation",
+    "description": "Detect AWS IAM privilege escalation paths using boto3 and Cloudsplaining",
+    "path": "skills/detecting-aws-iam-privilege-escalation"
+  },
+  {
+    "name": "detecting-azure-lateral-movement",
+    "description": "Detect lateral movement in Azure AD/Entra ID environments using Microsoft",
+    "path": "skills/detecting-azure-lateral-movement"
+  },
+  {
+    "name": "detecting-azure-service-principal-abuse",
+    "description": "Detect and investigate Azure service principal abuse including privilege",
+    "path": "skills/detecting-azure-service-principal-abuse"
+  },
+  {
+    "name": "detecting-azure-storage-account-misconfigurations",
+    "description": "Audit Azure Blob and ADLS storage accounts for public access exposure,",
+    "path": "skills/detecting-azure-storage-account-misconfigurations"
+  },
+  {
+    "name": "detecting-beaconing-patterns-with-zeek",
+    "description": "'Performs statistical analysis of Zeek conn.log connection intervals",
+    "path": "skills/detecting-beaconing-patterns-with-zeek"
+  },
+  {
+    "name": "detecting-bluetooth-low-energy-attacks",
+    "description": "'Detects and analyzes Bluetooth Low Energy (BLE) security attacks including",
+    "path": "skills/detecting-bluetooth-low-energy-attacks"
+  },
+  {
+    "name": "detecting-broken-object-property-level-authorization",
+    "description": "Detect and test for OWASP API3:2023 Broken Object Property Level Authorization",
+    "path": "skills/detecting-broken-object-property-level-authorization"
+  },
+  {
+    "name": "detecting-business-email-compromise",
+    "description": "Business Email Compromise (BEC) is a sophisticated fraud scheme where",
+    "path": "skills/detecting-business-email-compromise"
+  },
+  {
+    "name": "detecting-business-email-compromise-with-ai",
+    "description": "Deploy AI and NLP-powered detection systems to identify business email",
+    "path": "skills/detecting-business-email-compromise-with-ai"
+  },
+  {
+    "name": "detecting-cloud-threats-with-guardduty",
+    "description": "'This skill teaches security teams how to deploy and operationalize Amazon",
+    "path": "skills/detecting-cloud-threats-with-guardduty"
+  },
+  {
+    "name": "detecting-command-and-control-over-dns",
+    "description": "'Detects command-and-control (C2) communications tunneled through DNS",
+    "path": "skills/detecting-command-and-control-over-dns"
+  },
+  {
+    "name": "detecting-compromised-cloud-credentials",
+    "description": "'Detecting compromised cloud credentials across AWS, Azure, and GCP by",
+    "path": "skills/detecting-compromised-cloud-credentials"
+  },
+  {
+    "name": "detecting-container-drift-at-runtime",
+    "description": "Detect unauthorized modifications to running containers by monitoring",
+    "path": "skills/detecting-container-drift-at-runtime"
+  },
+  {
+    "name": "detecting-container-escape-attempts",
+    "description": "Container escape is a critical attack technique where an adversary breaks",
+    "path": "skills/detecting-container-escape-attempts"
+  },
+  {
+    "name": "detecting-container-escape-with-falco-rules",
+    "description": "Detect container escape attempts in real-time using Falco runtime security",
+    "path": "skills/detecting-container-escape-with-falco-rules"
+  },
+  {
+    "name": "detecting-credential-dumping-techniques",
+    "description": "Detect LSASS credential dumping, SAM database extraction, and NTDS.dit",
+    "path": "skills/detecting-credential-dumping-techniques"
+  },
+  {
+    "name": "detecting-cryptomining-in-cloud",
+    "description": "'This skill teaches security teams how to detect and respond to unauthorized",
+    "path": "skills/detecting-cryptomining-in-cloud"
+  },
+  {
+    "name": "detecting-dcsync-attack-in-active-directory",
+    "description": "Detect DCSync attacks where adversaries abuse Active Directory replication",
+    "path": "skills/detecting-dcsync-attack-in-active-directory"
+  },
+  {
+    "name": "detecting-deepfake-audio-in-vishing-attacks",
+    "description": "'Detects AI-generated deepfake audio used in voice phishing (vishing)",
+    "path": "skills/detecting-deepfake-audio-in-vishing-attacks"
+  },
+  {
+    "name": "detecting-dll-sideloading-attacks",
+    "description": "Detect DLL side-loading attacks where adversaries place malicious DLLs",
+    "path": "skills/detecting-dll-sideloading-attacks"
+  },
+  {
+    "name": "detecting-dnp3-protocol-anomalies",
+    "description": "'Detect anomalies in DNP3 (Distributed Network Protocol 3) communications",
+    "path": "skills/detecting-dnp3-protocol-anomalies"
+  },
+  {
+    "name": "detecting-dns-exfiltration-with-dns-query-analysis",
+    "description": "Detect data exfiltration through DNS tunneling by analyzing query entropy,",
+    "path": "skills/detecting-dns-exfiltration-with-dns-query-analysis"
+  },
+  {
+    "name": "detecting-email-account-compromise",
+    "description": "Detect compromised O365 and Google Workspace email accounts by analyzing",
+    "path": "skills/detecting-email-account-compromise"
+  },
+  {
+    "name": "detecting-email-forwarding-rules-attack",
+    "description": "Detect malicious email forwarding rules created by adversaries to maintain",
+    "path": "skills/detecting-email-forwarding-rules-attack"
+  },
+  {
+    "name": "detecting-evasion-techniques-in-endpoint-logs",
+    "description": "'Detects defense evasion techniques used by adversaries in endpoint logs",
+    "path": "skills/detecting-evasion-techniques-in-endpoint-logs"
+  },
+  {
+    "name": "detecting-exfiltration-over-dns-with-zeek",
+    "description": "Detect DNS-based data exfiltration by analyzing Zeek dns.log for high-entropy",
+    "path": "skills/detecting-exfiltration-over-dns-with-zeek"
+  },
+  {
+    "name": "detecting-fileless-attacks-on-endpoints",
+    "description": "'Detects fileless malware and in-memory attacks that execute entirely",
+    "path": "skills/detecting-fileless-attacks-on-endpoints"
+  },
+  {
+    "name": "detecting-fileless-malware-techniques",
+    "description": "'Detects and analyzes fileless malware that operates entirely in memory",
+    "path": "skills/detecting-fileless-malware-techniques"
+  },
+  {
+    "name": "detecting-golden-ticket-attacks-in-kerberos-logs",
+    "description": "Detect Golden Ticket attacks in Active Directory by analyzing Kerberos",
+    "path": "skills/detecting-golden-ticket-attacks-in-kerberos-logs"
+  },
+  {
+    "name": "detecting-golden-ticket-forgery",
+    "description": "Detect Kerberos Golden Ticket forgery by analyzing Windows Event ID 4769",
+    "path": "skills/detecting-golden-ticket-forgery"
+  },
+  {
+    "name": "detecting-insider-data-exfiltration-via-dlp",
+    "description": "'Detects insider data exfiltration by analyzing DLP policy violations,",
+    "path": "skills/detecting-insider-data-exfiltration-via-dlp"
+  },
+  {
+    "name": "detecting-insider-threat-behaviors",
+    "description": "Detect insider threat behavioral indicators including unusual data access,",
+    "path": "skills/detecting-insider-threat-behaviors"
+  },
+  {
+    "name": "detecting-insider-threat-with-ueba",
+    "description": "Implement User and Entity Behavior Analytics using Elasticsearch/OpenSearch",
+    "path": "skills/detecting-insider-threat-with-ueba"
+  },
+  {
+    "name": "detecting-kerberoasting-attacks",
+    "description": "Detect Kerberoasting attacks by monitoring for anomalous Kerberos TGS",
+    "path": "skills/detecting-kerberoasting-attacks"
+  },
+  {
+    "name": "detecting-lateral-movement-in-network",
+    "description": "'Identifies lateral movement techniques in enterprise networks by analyzing",
+    "path": "skills/detecting-lateral-movement-in-network"
+  },
+  {
+    "name": "detecting-lateral-movement-with-splunk",
+    "description": "Detect adversary lateral movement across networks using Splunk SPL queries",
+    "path": "skills/detecting-lateral-movement-with-splunk"
+  },
+  {
+    "name": "detecting-lateral-movement-with-zeek",
+    "description": "'Detect lateral movement in network traffic using Zeek (formerly Bro)",
+    "path": "skills/detecting-lateral-movement-with-zeek"
+  },
+  {
+    "name": "detecting-living-off-the-land-attacks",
+    "description": "'Detect abuse of legitimate Windows binaries (LOLBins) used for living",
+    "path": "skills/detecting-living-off-the-land-attacks"
+  },
+  {
+    "name": "detecting-living-off-the-land-with-lolbas",
+    "description": "Detect Living Off the Land Binaries (LOLBins/LOLBAS) abuse including",
+    "path": "skills/detecting-living-off-the-land-with-lolbas"
+  },
+  {
+    "name": "detecting-malicious-scheduled-tasks-with-sysmon",
+    "description": "'Detect malicious scheduled task creation and modification using Sysmon",
+    "path": "skills/detecting-malicious-scheduled-tasks-with-sysmon"
+  },
+  {
+    "name": "detecting-mimikatz-execution-patterns",
+    "description": "Detect Mimikatz execution through command-line patterns, LSASS access",
+    "path": "skills/detecting-mimikatz-execution-patterns"
+  },
+  {
+    "name": "detecting-misconfigured-azure-storage",
+    "description": "'Detecting misconfigured Azure Storage accounts including publicly accessible",
+    "path": "skills/detecting-misconfigured-azure-storage"
+  },
+  {
+    "name": "detecting-mobile-malware-behavior",
+    "description": "'Detects and analyzes malicious behavior in mobile applications through",
+    "path": "skills/detecting-mobile-malware-behavior"
+  },
+  {
+    "name": "detecting-modbus-command-injection-attacks",
+    "description": "'Detect command injection attacks against Modbus TCP/RTU protocol in",
+    "path": "skills/detecting-modbus-command-injection-attacks"
+  },
+  {
+    "name": "detecting-modbus-protocol-anomalies",
+    "description": "'This skill covers detecting anomalies in Modbus/TCP and Modbus RTU communications",
+    "path": "skills/detecting-modbus-protocol-anomalies"
+  },
+  {
+    "name": "detecting-network-anomalies-with-zeek",
+    "description": "'Deploys and configures Zeek (formerly Bro) network security monitor",
+    "path": "skills/detecting-network-anomalies-with-zeek"
+  },
+  {
+    "name": "detecting-network-scanning-with-ids-signatures",
+    "description": "Detect network reconnaissance and port scanning using Suricata and Snort",
+    "path": "skills/detecting-network-scanning-with-ids-signatures"
+  },
+  {
+    "name": "detecting-ntlm-relay-with-event-correlation",
+    "description": "'Detect NTLM relay attacks through Windows Security Event correlation",
+    "path": "skills/detecting-ntlm-relay-with-event-correlation"
+  },
+  {
+    "name": "detecting-oauth-token-theft",
+    "description": "'Detects and responds to OAuth token theft and replay attacks in cloud",
+    "path": "skills/detecting-oauth-token-theft"
+  },
+  {
+    "name": "detecting-pass-the-hash-attacks",
+    "description": "Detect Pass-the-Hash attacks by analyzing NTLM authentication patterns,",
+    "path": "skills/detecting-pass-the-hash-attacks"
+  },
+  {
+    "name": "detecting-pass-the-ticket-attacks",
+    "description": "Detect Kerberos Pass-the-Ticket (PtT) attacks by analyzing Windows Event",
+    "path": "skills/detecting-pass-the-ticket-attacks"
+  },
+  {
+    "name": "detecting-port-scanning-with-fail2ban",
+    "description": "'Configures Fail2ban with custom filters and actions to detect port scanning",
+    "path": "skills/detecting-port-scanning-with-fail2ban"
+  },
+  {
+    "name": "detecting-privilege-escalation-attempts",
+    "description": "Detect privilege escalation attempts including token manipulation, UAC",
+    "path": "skills/detecting-privilege-escalation-attempts"
+  },
+  {
+    "name": "detecting-privilege-escalation-in-kubernetes-pods",
+    "description": "Detect and prevent privilege escalation in Kubernetes pods by monitoring",
+    "path": "skills/detecting-privilege-escalation-in-kubernetes-pods"
+  },
+  {
+    "name": "detecting-process-hollowing-technique",
+    "description": "Detect process hollowing (T1055.012) by analyzing memory-mapped sections,",
+    "path": "skills/detecting-process-hollowing-technique"
+  },
+  {
+    "name": "detecting-process-injection-techniques",
+    "description": "'Detects and analyzes process injection techniques used by malware including",
+    "path": "skills/detecting-process-injection-techniques"
+  },
+  {
+    "name": "detecting-qr-code-phishing-with-email-security",
+    "description": "Detect and prevent QR code phishing (quishing) attacks that bypass traditional",
+    "path": "skills/detecting-qr-code-phishing-with-email-security"
+  },
+  {
+    "name": "detecting-ransomware-encryption-behavior",
+    "description": "'Detects ransomware encryption activity in real time using entropy analysis,",
+    "path": "skills/detecting-ransomware-encryption-behavior"
+  },
+  {
+    "name": "detecting-ransomware-precursors-in-network",
+    "description": "'Detects early-stage ransomware indicators in network traffic before",
+    "path": "skills/detecting-ransomware-precursors-in-network"
+  },
+  {
+    "name": "detecting-rdp-brute-force-attacks",
+    "description": "Detect RDP brute force attacks by analyzing Windows Security Event Logs",
+    "path": "skills/detecting-rdp-brute-force-attacks"
+  },
+  {
+    "name": "detecting-rootkit-activity",
+    "description": "'Detects rootkit presence on compromised systems by identifying hidden",
+    "path": "skills/detecting-rootkit-activity"
+  },
+  {
+    "name": "detecting-s3-data-exfiltration-attempts",
+    "description": "'Detecting data exfiltration attempts from AWS S3 buckets by analyzing",
+    "path": "skills/detecting-s3-data-exfiltration-attempts"
+  },
+  {
+    "name": "detecting-serverless-function-injection",
+    "description": "'Detects and prevents code injection attacks targeting serverless functions",
+    "path": "skills/detecting-serverless-function-injection"
+  },
+  {
+    "name": "detecting-service-account-abuse",
+    "description": "Detect abuse of service accounts through anomalous interactive logons,",
+    "path": "skills/detecting-service-account-abuse"
+  },
+  {
+    "name": "detecting-shadow-api-endpoints",
+    "description": "Discover and inventory shadow API endpoints that operate outside documented",
+    "path": "skills/detecting-shadow-api-endpoints"
+  },
+  {
+    "name": "detecting-shadow-it-cloud-usage",
+    "description": "Detect unauthorized SaaS and cloud service usage (shadow IT) by analyzing",
+    "path": "skills/detecting-shadow-it-cloud-usage"
+  },
+  {
+    "name": "detecting-spearphishing-with-email-gateway",
+    "description": "Spearphishing targets specific individuals using personalized, researched",
+    "path": "skills/detecting-spearphishing-with-email-gateway"
+  },
+  {
+    "name": "detecting-sql-injection-via-waf-logs",
+    "description": "Analyze WAF (ModSecurity/AWS WAF/Cloudflare) logs to detect SQL injection",
+    "path": "skills/detecting-sql-injection-via-waf-logs"
+  },
+  {
+    "name": "detecting-stuxnet-style-attacks",
+    "description": "'This skill covers detecting sophisticated cyber-physical attacks that",
+    "path": "skills/detecting-stuxnet-style-attacks"
+  },
+  {
+    "name": "detecting-supply-chain-attacks-in-ci-cd",
+    "description": "'Scans GitHub Actions workflows and CI/CD pipeline configurations for",
+    "path": "skills/detecting-supply-chain-attacks-in-ci-cd"
+  },
+  {
+    "name": "detecting-suspicious-oauth-application-consent",
+    "description": "Detect risky OAuth application consent grants in Azure AD / Microsoft",
+    "path": "skills/detecting-suspicious-oauth-application-consent"
+  },
+  {
+    "name": "detecting-suspicious-powershell-execution",
+    "description": "Detect suspicious PowerShell execution patterns including encoded commands,",
+    "path": "skills/detecting-suspicious-powershell-execution"
+  },
+  {
+    "name": "detecting-t1003-credential-dumping-with-edr",
+    "description": "Detect OS credential dumping techniques targeting LSASS memory, SAM database,",
+    "path": "skills/detecting-t1003-credential-dumping-with-edr"
+  },
+  {
+    "name": "detecting-t1055-process-injection-with-sysmon",
+    "description": "Detect process injection techniques (T1055) including classic DLL injection,",
+    "path": "skills/detecting-t1055-process-injection-with-sysmon"
+  },
+  {
+    "name": "detecting-t1548-abuse-elevation-control-mechanism",
+    "description": "Detect abuse of elevation control mechanisms including UAC bypass, sudo",
+    "path": "skills/detecting-t1548-abuse-elevation-control-mechanism"
+  },
+  {
+    "name": "detecting-typosquatting-packages-in-npm-pypi",
+    "description": "'Detects typosquatting attacks in npm and PyPI package registries by",
+    "path": "skills/detecting-typosquatting-packages-in-npm-pypi"
+  },
+  {
+    "name": "detecting-wmi-persistence",
+    "description": "Detect WMI event subscription persistence by analyzing Sysmon Event IDs",
+    "path": "skills/detecting-wmi-persistence"
+  },
+  {
+    "name": "executing-active-directory-attack-simulation",
+    "description": "'Executes authorized attack simulations against Active Directory environments",
+    "path": "skills/executing-active-directory-attack-simulation"
+  },
+  {
+    "name": "executing-phishing-simulation-campaign",
+    "description": "'Executes authorized phishing simulation campaigns to assess an organization''s",
+    "path": "skills/executing-phishing-simulation-campaign"
+  },
+  {
+    "name": "exploiting-active-directory-certificate-services-esc1",
+    "description": "Exploit misconfigured Active Directory Certificate Services (AD CS) ESC1",
+    "path": "skills/exploiting-active-directory-certificate-services-esc1"
+  },
+  {
+    "name": "exploiting-api-injection-vulnerabilities",
+    "description": "'Tests APIs for injection vulnerabilities including SQL injection, NoSQL",
+    "path": "skills/exploiting-api-injection-vulnerabilities"
+  },
+  {
+    "name": "exploiting-bgp-hijacking-vulnerabilities",
+    "description": "'Analyzes and simulates BGP hijacking scenarios in authorized lab environments",
+    "path": "skills/exploiting-bgp-hijacking-vulnerabilities"
+  },
+  {
+    "name": "exploiting-broken-function-level-authorization",
+    "description": "'Tests APIs for Broken Function Level Authorization (BFLA) vulnerabilities",
+    "path": "skills/exploiting-broken-function-level-authorization"
+  },
+  {
+    "name": "exploiting-excessive-data-exposure-in-api",
+    "description": "'Tests APIs for excessive data exposure where endpoints return more data",
+    "path": "skills/exploiting-excessive-data-exposure-in-api"
+  },
+  {
+    "name": "exploiting-http-request-smuggling",
+    "description": "Detecting and exploiting HTTP request smuggling vulnerabilities caused",
+    "path": "skills/exploiting-http-request-smuggling"
+  },
+  {
+    "name": "exploiting-idor-vulnerabilities",
+    "description": "Identifying and exploiting Insecure Direct Object Reference vulnerabilities",
+    "path": "skills/exploiting-idor-vulnerabilities"
+  },
+  {
+    "name": "exploiting-insecure-data-storage-in-mobile",
+    "description": "'Identifies and exploits insecure local data storage vulnerabilities",
+    "path": "skills/exploiting-insecure-data-storage-in-mobile"
+  },
+  {
+    "name": "exploiting-insecure-deserialization",
+    "description": "Identifying and exploiting insecure deserialization vulnerabilities in",
+    "path": "skills/exploiting-insecure-deserialization"
+  },
+  {
+    "name": "exploiting-jwt-algorithm-confusion-attack",
+    "description": "'Exploits JWT algorithm confusion vulnerabilities where the server''s",
+    "path": "skills/exploiting-jwt-algorithm-confusion-attack"
+  },
+  {
+    "name": "exploiting-mass-assignment-in-rest-apis",
+    "description": "Discover and exploit mass assignment vulnerabilities in REST APIs to",
+    "path": "skills/exploiting-mass-assignment-in-rest-apis"
+  },
+  {
+    "name": "exploiting-nosql-injection-vulnerabilities",
+    "description": "Detect and exploit NoSQL injection vulnerabilities in MongoDB, CouchDB,",
+    "path": "skills/exploiting-nosql-injection-vulnerabilities"
+  },
+  {
+    "name": "exploiting-oauth-misconfiguration",
+    "description": "Identifying and exploiting OAuth 2.0 and OpenID Connect misconfigurations",
+    "path": "skills/exploiting-oauth-misconfiguration"
+  },
+  {
+    "name": "exploiting-prototype-pollution-in-javascript",
+    "description": "Detect and exploit JavaScript prototype pollution vulnerabilities on",
+    "path": "skills/exploiting-prototype-pollution-in-javascript"
+  },
+  {
+    "name": "exploiting-race-condition-vulnerabilities",
+    "description": "Detect and exploit race condition vulnerabilities in web applications",
+    "path": "skills/exploiting-race-condition-vulnerabilities"
+  },
+  {
+    "name": "exploiting-server-side-request-forgery",
+    "description": "Identifying and exploiting SSRF vulnerabilities to access internal services,",
+    "path": "skills/exploiting-server-side-request-forgery"
+  },
+  {
+    "name": "exploiting-sql-injection-vulnerabilities",
+    "description": "'Identifies and exploits SQL injection vulnerabilities in web applications",
+    "path": "skills/exploiting-sql-injection-vulnerabilities"
+  },
+  {
+    "name": "exploiting-sql-injection-with-sqlmap",
+    "description": "Detecting and exploiting SQL injection vulnerabilities using sqlmap to",
+    "path": "skills/exploiting-sql-injection-with-sqlmap"
+  },
+  {
+    "name": "exploiting-template-injection-vulnerabilities",
+    "description": "Detecting and exploiting Server-Side Template Injection (SSTI) vulnerabilities",
+    "path": "skills/exploiting-template-injection-vulnerabilities"
+  },
+  {
+    "name": "exploiting-websocket-vulnerabilities",
+    "description": "Testing WebSocket implementations for authentication bypass, cross-site",
+    "path": "skills/exploiting-websocket-vulnerabilities"
+  },
+  {
+    "name": "exploiting-zerologon-vulnerability-cve-2020-1472",
+    "description": "Exploit the Zerologon vulnerability (CVE-2020-1472) in the Netlogon Remote",
+    "path": "skills/exploiting-zerologon-vulnerability-cve-2020-1472"
+  },
+  {
+    "name": "extracting-browser-history-artifacts",
+    "description": "Extract and analyze browser history, cookies, cache, downloads, and bookmarks",
+    "path": "skills/extracting-browser-history-artifacts"
+  },
+  {
+    "name": "extracting-credentials-from-memory-dump",
+    "description": "Extract cached credentials, password hashes, Kerberos tickets, and authentication",
+    "path": "skills/extracting-credentials-from-memory-dump"
+  },
+  {
+    "name": "extracting-windows-event-logs-artifacts",
+    "description": "Extract, parse, and analyze Windows Event Logs (EVTX) using Chainsaw,",
+    "path": "skills/extracting-windows-event-logs-artifacts"
+  },
+  {
+    "name": "hardening-docker-containers-for-production",
+    "description": "Hardening Docker containers for production involves applying security",
+    "path": "skills/hardening-docker-containers-for-production"
+  },
+  {
+    "name": "hardening-docker-daemon-configuration",
+    "description": "Harden the Docker daemon by configuring daemon.json with user namespace",
+    "path": "skills/hardening-docker-daemon-configuration"
+  },
+  {
+    "name": "hardening-linux-endpoint-with-cis-benchmark",
+    "description": "'Hardens Linux endpoints using CIS Benchmark recommendations for Ubuntu,",
+    "path": "skills/hardening-linux-endpoint-with-cis-benchmark"
+  },
+  {
+    "name": "hardening-windows-endpoint-with-cis-benchmark",
+    "description": "'Hardens Windows endpoints using CIS (Center for Internet Security) Benchmark",
+    "path": "skills/hardening-windows-endpoint-with-cis-benchmark"
+  },
+  {
+    "name": "hunting-credential-stuffing-attacks",
+    "description": "'Detects credential stuffing attacks by analyzing authentication logs",
+    "path": "skills/hunting-credential-stuffing-attacks"
+  },
+  {
+    "name": "hunting-for-anomalous-powershell-execution",
+    "description": "'Hunt for malicious PowerShell activity by analyzing Script Block Logging",
+    "path": "skills/hunting-for-anomalous-powershell-execution"
+  },
+  {
+    "name": "hunting-for-cobalt-strike-beacons",
+    "description": "Detect Cobalt Strike beacon network activity using default TLS certificate",
+    "path": "skills/hunting-for-cobalt-strike-beacons"
+  },
+  {
+    "name": "hunting-for-command-and-control-beaconing",
+    "description": "Detect C2 beaconing patterns in network traffic using frequency analysis,",
+    "path": "skills/hunting-for-command-and-control-beaconing"
+  },
+  {
+    "name": "hunting-for-data-exfiltration-indicators",
+    "description": "Hunt for data exfiltration through network traffic analysis, detecting",
+    "path": "skills/hunting-for-data-exfiltration-indicators"
+  },
+  {
+    "name": "hunting-for-data-staging-before-exfiltration",
+    "description": "Detect data staging activity before exfiltration by monitoring for archive",
+    "path": "skills/hunting-for-data-staging-before-exfiltration"
+  },
+  {
+    "name": "hunting-for-dcom-lateral-movement",
+    "description": "'Hunt for DCOM-based lateral movement by detecting abuse of MMC20.Application,",
+    "path": "skills/hunting-for-dcom-lateral-movement"
+  },
+  {
+    "name": "hunting-for-dcsync-attacks",
+    "description": "Detect DCSync attacks by analyzing Windows Event ID 4662 for unauthorized",
+    "path": "skills/hunting-for-dcsync-attacks"
+  },
+  {
+    "name": "hunting-for-defense-evasion-via-timestomping",
+    "description": "'Detect NTFS timestamp manipulation (MITRE T1070.006) by comparing $STANDARD_INFORMATION",
+    "path": "skills/hunting-for-defense-evasion-via-timestomping"
+  },
+  {
+    "name": "hunting-for-dns-tunneling-with-zeek",
+    "description": "Detect DNS tunneling and data exfiltration by analyzing Zeek dns.log",
+    "path": "skills/hunting-for-dns-tunneling-with-zeek"
+  },
+  {
+    "name": "hunting-for-domain-fronting-c2-traffic",
+    "description": "Detect domain fronting C2 traffic by analyzing SNI vs HTTP Host header",
+    "path": "skills/hunting-for-domain-fronting-c2-traffic"
+  },
+  {
+    "name": "hunting-for-lateral-movement-via-wmi",
+    "description": "Detect WMI-based lateral movement by analyzing Windows Event ID 4688",
+    "path": "skills/hunting-for-lateral-movement-via-wmi"
+  },
+  {
+    "name": "hunting-for-lolbins-execution-in-endpoint-logs",
+    "description": "Hunt for adversary abuse of Living Off the Land Binaries (LOLBins) by",
+    "path": "skills/hunting-for-lolbins-execution-in-endpoint-logs"
+  },
+  {
+    "name": "hunting-for-ntlm-relay-attacks",
+    "description": "Detect NTLM relay attacks by analyzing Windows Event 4624 logon type",
+    "path": "skills/hunting-for-ntlm-relay-attacks"
+  },
+  {
+    "name": "hunting-for-process-injection-techniques",
+    "description": "Detect process injection techniques (T1055) including CreateRemoteThread,",
+    "path": "skills/hunting-for-process-injection-techniques"
+  },
+  {
+    "name": "hunting-for-registry-persistence-mechanisms",
+    "description": "Hunt for registry-based persistence mechanisms including Run keys, Winlogon",
+    "path": "skills/hunting-for-registry-persistence-mechanisms"
+  },
+  {
+    "name": "hunting-for-registry-run-key-persistence",
+    "description": "Detect MITRE ATT&CK T1547.001 registry Run key persistence by analyzing",
+    "path": "skills/hunting-for-registry-run-key-persistence"
+  },
+  {
+    "name": "hunting-for-spearphishing-indicators",
+    "description": "Hunt for spearphishing campaign indicators across email logs, endpoint",
+    "path": "skills/hunting-for-spearphishing-indicators"
+  },
+  {
+    "name": "hunting-for-startup-folder-persistence",
+    "description": "Detect T1547.001 startup folder persistence by monitoring Windows startup",
+    "path": "skills/hunting-for-startup-folder-persistence"
+  },
+  {
+    "name": "hunting-for-unusual-service-installations",
+    "description": "Detect suspicious Windows service installations (MITRE ATT&CK T1543.003)",
+    "path": "skills/hunting-for-unusual-service-installations"
+  },
+  {
+    "name": "hunting-for-webshell-activity",
+    "description": "Hunt for web shell deployments on internet-facing servers by analyzing",
+    "path": "skills/hunting-for-webshell-activity"
+  },
+  {
+    "name": "implementing-aes-encryption-for-data-at-rest",
+    "description": "AES (Advanced Encryption Standard) is a symmetric block cipher standardized",
+    "path": "skills/implementing-aes-encryption-for-data-at-rest"
+  },
+  {
+    "name": "implementing-alert-fatigue-reduction",
+    "description": "'Implements strategies to reduce SOC alert fatigue by tuning detection",
+    "path": "skills/implementing-alert-fatigue-reduction"
+  },
+  {
+    "name": "implementing-api-abuse-detection-with-rate-limiting",
+    "description": "Implement API abuse detection using token bucket, sliding window, and",
+    "path": "skills/implementing-api-abuse-detection-with-rate-limiting"
+  },
+  {
+    "name": "implementing-api-gateway-security-controls",
+    "description": "'Implements security controls at the API gateway layer including authentication",
+    "path": "skills/implementing-api-gateway-security-controls"
+  },
+  {
+    "name": "implementing-api-key-security-controls",
+    "description": "'Implements secure API key generation, storage, rotation, and revocation",
+    "path": "skills/implementing-api-key-security-controls"
+  },
+  {
+    "name": "implementing-api-rate-limiting-and-throttling",
+    "description": "'Implements API rate limiting and throttling controls using token bucket,",
+    "path": "skills/implementing-api-rate-limiting-and-throttling"
+  },
+  {
+    "name": "implementing-api-schema-validation-security",
+    "description": "Implement API schema validation using OpenAPI specifications and JSON",
+    "path": "skills/implementing-api-schema-validation-security"
+  },
+  {
+    "name": "implementing-api-security-posture-management",
+    "description": "Implement API Security Posture Management to continuously discover, classify,",
+    "path": "skills/implementing-api-security-posture-management"
+  },
+  {
+    "name": "implementing-api-security-testing-with-42crunch",
+    "description": "Implement comprehensive API security testing using the 42Crunch platform",
+    "path": "skills/implementing-api-security-testing-with-42crunch"
+  },
+  {
+    "name": "implementing-api-threat-protection-with-apigee",
+    "description": "Implement API threat protection using Google Apigee policies including",
+    "path": "skills/implementing-api-threat-protection-with-apigee"
+  },
+  {
+    "name": "implementing-aqua-security-for-container-scanning",
+    "description": "Deploy Aqua Security's Trivy scanner to detect vulnerabilities, misconfigurations,",
+    "path": "skills/implementing-aqua-security-for-container-scanning"
+  },
+  {
+    "name": "implementing-aws-config-rules-for-compliance",
+    "description": "'Implementing AWS Config rules for continuous compliance monitoring of",
+    "path": "skills/implementing-aws-config-rules-for-compliance"
+  },
+  {
+    "name": "implementing-aws-iam-permission-boundaries",
+    "description": "Configure IAM permission boundaries in AWS to delegate role creation",
+    "path": "skills/implementing-aws-iam-permission-boundaries"
+  },
+  {
+    "name": "implementing-aws-macie-for-data-classification",
+    "description": "Implement Amazon Macie to automatically discover, classify, and protect",
+    "path": "skills/implementing-aws-macie-for-data-classification"
+  },
+  {
+    "name": "implementing-azure-ad-privileged-identity-management",
+    "description": "Configure Microsoft Entra Privileged Identity Management to enforce just-in-time",
+    "path": "skills/implementing-azure-ad-privileged-identity-management"
+  },
+  {
+    "name": "implementing-beyondcorp-zero-trust-access-model",
+    "description": "'Implementing Google''s BeyondCorp zero trust access model to eliminate",
+    "path": "skills/implementing-beyondcorp-zero-trust-access-model"
+  },
+  {
+    "name": "implementing-bgp-security-with-rpki",
+    "description": "Implement BGP route origin validation using RPKI with Route Origin Authorizations,",
+    "path": "skills/implementing-bgp-security-with-rpki"
+  },
+  {
+    "name": "implementing-canary-tokens-for-network-intrusion",
+    "description": "'Deploys DNS, HTTP, and AWS API key canary tokens across network infrastructure",
+    "path": "skills/implementing-canary-tokens-for-network-intrusion"
+  },
+  {
+    "name": "implementing-cloud-dlp-for-data-protection",
+    "description": "'Implementing Cloud Data Loss Prevention (DLP) using Amazon Macie, Azure",
+    "path": "skills/implementing-cloud-dlp-for-data-protection"
+  },
+  {
+    "name": "implementing-cloud-security-posture-management",
+    "description": "'Implementing Cloud Security Posture Management (CSPM) to continuously",
+    "path": "skills/implementing-cloud-security-posture-management"
+  },
+  {
+    "name": "implementing-cloud-trail-log-analysis",
+    "description": "'Implementing AWS CloudTrail log analysis for security monitoring, threat",
+    "path": "skills/implementing-cloud-trail-log-analysis"
+  },
+  {
+    "name": "implementing-cloud-waf-rules",
+    "description": "'This skill covers deploying and tuning Web Application Firewall rules",
+    "path": "skills/implementing-cloud-waf-rules"
+  },
+  {
+    "name": "implementing-cloud-workload-protection",
+    "description": "'Implements cloud workload protection using boto3 and google-cloud APIs",
+    "path": "skills/implementing-cloud-workload-protection"
+  },
+  {
+    "name": "implementing-conditional-access-policies-azure-ad",
+    "description": "Configure Microsoft Entra ID (Azure AD) Conditional Access policies for",
+    "path": "skills/implementing-conditional-access-policies-azure-ad"
+  },
+  {
+    "name": "implementing-conduit-security-for-ot-remote-access",
+    "description": "'Implement secure conduit architecture for OT remote access following",
+    "path": "skills/implementing-conduit-security-for-ot-remote-access"
+  },
+  {
+    "name": "implementing-continuous-security-validation-with-bas",
+    "description": "Deploy Breach and Attack Simulation tools to continuously validate security",
+    "path": "skills/implementing-continuous-security-validation-with-bas"
+  },
+  {
+    "name": "implementing-ddos-mitigation-with-cloudflare",
+    "description": "Configure Cloudflare DDoS protection with managed rulesets, rate limiting,",
+    "path": "skills/implementing-ddos-mitigation-with-cloudflare"
+  },
+  {
+    "name": "implementing-deception-based-detection-with-canarytoken",
+    "description": "Deploy and monitor Canary Tokens via the Thinkst Canary API for deception-based",
+    "path": "skills/implementing-deception-based-detection-with-canarytoken"
+  },
+  {
+    "name": "implementing-delinea-secret-server-for-pam",
+    "description": "'Implements Delinea Secret Server for privileged access management (PAM)",
+    "path": "skills/implementing-delinea-secret-server-for-pam"
+  },
+  {
+    "name": "implementing-device-posture-assessment-in-zero-trust",
+    "description": "'Implementing device posture assessment as a zero trust access control",
+    "path": "skills/implementing-device-posture-assessment-in-zero-trust"
+  },
+  {
+    "name": "implementing-disk-encryption-with-bitlocker",
+    "description": "'Implements full disk encryption using Microsoft BitLocker on Windows",
+    "path": "skills/implementing-disk-encryption-with-bitlocker"
+  },
+  {
+    "name": "implementing-dmarc-dkim-spf-email-security",
+    "description": "SPF, DKIM, and DMARC form the three pillars of email authentication.",
+    "path": "skills/implementing-dmarc-dkim-spf-email-security"
+  },
+  {
+    "name": "implementing-dragos-platform-for-ot-monitoring",
+    "description": "'Deploy and configure the Dragos Platform for OT network monitoring,",
+    "path": "skills/implementing-dragos-platform-for-ot-monitoring"
+  },
+  {
+    "name": "implementing-ebpf-security-monitoring",
+    "description": "'Implements eBPF-based security monitoring using Cilium Tetragon for",
+    "path": "skills/implementing-ebpf-security-monitoring"
+  },
+  {
+    "name": "implementing-end-to-end-encryption-for-messaging",
+    "description": "End-to-end encryption (E2EE) ensures that only the communicating parties",
+    "path": "skills/implementing-end-to-end-encryption-for-messaging"
+  },
+  {
+    "name": "implementing-endpoint-detection-with-wazuh",
+    "description": "Deploy and configure Wazuh SIEM/XDR for endpoint detection including",
+    "path": "skills/implementing-endpoint-detection-with-wazuh"
+  },
+  {
+    "name": "implementing-endpoint-dlp-controls",
+    "description": "'Implements endpoint Data Loss Prevention (DLP) controls to detect and",
+    "path": "skills/implementing-endpoint-dlp-controls"
+  },
+  {
+    "name": "implementing-envelope-encryption-with-aws-kms",
+    "description": "Envelope encryption is a strategy where data is encrypted with a data",
+    "path": "skills/implementing-envelope-encryption-with-aws-kms"
+  },
+  {
+    "name": "implementing-epss-score-for-vulnerability-prioritization",
+    "description": "Integrate FIRST's Exploit Prediction Scoring System (EPSS) API to prioritize",
+    "path": "skills/implementing-epss-score-for-vulnerability-prioritization"
+  },
+  {
+    "name": "implementing-file-integrity-monitoring-with-aide",
+    "description": "Configure AIDE (Advanced Intrusion Detection Environment) for file integrity",
+    "path": "skills/implementing-file-integrity-monitoring-with-aide"
+  },
+  {
+    "name": "implementing-gcp-binary-authorization",
+    "description": "Implement GCP Binary Authorization to enforce deploy-time security controls",
+    "path": "skills/implementing-gcp-binary-authorization"
+  },
+  {
+    "name": "implementing-gcp-vpc-firewall-rules",
+    "description": "'Implementing and auditing GCP VPC firewall rules to enforce network",
+    "path": "skills/implementing-gcp-vpc-firewall-rules"
+  },
+  {
+    "name": "implementing-gdpr-data-protection-controls",
+    "description": "The General Data Protection Regulation (EU) 2016/679 (GDPR) is the EU's",
+    "path": "skills/implementing-gdpr-data-protection-controls"
+  },
+  {
+    "name": "implementing-gdpr-data-subject-access-request",
+    "description": "'Automates GDPR Data Subject Access Request (DSAR) workflows including",
+    "path": "skills/implementing-gdpr-data-subject-access-request"
+  },
+  {
+    "name": "implementing-google-workspace-admin-security",
+    "description": "'Implements comprehensive Google Workspace security hardening including",
+    "path": "skills/implementing-google-workspace-admin-security"
+  },
+  {
+    "name": "implementing-google-workspace-phishing-protection",
+    "description": "Configure Google Workspace advanced phishing and malware protection settings",
+    "path": "skills/implementing-google-workspace-phishing-protection"
+  },
+  {
+    "name": "implementing-google-workspace-sso-configuration",
+    "description": "Configure SAML 2.0 single sign-on for Google Workspace with a third-party",
+    "path": "skills/implementing-google-workspace-sso-configuration"
+  },
+  {
+    "name": "implementing-hardware-security-key-authentication",
+    "description": "'Implements FIDO2/WebAuthn hardware security key authentication including",
+    "path": "skills/implementing-hardware-security-key-authentication"
+  },
+  {
+    "name": "implementing-hashicorp-vault-dynamic-secrets",
+    "description": "'Implements HashiCorp Vault dynamic secrets engines for database credentials,",
+    "path": "skills/implementing-hashicorp-vault-dynamic-secrets"
+  },
+  {
+    "name": "implementing-honeypot-for-ransomware-detection",
+    "description": "'Deploys canary files, honeypot shares, and decoy systems to detect ransomware",
+    "path": "skills/implementing-honeypot-for-ransomware-detection"
+  },
+  {
+    "name": "implementing-honeytokens-for-breach-detection",
+    "description": "'Deploys canary tokens and honeytokens (fake AWS credentials, DNS canaries,",
+    "path": "skills/implementing-honeytokens-for-breach-detection"
+  },
+  {
+    "name": "implementing-ics-firewall-with-tofino",
+    "description": "'Deploy and configure Tofino industrial firewalls from Belden/Hirschmann",
+    "path": "skills/implementing-ics-firewall-with-tofino"
+  },
+  {
+    "name": "implementing-identity-governance-with-sailpoint",
+    "description": "Deploy SailPoint IdentityNow or IdentityIQ for identity governance and",
+    "path": "skills/implementing-identity-governance-with-sailpoint"
+  },
+  {
+    "name": "implementing-identity-verification-for-zero-trust",
+    "description": "Implement continuous identity verification for zero trust using phishing-resistant",
+    "path": "skills/implementing-identity-verification-for-zero-trust"
+  },
+  {
+    "name": "implementing-just-in-time-access-provisioning",
+    "description": "Implement Just-In-Time (JIT) access provisioning to eliminate standing",
+    "path": "skills/implementing-just-in-time-access-provisioning"
+  },
+  {
+    "name": "implementing-jwt-signing-and-verification",
+    "description": "JSON Web Tokens (JWT) defined in RFC 7519 are compact, URL-safe tokens",
+    "path": "skills/implementing-jwt-signing-and-verification"
+  },
+  {
+    "name": "implementing-llm-guardrails-for-security",
+    "description": "'Implements input and output validation guardrails for LLM-powered applications",
+    "path": "skills/implementing-llm-guardrails-for-security"
+  },
+  {
+    "name": "implementing-log-forwarding-with-fluentd",
+    "description": "Configure Fluentd and Fluent Bit for centralized log aggregation, routing,",
+    "path": "skills/implementing-log-forwarding-with-fluentd"
+  },
+  {
+    "name": "implementing-log-integrity-with-blockchain",
+    "description": "Build an append-only log integrity chain using SHA-256 hash chaining",
+    "path": "skills/implementing-log-integrity-with-blockchain"
+  },
+  {
+    "name": "implementing-memory-protection-with-dep-aslr",
+    "description": "'Implements memory protection mechanisms including DEP (Data Execution",
+    "path": "skills/implementing-memory-protection-with-dep-aslr"
+  },
+  {
+    "name": "implementing-mimecast-targeted-attack-protection",
+    "description": "Deploy Mimecast Targeted Threat Protection including URL Protect, Attachment",
+    "path": "skills/implementing-mimecast-targeted-attack-protection"
+  },
+  {
+    "name": "implementing-mitre-attack-coverage-mapping",
+    "description": "Implement MITRE ATT&CK coverage mapping to identify detection gaps, prioritize",
+    "path": "skills/implementing-mitre-attack-coverage-mapping"
+  },
+  {
+    "name": "implementing-mobile-application-management",
+    "description": "'Implements Mobile Application Management (MAM) policies to protect enterprise",
+    "path": "skills/implementing-mobile-application-management"
+  },
+  {
+    "name": "implementing-mtls-for-zero-trust-services",
+    "description": "'Configures mutual TLS (mTLS) authentication between microservices using",
+    "path": "skills/implementing-mtls-for-zero-trust-services"
+  },
+  {
+    "name": "implementing-network-access-control",
+    "description": "'Implements 802.1X port-based network access control using RADIUS authentication,",
+    "path": "skills/implementing-network-access-control"
+  },
+  {
+    "name": "implementing-network-access-control-with-cisco-ise",
+    "description": "Deploy Cisco Identity Services Engine for 802.1X wired and wireless authentication,",
+    "path": "skills/implementing-network-access-control-with-cisco-ise"
+  },
+  {
+    "name": "implementing-network-segmentation-for-ot",
+    "description": "'This skill covers implementing network segmentation in Operational Technology",
+    "path": "skills/implementing-network-segmentation-for-ot"
+  },
+  {
+    "name": "implementing-network-segmentation-with-firewall-zones",
+    "description": "Design and implement network segmentation using firewall security zones,",
+    "path": "skills/implementing-network-segmentation-with-firewall-zones"
+  },
+  {
+    "name": "implementing-next-generation-firewall-with-palo-alto",
+    "description": "Configure and deploy Palo Alto Networks next-generation firewalls with",
+    "path": "skills/implementing-next-generation-firewall-with-palo-alto"
+  },
+  {
+    "name": "implementing-pam-for-database-access",
+    "description": "Deploy privileged access management for database systems including Oracle,",
+    "path": "skills/implementing-pam-for-database-access"
+  },
+  {
+    "name": "implementing-passwordless-auth-with-microsoft-entra",
+    "description": "'Implements passwordless authentication using Microsoft Entra ID with",
+    "path": "skills/implementing-passwordless-auth-with-microsoft-entra"
+  },
+  {
+    "name": "implementing-passwordless-authentication-with-fido2",
+    "description": "Deploy FIDO2/WebAuthn passwordless authentication using security keys",
+    "path": "skills/implementing-passwordless-authentication-with-fido2"
+  },
+  {
+    "name": "implementing-privileged-access-management-with-cyberark",
+    "description": "Deploy CyberArk Privileged Access Management to discover, vault, rotate,",
+    "path": "skills/implementing-privileged-access-management-with-cyberark"
+  },
+  {
+    "name": "implementing-privileged-access-workstation",
+    "description": "Design and implement Privileged Access Workstations (PAWs) with device",
+    "path": "skills/implementing-privileged-access-workstation"
+  },
+  {
+    "name": "implementing-privileged-session-monitoring",
+    "description": "'Implements privileged session monitoring and recording using Privileged",
+    "path": "skills/implementing-privileged-session-monitoring"
+  },
+  {
+    "name": "implementing-proofpoint-email-security-gateway",
+    "description": "Deploy and configure Proofpoint Email Protection as a secure email gateway",
+    "path": "skills/implementing-proofpoint-email-security-gateway"
+  },
+  {
+    "name": "implementing-ransomware-kill-switch-detection",
+    "description": "'Detects and exploits ransomware kill switch mechanisms including mutex-based",
+    "path": "skills/implementing-ransomware-kill-switch-detection"
+  },
+  {
+    "name": "implementing-rapid7-insightvm-for-scanning",
+    "description": "Deploy and configure Rapid7 InsightVM Security Console and Scan Engines",
+    "path": "skills/implementing-rapid7-insightvm-for-scanning"
+  },
+  {
+    "name": "implementing-rbac-hardening-for-kubernetes",
+    "description": "Harden Kubernetes Role-Based Access Control by implementing least-privilege",
+    "path": "skills/implementing-rbac-hardening-for-kubernetes"
+  },
+  {
+    "name": "implementing-rsa-key-pair-management",
+    "description": "RSA (Rivest-Shamir-Adleman) is the most widely deployed asymmetric cryptographic",
+    "path": "skills/implementing-rsa-key-pair-management"
+  },
+  {
+    "name": "implementing-runtime-application-self-protection",
+    "description": "Deploy Runtime Application Self-Protection (RASP) agents to detect and",
+    "path": "skills/implementing-runtime-application-self-protection"
+  },
+  {
+    "name": "implementing-saml-sso-with-okta",
+    "description": "Implement SAML 2.0 Single Sign-On (SSO) using Okta as the Identity Provider",
+    "path": "skills/implementing-saml-sso-with-okta"
+  },
+  {
+    "name": "implementing-secret-scanning-with-gitleaks",
+    "description": "'This skill covers implementing Gitleaks for detecting and preventing",
+    "path": "skills/implementing-secret-scanning-with-gitleaks"
+  },
+  {
+    "name": "implementing-secrets-scanning-in-ci-cd",
+    "description": "Integrate gitleaks and trufflehog into CI/CD pipelines to detect leaked",
+    "path": "skills/implementing-secrets-scanning-in-ci-cd"
+  },
+  {
+    "name": "implementing-security-information-sharing-with-stix2",
+    "description": "'Create, validate, and share STIX 2.1 threat intelligence objects using",
+    "path": "skills/implementing-security-information-sharing-with-stix2"
+  },
+  {
+    "name": "implementing-security-monitoring-with-datadog",
+    "description": "'Implements security monitoring using Datadog Cloud SIEM, Cloud Security",
+    "path": "skills/implementing-security-monitoring-with-datadog"
+  },
+  {
+    "name": "implementing-semgrep-for-custom-sast-rules",
+    "description": "Write custom Semgrep SAST rules in YAML to detect application-specific",
+    "path": "skills/implementing-semgrep-for-custom-sast-rules"
+  },
+  {
+    "name": "implementing-siem-correlation-rules-for-apt",
+    "description": "Write multi-event correlation rules that detect APT lateral movement",
+    "path": "skills/implementing-siem-correlation-rules-for-apt"
+  },
+  {
+    "name": "implementing-siem-use-case-tuning",
+    "description": "Tune SIEM detection rules to reduce false positives by analyzing alert",
+    "path": "skills/implementing-siem-use-case-tuning"
+  },
+  {
+    "name": "implementing-siem-use-cases-for-detection",
+    "description": "'Implements SIEM detection use cases by designing correlation rules,",
+    "path": "skills/implementing-siem-use-cases-for-detection"
+  },
+  {
+    "name": "implementing-soar-playbook-for-phishing",
+    "description": "Automate phishing incident response using Splunk SOAR REST API to create",
+    "path": "skills/implementing-soar-playbook-for-phishing"
+  },
+  {
+    "name": "implementing-syslog-centralization-with-rsyslog",
+    "description": "Configure rsyslog for centralized log collection with TLS encryption,",
+    "path": "skills/implementing-syslog-centralization-with-rsyslog"
+  },
+  {
+    "name": "implementing-ticketing-system-for-incidents",
+    "description": "'Implements an integrated incident ticketing system connecting SIEM alerts",
+    "path": "skills/implementing-ticketing-system-for-incidents"
+  },
+  {
+    "name": "implementing-usb-device-control-policy",
+    "description": "'Implements USB device control policies to restrict unauthorized removable",
+    "path": "skills/implementing-usb-device-control-policy"
+  },
+  {
+    "name": "implementing-velociraptor-for-ir-collection",
+    "description": "Deploy and configure Velociraptor for scalable endpoint forensic artifact",
+    "path": "skills/implementing-velociraptor-for-ir-collection"
+  },
+  {
+    "name": "implementing-vulnerability-sla-breach-alerting",
+    "description": "Build automated alerting for vulnerability remediation SLA breaches with",
+    "path": "skills/implementing-vulnerability-sla-breach-alerting"
+  },
+  {
+    "name": "implementing-web-application-logging-with-modsecurity",
+    "description": "'Configure ModSecurity WAF with OWASP Core Rule Set (CRS) for web application",
+    "path": "skills/implementing-web-application-logging-with-modsecurity"
+  },
+  {
+    "name": "implementing-zero-knowledge-proof-for-authentication",
+    "description": "Zero-Knowledge Proofs (ZKPs) allow a prover to demonstrate knowledge",
+    "path": "skills/implementing-zero-knowledge-proof-for-authentication"
+  },
+  {
+    "name": "implementing-zero-standing-privilege-with-cyberark",
+    "description": "Deploy CyberArk Secure Cloud Access to eliminate standing privileges",
+    "path": "skills/implementing-zero-standing-privilege-with-cyberark"
+  },
+  {
+    "name": "implementing-zero-trust-dns-with-nextdns",
+    "description": "Implement NextDNS as a zero trust DNS filtering layer with encrypted",
+    "path": "skills/implementing-zero-trust-dns-with-nextdns"
+  },
+  {
+    "name": "implementing-zero-trust-for-saas-applications",
+    "description": "'Implementing zero trust access controls for SaaS applications using",
+    "path": "skills/implementing-zero-trust-for-saas-applications"
+  },
+  {
+    "name": "implementing-zero-trust-network-access",
+    "description": "'Implementing Zero Trust Network Access (ZTNA) in cloud environments",
+    "path": "skills/implementing-zero-trust-network-access"
+  },
+  {
+    "name": "implementing-zero-trust-network-access-with-zscaler",
+    "description": "Implement Zero Trust Network Access using Zscaler Private Access (ZPA)",
+    "path": "skills/implementing-zero-trust-network-access-with-zscaler"
+  },
+  {
+    "name": "implementing-zero-trust-with-beyondcorp",
+    "description": "Deploy Google BeyondCorp Enterprise zero trust access controls using",
+    "path": "skills/implementing-zero-trust-with-beyondcorp"
+  },
+  {
+    "name": "implementing-zero-trust-with-hashicorp-boundary",
+    "description": "Implement HashiCorp Boundary for identity-aware zero trust infrastructure",
+    "path": "skills/implementing-zero-trust-with-hashicorp-boundary"
+  },
+  {
+    "name": "intercepting-mobile-traffic-with-burpsuite",
+    "description": "'Intercepts and analyzes HTTP/HTTPS traffic from mobile applications",
+    "path": "skills/intercepting-mobile-traffic-with-burpsuite"
+  },
+  {
+    "name": "managing-cloud-identity-with-okta",
+    "description": "'This skill covers implementing Okta as a centralized identity provider",
+    "path": "skills/managing-cloud-identity-with-okta"
+  },
+  {
+    "name": "mapping-mitre-attack-techniques",
+    "description": "'Maps observed adversary behaviors, security alerts, and detection rules",
+    "path": "skills/mapping-mitre-attack-techniques"
+  },
+  {
+    "name": "monitoring-darkweb-sources",
+    "description": "'Monitors dark web forums, marketplaces, paste sites, and ransomware",
+    "path": "skills/monitoring-darkweb-sources"
+  },
+  {
+    "name": "monitoring-scada-modbus-traffic-anomalies",
+    "description": "'Monitors Modbus TCP traffic on SCADA and ICS networks to detect anomalous",
+    "path": "skills/monitoring-scada-modbus-traffic-anomalies"
+  },
+  {
+    "name": "performing-access-recertification-with-saviynt",
+    "description": "Configure and execute access recertification campaigns in Saviynt Enterprise",
+    "path": "skills/performing-access-recertification-with-saviynt"
+  },
+  {
+    "name": "performing-access-review-and-certification",
+    "description": "Conduct systematic access reviews and certifications to ensure users",
+    "path": "skills/performing-access-review-and-certification"
+  },
+  {
+    "name": "performing-active-directory-compromise-investigation",
+    "description": "Investigate Active Directory compromise by analyzing authentication logs,",
+    "path": "skills/performing-active-directory-compromise-investigation"
+  },
+  {
+    "name": "performing-active-directory-forest-trust-attack",
+    "description": "Enumerate and audit Active Directory forest trust relationships using",
+    "path": "skills/performing-active-directory-forest-trust-attack"
+  },
+  {
+    "name": "performing-adversary-in-the-middle-phishing-detection",
+    "description": "Detect and respond to Adversary-in-the-Middle (AiTM) phishing attacks",
+    "path": "skills/performing-adversary-in-the-middle-phishing-detection"
+  },
+  {
+    "name": "performing-alert-triage-with-elastic-siem",
+    "description": "Perform systematic alert triage in Elastic Security SIEM to rapidly classify,",
+    "path": "skills/performing-alert-triage-with-elastic-siem"
+  },
+  {
+    "name": "performing-api-fuzzing-with-restler",
+    "description": "'Uses Microsoft RESTler to perform stateful REST API fuzzing by automatically",
+    "path": "skills/performing-api-fuzzing-with-restler"
+  },
+  {
+    "name": "performing-api-inventory-and-discovery",
+    "description": "'Performs API inventory and discovery to identify all API endpoints in",
+    "path": "skills/performing-api-inventory-and-discovery"
+  },
+  {
+    "name": "performing-api-rate-limiting-bypass",
+    "description": "'Tests API rate limiting implementations for bypass vulnerabilities by",
+    "path": "skills/performing-api-rate-limiting-bypass"
+  },
+  {
+    "name": "performing-api-security-testing-with-postman",
+    "description": "'Uses Postman to perform structured API security testing by building",
+    "path": "skills/performing-api-security-testing-with-postman"
+  },
+  {
+    "name": "performing-arp-spoofing-attack-simulation",
+    "description": "'Simulates ARP spoofing attacks in authorized lab or pentest environments",
+    "path": "skills/performing-arp-spoofing-attack-simulation"
+  },
+  {
+    "name": "performing-authenticated-scan-with-openvas",
+    "description": "Configure and execute authenticated vulnerability scans using OpenVAS/Greenbone",
+    "path": "skills/performing-authenticated-scan-with-openvas"
+  },
+  {
+    "name": "performing-authenticated-vulnerability-scan",
+    "description": "Authenticated (credentialed) vulnerability scanning uses valid system",
+    "path": "skills/performing-authenticated-vulnerability-scan"
+  },
+  {
+    "name": "performing-aws-privilege-escalation-assessment",
+    "description": "'Performing authorized privilege escalation assessments in AWS environments",
+    "path": "skills/performing-aws-privilege-escalation-assessment"
+  },
+  {
+    "name": "performing-blind-ssrf-exploitation",
+    "description": "Detect and exploit blind Server-Side Request Forgery vulnerabilities",
+    "path": "skills/performing-blind-ssrf-exploitation"
+  },
+  {
+    "name": "performing-brand-monitoring-for-impersonation",
+    "description": "Monitor for brand impersonation attacks across domains, social media,",
+    "path": "skills/performing-brand-monitoring-for-impersonation"
+  },
+  {
+    "name": "performing-clickjacking-attack-test",
+    "description": "Testing web applications for clickjacking vulnerabilities by assessing",
+    "path": "skills/performing-clickjacking-attack-test"
+  },
+  {
+    "name": "performing-cloud-forensics-with-aws-cloudtrail",
+    "description": "Perform forensic investigation of AWS environments using CloudTrail logs",
+    "path": "skills/performing-cloud-forensics-with-aws-cloudtrail"
+  },
+  {
+    "name": "performing-cloud-log-forensics-with-athena",
+    "description": "'Uses AWS Athena to query CloudTrail, VPC Flow Logs, S3 access logs,",
+    "path": "skills/performing-cloud-log-forensics-with-athena"
+  },
+  {
+    "name": "performing-cloud-native-forensics-with-falco",
+    "description": "'Uses Falco YAML rules for runtime threat detection in containers and",
+    "path": "skills/performing-cloud-native-forensics-with-falco"
+  },
+  {
+    "name": "performing-cloud-native-threat-hunting-with-aws-detective",
+    "description": "Hunt for threats in AWS environments using Detective behavior graphs,",
+    "path": "skills/performing-cloud-native-threat-hunting-with-aws-detective"
+  },
+  {
+    "name": "performing-cloud-penetration-testing-with-pacu",
+    "description": "'Performing authorized AWS penetration testing using Pacu, the open-source",
+    "path": "skills/performing-cloud-penetration-testing-with-pacu"
+  },
+  {
+    "name": "performing-container-escape-detection",
+    "description": "'Detects container escape attempts by analyzing namespace configurations,",
+    "path": "skills/performing-container-escape-detection"
+  },
+  {
+    "name": "performing-container-image-hardening",
+    "description": "'This skill covers hardening container images by minimizing attack surface,",
+    "path": "skills/performing-container-image-hardening"
+  },
+  {
+    "name": "performing-credential-access-with-lazagne",
+    "description": "Extract stored credentials from compromised endpoints using the LaZagne",
+    "path": "skills/performing-credential-access-with-lazagne"
+  },
+  {
+    "name": "performing-cryptographic-audit-of-application",
+    "description": "A cryptographic audit systematically reviews an application's use of",
+    "path": "skills/performing-cryptographic-audit-of-application"
+  },
+  {
+    "name": "performing-csrf-attack-simulation",
+    "description": "Testing web applications for Cross-Site Request Forgery vulnerabilities",
+    "path": "skills/performing-csrf-attack-simulation"
+  },
+  {
+    "name": "performing-cve-prioritization-with-kev-catalog",
+    "description": "Leverage the CISA Known Exploited Vulnerabilities catalog alongside EPSS",
+    "path": "skills/performing-cve-prioritization-with-kev-catalog"
+  },
+  {
+    "name": "performing-dark-web-monitoring-for-threats",
+    "description": "Dark web monitoring involves systematically scanning Tor hidden services,",
+    "path": "skills/performing-dark-web-monitoring-for-threats"
+  },
+  {
+    "name": "performing-deception-technology-deployment",
+    "description": "'Deploys deception technology including honeypots, honeytokens, and decoy",
+    "path": "skills/performing-deception-technology-deployment"
+  },
+  {
+    "name": "performing-directory-traversal-testing",
+    "description": "Testing web applications for path traversal vulnerabilities that allow",
+    "path": "skills/performing-directory-traversal-testing"
+  },
+  {
+    "name": "performing-dmarc-policy-enforcement-rollout",
+    "description": "Execute a phased DMARC rollout from p=none monitoring through p=quarantine",
+    "path": "skills/performing-dmarc-policy-enforcement-rollout"
+  },
+  {
+    "name": "performing-dns-tunneling-detection",
+    "description": "'Detects DNS tunneling by computing Shannon entropy of DNS query names,",
+    "path": "skills/performing-dns-tunneling-detection"
+  },
+  {
+    "name": "performing-endpoint-forensics-investigation",
+    "description": "'Performs digital forensics investigation on compromised endpoints including",
+    "path": "skills/performing-endpoint-forensics-investigation"
+  },
+  {
+    "name": "performing-endpoint-vulnerability-remediation",
+    "description": "'Performs vulnerability remediation on endpoints by prioritizing CVEs",
+    "path": "skills/performing-endpoint-vulnerability-remediation"
+  },
+  {
+    "name": "performing-entitlement-review-with-sailpoint-iiq",
+    "description": "'Performs entitlement review and access certification campaigns using",
+    "path": "skills/performing-entitlement-review-with-sailpoint-iiq"
+  },
+  {
+    "name": "performing-false-positive-reduction-in-siem",
+    "description": "Perform systematic SIEM false positive reduction through rule tuning,",
+    "path": "skills/performing-false-positive-reduction-in-siem"
+  },
+  {
+    "name": "performing-firmware-malware-analysis",
+    "description": "'Analyzes firmware images for embedded malware, backdoors, and unauthorized",
+    "path": "skills/performing-firmware-malware-analysis"
+  },
+  {
+    "name": "performing-graphql-introspection-attack",
+    "description": "'Performs GraphQL introspection attacks to extract the full API schema",
+    "path": "skills/performing-graphql-introspection-attack"
+  },
+  {
+    "name": "performing-graphql-security-assessment",
+    "description": "Assessing GraphQL API endpoints for introspection leaks, injection attacks,",
+    "path": "skills/performing-graphql-security-assessment"
+  },
+  {
+    "name": "performing-http-parameter-pollution-attack",
+    "description": "Execute HTTP Parameter Pollution attacks to bypass input validation,",
+    "path": "skills/performing-http-parameter-pollution-attack"
+  },
+  {
+    "name": "performing-initial-access-with-evilginx3",
+    "description": "Perform authorized initial access using EvilGinx3 adversary-in-the-middle",
+    "path": "skills/performing-initial-access-with-evilginx3"
+  },
+  {
+    "name": "performing-ip-reputation-analysis-with-shodan",
+    "description": "Analyze IP address reputation using the Shodan API to identify open ports,",
+    "path": "skills/performing-ip-reputation-analysis-with-shodan"
+  },
+  {
+    "name": "performing-jwt-none-algorithm-attack",
+    "description": "Execute and test the JWT none algorithm attack to bypass signature verification",
+    "path": "skills/performing-jwt-none-algorithm-attack"
+  },
+  {
+    "name": "performing-kubernetes-cis-benchmark-with-kube-bench",
+    "description": "Audit Kubernetes cluster security posture against CIS benchmarks using",
+    "path": "skills/performing-kubernetes-cis-benchmark-with-kube-bench"
+  },
+  {
+    "name": "performing-lateral-movement-detection",
+    "description": "'Detects lateral movement techniques including Pass-the-Hash, PsExec,",
+    "path": "skills/performing-lateral-movement-detection"
+  },
+  {
+    "name": "performing-linux-log-forensics-investigation",
+    "description": "Perform forensic investigation of Linux system logs including syslog,",
+    "path": "skills/performing-linux-log-forensics-investigation"
+  },
+  {
+    "name": "performing-log-analysis-for-forensic-investigation",
+    "description": "Collect, parse, and correlate system, application, and security logs",
+    "path": "skills/performing-log-analysis-for-forensic-investigation"
+  },
+  {
+    "name": "performing-log-source-onboarding-in-siem",
+    "description": "Perform structured log source onboarding into SIEM platforms by configuring",
+    "path": "skills/performing-log-source-onboarding-in-siem"
+  },
+  {
+    "name": "performing-malware-hash-enrichment-with-virustotal",
+    "description": "Enrich malware file hashes using the VirusTotal API to retrieve detection",
+    "path": "skills/performing-malware-hash-enrichment-with-virustotal"
+  },
+  {
+    "name": "performing-malware-triage-with-yara",
+    "description": "'Performs rapid malware triage and classification using YARA rules to",
+    "path": "skills/performing-malware-triage-with-yara"
+  },
+  {
+    "name": "performing-memory-forensics-with-volatility3-plugins",
+    "description": "Analyze memory dumps using Volatility3 plugins to detect injected code,",
+    "path": "skills/performing-memory-forensics-with-volatility3-plugins"
+  },
+  {
+    "name": "performing-mobile-app-certificate-pinning-bypass",
+    "description": "'Bypasses SSL/TLS certificate pinning implementations in Android and",
+    "path": "skills/performing-mobile-app-certificate-pinning-bypass"
+  },
+  {
+    "name": "performing-network-traffic-analysis-with-zeek",
+    "description": "Deploy Zeek network security monitor to capture, parse, and analyze network",
+    "path": "skills/performing-network-traffic-analysis-with-zeek"
+  },
+  {
+    "name": "performing-oauth-scope-minimization-review",
+    "description": "'Performs OAuth 2.0 scope minimization review to identify over-permissioned",
+    "path": "skills/performing-oauth-scope-minimization-review"
+  },
+  {
+    "name": "performing-osint-with-spiderfoot",
+    "description": "Automate OSINT collection using SpiderFoot REST API and CLI for target",
+    "path": "skills/performing-osint-with-spiderfoot"
+  },
+  {
+    "name": "performing-packet-injection-attack",
+    "description": "'Crafts and injects custom network packets using Scapy, hping3, and Nemesis",
+    "path": "skills/performing-packet-injection-attack"
+  },
+  {
+    "name": "performing-paste-site-monitoring-for-credentials",
+    "description": "Monitor paste sites like Pastebin and GitHub Gists for leaked credentials,",
+    "path": "skills/performing-paste-site-monitoring-for-credentials"
+  },
+  {
+    "name": "performing-physical-intrusion-assessment",
+    "description": "Conduct authorized physical penetration testing using tailgating, badge",
+    "path": "skills/performing-physical-intrusion-assessment"
+  },
+  {
+    "name": "performing-plc-firmware-security-analysis",
+    "description": "'This skill covers analyzing Programmable Logic Controller (PLC) firmware",
+    "path": "skills/performing-plc-firmware-security-analysis"
+  },
+  {
+    "name": "performing-post-quantum-cryptography-migration",
+    "description": "'Assesses organizational readiness for post-quantum cryptography migration",
+    "path": "skills/performing-post-quantum-cryptography-migration"
+  },
+  {
+    "name": "performing-privilege-escalation-assessment",
+    "description": "'Performs privilege escalation assessments on compromised Linux and Windows",
+    "path": "skills/performing-privilege-escalation-assessment"
+  },
+  {
+    "name": "performing-privilege-escalation-on-linux",
+    "description": "Linux privilege escalation involves elevating from a low-privilege user",
+    "path": "skills/performing-privilege-escalation-on-linux"
+  },
+  {
+    "name": "performing-privileged-account-access-review",
+    "description": "Conduct systematic reviews of privileged accounts to validate access",
+    "path": "skills/performing-privileged-account-access-review"
+  },
+  {
+    "name": "performing-privileged-account-discovery",
+    "description": "Discover and inventory all privileged accounts across enterprise infrastructure",
+    "path": "skills/performing-privileged-account-discovery"
+  },
+  {
+    "name": "performing-ransomware-response",
+    "description": "'Executes a structured ransomware incident response from initial detection",
+    "path": "skills/performing-ransomware-response"
+  },
+  {
+    "name": "performing-red-team-with-covenant",
+    "description": "Conduct red team operations using the Covenant C2 framework for authorized",
+    "path": "skills/performing-red-team-with-covenant"
+  },
+  {
+    "name": "performing-s7comm-protocol-security-analysis",
+    "description": "'Perform security analysis of Siemens S7comm and S7CommPlus protocols",
+    "path": "skills/performing-s7comm-protocol-security-analysis"
+  },
+  {
+    "name": "performing-second-order-sql-injection",
+    "description": "Detect and exploit second-order SQL injection vulnerabilities where malicious",
+    "path": "skills/performing-second-order-sql-injection"
+  },
+  {
+    "name": "performing-security-headers-audit",
+    "description": "Auditing HTTP security headers including CSP, HSTS, X-Frame-Options,",
+    "path": "skills/performing-security-headers-audit"
+  },
+  {
+    "name": "performing-service-account-audit",
+    "description": "Audit service accounts across enterprise infrastructure to identify orphaned,",
+    "path": "skills/performing-service-account-audit"
+  },
+  {
+    "name": "performing-service-account-credential-rotation",
+    "description": "Automate credential rotation for service accounts across Active Directory,",
+    "path": "skills/performing-service-account-credential-rotation"
+  },
+  {
+    "name": "performing-soap-web-service-security-testing",
+    "description": "Perform security testing of SOAP web services by analyzing WSDL definitions",
+    "path": "skills/performing-soap-web-service-security-testing"
+  },
+  {
+    "name": "performing-soc2-type2-audit-preparation",
+    "description": "'Automates SOC 2 Type II audit preparation including gap assessment against",
+    "path": "skills/performing-soc2-type2-audit-preparation"
+  },
+  {
+    "name": "performing-ssl-certificate-lifecycle-management",
+    "description": "SSL/TLS certificate lifecycle management encompasses the full process",
+    "path": "skills/performing-ssl-certificate-lifecycle-management"
+  },
+  {
+    "name": "performing-ssl-stripping-attack",
+    "description": "'Simulates SSL stripping attacks using sslstrip, Bettercap, and mitmproxy",
+    "path": "skills/performing-ssl-stripping-attack"
+  },
+  {
+    "name": "performing-ssl-tls-inspection-configuration",
+    "description": "Configure SSL/TLS inspection on network security devices to decrypt,",
+    "path": "skills/performing-ssl-tls-inspection-configuration"
+  },
+  {
+    "name": "performing-ssl-tls-security-assessment",
+    "description": "Assess SSL/TLS server configurations using the sslyze Python library",
+    "path": "skills/performing-ssl-tls-security-assessment"
+  },
+  {
+    "name": "performing-steganography-detection",
+    "description": "Detect and extract hidden data embedded in images, audio, and other media",
+    "path": "skills/performing-steganography-detection"
+  },
+  {
+    "name": "performing-supply-chain-attack-simulation",
+    "description": "Simulate and detect software supply chain attacks including typosquatting",
+    "path": "skills/performing-supply-chain-attack-simulation"
+  },
+  {
+    "name": "performing-thick-client-application-penetration-test",
+    "description": "Conduct a thick client application penetration test to identify insecure",
+    "path": "skills/performing-thick-client-application-penetration-test"
+  },
+  {
+    "name": "performing-threat-emulation-with-atomic-red-team",
+    "description": "'Executes Atomic Red Team tests for MITRE ATT&CK technique validation",
+    "path": "skills/performing-threat-emulation-with-atomic-red-team"
+  },
+  {
+    "name": "performing-threat-hunting-with-elastic-siem",
+    "description": "'Performs proactive threat hunting in Elastic Security SIEM using KQL/EQL",
+    "path": "skills/performing-threat-hunting-with-elastic-siem"
+  },
+  {
+    "name": "performing-timeline-reconstruction-with-plaso",
+    "description": "Build comprehensive forensic super-timelines using Plaso (log2timeline)",
+    "path": "skills/performing-timeline-reconstruction-with-plaso"
+  },
+  {
+    "name": "performing-user-behavior-analytics",
+    "description": "'Performs User and Entity Behavior Analytics (UEBA) to detect anomalous",
+    "path": "skills/performing-user-behavior-analytics"
+  },
+  {
+    "name": "performing-vulnerability-scanning-with-nessus",
+    "description": "'Performs authenticated and unauthenticated vulnerability scanning using",
+    "path": "skills/performing-vulnerability-scanning-with-nessus"
+  },
+  {
+    "name": "performing-web-application-firewall-bypass",
+    "description": "Bypass Web Application Firewall protections using encoding techniques,",
+    "path": "skills/performing-web-application-firewall-bypass"
+  },
+  {
+    "name": "performing-web-application-penetration-test",
+    "description": "'Performs systematic security testing of web applications following the",
+    "path": "skills/performing-web-application-penetration-test"
+  },
+  {
+    "name": "performing-web-application-scanning-with-nikto",
+    "description": "Nikto is an open-source web server and web application scanner that tests",
+    "path": "skills/performing-web-application-scanning-with-nikto"
+  },
+  {
+    "name": "performing-web-application-vulnerability-triage",
+    "description": "Triage web application vulnerability findings from DAST/SAST scanners",
+    "path": "skills/performing-web-application-vulnerability-triage"
+  },
+  {
+    "name": "performing-web-cache-deception-attack",
+    "description": "Execute web cache deception attacks by exploiting path normalization",
+    "path": "skills/performing-web-cache-deception-attack"
+  },
+  {
+    "name": "performing-web-cache-poisoning-attack",
+    "description": "Exploiting web cache mechanisms to serve malicious content to other users",
+    "path": "skills/performing-web-cache-poisoning-attack"
+  },
+  {
+    "name": "performing-wifi-password-cracking-with-aircrack",
+    "description": "'Captures WPA/WPA2 handshakes and performs offline password cracking",
+    "path": "skills/performing-wifi-password-cracking-with-aircrack"
+  },
+  {
+    "name": "performing-wireless-security-assessment-with-kismet",
+    "description": "Conduct wireless network security assessments using Kismet to detect",
+    "path": "skills/performing-wireless-security-assessment-with-kismet"
+  },
+  {
+    "name": "performing-yara-rule-development-for-detection",
+    "description": "Develop precise YARA rules for malware detection by identifying unique",
+    "path": "skills/performing-yara-rule-development-for-detection"
+  },
+  {
+    "name": "reverse-engineering-ransomware-encryption-routine",
+    "description": "Reverse engineer ransomware encryption routines to identify cryptographic",
+    "path": "skills/reverse-engineering-ransomware-encryption-routine"
+  },
+  {
+    "name": "securing-api-gateway-with-aws-waf",
+    "description": "'Securing API Gateway endpoints with AWS WAF by configuring managed rule",
+    "path": "skills/securing-api-gateway-with-aws-waf"
+  },
+  {
+    "name": "securing-aws-iam-permissions",
+    "description": "'This skill guides practitioners through hardening AWS Identity and Access",
+    "path": "skills/securing-aws-iam-permissions"
+  },
+  {
+    "name": "securing-aws-lambda-execution-roles",
+    "description": "'Securing AWS Lambda execution roles by implementing least-privilege",
+    "path": "skills/securing-aws-lambda-execution-roles"
+  },
+  {
+    "name": "securing-github-actions-workflows",
+    "description": "'This skill covers hardening GitHub Actions workflows against supply",
+    "path": "skills/securing-github-actions-workflows"
+  },
+  {
+    "name": "securing-helm-chart-deployments",
+    "description": "Secure Helm chart deployments by validating chart integrity, scanning",
+    "path": "skills/securing-helm-chart-deployments"
+  },
+  {
+    "name": "securing-historian-server-in-ot-environment",
+    "description": "'This skill covers hardening and securing process historian servers (OSIsoft",
+    "path": "skills/securing-historian-server-in-ot-environment"
+  },
+  {
+    "name": "securing-kubernetes-on-cloud",
+    "description": "'This skill covers hardening managed Kubernetes clusters on EKS, AKS,",
+    "path": "skills/securing-kubernetes-on-cloud"
+  },
+  {
+    "name": "securing-remote-access-to-ot-environment",
+    "description": "'This skill covers implementing secure remote access to OT/ICS environments",
+    "path": "skills/securing-remote-access-to-ot-environment"
+  },
+  {
+    "name": "securing-serverless-functions",
+    "description": "'This skill covers security hardening for serverless compute platforms",
+    "path": "skills/securing-serverless-functions"
+  },
+  {
+    "name": "testing-api-authentication-weaknesses",
+    "description": "'Tests API authentication mechanisms for weaknesses including broken",
+    "path": "skills/testing-api-authentication-weaknesses"
+  },
+  {
+    "name": "testing-api-for-broken-object-level-authorization",
+    "description": "'Tests REST and GraphQL APIs for Broken Object Level Authorization (BOLA/IDOR)",
+    "path": "skills/testing-api-for-broken-object-level-authorization"
+  },
+  {
+    "name": "testing-api-for-mass-assignment-vulnerability",
+    "description": "'Tests APIs for mass assignment (auto-binding) vulnerabilities where",
+    "path": "skills/testing-api-for-mass-assignment-vulnerability"
+  },
+  {
+    "name": "testing-api-security-with-owasp-top-10",
+    "description": "Systematically assessing REST and GraphQL API endpoints against the OWASP",
+    "path": "skills/testing-api-security-with-owasp-top-10"
+  },
+  {
+    "name": "testing-cors-misconfiguration",
+    "description": "Identifying and exploiting Cross-Origin Resource Sharing misconfigurations",
+    "path": "skills/testing-cors-misconfiguration"
+  },
+  {
+    "name": "testing-for-broken-access-control",
+    "description": "Systematically testing web applications for broken access control vulnerabilities",
+    "path": "skills/testing-for-broken-access-control"
+  },
+  {
+    "name": "testing-for-business-logic-vulnerabilities",
+    "description": "Identifying flaws in application business logic that allow price manipulation,",
+    "path": "skills/testing-for-business-logic-vulnerabilities"
+  },
+  {
+    "name": "testing-for-email-header-injection",
+    "description": "Test web application email functionality for SMTP header injection vulnerabilities",
+    "path": "skills/testing-for-email-header-injection"
+  },
+  {
+    "name": "testing-for-host-header-injection",
+    "description": "Test web applications for HTTP Host header injection vulnerabilities",
+    "path": "skills/testing-for-host-header-injection"
+  },
+  {
+    "name": "testing-for-json-web-token-vulnerabilities",
+    "description": "Test JWT implementations for critical vulnerabilities including algorithm",
+    "path": "skills/testing-for-json-web-token-vulnerabilities"
+  },
+  {
+    "name": "testing-for-open-redirect-vulnerabilities",
+    "description": "Identify and test open redirect vulnerabilities in web applications by",
+    "path": "skills/testing-for-open-redirect-vulnerabilities"
+  },
+  {
+    "name": "testing-for-sensitive-data-exposure",
+    "description": "Identifying sensitive data exposure vulnerabilities including API key",
+    "path": "skills/testing-for-sensitive-data-exposure"
+  },
+  {
+    "name": "testing-for-xml-injection-vulnerabilities",
+    "description": "Test web applications for XML injection vulnerabilities including XXE,",
+    "path": "skills/testing-for-xml-injection-vulnerabilities"
+  },
+  {
+    "name": "testing-for-xss-vulnerabilities",
+    "description": "'Tests web applications for Cross-Site Scripting (XSS) vulnerabilities",
+    "path": "skills/testing-for-xss-vulnerabilities"
+  },
+  {
+    "name": "testing-for-xss-vulnerabilities-with-burpsuite",
+    "description": "Identifying and validating cross-site scripting vulnerabilities using",
+    "path": "skills/testing-for-xss-vulnerabilities-with-burpsuite"
+  },
+  {
+    "name": "testing-for-xxe-injection-vulnerabilities",
+    "description": "Discovering and exploiting XML External Entity injection vulnerabilities",
+    "path": "skills/testing-for-xxe-injection-vulnerabilities"
+  },
+  {
+    "name": "testing-jwt-token-security",
+    "description": "Assessing JSON Web Token implementations for cryptographic weaknesses,",
+    "path": "skills/testing-jwt-token-security"
+  },
+  {
+    "name": "testing-mobile-api-authentication",
+    "description": "'Tests authentication and authorization mechanisms in mobile application",
+    "path": "skills/testing-mobile-api-authentication"
+  },
+  {
+    "name": "testing-oauth2-implementation-flaws",
+    "description": "'Tests OAuth 2.0 and OpenID Connect implementations for security flaws",
+    "path": "skills/testing-oauth2-implementation-flaws"
+  },
+  {
+    "name": "testing-ransomware-recovery-procedures",
+    "description": "Test and validate ransomware recovery procedures including backup restore",
+    "path": "skills/testing-ransomware-recovery-procedures"
+  },
+  {
+    "name": "testing-websocket-api-security",
+    "description": "'Tests WebSocket API implementations for security vulnerabilities including",
+    "path": "skills/testing-websocket-api-security"
+  },
+  {
+    "name": "tracking-threat-actor-infrastructure",
+    "description": "Threat actor infrastructure tracking involves monitoring and mapping",
+    "path": "skills/tracking-threat-actor-infrastructure"
+  },
+  {
+    "name": "triaging-security-alerts-in-splunk",
+    "description": "'Triages security alerts in Splunk Enterprise Security by classifying",
+    "path": "skills/triaging-security-alerts-in-splunk"
+  },
+  {
+    "name": "validating-backup-integrity-for-recovery",
+    "description": "Validate backup integrity through cryptographic hash verification, automated",
+    "path": "skills/validating-backup-integrity-for-recovery"
+  }
+]

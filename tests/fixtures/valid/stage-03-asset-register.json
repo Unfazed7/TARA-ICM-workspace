@@ -1,0 +1,18 @@
+[
+  {
+    "asset_id": "AS_01",
+    "asset_title": "Diagnostic API Endpoint",
+    "asset_type": "api_endpoint",
+    "asset_description": "Backend endpoint that accepts diagnostic requests for enrolled vehicles.",
+    "ciaaan": {
+      "confidentiality": true,
+      "integrity": true,
+      "availability": true,
+      "authenticity": true,
+      "authorization": true,
+      "non_repudiation": false
+    },
+    "input_mode": "csv",
+    "created_timestamp": "2026-06-01T10:00:00Z"
+  }
+]

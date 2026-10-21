@@ -1,0 +1,7 @@
+asset_title,asset_type,asset_description,confidentiality,integrity,availability,authenticity,authorization,non_repudiation
+OTA Update Service,api_endpoint,Cloud endpoint that distributes firmware updates to vehicles over-the-air,true,true,true,true,true,false
+Vehicle Telematics Data,data_store,Real-time telemetry data including location GPS speed and diagnostics transmitted to backend,true,false,true,true,false,true
+Remote Diagnostic Session,function,OBD-II remote diagnostic capability allowing service technicians to read DTCs remotely,false,true,true,true,true,false
+TLS Session Keys,auth_credential,Cryptographic keys used to secure TLS connections between vehicle and backend server,true,true,false,true,true,false
+CAN Bus Gateway,communication_path,Central gateway ECU bridging infotainment CAN and powertrain CAN networks,false,true,true,false,true,false
+User Authentication Token,auth_credential,JWT token issued to authenticated users for accessing vehicle mobile app features,true,false,false,true,true,true

@@ -1,0 +1,58 @@
+{
+  "_comment": "ISO/SAE 21434 Risk Matrix. Rows = Impact (1-4). Cols = Feasibility (1-5). Values = risk_level.",
+  "_formula": "risk_score = impact_rating_value × feasibility_rating_value",
+  "_thresholds": {
+    "low": { "min": 1, "max": 4 },
+    "medium": { "min": 5, "max": 9 },
+    "high": { "min": 10, "max": 15 },
+    "critical": { "min": 16, "max": 20 }
+  },
+  "matrix": {
+    "impact_1": {
+      "feasibility_1": { "risk_score": 1, "risk_level": "low" },
+      "feasibility_2": { "risk_score": 2, "risk_level": "low" },
+      "feasibility_3": { "risk_score": 3, "risk_level": "low" },
+      "feasibility_4": { "risk_score": 4, "risk_level": "low" },
+      "feasibility_5": { "risk_score": 5, "risk_level": "medium" }
+    },
+    "impact_2": {
+      "feasibility_1": { "risk_score": 2, "risk_level": "low" },
+      "feasibility_2": { "risk_score": 4, "risk_level": "low" },
+      "feasibility_3": { "risk_score": 6, "risk_level": "medium" },
+      "feasibility_4": { "risk_score": 8, "risk_level": "medium" },
+      "feasibility_5": { "risk_score": 10, "risk_level": "high" }
+    },
+    "impact_3": {
+      "feasibility_1": { "risk_score": 3, "risk_level": "low" },
+      "feasibility_2": { "risk_score": 6, "risk_level": "medium" },
+      "feasibility_3": { "risk_score": 9, "risk_level": "medium" },
+      "feasibility_4": { "risk_score": 12, "risk_level": "high" },
+      "feasibility_5": { "risk_score": 15, "risk_level": "high" }
+    },
+    "impact_4": {
+      "feasibility_1": { "risk_score": 4, "risk_level": "low" },
+      "feasibility_2": { "risk_score": 8, "risk_level": "medium" },
+      "feasibility_3": { "risk_score": 12, "risk_level": "high" },
+      "feasibility_4": { "risk_score": 16, "risk_level": "critical" },
+      "feasibility_5": { "risk_score": 20, "risk_level": "critical" }
+    }
+  },
+  "impact_levels": {
+    "1": "negligible",
+    "2": "minor",
+    "3": "major",
+    "4": "severe"
+  },
+  "feasibility_levels": {
+    "1": "very_low",
+    "2": "low",
+    "3": "medium",
+    "4": "high",
+    "5": "very_high"
+  },
+  "acceptability_thresholds": {
+    "acceptable_without_treatment": ["low"],
+    "conditional_acceptance": ["medium"],
+    "must_treat": ["high", "critical"]
+  }
+}

@@ -1,0 +1,384 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "rationale.schema.json",
+  "title": "Stage Rationale",
+  "description": "One item per conflict, ambiguity, gap and assumption a stage met, shown below the stage output. Never blocks the pipeline. Specs: .meta/specs/13a-rationale-items.md, .meta/specs/13b-rationale-defaults-and-api.md",
+  "type": "array",
+  "uniqueItemProperties": [
+    "rationale_id"
+  ],
+  "definitions": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "doc_id",
+        "location",
+        "quote"
+      ],
+      "properties": {
+        "doc_id": {
+          "type": "string",
+          "pattern": "^DOC-\\d{2,}$"
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      }
+    }
+  },
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "rationale_id",
+      "stage",
+      "kind",
+      "topic",
+      "attention",
+      "title",
+      "concluded",
+      "why",
+      "assumed",
+      "would_change",
+      "affects",
+      "review"
+    ],
+    "properties": {
+      "rationale_id": {
+        "type": "string",
+        "pattern": "^RAT-\\d{3,}$"
+      },
+      "stage": {
+        "type": "string",
+        "pattern": "^\\d{2}$"
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "conflict",
+          "ambiguity",
+          "gap",
+          "assumption"
+        ]
+      },
+      "topic": {
+        "type": "string",
+        "enum": [
+          "exposure",
+          "sign_in",
+          "scope",
+          "environment",
+          "data",
+          "naming",
+          "reading"
+        ],
+        "description": "The group the Assumptions panel shows it under. Set by code from the template that wrote the item, never by a model (spec 23)."
+      },
+      "attention": {
+        "type": "string",
+        "enum": [
+          "needs_attention",
+          "information"
+        ]
+      },
+      "title": {
+        "type": "string",
+        "minLength": 5,
+        "maxLength": 160
+      },
+      "concluded": {
+        "type": "string",
+        "minLength": 5
+      },
+      "why": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/source_ref"
+            }
+          },
+          "based_on_rationale_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^RAT-\\d{3,}$"
+            }
+          },
+          "note": {
+            "type": "string",
+            "minLength": 3
+          }
+        },
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "sources"
+            ],
+            "properties": {
+              "sources": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "based_on_rationale_ids"
+            ],
+            "properties": {
+              "based_on_rationale_ids": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          }
+        ]
+      },
+      "assumed": {
+        "type": "string",
+        "minLength": 5
+      },
+      "would_change": {
+        "type": "string",
+        "minLength": 5
+      },
+      "question_id": {
+        "type": "string",
+        "pattern": "^Q-\\d{3,}$"
+      },
+      "conflict_id": {
+        "type": "string",
+        "pattern": "^CNF-\\d{3,}$"
+      },
+      "auto_resolved": {
+        "type": "boolean"
+      },
+      "affects": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "pattern": "^(FCT-\\d{3,}|CNF-\\d{3,}|DOC-\\d{2,}|EL-\\d{3,}|IF-\\d{2,}|CTR-\\d{2,}|ZN-\\d{2,}|FN-\\d{3,}|ASM-\\d{2,}|Q-\\d{3,}|SD-\\d{3,})$"
+        }
+      },
+      "review": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "unreviewed",
+              "confirmed",
+              "disputed"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "minLength": 3
+          },
+          "by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "conflict"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "required": [
+            "conflict_id",
+            "auto_resolved"
+          ],
+          "properties": {
+            "conflict_id": {
+              "type": "string",
+              "pattern": "^CNF-\\d{3,}$"
+            },
+            "auto_resolved": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "auto_resolved": {
+              "type": "boolean",
+              "const": true
+            },
+            "topic": {
+              "not": {
+                "const": "naming"
+              }
+            }
+          },
+          "required": [
+            "auto_resolved",
+            "topic"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "attention": {
+              "type": "string",
+              "const": "information"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "review": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "const": "disputed"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            }
+          },
+          "required": [
+            "review"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "review": {
+              "type": "object",
+              "required": [
+                "status",
+                "note"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "unreviewed",
+                    "confirmed",
+                    "disputed"
+                  ]
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 3
+                },
+                "by": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "review": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "disputed"
+                  ]
+                }
+              },
+              "required": [
+                "status"
+              ]
+            }
+          },
+          "required": [
+            "review"
+          ]
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "review": {
+              "type": "object",
+              "required": [
+                "status",
+                "by",
+                "at"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "unreviewed",
+                    "confirmed",
+                    "disputed"
+                  ]
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 3
+                },
+                "by": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "asset_id": "AS_01",
+    "asset_title": "Diagnostic API Endpoint",
+    "asset_type": "api_endpoint",
+    "asset_description": "Backend endpoint that accepts diagnostic requests.",
+    "ciaaan": {
+      "confidentiality": false,
+      "integrity": false,
+      "availability": false,
+      "authenticity": false,
+      "authorization": false,
+      "non_repudiation": false
+    },
+    "input_mode": "csv",
+    "created_timestamp": "2026-06-01T10:00:00Z"
+  }
+]
