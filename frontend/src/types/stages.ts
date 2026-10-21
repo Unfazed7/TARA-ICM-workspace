@@ -42,6 +42,8 @@ export interface RegisterEntry {
   doc_type: string;
   doc_type_label?: string;
   read_status: 'parsed' | 'partial' | 'failed';
+  /** How the document was read: `parsed` by code, or by the model (for example `image_model`). */
+  reading_method?: string;
   precedence_rank: number;
   environment: string;
   used_for: string;

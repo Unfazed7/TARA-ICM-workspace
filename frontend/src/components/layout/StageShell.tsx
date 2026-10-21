@@ -7,10 +7,11 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Settings, Shield } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { useMotionPreset } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
-export type ShellStage = { key: string; label: string; ready: boolean; note?: string };
+export type ShellStage = { key: string; label: string; ready: boolean; note?: string; tone?: 'blue' | 'yellow' | 'grey' };
 
 type TopBarProps = {
   stages: ShellStage[];
@@ -20,9 +21,11 @@ type TopBarProps = {
   assumptionsOpen: boolean;
   onAssumptions: () => void;
   onSettings: () => void;
+  /** Short description of the assessment, shown in the menu. */
+  description?: string;
 };
 
-export function StageTopBar({ stages, current, onStage, needCount, assumptionsOpen, onAssumptions, onSettings }: TopBarProps) {
+export function StageTopBar({ stages, current, onStage, needCount, assumptionsOpen, onAssumptions, onSettings, description }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { easeOut, riseList, riseItem } = useMotionPreset();
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -122,25 +125,44 @@ export function StageTopBar({ stages, current, onStage, needCount, assumptionsOp
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-20 overflow-y-auto bg-background/85 backdrop-blur-2xl"
           >
-            <motion.ol variants={riseList} initial="hidden" animate="show" className="mx-auto mt-32 flex max-w-3xl list-none flex-col border-t border-border px-6">
-              {stages.map((s) => (
-                <motion.li key={s.key} variants={riseItem}>
-                  <button
-                    type="button"
-                    disabled={!s.ready}
-                    onClick={() => {
-                      onStage(s.key);
-                      setMenuOpen(false);
-                    }}
-                    className="flex w-full items-center gap-4 border-b border-border py-3.5 text-left text-[28px] font-semibold tracking-tight disabled:cursor-not-allowed disabled:text-muted-foreground/60"
-                  >
-                    <span className="aegis-mono w-8 text-[13px] text-muted-foreground">{s.key}</span>
-                    <span className="flex-1">{s.label}</span>
-                    {s.note && <span className={cn('rounded-full px-2.5 py-0.5 text-xs font-medium', s.ready ? 'bg-state-blue text-state-blue-foreground' : 'bg-state-grey text-state-grey-foreground')}>{s.note}</span>}
-                  </button>
-                </motion.li>
-              ))}
-            </motion.ol>
+            <motion.div variants={riseList} initial="hidden" animate="show" className="mx-auto grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-12 px-[clamp(16px,5vw,64px)] pb-16 pt-[130px]">
+              <ol className="m-0 flex list-none flex-col border-t border-border p-0">
+                {stages.map((s) => (
+                  <motion.li key={s.key} variants={riseItem}>
+                    <button
+                      type="button"
+                      disabled={!s.ready}
+                      onClick={() => {
+                        onStage(s.key);
+                        setMenuOpen(false);
+                      }}
+                      className="flex w-full items-center gap-4 border-b border-border py-3.5 text-left text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.03em] disabled:cursor-not-allowed disabled:text-[#B5B4AF]"
+                    >
+                      <span className="aegis-mono w-7 text-[13px] text-[#8E8D89]">{s.key}</span>
+                      <span className="flex-1">{s.label}</span>
+                      {s.note && <Badge variant={s.tone ?? 'grey'}>{s.note}</Badge>}
+                    </button>
+                  </motion.li>
+                ))}
+              </ol>
+              <motion.div variants={riseItem} className="flex flex-col gap-3.5 self-end">
+                <Badge variant="blue" className="self-start">Assessment</Badge>
+                {description && <p className="m-0 line-clamp-3 max-w-[36ch] text-[15px] text-[#5F5E5B]">{description}</p>}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onSettings();
+                  }}
+                  className="inline-flex min-h-10 items-center self-start rounded-[10px] border border-border bg-card px-3.5 text-sm font-medium hover:bg-accent active:scale-[0.98]"
+                >
+                  What I read
+                </button>
+                <Link to="/dashboard" className="inline-flex min-h-10 items-center self-start rounded-[10px] border border-border bg-card px-3.5 text-sm font-medium text-foreground no-underline hover:bg-accent">
+                  Back to the dashboard
+                </Link>
+              </motion.div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

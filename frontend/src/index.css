@@ -10,14 +10,16 @@
     @apply border-border;
   }
 
+  /* D-51: standard 16px root so rem sizes match the design; body text 15px. */
   html {
-    font-size: 14px;
+    font-size: 16px;
     color-scheme: light;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 1.55;
     min-height: 100vh;
   }
 

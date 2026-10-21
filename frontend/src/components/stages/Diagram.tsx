@@ -6,7 +6,7 @@
  */
 
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, { BaseEdge, Controls, Handle, Position, ReactFlowProvider, useReactFlow, type Edge, type EdgeProps, type Node, type NodeProps } from 'reactflow';
+import ReactFlow, { Background, BackgroundVariant, BaseEdge, Controls, Handle, Position, ReactFlowProvider, useReactFlow, type Edge, type EdgeProps, type Node, type NodeProps } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { cn } from '@/lib/utils';
 import type { ScopeStatus, Stage02Output } from '@/types/stages';
@@ -48,7 +48,9 @@ const BoxNode = memo(({ data }: NodeProps<BoxData>) => {
   const look = boxLook(box);
   return (
     <div className={cn('pointer-events-none relative h-full w-full rounded-[12px]', look.cls)} style={{ width: box.w, height: box.h }}>
-      <span className={cn('aegis-label absolute left-3 top-2.5 text-[10px]', look.label)}>{box.label}</span>
+      <span title={box.label} className={cn('aegis-label absolute left-3 right-3 top-2.5 truncate whitespace-nowrap text-[10px]', look.label)}>
+        {box.label}
+      </span>
     </div>
   );
 });
@@ -317,6 +319,7 @@ function DiagramCanvas({ def, scope, selectedId, highlight, onSelect, fitKey }: 
           proOptions={{ hideAttribution: true }}
           aria-label="Item definition diagram"
         >
+          <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="rgba(28,27,25,.09)" />
           <Controls showInteractive={false} position="bottom-right" />
         </ReactFlow>
       )}
@@ -342,7 +345,7 @@ export function Legend() {
     </span>
   );
   return (
-    <div className="flex flex-wrap items-center gap-x-[18px] gap-y-2 text-[12.5px] text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-x-[18px] gap-y-2 text-[12.5px] text-[#4A4946]">
       {item('rounded border border-[hsl(47_6%_80%)] bg-card', 'In scope')}
       {item('rounded border-[1.25px] border-dashed border-[hsl(var(--aegis-interface))] bg-card/60', 'Interface')}
       {item('rounded bg-state-grey', 'Out of scope')}

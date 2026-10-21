@@ -9,12 +9,13 @@ import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Info, PanelLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 import { useMotionPreset } from '@/lib/motion';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
 import type { RationaleItem, ScopeStatus, StageKey } from '@/types/stages';
 import { DocumentsStage } from '@/components/stages/DocumentsStage';
 import { Diagram, Legend } from '@/components/stages/Diagram';
-import { DetailsDrawer } from '@/components/stages/DetailsDrawer';
+import { DetailsDrawer, DetailsEmpty } from '@/components/stages/DetailsDrawer';
 import { AssumptionsList } from '@/components/stages/AssumptionsPanel';
 import { PageHeader, StageTopBar, StatusDot } from '@/components/layout/StageShell';
 import { SideSheet } from '@/components/layout/SideSheet';
@@ -29,6 +30,20 @@ const TABS: { key: StageKey | string; label: string; ready: boolean; note?: stri
   { key: '05', label: 'Threats', ready: false, note: 'Comes later' },
   { key: '06', label: 'Risk', ready: false, note: 'Comes later' },
 ];
+
+/** The kinds of area the diagram shows, as coloured tags for the workspace header. */
+function zoneTags(def: { zones: { kind: string }[]; containers: { kind: string; zone_id?: string }[] }) {
+  const zoneKind = new Map(def.zones.map((z) => [(z as { zone_id?: string }).zone_id, z.kind]));
+  const kinds = new Set([...def.zones.map((z) => z.kind), ...def.containers.map((c) => (c.zone_id ? zoneKind.get(c.zone_id) ?? c.kind : c.kind))]);
+  const has = (test: (k: string) => boolean) => [...kinds].some(test);
+  const tags: { label: string; tone: 'red' | 'yellow' | 'green' | 'blue' | 'grey' }[] = [];
+  if (has((k) => k === 'internet_external')) tags.push({ label: 'Internet', tone: 'red' });
+  if (has((k) => k.includes('public'))) tags.push({ label: 'Public', tone: 'yellow' });
+  if (has((k) => k.includes('private'))) tags.push({ label: 'Private', tone: 'green' });
+  if (has((k) => k.includes('managed'))) tags.push({ label: 'Managed', tone: 'blue' });
+  if (has((k) => ['corporate_it', 'third_party_saas', 'vehicle_field_device'].includes(k))) tags.push({ label: 'Outside', tone: 'grey' });
+  return tags;
+}
 
 /** A stage that has not run yet answers 404; that is "nothing yet", not an error. */
 const orNothing = <T,>(p: Promise<T>) => p.catch((e) => (e instanceof ApiError && e.status === 404 ? null : Promise.reject(e)));
@@ -52,11 +67,11 @@ export default function Assessment() {
   const rat02 = useQuery({ queryKey: ['rationale', assessmentId, '02'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '02')) });
   const boundary = useQuery({ queryKey: ['boundary', assessmentId], queryFn: () => stagesApi.boundary(assessmentId) });
 
-  const items01: RationaleItem[] = rat01.data?.items ?? [];
-  const items02: RationaleItem[] = rat02.data?.items ?? [];
+  const items01 = useMemo<RationaleItem[]>(() => rat01.data?.items ?? [], [rat01.data]);
+  const items02 = useMemo<RationaleItem[]>(() => rat02.data?.items ?? [], [rat02.data]);
   const def = stage02.data?.item_definition;
-  const elements = def?.elements ?? [];
-  const links = def?.links ?? [];
+  const elements = useMemo(() => def?.elements ?? [], [def]);
+  const links = useMemo(() => def?.links ?? [], [def]);
 
   const facts = useMemo(() => new Map((stage01.data?.facts ?? []).map((f) => [f.fact_id, f])), [stage01.data]);
   const docs = useMemo(() => new Map((stage01.data?.document_register ?? []).map((d) => [d.doc_id, d])), [stage01.data]);
@@ -68,6 +83,8 @@ export default function Assessment() {
   const stageCards = useMemo(() => buildCards(items01, items02, tab), [items01, items02, tab]);
   const cards02 = useMemo(() => buildCards(items01, items02, '02'), [items01, items02]);
   const needCount = stageCards.filter(needsYou).length;
+  const needs01 = useMemo(() => buildCards(items01, items02, '01').filter(needsYou).length, [items01, items02]);
+  const needs02 = useMemo(() => cards02.filter(needsYou).length, [cards02]);
   const viewCards = useMemo(
     () => (filterId ? stageCards.filter((c) => affectedIds(c, elements, links).has(filterId)) : stageCards),
     [stageCards, filterId, elements, links],
@@ -101,7 +118,13 @@ export default function Assessment() {
     <div className="relative min-h-[100dvh] bg-background text-foreground">
       <div className="aegis-canvas-grid pointer-events-none fixed inset-0" aria-hidden="true" />
       <StageTopBar
-        stages={TABS}
+        stages={TABS.map((t) => {
+          const open = t.key === '01' ? needs01 : t.key === '02' ? needs02 : 0;
+          if (t.key === tab) return { ...t, note: 'You are here', tone: 'blue' as const };
+          if (t.ready && open) return { ...t, note: `${open} need you`, tone: 'yellow' as const };
+          return { ...t, tone: 'grey' as const };
+        })}
+        description={boundary.data?.text ?? undefined}
         current={tab}
         onStage={goTo}
         needCount={needCount}
@@ -190,8 +213,15 @@ export default function Assessment() {
                       <PanelLeft className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
                     </button>
                     <span className="text-[15px] font-semibold">Diagram</span>
-                    <span className="aegis-mono text-xs text-muted-foreground">{elements.length} components · {links.length} connections</span>
+                    <span className="aegis-mono hidden text-xs text-muted-foreground sm:inline">{elements.length} components · {links.length} connections</span>
                   </span>
+                  <span className="flex flex-wrap gap-1.5">
+                    {zoneTags(def).map((z) => (
+                      <Badge key={z.label} variant={z.tone}>{z.label}</Badge>
+                    ))}
+                  </span>
+                </div>
+                <div className="border-b border-rule px-[22px] py-2.5">
                   <Legend />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-[var(--side)_minmax(0,1fr)]" style={{ ['--side' as string]: sideOpen ? '380px' : '60px' }}>
@@ -242,13 +272,7 @@ export default function Assessment() {
                               onSelect={setSelectedId}
                             />
                           ) : (
-                            <div className="flex flex-col gap-1.5 px-5 py-6">
-                              <span className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-muted text-muted-foreground" aria-hidden="true">
-                                <Info className="h-[18px] w-[18px]" strokeWidth={1.75} />
-                              </span>
-                              <span className="mt-2 text-[15px] font-medium">Nothing selected</span>
-                              <span className="text-[13px] leading-relaxed text-muted-foreground">Click a component or a connection on the diagram to see where it sits, why it is in scope and what the documents say.</span>
-                            </div>
+                            <DetailsEmpty />
                           )}
                         </div>
                       </>

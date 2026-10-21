@@ -14,7 +14,7 @@ import { useMotionPreset } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { stagesApi } from '@/lib/stagesApi';
 import type { DocGroup, PipelineStatus, UploadedDocument } from '@/types/stages';
-import { DOC_LABELS, GROUP_TITLE, groupOfType } from './words';
+import { DOC_LABELS, fileKindTone, GROUP_TITLE, groupOfType, sizeWords, TONE_CHIP } from './words';
 
 const ACCEPT = '.drawio,.md,.txt,.html,.htm,.docx,.xlsx,.pdf,.png,.jpg,.jpeg';
 const OTHER = '__other__';
@@ -25,6 +25,7 @@ interface Row {
   other: boolean; // Other (specify): the analyst types the kind
   otherText: string;
   file?: string; // uploaded file name
+  size?: number; // uploaded file size in bytes
   busy?: boolean;
   error?: string;
 }
@@ -38,7 +39,7 @@ function rowsFrom(docs: UploadedDocument[]): Record<DocGroup, Row[]> {
     const group: DocGroup = d.category || groupOfType(d.doc_type) || 'components';
     const label = d.type_label && DOC_LABELS[group].includes(d.type_label) ? d.type_label : '';
     const other = !label && d.doc_type === 'other';
-    rows[group].push({ ...newRow(), label, other, otherText: other ? d.type_label || '' : '', file: d.file });
+    rows[group].push({ ...newRow(), label, other, otherText: other ? d.type_label || '' : '', file: d.file, size: d.size_bytes });
   }
   for (const g of ['components', 'behaviour'] as DocGroup[]) if (!rows[g].length) rows[g].push(newRow());
   return rows;
@@ -97,7 +98,7 @@ export function DocumentsStage({ assessmentId, project, onOpenItemDefinition }: 
     try {
       if (row.file && row.file !== file.name) await stagesApi.removeDocument(assessmentId, row.file);
       const saved = await stagesApi.upload(assessmentId, file, group, typeOf(row));
-      update(group, row.key, { busy: false, file: saved.file });
+      update(group, row.key, { busy: false, file: saved.file, size: saved.size_bytes });
       refreshStatus();
     } catch (err) {
       update(group, row.key, { busy: false, error: (err as Error).message });
@@ -195,7 +196,7 @@ export function DocumentsStage({ assessmentId, project, onOpenItemDefinition }: 
                 <span className="flex min-w-0 flex-col">
                   <span className="aegis-label">Step 1 · Boundary</span>
                   <label htmlFor="boundary" className="text-[15px] font-semibold leading-snug">
-                    What is being assessed?
+                    What is being assessed? <span className="text-state-yellow-foreground" aria-hidden="true">*</span>
                     <span className="sr-only"> (required)</span>
                   </label>
                 </span>
@@ -237,14 +238,14 @@ export function DocumentsStage({ assessmentId, project, onOpenItemDefinition }: 
                   <span className="flex min-w-0 flex-col">
                     <span className="aegis-label">Step {i + 2} · {group === 'components' ? 'Architecture' : 'Behaviour'}</span>
                     <h2 id={`group-${group}`} className="m-0 text-[15px] font-semibold leading-snug">
-                      {GROUP_TITLE[group]}
+                      {GROUP_TITLE[group]} <span className="text-state-yellow-foreground" aria-hidden="true">*</span>
                       <span className="sr-only"> (required)</span>
                     </h2>
                   </span>
                 </span>
                 <Badge variant={added(group) ? 'green' : 'yellow'}>{added(group)} added</Badge>
               </div>
-              <div className="drow aegis-label hidden border-b border-rule bg-[hsl(var(--well))] px-6 py-2 md:grid">
+              <div className="drow aegis-label hidden border-b border-rule bg-[#F7F6F2] px-6 py-2 md:grid">
                 <span>Type</span>
                 <span>File</span>
                 <span>Actions</span>
@@ -415,8 +416,13 @@ function DocumentRow({
             </>
           ) : row.file ? (
             <>
-              <span className="aegis-mono flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-state-grey text-[9.5px] font-semibold text-state-grey-foreground" aria-hidden="true">{ext.slice(0, 6)}</span>
-              <span className="aegis-mono min-w-0 truncate text-[13px] text-foreground">{row.file}</span>
+              <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] font-mono text-[8.5px] font-semibold tracking-[.04em]', TONE_CHIP[fileKindTone(row.file)])} aria-hidden="true">
+                {ext.slice(0, 6)}
+              </span>
+              <span className="flex min-w-0 flex-col">
+                <span className="truncate font-mono text-[13px] text-foreground">{row.file}</span>
+                <span className="text-xs text-muted-foreground">{[sizeWords(row.size), typeOf(row)].filter(Boolean).join(' · ')}</span>
+              </span>
             </>
           ) : (
             <span className="text-[13.5px] text-muted-foreground">{typeChosen ? 'No file yet' : 'Choose the type, then upload'}</span>
@@ -508,33 +514,58 @@ function RunCard({
           <h2 id="run-h" className="m-0 text-base font-semibold">{title}</h2>
         </span>
         <span className="aegis-mono text-xs">
-          {starting && !s01?.started_at ? 'Starting' : s01?.started_at && state !== 'idle' ? `Started ${new Date(s01.started_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '2 steps'}
+          {starting && !s01?.started_at ? 'starting' : s01?.started_at && state !== 'idle' ? `started ${new Date(s01.started_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '2 steps'}
         </span>
       </div>
-      <div className="flex flex-col gap-4 px-6 py-5">
-        {failed?.error && <p className="m-0 whitespace-pre-line rounded-[10px] bg-state-red px-3 py-2.5 text-sm text-state-red-foreground">{failed.error}</p>}
-        {failed && (
-          <p className="m-0 text-sm text-muted-foreground">
-            {failed.stage === '01' && /could not be read|Missing input/.test(failed.error || '')
-              ? 'Fix or replace the documents named above, then execute again.'
-              : 'Execute again. If it stops the same way, send the last lines of logs/aegis.log.'}{' '}
-            Your documents and the text are kept.
-          </p>
+      <div className="flex flex-col gap-[18px] px-6 pb-6 pt-1.5">
+        {showSteps ? (
+          <ol className="m-0 flex list-none flex-col p-0">
+            {steps.map(({ n, label, s: st }) => {
+              const status = st?.status || 'not_started';
+              const tag = STEP_TAG[status] ?? STEP_TAG.not_started;
+              return (
+                <li key={n} className="grid grid-cols-[30px_minmax(0,1fr)_auto] items-start gap-3 border-b border-rule py-3.5">
+                  <StepMarker n={n} status={status} />
+                  <span className="flex min-w-0 flex-col gap-1">
+                    <span className="text-[14.5px] font-medium">{label}</span>
+                    <span className="text-[13px] text-muted-foreground">{words(status)}</span>
+                    {status === 'running' && (
+                      <span className="mt-1.5 block h-1 overflow-hidden rounded bg-state-yellow" aria-hidden="true">
+                        <span className="aegis-bar block h-full rounded bg-state-yellow-foreground" />
+                      </span>
+                    )}
+                  </span>
+                  <Badge variant={tag[1]}>{tag[0]}</Badge>
+                </li>
+              );
+            })}
+          </ol>
+        ) : (
+          <ul className="m-0 flex list-none flex-col p-0">
+            {checks.map((c) => (
+              <li key={c.label} className="flex items-start gap-3 border-b border-rule py-3 text-sm">
+                <span
+                  className={cn('mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-md', c.ok ? 'bg-state-green text-state-green-foreground' : 'bg-state-red text-state-red-foreground')}
+                  aria-label={c.ok ? 'Done' : 'Missing'}
+                >
+                  {c.ok ? <Check className="h-[11px] w-[11px]" strokeWidth={3} /> : <X className="h-[11px] w-[11px]" strokeWidth={3} />}
+                </span>
+                <span className={c.ok ? 'text-foreground' : 'text-state-red-foreground'}>{c.label}</span>
+              </li>
+            ))}
+          </ul>
         )}
-        <ul className="m-0 flex list-none flex-col p-0">
-          {(showSteps
-            ? steps.map(({ n, label, s }) => ({ key: n, label, sub: words(s?.status), status: s?.status }))
-            : checks.map((c) => ({ key: c.label, label: c.label, sub: '', status: c.ok ? 'complete' : 'missing' }))
-          ).map((r) => (
-            <li key={r.key} className="flex items-start gap-3 border-b border-rule py-3 text-sm last:border-b-0">
-              <StepDot status={r.status} />
-              <span className="flex flex-col">
-                <span className={r.status === 'missing' ? 'text-state-red-foreground' : 'text-foreground'}>{r.label}</span>
-                {r.sub && <span className="text-[13px] text-muted-foreground">{r.sub}</span>}
-              </span>
-            </li>
-          ))}
-        </ul>
+        {failed && (
+          <div role="alert" className="flex flex-col gap-1 rounded-xl border border-state-red-border bg-state-red px-4 py-3.5 text-[13.5px] text-state-red-foreground">
+            {failed.error && <span className="whitespace-pre-line font-semibold">{failed.error}</span>}
+            <span>
+              {failed.stage === '01' && /could not be read|Missing input/.test(failed.error || '')
+                ? 'Fix or replace the documents named above, then execute again.'
+                : 'Execute again. If it stops the same way, send the last lines of logs/aegis.log.'}{' '}
+              Your documents and the text you wrote are kept.
+            </span>
+          </div>
+        )}
         <p className="m-0 text-[13.5px] text-muted-foreground">{footer}</p>
         {done && !locked && (
           <Button type="button" onClick={onOpen} className="h-12 justify-between rounded-xl px-[18px] text-[15px]">
@@ -555,10 +586,18 @@ function RunCard({
   );
 }
 
-function StepDot({ status }: { status?: string }) {
-  const base = 'mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[11px] font-semibold';
-  if (status === 'complete') return <span className={cn(base, 'bg-state-green text-state-green-foreground')} aria-label="Done"><Check className="h-3 w-3" strokeWidth={2.5} /></span>;
-  if (status === 'running') return <span className={cn(base, 'bg-state-yellow text-state-yellow-foreground')} aria-label="In progress"><Loader2 className="h-3 w-3 animate-spin motion-reduce:animate-none" /></span>;
-  if (status === 'failed' || status === 'missing') return <span className={cn(base, 'bg-state-red text-state-red-foreground')} aria-label={status === 'missing' ? 'Missing' : 'Stopped'}><X className="h-3 w-3" strokeWidth={2.5} /></span>;
-  return <span className={cn(base, 'bg-state-grey text-state-grey-foreground')} aria-label="Not started" />;
+const STEP_TAG: Record<string, [string, 'green' | 'yellow' | 'grey' | 'red']> = {
+  complete: ['Done', 'green'],
+  running: ['Running', 'yellow'],
+  pending: ['Waiting', 'grey'],
+  failed: ['Stopped', 'red'],
+  not_started: ['Not started', 'grey'],
+};
+
+function StepMarker({ n, status }: { n: string; status: string }) {
+  const base = 'flex h-[30px] w-[30px] items-center justify-center rounded-[9px]';
+  if (status === 'complete') return <span className={cn(base, 'bg-state-green text-state-green-foreground')} aria-hidden="true"><Check className="h-[13px] w-[13px]" strokeWidth={2.75} /></span>;
+  if (status === 'running') return <span className={cn(base, 'bg-state-yellow text-state-yellow-foreground')} aria-hidden="true"><Loader2 className="h-[15px] w-[15px] animate-spin motion-reduce:animate-none" strokeWidth={2.25} /></span>;
+  if (status === 'failed') return <span className={cn(base, 'bg-state-red text-state-red-foreground font-mono text-sm font-semibold')} aria-hidden="true">!</span>;
+  return <span className={cn(base, 'bg-state-grey text-state-grey-foreground font-mono text-[11px]')} aria-hidden="true">{n}</span>;
 }

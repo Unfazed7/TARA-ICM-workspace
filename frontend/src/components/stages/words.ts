@@ -89,3 +89,31 @@ export const SCOPE_WORDS: Record<ScopeStatus, string> = {
 
 export const ACTOR_TYPES = new Set(['human_actor', 'system_to_system_client']);
 export const EXTERNAL_ZONES = new Set(['internet_external', 'corporate_it', 'third_party_saas', 'vehicle_field_device']);
+
+/**
+ * Tint of a file-type chip by file kind (D-51: the one use of colour that is not state).
+ * Diagrams blue, images yellow, text and documents green, anything else grey.
+ */
+export function fileKindTone(file: string): 'blue' | 'yellow' | 'green' | 'grey' {
+  const ext = file.split('.').pop()?.toLowerCase() || '';
+  if (['drawio', 'vsdx', 'vsd', 'lucid'].includes(ext)) return 'blue';
+  if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext)) return 'yellow';
+  if (['md', 'txt', 'html', 'htm', 'docx', 'doc', 'pdf'].includes(ext)) return 'green';
+  return 'grey';
+}
+
+export const TONE_CHIP: Record<'blue' | 'yellow' | 'green' | 'grey' | 'red', string> = {
+  blue: 'bg-state-blue text-state-blue-foreground',
+  yellow: 'bg-state-yellow text-state-yellow-foreground',
+  green: 'bg-state-green text-state-green-foreground',
+  grey: 'bg-state-grey text-state-grey-foreground',
+  red: 'bg-state-red text-state-red-foreground',
+};
+
+/** File size in plain words, e.g. "41 KB". */
+export function sizeWords(bytes?: number): string {
+  if (!bytes && bytes !== 0) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}

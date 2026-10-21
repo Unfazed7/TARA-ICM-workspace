@@ -84,6 +84,7 @@ const BOX_GAP_Y = 20;
 const LANE = 8;
 const MARGIN = 40;
 const PASSES = 24;
+const LABEL_CHAR = 7.4;
 
 /** Rule 1: the column of every component. */
 export function columnsOf(input: LayoutInput, isOutside: (e: Element) => boolean = () => false): Map<string, number> {
@@ -250,6 +251,15 @@ export function layoutItemDefinition(input: LayoutInput, options: LayoutOptions)
   const roots = itemsOf(regions, [], col, splitGap, null);
   const widths = new Map(input.elements.map((e) => [e.element_id, measure(e)]));
   const colW = Array.from({ length: nCols }, (_, c) => Math.max(0, ...input.elements.filter((e) => col.get(e.element_id) === c).map((e) => widths.get(e.element_id)!)));
+  // A box that sits in one column must be wide enough for its label (10 px mono capitals).
+  const labelFit = (items: Item[]) => {
+    for (const it of items) {
+      if (it.type !== 'box') continue;
+      if (it.lo === it.hi) colW[it.lo] = Math.max(colW[it.lo], Math.ceil(it.region.label.length * LABEL_CHAR + 24 - 2 * PAD_X));
+      labelFit(it.items);
+    }
+  };
+  labelFit(roots);
 
   // Rule 5: how many box borders meet at each column edge.
   const leftNest = new Array(nCols).fill(0);
