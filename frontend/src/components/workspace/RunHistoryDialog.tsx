@@ -17,13 +17,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { api } from '@/lib/api';
 import type { PipelineRunAttempt } from '@/types/api';
 
-const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  pending: 'secondary',
-  running: 'secondary',
-  paused: 'secondary',
-  cancelled: 'outline',
-  complete: 'default',
-  failed: 'destructive',
+const STATUS_VARIANT: Record<string, 'grey' | 'blue' | 'green' | 'red'> = {
+  pending: 'blue',
+  running: 'blue',
+  paused: 'blue',
+  cancelled: 'grey',
+  complete: 'green',
+  failed: 'red',
 };
 
 function formatDate(value: string | null) {
@@ -58,7 +58,7 @@ function RunRow({ attempt, onView }: { attempt: PipelineRunAttempt; onView: () =
         <p className="text-xs text-muted-foreground">{attempt.provider || 'Unknown provider'}</p>
       </div>
       <Badge variant={STATUS_VARIANT[attempt.status]} className="w-fit capitalize">
-        {active && <LoaderCircle className="mr-1 size-3 animate-spin" aria-hidden="true" />}
+        {active && <LoaderCircle className="mr-1 size-3 animate-spin motion-reduce:animate-none" aria-hidden="true" />}
         {attempt.status}
       </Badge>
       <Button size="sm" variant="outline" className="w-fit gap-1.5" disabled={!attempt.log_available} onClick={onView}>
@@ -109,7 +109,7 @@ export function RunHistoryDialog({ assessmentId }: { assessmentId: string }) {
   return (
     <Dialog open={open} onOpenChange={(next) => { setOpen(next); if (!next) setSelected(null); }}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-7 gap-2">
+        <Button variant="outline" size="sm" className="h-[34px] gap-2 rounded-[10px] bg-card text-foreground hover:bg-accent">
           <History className="size-4" aria-hidden="true" />
           <span className="hidden sm:inline">Run history</span>
         </Button>
@@ -128,12 +128,12 @@ export function RunHistoryDialog({ assessmentId }: { assessmentId: string }) {
             </div>
             {selected ? (
               <Button size="sm" variant="outline" className="gap-1.5" disabled={downloading} onClick={handleDownload}>
-                {downloading ? <LoaderCircle className="size-3.5 animate-spin" /> : <Download className="size-3.5" />}
+                {downloading ? <LoaderCircle className="size-3.5 animate-spin motion-reduce:animate-none" /> : <Download className="size-3.5" />}
                 Download
               </Button>
             ) : (
               <Button size="icon" variant="ghost" className="size-8" disabled={historyQuery.isFetching} onClick={() => historyQuery.refetch()} aria-label="Refresh run history">
-                <RefreshCw className={`size-4 ${historyQuery.isFetching ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`size-4 ${historyQuery.isFetching ? 'animate-spin motion-reduce:animate-none' : ''}`} />
               </Button>
             )}
           </div>
@@ -141,14 +141,14 @@ export function RunHistoryDialog({ assessmentId }: { assessmentId: string }) {
 
         {selected ? (
           <ScrollArea className="min-h-0 flex-1 bg-muted/30">
-            {logQuery.isLoading && <div className="grid min-h-48 place-items-center text-sm text-muted-foreground"><LoaderCircle className="mr-2 inline size-4 animate-spin" /> Loading log…</div>}
-            {logQuery.error && <p className="m-4 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive" role="alert">{logQuery.error.message}</p>}
+            {logQuery.isLoading && <div className="grid min-h-48 place-items-center text-sm text-muted-foreground"><LoaderCircle className="mr-2 inline size-4 animate-spin motion-reduce:animate-none" /> Loading log…</div>}
+            {logQuery.error && <p className="m-4 rounded-xl border border-state-red-border bg-state-red p-3 text-sm text-state-red-foreground" role="alert">{logQuery.error.message}</p>}
             {logQuery.data && <pre className="min-w-full whitespace-pre-wrap break-words p-4 font-mono text-xs leading-5 text-foreground">{logQuery.data}</pre>}
           </ScrollArea>
         ) : (
           <ScrollArea className="min-h-0 flex-1">
-            {historyQuery.isLoading && <div className="grid min-h-48 place-items-center text-sm text-muted-foreground"><LoaderCircle className="mr-2 inline size-4 animate-spin" /> Loading run history…</div>}
-            {historyQuery.error && <p className="m-4 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive" role="alert">{historyQuery.error.message}</p>}
+            {historyQuery.isLoading && <div className="grid min-h-48 place-items-center text-sm text-muted-foreground"><LoaderCircle className="mr-2 inline size-4 animate-spin motion-reduce:animate-none" /> Loading run history…</div>}
+            {historyQuery.error && <p className="m-4 rounded-xl border border-state-red-border bg-state-red p-3 text-sm text-state-red-foreground" role="alert">{historyQuery.error.message}</p>}
             {historyQuery.data?.length === 0 && <div className="grid min-h-48 place-items-center px-4 text-center"><div><History className="mx-auto mb-2 size-7 text-muted-foreground" /><p className="font-medium">No stage runs yet</p><p className="mt-1 text-sm text-muted-foreground">Logs will appear here when a pipeline stage is started.</p></div></div>}
             {historyQuery.data?.map(attempt => <RunRow key={attempt.attempt_id} attempt={attempt} onView={() => setSelected(attempt)} />)}
           </ScrollArea>

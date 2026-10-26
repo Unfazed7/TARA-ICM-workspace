@@ -24,9 +24,11 @@ interface Props {
   onOpen: (card: Card | null) => void;
   filterName?: string | null;
   onClearFilter?: () => void;
+  /** Stages 03 and 10 show their Assumptions without Confirm and Dispute for now. */
+  readOnly?: boolean;
 }
 
-export function AssumptionsList({ assessmentId, cards, questions, docs, openId, onOpen, filterName, onClearFilter }: Props) {
+export function AssumptionsList({ assessmentId, cards, questions, docs, openId, onOpen, filterName, onClearFilter, readOnly = false }: Props) {
   const groups = groupCards(cards);
   return (
     <div className="flex flex-col">
@@ -56,6 +58,7 @@ export function AssumptionsList({ assessmentId, cards, questions, docs, openId, 
               question={c.item.question_id ? questions.get(c.item.question_id) : undefined}
               docs={docs}
               onToggle={() => onOpen(c.id === openId ? null : c)}
+              readOnly={readOnly}
             />
           ))}
         </section>
@@ -71,7 +74,7 @@ function chipOf(card: Card): { text: string; cls: string } {
   return needsYou(card) ? { text: 'Needs you', cls: 'bg-state-yellow text-state-yellow-foreground' } : { text: 'Noted', cls: 'bg-state-grey text-state-grey-foreground' };
 }
 
-function CardRow({ assessmentId, card, open, question, docs, onToggle }: { assessmentId: string; card: Card; open: boolean; question?: Question; docs: Map<string, RegisterEntry>; onToggle: () => void }) {
+function CardRow({ assessmentId, card, open, question, docs, onToggle, readOnly }: { assessmentId: string; card: Card; open: boolean; question?: Question; docs: Map<string, RegisterEntry>; onToggle: () => void; readOnly: boolean }) {
   const chip = chipOf(card);
   const sub = [card.found.length ? 'Carried over from Stage 01' : '', question && question.status === 'open' ? 'Open question' : ''].filter(Boolean).join(' · ');
   const { easeOut } = useMotionPreset();
@@ -95,7 +98,7 @@ function CardRow({ assessmentId, card, open, question, docs, onToggle }: { asses
       <AnimatePresence initial={false}>
         {open && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={easeOut} className="overflow-hidden">
-            <OpenCard assessmentId={assessmentId} card={card} question={question} docs={docs} />
+            <OpenCard assessmentId={assessmentId} card={card} question={question} docs={docs} readOnly={readOnly} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -103,7 +106,7 @@ function CardRow({ assessmentId, card, open, question, docs, onToggle }: { asses
   );
 }
 
-function OpenCard({ assessmentId, card, question, docs }: { assessmentId: string; card: Card; question?: Question; docs: Map<string, RegisterEntry> }) {
+function OpenCard({ assessmentId, card, question, docs, readOnly }: { assessmentId: string; card: Card; question?: Question; docs: Map<string, RegisterEntry>; readOnly: boolean }) {
   const queryClient = useQueryClient();
   const [disputing, setDisputing] = useState(false);
   const [note, setNote] = useState('');
@@ -113,6 +116,7 @@ function OpenCard({ assessmentId, card, question, docs }: { assessmentId: string
   const items = [card.item, ...card.found];
   const sources = items.flatMap((i) => i.why.sources || []);
   const notes = items.map((i) => i.why.note).filter(Boolean) as string[];
+  const fromIds = items.flatMap((i) => i.why.from_ids || []);
   const review = card.item.review;
 
   const refresh = () => queryClient.invalidateQueries({ predicate: (q) => q.queryKey[1] === assessmentId && ['rationale', 'stage02'].includes(String(q.queryKey[0])) });
@@ -151,8 +155,9 @@ function OpenCard({ assessmentId, card, question, docs }: { assessmentId: string
   return (
     <div className="flex flex-col gap-3 px-5 pb-4 text-sm">
       <Part title="What I found">{[...card.found, card.item].map((i) => <p key={i.rationale_id} className="m-0 text-foreground/90">{i.concluded}</p>)}</Part>
-      {(sources.length > 0 || notes.length > 0) && (
+      {(sources.length > 0 || notes.length > 0 || fromIds.length > 0) && (
         <Part title="Why">
+          {fromIds.length > 0 && <p className="m-0 text-muted-foreground">Worked out from <span className="aegis-mono">{fromIds.join(', ')}</span></p>}
           {sources.map((s, n) => <SourceQuote key={n} quote={s.quote} doc={docs.get(s.doc_id)?.client_doc_ref || s.doc_id} location={s.location} />)}
           {notes.map((n) => <p key={n} className="m-0 text-muted-foreground">{n}</p>)}
         </Part>
@@ -177,7 +182,9 @@ function OpenCard({ assessmentId, card, question, docs }: { assessmentId: string
         <Part title="Your answer"><p className="m-0">{question.answer} <span className="text-muted-foreground">(kept on record)</span></p></Part>
       )}
 
-      {review.status !== 'unreviewed' ? (
+      {readOnly ? (
+        <p className="m-0 text-muted-foreground">Confirming or disputing comes later for this stage.</p>
+      ) : review.status !== 'unreviewed' ? (
         <div className="flex flex-wrap items-center gap-2.5">
           <p className="m-0">
             {review.status === 'confirmed' ? 'You confirmed this.' : 'You disputed this.'}

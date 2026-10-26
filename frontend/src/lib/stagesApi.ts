@@ -39,7 +39,7 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
 }
 
 export const stagesApi = {
-  assessment: (id: string) => call<{ assessment_id: string; name: string }>(`/${id}`),
+  assessment: (id: string) => call<{ assessment_id: string; name: string; stages?: Record<string, string> }>(`/${id}`),
 
   documents: (id: string) => call<UploadedDocument[]>(`/${id}/documents`),
   upload: (id: string, file: File, group: DocGroup, typeLabel: string) => {
@@ -62,6 +62,8 @@ export const stagesApi = {
   stage01: (id: string) => call<Stage01Output>(`/${id}/stages/01/runs/current/output`),
   stage02: (id: string) => call<Stage02Output>(`/${id}/stages/02/runs/current/output`),
   rationale: (id: string, stage: StageKey) => call<RationaleList>(`/${id}/stages/${stage}/rationale`),
+  /** The Assumptions a pipeline stage (03, 10) wrote next to its output. Read-only. */
+  pipelineRationale: (id: string, stageNum: number) => call<RationaleList>(`/${id}/stages/${stageNum}/rationale-file`),
   review: (id: string, stage: StageKey, rationaleId: string, status: ReviewStatus, note?: string) =>
     call<unknown>(`/${id}/stages/${stage}/rationale/${rationaleId}`, {
       method: 'PATCH',

@@ -165,7 +165,7 @@ export interface RationaleItem {
   attention: 'needs_attention' | 'information';
   title: string;
   concluded: string;
-  why: { sources?: SourceRef[]; based_on_rationale_ids?: string[]; note?: string };
+  why: { sources?: SourceRef[]; based_on_rationale_ids?: string[]; from_ids?: string[]; note?: string };
   assumed: string;
   would_change: string;
   question_id?: string;

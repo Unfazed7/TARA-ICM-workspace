@@ -23,9 +23,11 @@ type TopBarProps = {
   onSettings: () => void;
   /** Short description of the assessment, shown in the menu. */
   description?: string;
+  /** When set, the Assumptions button is off and this plain sentence says why. */
+  assumptionsDisabled?: string;
 };
 
-export function StageTopBar({ stages, current, onStage, needCount, assumptionsOpen, onAssumptions, onSettings, description }: TopBarProps) {
+export function StageTopBar({ stages, current, onStage, needCount, assumptionsOpen, onAssumptions, onSettings, description, assumptionsDisabled }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { easeOut, riseList, riseItem } = useMotionPreset();
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -82,10 +84,14 @@ export function StageTopBar({ stages, current, onStage, needCount, assumptionsOp
           <button
             type="button"
             aria-expanded={assumptionsOpen}
+            disabled={Boolean(assumptionsDisabled)}
+            title={assumptionsDisabled}
             onClick={onAssumptions}
             className={cn(
               'flex min-h-9 items-center gap-2 whitespace-nowrap rounded-full px-3.5 text-[13.5px] font-medium transition-colors',
-              assumptionsOpen ? 'bg-foreground text-primary-foreground' : 'text-foreground hover:bg-foreground/5',
+              assumptionsDisabled
+                ? 'cursor-not-allowed text-muted-foreground opacity-60'
+                : assumptionsOpen ? 'bg-foreground text-primary-foreground' : 'text-foreground hover:bg-foreground/5',
             )}
           >
             Assumptions

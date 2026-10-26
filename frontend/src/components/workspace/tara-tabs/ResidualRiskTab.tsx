@@ -2,6 +2,8 @@ import { useTara } from '@/contexts/TaraContext';
 import { getFeasibilityLevel, FeasibilityLevel, FeasibilityFactors, calculateRiskValue, impactToNumber, feasibilityLevelToNumber, getRiskColor, getRiskLabel } from '@/types/risk-assessment';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import type { CvssMetricKey, TaraResidualRisk } from '@/lib/mappers';
 
 const feasibilityColors: Record<FeasibilityLevel, { bg: string; text: string; label: string }> = {
   high: { bg: 'bg-sev-4', text: 'text-sev-4-foreground', label: 'High' },
@@ -55,7 +57,94 @@ const factorColumns: { key: FactorKey; label: string; options: { value: string; 
   { key: 'equipment', label: 'Equipment', options: equipmentOptions },
 ];
 
-export function ResidualRiskTab() {
+const METRIC_COLUMNS: { key: CvssMetricKey; short: string; values: Record<string, string> }[] = [
+  { key: 'attack_vector', short: 'Vector', values: { N: 'Network', A: 'Adjacent', L: 'Local', P: 'Physical' } },
+  { key: 'attack_complexity', short: 'Complexity', values: { L: 'Low', H: 'High' } },
+  { key: 'privileges_required', short: 'Privileges', values: { N: 'None', L: 'Low', H: 'High' } },
+  { key: 'user_interaction', short: 'User step', values: { N: 'None', R: 'Required' } },
+];
+
+const LEVEL_STYLE: Record<string, string> = {
+  informational: 'bg-muted text-muted-foreground',
+  low: 'bg-sev-1 text-sev-1-foreground',
+  medium: 'bg-sev-2 text-sev-2-foreground',
+  high: 'bg-sev-3 text-sev-3-foreground',
+  critical: 'bg-sev-4 text-sev-4-foreground',
+};
+
+function LevelTag({ level, score }: { level: string; score: number }) {
+  return (
+    <span className={cn('inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium capitalize', LEVEL_STYLE[level] ?? LEVEL_STYLE.informational)}>
+      <span className="aegis-mono">{score}</span>
+      {level}
+    </span>
+  );
+}
+
+/** What Stage 10 worked out: the same feasibility and risk calculation as before, with the controls applied. */
+function Stage10Result({ rows }: { rows: TaraResidualRisk[] }) {
+  const { assets } = useTara();
+  const assetName = (id: string) => assets.find((a) => a.assetId === id)?.name ?? id;
+  return (
+    <div className="stage-result-table">
+      <div className="stage-result-header border-b border-border sticky top-0 z-10">
+        {[['Threat', 'w-[210px]'], ['Controls', 'w-[190px]'], ['What the controls change', 'w-[330px]'], ['Feasibility', 'w-[190px]'], ['Risk', 'w-[250px]']].map(([label, width]) => (
+          <div key={label} className={cn(width, 'min-w-0 shrink-0 px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground aegis-mono font-medium')}>{label}</div>
+        ))}
+      </div>
+      {rows.map((row) => (
+        <div key={row.id} className="stage-result-row border-b border-border items-start">
+          <div className="w-[210px] shrink-0 px-3 py-3">
+            <div className="text-sm text-foreground">{assetName(row.assetId)}</div>
+            <div className="aegis-mono text-[10px] text-muted-foreground">{row.threatId} · {row.riskId}</div>
+          </div>
+          <div className="w-[190px] shrink-0 px-3 py-3">
+            {row.controls.length === 0 ? (
+              <span className="text-xs text-muted-foreground">No controls ({row.treatmentOption})</span>
+            ) : (
+              <div className="flex flex-col gap-1">
+                {row.controls.map((control) => (
+                  <span key={control.id} className="text-xs text-foreground"><span className="aegis-mono text-muted-foreground">{control.id}</span> {control.title}</span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="w-[330px] shrink-0 px-3 py-3">
+            <div className="flex flex-wrap gap-1.5">
+              {METRIC_COLUMNS.map((metric) => {
+                const before = row.pre.metrics[metric.key];
+                const after = row.post.metrics[metric.key];
+                const changed = before !== after;
+                return (
+                  <Badge key={metric.key} variant={changed ? 'green' : 'grey'} case="normal" title={metric.short}>
+                    {metric.short}: {metric.values[before]}{changed && <> → {metric.values[after]}</>}
+                  </Badge>
+                );
+              })}
+            </div>
+            {row.changes.length > 0 && (
+              <ul className="m-0 mt-2 list-none space-y-1 p-0">
+                {row.changes.map((change) => (
+                  <li key={change.metric} className="text-xs leading-relaxed text-muted-foreground">{change.reason}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="w-[190px] shrink-0 px-3 py-3 text-xs">
+            <div className="capitalize text-muted-foreground">Before: <span className="text-foreground">{row.pre.afrLabel}</span></div>
+            <div className="capitalize text-muted-foreground">With controls: <span className="font-medium text-foreground">{row.post.afrLabel}</span></div>
+          </div>
+          <div className="w-[250px] shrink-0 space-y-1 px-3 py-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2">Before <LevelTag level={row.pre.level} score={row.pre.score} /></div>
+            <div className="flex items-center gap-2">With controls <LevelTag level={row.post.level} score={row.post.score} /></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AnalystEstimate() {
   const { threats, assets, impacts, attackPaths, treatments, updateTreatment } = useTara();
 
   const handlePostFeasibilityChange = (threatId: string, treatment: typeof treatments[0], key: FactorKey, value: number) => {
@@ -75,12 +164,12 @@ export function ResidualRiskTab() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="flex flex-col bg-background">
       <div className="px-4 py-3 border-b border-border">
-        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Residual Risk — Post-treatment feasibility & risk assessment</p>
+        <p className="aegis-mono text-[10px] uppercase tracking-widest text-muted-foreground">Your own estimate — change the five factors by hand; kept in the browser draft</p>
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <div className="overflow-auto">
         <div className="stage-result-table">
           {/* Header */}
           <div className="stage-result-header bg-card border-b border-border sticky top-0 z-10">
@@ -173,6 +262,26 @@ export function ResidualRiskTab() {
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+export function ResidualRiskTab() {
+  const { residualRisks, stageStatuses } = useTara();
+  const state = stageStatuses['10'] ?? 'not_started';
+  return (
+    <div className="h-full overflow-auto bg-background">
+      <div className="px-4 py-3 border-b border-border">
+        <p className="aegis-mono text-[10px] uppercase tracking-widest text-muted-foreground">Residual Risk — the same feasibility and risk calculation, with the controls applied</p>
+      </div>
+      {residualRisks.length > 0 ? (
+        <div className="overflow-x-auto"><Stage10Result rows={residualRisks} /></div>
+      ) : (
+        <p className="m-0 px-4 py-6 text-sm text-muted-foreground">
+          {state === 'complete' ? 'Stage 10 has no threats to show.' : 'Run stage 10 above to see the risk before and with the controls.'}
+        </p>
+      )}
+      <AnalystEstimate />
     </div>
   );
 }

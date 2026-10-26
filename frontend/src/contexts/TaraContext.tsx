@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import type { Assessment } from '@/types/api';
 import { mapRiskScore, type RawRiskScore, type TaraRiskScore } from '@/lib/risk-scoring';
+import { mapResidualRisk, type RawResidualRisk, type TaraResidualRisk } from '@/lib/mappers';
 import {
   calculateRiskValue,
   feasibilityLevelToNumber,
@@ -320,6 +321,7 @@ interface TaraContextType {
   feasibilities: TaraFeasibility[];
   treatments: TaraTreatment[];
   riskScores: TaraRiskScore[];
+  residualRisks: TaraResidualRisk[];
   stageStatuses: Record<string, StageStatus>;
   runStage: (stageNum: number) => Promise<void>;
   pauseStage: (stageNum: number) => Promise<void>;
@@ -440,6 +442,12 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
     enabled: !!assessmentId && stageStatuses?.['09'] === 'complete',
   });
 
+  const { data: rawResidualRisks } = useQuery({
+    queryKey: ['stage-output', assessmentId, 10],
+    queryFn: () => api.pipeline.output<RawResidualRisk[]>(assessmentId, 10),
+    enabled: !!assessmentId && stageStatuses?.['10'] === 'complete',
+  });
+
   const pipelineAssets = useMemo(() => (rawAssets ?? []).map(mapAsset), [rawAssets]);
 
   const damageScenarios = useMemo(
@@ -470,6 +478,8 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
     () => (rawRiskScores ?? []).map(mapRiskScore).sort((a, b) => a.rank - b.rank),
     [rawRiskScores],
   );
+
+  const residualRisks = useMemo(() => (rawResidualRisks ?? []).map(mapResidualRisk), [rawResidualRisks]);
 
   const assets = draft.assets ?? pipelineAssets;
   const threats = draft.threats ?? pipelineThreats;
@@ -670,6 +680,7 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
       feasibilities,
       treatments,
       riskScores,
+      residualRisks,
       stageStatuses: stageStatuses ?? {},
       runStage,
       pauseStage: (stageNum) => controlStage(stageNum, 'pause', 'paused'),

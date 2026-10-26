@@ -4,7 +4,9 @@ import { calculateSheetProgress, calculateWorkflowProgress, canRunStage } from '
 
 test('workflow progress is derived from completed backend stages', () => {
   assert.equal(calculateWorkflowProgress('assets-damage', { '03': 'complete', '04': 'not_started' }), 50);
-  assert.equal(calculateWorkflowProgress('risk-treatment', { '07': 'complete', '08': 'complete', '09': 'complete' }), 100);
+  // Stage 10 (residual risk) is part of the risk phase (D-55).
+  assert.equal(calculateWorkflowProgress('risk-treatment', { '07': 'complete', '08': 'complete', '09': 'complete' }), 75);
+  assert.equal(calculateWorkflowProgress('risk-treatment', { '07': 'complete', '08': 'complete', '09': 'complete', '10': 'complete' }), 100);
 });
 
 test('a stage only runs when it is available and dependencies are complete', () => {

@@ -1,6 +1,7 @@
 /**
- * Stage screens for stages 01 and 02 (D-46, D-51, spec 24): 01 Documents, 02 Item Definition,
- * the Assumptions of the current stage from the top bar, and Settings with "What I read".
+ * Stage screens (D-46, D-51, spec 24): 01 Documents, 02 Item Definition, and the four pipeline pages
+ * 03 Assets & Damage, 04 Threat Analysis, 05 Risk & Treatment, 06 Review & Publish (D-54). The
+ * Assumptions of the current stage open from the top bar, and Settings has "What I read".
  */
 
 import { useMemo, useState } from 'react';
@@ -10,6 +11,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Info, PanelLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { TaraProvider } from '@/contexts/TaraContext';
+import { PhasePage } from '@/components/stages/PhasePage';
+import { workflowStages, type WorkflowPhase } from '@/lib/workflow';
 import { useMotionPreset } from '@/lib/motion';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
 import type { RationaleItem, ScopeStatus, StageKey } from '@/types/stages';
@@ -22,14 +27,27 @@ import { SideSheet } from '@/components/layout/SideSheet';
 import { WhatIRead } from '@/components/stages/WhatIRead';
 import { affectedIds, buildCards, type Card, needsYou } from '@/components/stages/assumptions';
 
-const TABS: { key: StageKey | string; label: string; ready: boolean; note?: string }[] = [
+/** The pill keys. 01 and 02 are API stage ids; 03 to 06 are pages that group the pipeline stages 03 to 10. */
+type PhaseKey = StageKey | '03' | '04' | '05' | '06';
+
+const TABS: { key: PhaseKey; label: string; ready: boolean; note?: string }[] = [
   { key: '01', label: 'Documents', ready: true },
   { key: '02', label: 'Item Definition', ready: true },
-  { key: '03', label: 'Assets', ready: false, note: 'Comes later' },
-  { key: '04', label: 'Damage', ready: false, note: 'Comes later' },
-  { key: '05', label: 'Threats', ready: false, note: 'Comes later' },
-  { key: '06', label: 'Risk', ready: false, note: 'Comes later' },
+  { key: '03', label: 'Assets & Damage', ready: true },
+  { key: '04', label: 'Threat Analysis', ready: true },
+  { key: '05', label: 'Risk & Treatment', ready: true },
+  { key: '06', label: 'Review & Publish', ready: true },
 ];
+
+const PHASE_OF: Partial<Record<PhaseKey, WorkflowPhase>> = {
+  '03': 'assets-damage',
+  '04': 'threat-analysis',
+  '05': 'risk-treatment',
+  '06': 'review-publish',
+};
+
+/** The pipeline stage whose Assumptions a page shows (D-54). Pages 04 and 06 have none yet. */
+const ASSUMPTION_STAGE: Partial<Record<PhaseKey, number>> = { '03': 3, '05': 10 };
 
 /** The kinds of area the diagram shows, as coloured tags for the workspace header. */
 function zoneTags(def: { zones: { kind: string }[]; containers: { kind: string; zone_id?: string }[] }) {
@@ -50,7 +68,7 @@ const orNothing = <T,>(p: Promise<T>) => p.catch((e) => (e instanceof ApiError &
 
 export default function Assessment() {
   const { assessmentId = '' } = useParams();
-  const [tab, setTab] = useState<StageKey>('01');
+  const [tab, setTab] = useState<PhaseKey>('01');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [openCard, setOpenCard] = useState<Card | null>(null);
@@ -66,6 +84,9 @@ export default function Assessment() {
   const rat01 = useQuery({ queryKey: ['rationale', assessmentId, '01'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '01')) });
   const rat02 = useQuery({ queryKey: ['rationale', assessmentId, '02'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '02')) });
   const boundary = useQuery({ queryKey: ['boundary', assessmentId], queryFn: () => stagesApi.boundary(assessmentId) });
+  // Stages 03 and 10 write their Assumptions next to their output (read-only for now).
+  const rat03 = useQuery({ queryKey: ['pipeline-rationale', assessmentId, 3], queryFn: () => orNothing(stagesApi.pipelineRationale(assessmentId, 3)) });
+  const rat10 = useQuery({ queryKey: ['pipeline-rationale', assessmentId, 10], queryFn: () => orNothing(stagesApi.pipelineRationale(assessmentId, 10)) });
 
   const items01 = useMemo<RationaleItem[]>(() => rat01.data?.items ?? [], [rat01.data]);
   const items02 = useMemo<RationaleItem[]>(() => rat02.data?.items ?? [], [rat02.data]);
@@ -79,12 +100,32 @@ export default function Assessment() {
   const decisions = useMemo(() => new Map((def?.scope_decisions ?? []).map((d) => [d.element_id, d])), [def]);
   const scope = useMemo(() => new Map<string, ScopeStatus>([...decisions].map(([k, d]) => [k, d.status])), [decisions]);
 
+  const phase = PHASE_OF[tab];
+  const items03 = useMemo<RationaleItem[]>(() => rat03.data?.items ?? [], [rat03.data]);
+  const items10 = useMemo<RationaleItem[]>(() => rat10.data?.items ?? [], [rat10.data]);
+  const pipelineCards = (items: RationaleItem[]): Card[] => items.map((item) => ({ id: item.rationale_id, item, found: [] }));
+  const cards03 = useMemo(() => pipelineCards(items03), [items03]);
+  const cards10 = useMemo(() => pipelineCards(items10), [items10]);
+
   // Each stage shows only its own Assumptions (D-51).
-  const stageCards = useMemo(() => buildCards(items01, items02, tab), [items01, items02, tab]);
+  const stageCards = useMemo(
+    () => (tab === '01' || tab === '02' ? buildCards(items01, items02, tab) : tab === '03' ? cards03 : tab === '05' ? cards10 : []),
+    [items01, items02, tab, cards03, cards10],
+  );
   const cards02 = useMemo(() => buildCards(items01, items02, '02'), [items01, items02]);
   const needCount = stageCards.filter(needsYou).length;
   const needs01 = useMemo(() => buildCards(items01, items02, '01').filter(needsYou).length, [items01, items02]);
   const needs02 = useMemo(() => cards02.filter(needsYou).length, [cards02]);
+  const needs03 = useMemo(() => cards03.filter(needsYou).length, [cards03]);
+  const needs10 = useMemo(() => cards10.filter(needsYou).length, [cards10]);
+
+  // Pages 03 to 06 note a failed stage (yellow) or a running one (blue) in the top bar.
+  const stages = assessment.data?.stages ?? {};
+  const phaseStatus = (key: PhaseKey) => {
+    const p = PHASE_OF[key];
+    if (!p || p === 'review-publish') return [];
+    return workflowStages[p].map((n) => stages[String(n).padStart(2, '0')]);
+  };
   const viewCards = useMemo(
     () => (filterId ? stageCards.filter((c) => affectedIds(c, elements, links).has(filterId)) : stageCards),
     [stageCards, filterId, elements, links],
@@ -108,7 +149,8 @@ export default function Assessment() {
   const filterName = filterId ? elements.find((e) => e.element_id === filterId)?.name || 'this connection' : null;
   const project = assessment.data?.name ?? '...';
   const goTo = (key: string) => {
-    setTab(key as StageKey);
+    if (PHASE_OF[key as PhaseKey] || phase) setPanelOpen(false);
+    setTab(key as PhaseKey);
     setSelectedId(null);
     setOpenCard(null);
     setFilterId(null);
@@ -119,9 +161,12 @@ export default function Assessment() {
       <div className="aegis-canvas-grid pointer-events-none fixed inset-0" aria-hidden="true" />
       <StageTopBar
         stages={TABS.map((t) => {
-          const open = t.key === '01' ? needs01 : t.key === '02' ? needs02 : 0;
+          const open = t.key === '01' ? needs01 : t.key === '02' ? needs02 : t.key === '03' ? needs03 : t.key === '05' ? needs10 : 0;
+          const statuses = phaseStatus(t.key);
           if (t.key === tab) return { ...t, note: 'You are here', tone: 'blue' as const };
+          if (statuses.includes('failed')) return { ...t, note: 'A stage failed', tone: 'yellow' as const };
           if (t.ready && open) return { ...t, note: `${open} need you`, tone: 'yellow' as const };
+          if (statuses.some((s) => s === 'running' || s === 'pending')) return { ...t, note: 'Running', tone: 'blue' as const };
           return { ...t, tone: 'grey' as const };
         })}
         description={boundary.data?.text ?? undefined}
@@ -129,7 +174,8 @@ export default function Assessment() {
         onStage={goTo}
         needCount={needCount}
         assumptionsOpen={panelOpen}
-        onAssumptions={() => (panelOpen && (tab === '01' || sideOpen) ? setPanelOpen(false) : openAssumptions())}
+        onAssumptions={() => (panelOpen && (tab === '01' || phase || sideOpen) ? setPanelOpen(false) : openAssumptions())}
+        assumptionsDisabled={phase && !ASSUMPTION_STAGE[tab] ? 'Assumptions for these stages come later' : undefined}
         onSettings={() => setSettingsOpen(true)}
       />
 
@@ -137,6 +183,12 @@ export default function Assessment() {
         <main className="min-w-0 flex-1">
           {tab === '01' ? (
             <DocumentsStage assessmentId={assessmentId} project={project} onOpenItemDefinition={() => goTo('02')} />
+          ) : phase ? (
+            <TaraProvider projectId={assessmentId}>
+              <TooltipProvider delayDuration={200}>
+                <PhasePage key={tab} assessmentId={assessmentId} project={project} phase={phase} stage02Done={Boolean(def)} />
+              </TooltipProvider>
+            </TaraProvider>
           ) : stage02.isLoading ? (
             <p className="p-10 text-muted-foreground">Loading the item definition...</p>
           ) : stage02.error ? (
@@ -299,15 +351,15 @@ export default function Assessment() {
       </div>
 
       <SideSheet
-        open={tab === '01' && panelOpen}
+        open={(tab === '01' || Boolean(phase && ASSUMPTION_STAGE[tab])) && panelOpen}
         onOpenChange={(o) => { setPanelOpen(o); if (!o) setOpenCard(null); }}
-        eyebrow={`Stage 01 · ${stageCards.length} items`}
+        eyebrow={`Stage ${tab === '01' ? '01' : String(ASSUMPTION_STAGE[tab] ?? '').padStart(2, '0')} · ${stageCards.length} items`}
         title="Assumptions"
-        description="What Stage 01 assumed while reading the documents."
+        description={tab === '01' ? 'What Stage 01 assumed while reading the documents.' : tab === '03' ? 'What Stage 03 assumed while identifying the assets.' : 'What Stage 10 assumed while working out the risk with the controls.'}
         width={520}
         badge={needCount > 0 ? <span className="aegis-signal-pill px-2.5 py-0.5 text-xs">{needCount} need you</span> : undefined}
       >
-        <AssumptionsList assessmentId={assessmentId} cards={stageCards} questions={questions} docs={docs} openId={openCard?.id ?? null} onOpen={setOpenCard} />
+        <AssumptionsList assessmentId={assessmentId} cards={stageCards} questions={questions} docs={docs} openId={openCard?.id ?? null} onOpen={setOpenCard} readOnly={tab !== '01'} />
       </SideSheet>
 
       <WhatIRead open={settingsOpen} onOpenChange={setSettingsOpen} stage01={stage01.data ?? undefined} boundary={boundary.data?.text} />
