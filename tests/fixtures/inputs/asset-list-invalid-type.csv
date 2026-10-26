@@ -1,0 +1,2 @@
+asset_title,asset_type,asset_description,confidentiality,integrity,availability,authenticity,authorization,non_repudiation
+Diagnostic API Endpoint,unknown_type,Backend endpoint that accepts diagnostic requests,yes,yes,yes,yes,yes,no

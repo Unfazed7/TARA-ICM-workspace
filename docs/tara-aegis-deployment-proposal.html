@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TARA Aegis — Deployment & Distribution Plan</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      background: linear-gradient(135deg, #0f2447 0%, #1a3a6b 60%, #0e7490 100%);
+      color: white;
+      padding: 80px 60px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      right: -80px; top: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .cover-tag {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #7dd3fc;
+      margin-bottom: 16px;
+    }
+    .cover h1 {
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .cover h1 span { color: #38bdf8; }
+    .cover-sub {
+      font-size: 18px;
+      color: #cbd5e1;
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 32px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .cover-meta strong { color: #e2e8f0; display: block; font-size: 15px; }
+
+    /* ── Layout ── */
+    .container { max-width: 960px; margin: 0 auto; padding: 60px 40px; }
+
+    /* ── Section headings ── */
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #0e7490;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0f2447;
+      margin-bottom: 12px;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a3a6b;
+      margin-bottom: 8px;
+    }
+    p { color: #374151; margin-bottom: 16px; font-size: 15px; }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 48px 0; }
+
+    /* ── Problem block ── */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .problem-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #ef4444;
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+    .problem-card h3 { color: #b91c1c; font-size: 15px; margin-bottom: 6px; }
+    .problem-card p { font-size: 14px; color: #6b7280; margin: 0; }
+
+    /* ── Solution overview ── */
+    .solution-box {
+      background: #0f2447;
+      border-radius: 14px;
+      padding: 40px;
+      color: white;
+      margin-top: 28px;
+    }
+    .solution-box h3 { color: #38bdf8; font-size: 20px; margin-bottom: 12px; }
+    .solution-box p { color: #cbd5e1; font-size: 15px; }
+    .solution-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .step {
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 22px;
+      text-align: center;
+    }
+    .step-num {
+      width: 40px; height: 40px;
+      background: #0e7490;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 18px; color: white;
+      margin: 0 auto 14px;
+    }
+    .step h4 { color: #e2e8f0; font-size: 14px; margin-bottom: 6px; }
+    .step p { color: #94a3b8; font-size: 13px; margin: 0; }
+
+    /* ── How it works diagram ── */
+    .flow {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 36px;
+      margin-top: 28px;
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 16px;
+    }
+    .flow-box {
+      flex: 1;
+      background: #f0f9ff;
+      border: 1.5px solid #bae6fd;
+      border-radius: 10px;
+      padding: 14px 18px;
+      text-align: center;
+    }
+    .flow-box.dark {
+      background: #0f2447;
+      border-color: #1a3a6b;
+      color: white;
+    }
+    .flow-box.dark p { color: #94a3b8; }
+    .flow-box strong { display: block; font-size: 14px; color: #0369a1; margin-bottom: 4px; }
+    .flow-box.dark strong { color: #38bdf8; }
+    .flow-box p { font-size: 12px; color: #6b7280; margin: 0; }
+    .arrow {
+      width: 40px;
+      text-align: center;
+      font-size: 20px;
+      color: #94a3b8;
+      flex-shrink: 0;
+    }
+
+    /* ── Benefits grid ── */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .benefit-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .benefit-icon {
+      width: 44px; height: 44px;
+      background: #f0f9ff;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+    .benefit-card h3 { font-size: 15px; color: #0f2447; margin-bottom: 6px; }
+    .benefit-card p { font-size: 13px; color: #6b7280; margin: 0; }
+
+    /* ── Org brain ── */
+    .brain-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .brain-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+    }
+    .brain-card::before {
+      content: attr(data-company);
+      position: absolute;
+      top: 16px; right: 16px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+    .brain-card h3 { font-size: 15px; color: #0f2447; margin-bottom: 12px; }
+    .brain-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+    .brain-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #0e7490;
+      flex-shrink: 0;
+    }
+    .brain-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #166534;
+    }
+
+    /* ── IP Protection ── */
+    .ip-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+      font-size: 14px;
+    }
+    .ip-table th {
+      background: #0f2447;
+      color: #e2e8f0;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .ip-table th:first-child { border-radius: 8px 0 0 0; }
+    .ip-table th:last-child { border-radius: 0 8px 0 0; }
+    .ip-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      background: white;
+      color: #374151;
+    }
+    .ip-table tr:last-child td { border-bottom: none; }
+    .ip-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+    .ip-table tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+    .badge-protected {
+      background: #dcfce7;
+      color: #166534;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ── Model strategy ── */
+    .model-row {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      gap: 16px;
+    }
+    .model-stage {
+      background: #0f2447;
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .model-task { flex: 1; font-size: 14px; color: #374151; }
+    .model-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0e7490;
+      white-space: nowrap;
+    }
+
+    /* ── Licensing ── */
+    .license-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 28px;
+      gap: 12px;
+    }
+    .lf-box {
+      text-align: center;
+      flex: 1;
+    }
+    .lf-icon { font-size: 32px; margin-bottom: 8px; }
+    .lf-box strong { display: block; font-size: 14px; color: #0f2447; margin-bottom: 4px; }
+    .lf-box p { font-size: 12px; color: #6b7280; margin: 0; }
+    .lf-arrow { font-size: 24px; color: #cbd5e1; flex-shrink: 0; }
+
+    /* ── Next steps ── */
+    .next-steps {
+      background: linear-gradient(135deg, #0f2447, #0e7490);
+      border-radius: 14px;
+      padding: 40px;
+      color: white;
+      margin-top: 28px;
+    }
+    .next-steps h3 { color: #38bdf8; font-size: 20px; margin-bottom: 24px; }
+    .next-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .ns-num {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; color: #38bdf8;
+      flex-shrink: 0;
+    }
+    .ns-text strong { display: block; color: #e2e8f0; font-size: 15px; margin-bottom: 4px; }
+    .ns-text p { color: #94a3b8; font-size: 13px; margin: 0; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 13px;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    @media (max-width: 700px) {
+      .problem-grid, .solution-steps, .benefits-grid, .brain-grid { grid-template-columns: 1fr; }
+      .cover { padding: 48px 28px 40px; }
+      .cover h1 { font-size: 28px; }
+      .container { padding: 40px 20px; }
+      .license-flow { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── COVER ── -->
+<div class="cover">
+  <div class="cover-tag">Internal Proposal — Confidential</div>
+  <h1>TARA Aegis<br><span>Deployment & Distribution Plan</span></h1>
+  <p class="cover-sub">How we sell our pipeline to multiple companies, protect our IP, and keep every customer's data completely separate — using self-hosted AI models.</p>
+  <div class="cover-meta">
+    <div><strong>Product</strong>TARA Aegis</div>
+    <div><strong>Version</strong>MVP v1</div>
+    <div><strong>Prepared for</strong>Internal Review</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── THE PROBLEM ── -->
+  <div class="section-label">The Challenge</div>
+  <h2>What we need to solve before we can sell this</h2>
+  <p>TARA Aegis is a pipeline — a set of AI agents that run a full security assessment automatically. Before we can sell it to companies, we need to answer four questions.</p>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <h3>IP Protection</h3>
+      <p>If a company gets access to our files, they can copy the whole pipeline and run it themselves for free.</p>
+    </div>
+    <div class="problem-card">
+      <h3>Data Isolation</h3>
+      <p>Company A's security assessments must never be visible to Company B. Each customer needs their own private space.</p>
+    </div>
+    <div class="problem-card">
+      <h3>Data Sovereignty</h3>
+      <p>Automotive companies (OEMs, Tier-1 suppliers) will not send their vehicle security data to a third-party cloud server.</p>
+    </div>
+    <div class="problem-card">
+      <h3>Organizational Memory</h3>
+      <p>Each company needs the tool to learn from their past assessments — getting smarter about their specific systems over time.</p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── THE SOLUTION ── -->
+  <div class="section-label">The Solution</div>
+  <h2>Self-hosted AI, deployed inside the customer's own infrastructure</h2>
+  <p>Instead of asking companies to send their data to us, we send the entire product to them — packaged as a sealed, deployable unit. They run it on their own servers. Their data never leaves their building.</p>
+
+  <div class="solution-box">
+    <h3>The core idea in one sentence</h3>
+    <p>We package our pipeline into a sealed box, identify the best open-source AI models from Hugging Face for each task, and deploy everything inside the customer's private cloud — so they get the full product without ever seeing how it's built or having their data leave their network.</p>
+
+    <div class="solution-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>We package the pipeline</h4>
+        <p>Our agents, prompts, and logic are sealed inside containers — runnable but not readable.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Models download to their server</h4>
+        <p>Best-fit open source models pull from Hugging Face once during setup, then run offline forever.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Everything runs on their hardware</h4>
+        <p>The pipeline calls their local model server. No external API. No data leaves their VPC.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="section-label">How It Works</div>
+  <h2>What actually happens when a company runs an assessment</h2>
+
+  <div class="flow">
+    <div class="flow-row">
+      <div class="flow-box">
+        <strong>Technician</strong>
+        <p>Logs into the web app, uploads asset list</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flow-box dark">
+        <strong>TARA Pipeline</strong>
+        <p>Runs 7 stages automatically — fully hidden</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flow-box dark">
+        <strong>Local AI Model</strong>
+        <p>Runs on their own server — no external calls</p>
+      </div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-box">
+        <strong>TARA Report</strong>
+        <p>Full assessment delivered back to the technician</p>
+      </div>
+      <div class="arrow">←</div>
+      <div class="flow-box dark">
+        <strong>Org Brain</strong>
+        <p>Stores results, learns their patterns for next time</p>
+      </div>
+      <div class="arrow">←</div>
+      <div class="flow-box dark">
+        <strong>Results</strong>
+        <p>Validated, formatted, saved to their database</p>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:13px; color:#94a3b8; margin-top:16px; margin-bottom:0;">
+      Everything inside the dotted boundary runs on the customer's servers. We never see their data.
+    </p>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── MODEL STRATEGY ── -->
+  <div class="section-label">AI Model Strategy</div>
+  <h2>One model per task — best open-source fit from Hugging Face</h2>
+  <p>Different stages of our pipeline require different capabilities. Rather than using one expensive model for everything, we identify the best free open-source model for each task — downloaded once, runs offline.</p>
+
+  <div class="model-row">
+    <span class="model-stage">Stage 01</span>
+    <span class="model-task">Reading and normalising the customer's asset list</span>
+    <span class="model-name">Lightweight fast model</span>
+  </div>
+  <div class="model-row">
+    <span class="model-stage">Stage 02–03</span>
+    <span class="model-task">Writing damage scenarios and identifying threats</span>
+    <span class="model-name">Qwen 2.5 72B</span>
+  </div>
+  <div class="model-row">
+    <span class="model-stage">Stage 04</span>
+    <span class="model-task">Modelling attack paths — the most reasoning-heavy task</span>
+    <span class="model-name">DeepSeek R1 70B</span>
+  </div>
+  <div class="model-row">
+    <span class="model-stage">Stage 05–07</span>
+    <span class="model-task">Impact rating and risk treatment decisions</span>
+    <span class="model-name">Llama 3.3 70B</span>
+  </div>
+
+  <p style="margin-top:16px; font-size:13px; color:#6b7280;">
+    Model choices are not fixed — we benchmark each one against our pipeline's output quality and swap as better models become available. The customer never needs to know which model is running.
+  </p>
+
+  <hr class="divider" />
+
+  <!-- ── ORG BRAIN ── -->
+  <div class="section-label">Organizational Memory</div>
+  <h2>Each company's system gets smarter with every assessment</h2>
+  <p>Over time, the pipeline builds a picture of each company's systems — their common assets, recurring risks, existing controls, and past decisions. This gets injected automatically into every new assessment, making results more relevant and reducing repetitive input.</p>
+
+  <div class="brain-grid">
+    <div class="brain-card" data-company="Company A">
+      <h3>Company A — OEM</h3>
+      <div class="brain-item"><div class="brain-dot"></div>14 past assessments on OTA systems</div>
+      <div class="brain-item"><div class="brain-dot"></div>Known assets: firmware server, diagnostic API, token vault</div>
+      <div class="brain-item"><div class="brain-dot"></div>Preferred controls: SC-14, SC-22, ISO 27001 Annex A</div>
+      <div class="brain-item"><div class="brain-dot"></div>Risk tolerance: Low — safety-critical systems</div>
+    </div>
+    <div class="brain-card" data-company="Company B">
+      <h3>Company B — Diagnostics SaaS</h3>
+      <div class="brain-item"><div class="brain-dot"></div>6 past assessments on web portals</div>
+      <div class="brain-item"><div class="brain-dot"></div>Known assets: session manager, audit log, dealer API</div>
+      <div class="brain-item"><div class="brain-dot"></div>Preferred controls: NIST 800-53, OWASP Top 10</div>
+      <div class="brain-item"><div class="brain-dot"></div>Risk tolerance: Medium — no direct vehicle control</div>
+    </div>
+  </div>
+
+  <div class="brain-note">
+    ✅ &nbsp;Because each company runs their own installation, their organizational memory is stored entirely on their own servers. Company A cannot see Company B's data — not by policy, but by physical separation.
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── IP PROTECTION ── -->
+  <div class="section-label">IP Protection</div>
+  <h2>What the customer sees vs. what stays hidden</h2>
+
+  <table class="ip-table">
+    <thead>
+      <tr>
+        <th>What it is</th>
+        <th>What the customer sees</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>The web interface (frontend)</td>
+        <td>The full UI — this is their daily tool</td>
+        <td><span class="badge-protected">Visible by design</span></td>
+      </tr>
+      <tr>
+        <td>The AI models</td>
+        <td>A running service — they get results, not the model weights</td>
+        <td><span class="badge-protected">Effectively hidden</span></td>
+      </tr>
+      <tr>
+        <td>The pipeline stages and agent logic</td>
+        <td>Nothing — sealed inside containers</td>
+        <td><span class="badge-protected">Protected</span></td>
+      </tr>
+      <tr>
+        <td>The prompt engineering and methodology</td>
+        <td>Nothing — compiled into the container</td>
+        <td><span class="badge-protected">Protected</span></td>
+      </tr>
+      <tr>
+        <td>The scoring and risk calculation engines</td>
+        <td>Nothing — runs server-side, outputs only</td>
+        <td><span class="badge-protected">Protected</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="divider" />
+
+  <!-- ── LICENSING ── -->
+  <div class="section-label">Licensing & Updates</div>
+  <h2>How we keep control even after deployment</h2>
+  <p>Just because the product runs on their servers doesn't mean we lose control. We keep two levers.</p>
+
+  <div class="license-flow">
+    <div class="lf-box">
+      <div class="lf-icon">🏢</div>
+      <strong>Customer's Server</strong>
+      <p>Pipeline starts up, checks license key</p>
+    </div>
+    <div class="lf-arrow">→</div>
+    <div class="lf-box">
+      <div class="lf-icon">🔑</div>
+      <strong>Our License Server</strong>
+      <p>One daily ping — valid or expired?</p>
+    </div>
+    <div class="lf-arrow">→</div>
+    <div class="lf-box">
+      <div class="lf-icon">✅</div>
+      <strong>Pipeline Runs</strong>
+      <p>License valid — full functionality</p>
+    </div>
+    <div class="lf-arrow">→</div>
+    <div class="lf-box">
+      <div class="lf-icon">🚫</div>
+      <strong>License Expired</strong>
+      <p>Pipeline stops — renewal required</p>
+    </div>
+  </div>
+
+  <p style="margin-top:20px;">When we improve the product — better AI outputs, new stages, bug fixes — we publish a new version. Customers pull the update the same way they installed it. They never see what changed inside, only that it works better.</p>
+
+  <hr class="divider" />
+
+  <!-- ── BENEFITS ── -->
+  <div class="section-label">Why This Works</div>
+  <h2>Benefits for us and for the customer</h2>
+
+  <div class="benefits-grid">
+    <div class="benefit-card">
+      <div class="benefit-icon">🔒</div>
+      <h3>Data stays on-site</h3>
+      <p>Automotive companies can approve this without a lengthy legal review. Their security data never leaves their network.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🧠</div>
+      <h3>Smarter over time</h3>
+      <p>Each assessment adds to the company's organizational memory. The tool becomes more accurate the more they use it.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">💰</div>
+      <h3>No ongoing API costs</h3>
+      <p>Models run locally. After setup there are no per-token fees to Anthropic, OpenAI, or any other provider.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🛡️</div>
+      <h3>Our IP is protected</h3>
+      <p>The methodology, prompts, and pipeline logic are sealed. Companies get the output, not the recipe.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">📦</div>
+      <h3>One package, many customers</h3>
+      <p>We build the product once. Every new customer gets the same deployment — just configured for their environment.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🔄</div>
+      <h3>We control updates</h3>
+      <p>Improvements ship as new versions. Customers stay current. License renewal keeps the relationship active.</p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── NEXT STEPS ── -->
+  <div class="section-label">Roadmap</div>
+  <h2>What we build next to make this possible</h2>
+
+  <div class="next-steps">
+    <h3>Proposed next steps</h3>
+    <div class="next-step-item">
+      <div class="ns-num">1</div>
+      <div class="ns-text">
+        <strong>Benchmark open-source models</strong>
+        <p>Test Qwen 2.5, Llama 3.3, and DeepSeek R1 against each pipeline stage. Confirm tool-use reliability before committing to a model per stage.</p>
+      </div>
+    </div>
+    <div class="next-step-item">
+      <div class="ns-num">2</div>
+      <div class="ns-text">
+        <strong>Add per-stage model configuration</strong>
+        <p>Update the pipeline so each stage can use a different model, configured via environment variables — no code changes needed to swap models later.</p>
+      </div>
+    </div>
+    <div class="next-step-item">
+      <div class="ns-num">3</div>
+      <div class="ns-text">
+        <strong>Build the deployment package</strong>
+        <p>Package the entire stack (frontend, backend, pipeline, model server) into a single deployable unit. One command to install, one command to update.</p>
+      </div>
+    </div>
+    <div class="next-step-item">
+      <div class="ns-num">4</div>
+      <div class="ns-text">
+        <strong>Design the organizational brain</strong>
+        <p>Define what gets stored after each assessment (asset patterns, recurring threats, accepted controls) and how it gets injected into the next run.</p>
+      </div>
+    </div>
+    <div class="next-step-item">
+      <div class="ns-num">5</div>
+      <div class="ns-text">
+        <strong>Add license management</strong>
+        <p>Build the licensing server and the daily check inside the deployment. This gives us commercial control regardless of where the product is running.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="footer">
+  TARA Aegis &nbsp;·&nbsp; Internal Proposal &nbsp;·&nbsp; Confidential
+</div>
+
+</body>
+</html>

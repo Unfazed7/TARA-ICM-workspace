@@ -1,0 +1,48 @@
+[
+  {
+    "conflict_id": "CNF-001",
+    "fact_ids": [
+      "FCT-011",
+      "FCT-013"
+    ],
+    "kind": "internet_exposure",
+    "proposed_resolution": "Ask the analyst. Until answered, treat the load balancer as public, a second entry point next to the API gateway.",
+    "auto_resolved": false,
+    "loser_fact_ids": []
+  },
+  {
+    "conflict_id": "CNF-002",
+    "fact_ids": [
+      "FCT-011",
+      "FCT-015"
+    ],
+    "kind": "internet_exposure",
+    "proposed_resolution": "Ask the analyst. Until answered, treat the CDN as public, since relying services download the revocation list through it.",
+    "auto_resolved": false,
+    "loser_fact_ids": []
+  },
+  {
+    "conflict_id": "CNF-003",
+    "fact_ids": [
+      "FCT-018",
+      "FCT-019"
+    ],
+    "kind": "environment",
+    "proposed_resolution": "Ask the analyst which environment is assessed. Until answered, assess production and assume the written answers also hold for production.",
+    "auto_resolved": false,
+    "loser_fact_ids": []
+  },
+  {
+    "conflict_id": "CNF-004",
+    "fact_ids": [
+      "FCT-028",
+      "FCT-029"
+    ],
+    "kind": "naming",
+    "proposed_resolution": "Same service: the functional description calls the diagram's Key Service the signing service. Keep the diagram name.",
+    "auto_resolved": true,
+    "loser_fact_ids": [
+      "FCT-029"
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "_note": "Hiding of sensitive details before text is sent to a model (spec 19, C4). Off by default. When on: account ids, IP addresses, bucket names and hostnames are replaced by tokens, plus any names listed in names_file (one per line). Keep names_file outside the repo, for example in /private-eval/. The token mapping is written only to the run's output folder.",
+  "enabled": false,
+  "names_file": null
+}
