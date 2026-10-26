@@ -8,6 +8,14 @@ const VECTOR_COLORS: Record<string, string> = {
   physical: 'bg-slate-500/20 text-slate-400',
 };
 
+const AFR_COLORS: Record<string, string> = {
+  'very high': 'border-red-500/30 bg-red-500/15 text-red-700 dark:text-red-300',
+  high: 'border-orange-500/30 bg-orange-500/15 text-orange-700 dark:text-orange-300',
+  medium: 'border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-300',
+  low: 'border-emerald-500/30 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300',
+  'very low': 'border-slate-500/30 bg-slate-500/15 text-slate-700 dark:text-slate-300',
+};
+
 function EmptyState({ status }: { status: string }) {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
@@ -47,13 +55,15 @@ export function AttackPathTab() {
             <div className="w-[160px] min-w-[160px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Asset</div>
             <div className="w-[90px]  min-w-[90px]  px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Threat</div>
             <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Vector</div>
-            <div className="w-[560px] min-w-[560px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Attack Path</div>
+            <div className="w-[130px] min-w-[130px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">AFR</div>
+            <div className="w-[480px] min-w-[480px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Attack Path</div>
           </div>
 
           {attackPaths.map((ap) => {
             const threat = threatById.get(ap.linkedThreatId);
             const asset  = threat ? assetById.get(threat.linkedAssetId) : undefined;
             const vectorClass = VECTOR_COLORS[ap.attackVector] ?? 'bg-slate-500/20 text-slate-400';
+            const afrClass = AFR_COLORS[ap.afrLabel ?? ''] ?? AFR_COLORS['very low'];
             return (
               <div key={ap.id} className="stage-result-row border-b border-white/5 transition-colors">
                 <div className="w-[90px] min-w-[90px] px-3 py-3 flex items-start pt-3.5">
@@ -71,7 +81,16 @@ export function AttackPathTab() {
                     {ap.attackVector}
                   </span>
                 </div>
-                <div className="w-[560px] min-w-[560px] px-3 py-3">
+                <div className="w-[130px] min-w-[130px] px-3 py-3 flex items-start pt-3.5">
+                  {ap.afrValue !== undefined ? (
+                    <span className={`rounded border px-2 py-0.5 text-[10px] font-mono font-medium capitalize ${afrClass}`}>
+                      {ap.afrValue}/5 · {ap.afrLabel}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">Not calculated</span>
+                  )}
+                </div>
+                <div className="w-[480px] min-w-[480px] px-3 py-3">
                   <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">{ap.description}</p>
                 </div>
               </div>

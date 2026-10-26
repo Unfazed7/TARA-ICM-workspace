@@ -3,6 +3,7 @@ import type {
   AssetRegisterImportResult,
   AssetRegisterUploadStatus,
   PipelineRunStatus,
+  PipelineRunAttempt,
   CreateAssessmentBody,
   UpdateAssessmentBody,
   StageDefinition,
@@ -62,6 +63,22 @@ async function uploadFetch<T>(path: string, form: FormData): Promise<T> {
   return res.json();
 }
 
+async function authenticatedFetch(path: string): Promise<Response> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}${path}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (res.status === 401) {
+    sessionStorage.removeItem('tara_token');
+    window.dispatchEvent(new Event('autotara:unauthorized'));
+  }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail ?? `API error ${res.status}`);
+  }
+  return res;
+}
+
 export const api = {
   auth: {
     login: (email: string, password: string) =>
@@ -102,6 +119,19 @@ export const api = {
       apiFetch<PipelineRunStatus>(`/assessments/${assessmentId}/stages/${stageNum}/status`),
     output: <T>(assessmentId: string, stageNum: number) =>
       apiFetch<T>(`/assessments/${assessmentId}/stages/${stageNum}/output`),
+    runHistory: (assessmentId: string) =>
+      apiFetch<PipelineRunAttempt[]>(`/assessments/${assessmentId}/runs`),
+    runLog: (assessmentId: string, attemptId: string) =>
+      authenticatedFetch(`/assessments/${assessmentId}/runs/${encodeURIComponent(attemptId)}/log`)
+        .then(response => response.text()),
+    downloadRunLog: async (assessmentId: string, attemptId: string) => {
+      const response = await authenticatedFetch(
+        `/assessments/${assessmentId}/runs/${encodeURIComponent(attemptId)}/log/download`,
+      );
+      const disposition = response.headers.get('content-disposition') ?? '';
+      const filename = disposition.match(/filename="?([^";]+)"?/i)?.[1] ?? `${attemptId}.log`;
+      return { blob: await response.blob(), filename };
+    },
   },
 
   uploads: {

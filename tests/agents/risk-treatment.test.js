@@ -300,6 +300,10 @@ test('Claude request forces submit_treatment tool without extended thinking', as
   assert.equal(captured[0].body.tool_choice.type, 'tool');
   assert.equal(captured[0].body.tool_choice.name, 'submit_treatment');
   assert.equal(captured[0].body.thinking, undefined);
+  const toolSchema = captured[0].body.tools[0].function?.parameters
+    ?? captured[0].body.tools[0].input_schema;
+  assert.ok(toolSchema.required.includes('goal_statement'));
+  assert.ok(toolSchema.required.includes('control_ids'));
 });
 
 test('1:1 mapping creates one treatment per risk across five risks', async () => {
@@ -337,6 +341,35 @@ test('free text response is retried once before accepting tool_use', async () =>
   });
   assert.equal(captured.length, 2);
   assert.equal(treatments[0].treatment_option, 'reduce');
+});
+
+test('incomplete reduce tool payload is retried before being accepted', async () => {
+  const captured = [];
+  const incomplete = { ...TREATMENTS.reduce, goal_statement: null };
+  const treatments = await buildRiskTreatments(makeInputs(['high']), {
+    fetchImpl: mockClaudeFetch([incomplete, TREATMENTS.reduce], captured),
+    controlsCatalogue: CONTROL_CATALOGUE,
+    webTaraConstraints: WEB_CONSTRAINTS
+  });
+  assert.equal(captured.length, 2);
+  assert.equal(treatments[0].cybersecurity_goal.goal_statement, TREATMENTS.reduce.goal_statement);
+});
+
+test('repeated incomplete tool payloads use a valid deterministic treatment fallback', async () => {
+  const incomplete = { ...TREATMENTS.reduce, goal_statement: null };
+  const treatments = await buildRiskTreatments(makeInputs(['high']), {
+    fetchImpl: mockClaudeFetch([incomplete, incomplete]),
+    allowFallback: true,
+    timestamp: '2026-06-01T10:06:00Z',
+    controlsCatalogue: CONTROL_CATALOGUE,
+    webTaraConstraints: WEB_CONSTRAINTS
+  });
+
+  assert.equal(treatments.length, 1);
+  assert.equal(treatments[0].treatment_option, 'reduce');
+  assert.match(treatments[0].cybersecurity_goal.goal_statement, /Diagnostic API Endpoint 01 SHALL/);
+  assert.ok(treatments[0].controls_assigned.length >= 1);
+  assert.equal(validateSchema(treatments, SCHEMA).valid, true);
 });
 
 test('pre-check rejects attack paths without AFR values', () => {

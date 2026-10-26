@@ -10,7 +10,14 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from .database import SessionLocal
-from .models import Assessment, PipelineRun
+from .models import Assessment, PipelineRun, PipelineRunAttempt
+from .run_logs import (
+    RunLogWriter,
+    build_log_relative_path,
+    capture_process_output,
+    enforce_log_retention,
+    redact_log_text,
+)
 from .stage_catalog import STAGE_COUNT, STAGES_BY_NUMBER
 
 
@@ -280,9 +287,15 @@ def update_assessment_completion(db, assessment_id: str) -> None:
         assessment.completion_percentage = int((complete_count / STAGE_COUNT) * 100)
 
 
-async def run_stage_subprocess(assessment_id: str, stage_num: int, db=None) -> None:
+async def run_stage_subprocess(
+    assessment_id: str,
+    stage_num: int,
+    db=None,
+    attempt_id: str | None = None,
+) -> None:
     del db
     session = SessionLocal()
+    writer: RunLogWriter | None = None
     try:
         run = session.query(PipelineRun).filter_by(
             assessment_id=assessment_id,
@@ -291,13 +304,52 @@ async def run_stage_subprocess(assessment_id: str, stage_num: int, db=None) -> N
         if not run:
             return
 
+        attempt = (
+            session.query(PipelineRunAttempt).filter_by(attempt_id=attempt_id).first()
+            if attempt_id
+            else None
+        )
+        if attempt is None:
+            attempt = PipelineRunAttempt(
+                assessment_id=assessment_id,
+                stage_num=stage_num,
+                stage_name=run.stage_name,
+                provider=LLM_PROVIDER,
+                model=LLM_MODEL or None,
+            )
+            session.add(attempt)
+            session.flush()
+            attempt_id = attempt.attempt_id
+
+        relative_log_path = build_log_relative_path(assessment_id, stage_num, attempt.attempt_id)
+        attempt.log_path = relative_log_path.as_posix()
+        attempt.started_at = utc_now()
+        session.commit()
+        writer = RunLogWriter(
+            Path(WORKSPACE_ROOT) / relative_log_path,
+            secrets=(ANTHROPIC_API_KEY, LLM_API_KEY),
+        )
+        writer.write("INFO", "run.start", f"Attempt {attempt.attempt_id}")
+        writer.write("INFO", "assessment", assessment_id)
+        writer.write("INFO", "stage", f"{stage_num:02d} — {run.stage_name}")
+        writer.write("INFO", "provider", LLM_PROVIDER)
+        writer.write("INFO", "model", LLM_MODEL or "provider default")
+
         if run.status == "cancelled":
+            attempt.status = "cancelled"
+            attempt.completed_at = utc_now()
+            attempt.duration_ms = 0
+            writer.write("WARNING", "run.cancelled", "Cancelled before the process started")
+            session.commit()
             return
         run.status = "running"
         run.error_message = None
         run.started_at = utc_now()
         run.completed_at = None
+        attempt.status = "running"
+        attempt.error_message = None
         session.commit()
+        started_at = utc_now()
 
         env = os.environ.copy()
         env["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
@@ -308,51 +360,125 @@ async def run_stage_subprocess(assessment_id: str, stage_num: int, db=None) -> N
         env["CHECKPOINT_API_URL"] = os.getenv("CHECKPOINT_API_URL", "http://localhost:8000")
         env["CHECKPOINT_API_TOKEN"] = os.getenv("CHECKPOINT_API_TOKEN") or _service_token()
 
+        proc: subprocess.Popen | None = None
         try:
             # Blocking subprocess.run in a worker thread instead of
             # asyncio.create_subprocess_exec: on Windows, uvicorn may run a
             # SelectorEventLoop, which raises NotImplementedError for asyncio
             # subprocesses. A thread works on every event loop and platform.
+            agent_path = get_agent_path(stage_num)
+            stage_args = build_stage_args(assessment_id, stage_num)
+            writer.write("INFO", "process.command", f"node {Path(agent_path).name} ({len(stage_args)} arguments)")
+            writer.write("INFO", "process.cwd", WORKSPACE_ROOT)
+            writer.write("INFO", "output.path", get_output_path(stage_num, assessment_id))
             proc = subprocess.Popen(
-                ["node", get_agent_path(stage_num), *build_stage_args(assessment_id, stage_num)],
+                ["node", agent_path, *stage_args],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 env=env,
                 cwd=WORKSPACE_ROOT,
                 start_new_session=True,
             )
+            writer.write("INFO", "process.started", f"PID {proc.pid}")
             with _PROCESS_LOCK:
                 _ACTIVE_PROCESSES[(assessment_id, stage_num)] = proc
             session.refresh(run)
             if run.status == "cancelled":
                 cancel_stage_process(assessment_id, stage_num)
-            stdout, stderr = await asyncio.to_thread(proc.communicate)
-            returncode = proc.returncode
-            output_message = stderr.decode(errors="replace") or stdout.decode(errors="replace")
+            returncode, stdout, stderr = await asyncio.to_thread(capture_process_output, proc, writer)
+            output_lines = [line for line in (stderr or stdout).splitlines() if line.strip()]
+            # The complete streams are already preserved in the log. Surface
+            # only the final diagnostic as the run error so preceding fallback
+            # warnings are not repeated as if each warning caused the failure.
+            output_message = output_lines[-1] if output_lines else ""
+            writer.write("INFO" if returncode == 0 else "ERROR", "process.exit", f"Exit code {returncode}")
         except Exception as exc:  # noqa: BLE001 -- any failure here must still mark the run failed
+            if proc is not None and proc.poll() is None:
+                cancel_stage_process(assessment_id, stage_num)
             returncode = 1
             output_message = f"{type(exc).__name__}: {exc}"
+            writer.write("ERROR", "runner.exception", output_message)
         finally:
             with _PROCESS_LOCK:
                 _ACTIVE_PROCESSES.pop((assessment_id, stage_num), None)
 
+        session.expire_all()
         run = session.query(PipelineRun).filter_by(
             assessment_id=assessment_id,
             stage_num=stage_num,
         ).first()
-        if not run:
+        attempt = session.query(PipelineRunAttempt).filter_by(attempt_id=attempt_id).first()
+        if not run or not attempt:
             return
+        completed_at = utc_now()
+        attempt.completed_at = completed_at
+        attempt.duration_ms = max(0, int((completed_at - started_at).total_seconds() * 1000))
         if run.status == "cancelled":
             run.completed_at = run.completed_at or utc_now()
+            attempt.status = "cancelled"
+            attempt.error_message = None
+            writer.write("WARNING", "run.cancelled", "Execution cancelled by user")
         elif returncode == 0:
-            run.completed_at = utc_now()
+            run.completed_at = completed_at
             run.status = "complete"
             run.error_message = None
+            attempt.status = "complete"
+            attempt.error_message = None
+            output_path = Path(get_output_path(stage_num, assessment_id))
+            if output_path.is_file():
+                writer.write("INFO", "output.written", f"{output_path} ({output_path.stat().st_size} bytes)")
+            writer.write("INFO", "run.complete", f"Completed in {attempt.duration_ms} ms")
         else:
-            run.completed_at = utc_now()
+            run.completed_at = completed_at
             run.status = "failed"
             run.error_message = output_message[:2000]
+            attempt.status = "failed"
+            attempt.error_message = output_message[:2000]
+            writer.write("ERROR", "run.failed", output_message or f"Process exited with code {returncode}")
+        update_assessment_completion(session, assessment_id)
+        writer.close()
+        writer = None
+        log_path = Path(WORKSPACE_ROOT) / relative_log_path
+        attempt.size_bytes = log_path.stat().st_size if log_path.is_file() else 0
+        session.commit()
+        enforce_log_retention(session, WORKSPACE_ROOT, assessment_id)
+    except Exception as exc:  # noqa: BLE001 -- background tasks must persist their failure
+        session.rollback()
+        error_message = redact_log_text(f"{type(exc).__name__}: {exc}", (ANTHROPIC_API_KEY, LLM_API_KEY))
+        if writer is not None:
+            writer.write("ERROR", "runner.fatal", error_message)
+        completed_at = utc_now()
+        failed_run = session.query(PipelineRun).filter_by(
+            assessment_id=assessment_id,
+            stage_num=stage_num,
+        ).first()
+        if failed_run and failed_run.status != "cancelled":
+            failed_run.status = "failed"
+            failed_run.error_message = error_message[:2000]
+            failed_run.completed_at = completed_at
+        failed_attempt = (
+            session.query(PipelineRunAttempt).filter_by(attempt_id=attempt_id).first()
+            if attempt_id
+            else None
+        )
+        if failed_attempt and failed_attempt.status != "cancelled":
+            failed_attempt.status = "failed"
+            failed_attempt.error_message = error_message[:2000]
+            failed_attempt.completed_at = completed_at
+            if failed_attempt.started_at:
+                started = failed_attempt.started_at
+                if started.tzinfo is None:
+                    started = started.replace(tzinfo=timezone.utc)
+                failed_attempt.duration_ms = max(0, int((completed_at - started).total_seconds() * 1000))
         update_assessment_completion(session, assessment_id)
         session.commit()
     finally:
+        if writer is not None:
+            writer.close()
+            if attempt_id:
+                attempt = session.query(PipelineRunAttempt).filter_by(attempt_id=attempt_id).first()
+                if attempt:
+                    path = Path(WORKSPACE_ROOT) / attempt.log_path if attempt.log_path else None
+                    attempt.size_bytes = path.stat().st_size if path and path.is_file() else 0
+                    session.commit()
         session.close()

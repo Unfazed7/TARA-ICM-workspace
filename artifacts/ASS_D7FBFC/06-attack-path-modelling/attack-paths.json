@@ -1,0 +1,321 @@
+[
+  {
+    "attack_id": "AT_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "asset_id": "AS_01",
+    "attack_description": "An unauthenticated internet attacker floods the publicly exposed, unthrottled EKS API server endpoint of ap-south-1-cluster with high-cost cluster-wide LIST/WATCH queries and anonymous requests, exhausting the shared request-thread and connection budget because no WAF, IP allowlist, client rate limiting, or API Priority and Fairness reservation exists to shield kubelets and core controllers — freezing the entire cluster control plane so nothing can be deployed, scaled, rolled back or repaired while already-running services keep serving traffic with no means of intervention.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is an unauthenticated outsider on the public internet who resolves the DNS name of the ap-south-1-cluster EKS API server endpoint and confirms it answers from any source, since the endpoint is published publicly with no AWS WAF or IP allowlist in front of it. At this point the attacker holds nothing but network reachability to the single control-plane entry point for the whole cluster.",
+      "step_2_abuse_technique": "With that reach confirmed, the attacker runs automated scripts that issue repeated cluster-wide LIST and WATCH queries against large resource collections, alongside a continuous stream of anonymous requests to lightweight endpoints such as discovery and version. Every request is well-formed and at least partly unauthenticated, so the traffic looks like ordinary client activity and the authentication and RBAC controls are never engaged as a barrier.",
+      "step_3_exploit_effect": "Because each cluster-wide LIST forces the API server to enumerate and serialize large object sets, and each anonymous request still occupies a request thread and connection slot before it is refused, the attacker's traffic lands in the same finite concurrency pool used by kubectl, the cluster autoscaler, operators, and every kubelet and node agent. This gives the attacker a cheap amplification effect: modest outbound traffic from the attacker translates into heavy, sustained server-side work that crowds out all legitimate clients.",
+      "step_4_control_gap": "This succeeds because there is no client-side rate limiting to cap how many concurrent or expensive requests a single source may drive, and no API Priority and Fairness flow schemas reserving guaranteed capacity for kubelets and core controllers. Nothing at the edge drops the traffic either, since the public endpoint has no AWS WAF rules or IP allowlist, so system-critical clients are queued behind — and rejected alongside — the attacker's flood.",
+      "step_5_threat_realization": "As a direct result the API server's request threads and connection limits are exhausted and every legitimate client is rejected or times out, freezing the control plane. No workload can be deployed, updated, scaled, rolled back or restarted, no failed node or pod can be repaired, and the platform remains unmanageable while already-running services continue serving traffic with no means of intervention — realizing damage scenario DS_01."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "N",
+      "user_interaction": "N"
+    },
+    "afr_value": 5,
+    "afr_label": "very high",
+    "justifications": {
+      "attack_vector": "Network: the EKS API server endpoint is publicly resolvable and accepts requests from any internet source, with no AWS WAF or IP allowlist restricting reachability, so the attacker needs no adjacency, local session, or physical presence. Scope is Unchanged — the exhaustion impacts the availability of the same API server component that is being attacked, not a separate security authority.",
+      "attack_complexity": "Low: the attack is a repeatable scripted flood that can be re-run at will, requiring no race condition, no man-in-the-middle position, no timing dependency, and no environment setup beyond ordinary internet connectivity. Cluster-wide LIST/WATCH operations amplify server-side cost cheaply, so reliability of success is high rather than conditional.",
+      "privileges_required": "None: the attacker holds no account, credential, or role. Anonymous requests are accepted far enough by the API server to consume request threads and connection slots before authentication and RBAC can refuse them, and the volume-based exhaustion does not depend on any authorized capability.",
+      "user_interaction": "None: exhaustion is produced entirely by server-side request processing against the shared control-plane endpoint. No cluster operator, developer, or vehicle owner must click a link, approve anything, or be logged in for the denial of service to take effect."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_02",
+    "threat_id": "TH_02",
+    "damage_scenario_id": "DS_02",
+    "asset_id": "AS_01",
+    "attack_description": "An attacker holding a low-privilege pod service account token or narrowly scoped IAM role in ap-south-1-cluster replays it against the EKS API server while re-mapping the presented identity, and because the control plane performs no audience- or time-bound token validation and enforces no admission constraint on the verbs a principal may request, RBAC resolves the call to a privileged identity that admits Deployment, DaemonSet, and ClusterRoleBinding changes — placing arbitrary software on every node while the stored RBAC policy still records the original principal as read-only.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is an external adversary or malicious insider who has already harvested credential material for a low-privilege principal in the ap-south-1-cluster — a read-only pod service account token taken from a compromised workload, or a narrowly scoped IAM role — and has network reachability to the EKS Kubernetes API server endpoint.",
+      "step_2_abuse_technique": "Using that credential, the attacker replays the token against the API server while substituting or re-mapping the identity during the IAM/OIDC-to-Kubernetes-user translation step — for example presenting the token with an altered audience or subject that federates onto a different, more privileged Kubernetes username.",
+      "step_3_exploit_effect": "Because the API server accepts the presented token without verifying that its audience and validity window match this cluster and this request, its RBAC evaluation resolves the call to the privileged identity rather than the original read-only principal, and write requests to create or alter Deployments, DaemonSets, and ClusterRoleBindings are admitted.",
+      "step_4_control_gap": "This succeeds because the control plane has no token validation binding presented credentials to an intended audience and expiry, and no admission control layer (policy engine or equivalent) constraining which verbs and scopes a presenting principal may request; the stored RBAC policy is never reconciled against what was actually admitted, so nothing flags that a principal recorded as read-only is issuing cluster-wide writes.",
+      "step_5_threat_realization": "With privileged write access admitted, the attacker creates a supporting ClusterRoleBinding and schedules a DaemonSet that deploys arbitrary software to every node in ap-south-1-cluster, achieving persistent cluster-wide control while the recorded RBAC policy still depicts the original principal as restricted and audit evidence points at a legitimately issued low-privilege credential."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Network — The entire chain executes against the EKS API server's remotely reachable HTTPS endpoint, from the initial token replay through to admission of the DaemonSet and ClusterRoleBinding write requests. No physical handling, local shell on the control plane, or presence on a specific shared network segment is required beyond the reachability the compromised workload already had.",
+      "attack_complexity": "Low — The gaps exploited are static control-plane configuration weaknesses: absent audience and expiry validation, and absent admission constraints on the verbs a presenting principal may request. Neither a race condition, a man-in-the-middle position, nor any environment state outside the attacker's control is needed, so once the token is in hand the identity substitution replays deterministically and repeatedly with standard Kubernetes CLI tooling.",
+      "privileges_required": "Low — The attacker must already possess valid credential material for an authenticated but minimally privileged principal in the cluster, such as a read-only pod service account token or a narrowly scoped IAM role; anonymous attackers cannot present anything for the API server to translate. Privilege escalation to cluster-admin-equivalent write access happens through the exploit itself, not as a precondition. Scope is Unchanged, since both the vulnerable identity-translation/RBAC decision path and the cluster resources written to sit under the API server's own authorization authority.",
+      "user_interaction": "None — No legitimate owner, operator, or administrator action is required at any point in the chain. The identity re-mapping, RBAC resolution, and workload admission all occur server-side between the attacker and the API server, and the malicious DaemonSet is scheduled automatically once the write request is admitted."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_03",
+    "threat_id": "TH_03",
+    "damage_scenario_id": "DS_03",
+    "asset_id": "AS_02",
+    "attack_description": "A standard authenticated user abuses a server-side request feature in a platform service to reach the worker node's EC2 instance metadata endpoint, captures the node IAM role's short-lived cloud credentials, and uses them to read the secrets, configuration variables, and service account material mounted across the EKS worker fleet.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is a remote outsider who has registered a normal, low-privilege user account on the platform and has identified a public-facing service running in a pod on one of the roughly 22 Graviton worker nodes. That service exposes a legitimate feature — such as webhook registration, a remote log/file import, or a diagnostic URL check — that fetches a URL supplied by the caller and returns or logs the result.",
+      "step_2_abuse_technique": "Using that ordinary account, the attacker submits a request that points the service's outbound fetch at 169.254.169.254, the node-local EC2 instance metadata address that is reachable from inside the pod network, requesting the IAM security-credentials path for the node's attached role.",
+      "step_3_exploit_effect": "Because the service performs the request on the attacker's behalf and echoes the response body back (or writes it to a location the attacker can read), the metadata reply is returned in full — handing over the node role's temporary access key ID, secret access key, and session token in plain text.",
+      "step_4_control_gap": "This succeeds because the worker nodes have no outbound restriction or allowlist blocking pod traffic to the metadata endpoint, the metadata service still answers unsigned IMDSv1-style requests from containers (hop limit not reduced to 1), and the same broadly-privileged node role is shared by every workload — so any pod that can issue a request inherits the node's cloud identity. Compounding the exposure, secrets are mounted as plain-text files and environment variables with no external secret store or encryption, so cloud-side read access exposes them directly.",
+      "step_5_threat_realization": "With the node role's credentials, the attacker enumerates and downloads the cluster's mounted pod secrets, service configuration held in environment variables, and resident service account tokens for workloads across all 22 nodes, leaving the platform's internal credential and configuration material readable by an unauthorized party rather than confined to the specific workloads that were granted it."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "The entire chain is driven from the internet through the platform's public-facing API: the attacker submits a crafted URL parameter over the network and receives the metadata response through the same channel. No physical presence, node login, or shared network segment is needed to reach the vulnerable service that fronts the worker nodes.",
+      "attack_complexity": "Server-side request abuse against the EC2 metadata endpoint is a repeatable, publicly documented technique that requires no timing race, no victim session state, and no special environment preparation. The attacker simply submits requests until the service returns the credentials path, and the same request works identically against every pod scheduled on the fleet.",
+      "privileges_required": "The attacker needs only a self-service standard user account to invoke the URL-fetching feature — no technician, fleet-admin, or cluster-administrator rights are involved. Scope is Changed here: the exploit starts in the platform's web service but crosses into the AWS IAM authority governing the worker nodes, letting the attacker act well beyond the vulnerable component's own security domain.",
+      "user_interaction": "No legitimate user, owner, or operator has to click a link, approve a request, or be logged in for the attack to work. The attacker triggers the fetch and receives the node credentials entirely through their own automated API calls."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_04",
+    "threat_id": "TH_04",
+    "damage_scenario_id": "DS_04",
+    "asset_id": "AS_02",
+    "attack_description": "An attacker who already has code running inside one workload container on a private EKS node group escapes to the host through a privileged container mount or the node's own kubelet API, rewrites kubelet, container-runtime, node OS and cached image-layer state in place, and — because no signed configuration/image baseline is verified and no file-integrity monitoring reports node-side changes — keeps the node trusted by the control plane while the container boundary fails and the altered container reads the secrets, environment and storage of every other service co-located on that node.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is an adversary who has already achieved code execution inside a single low-privilege workload container running on a private EKS node group — for example by exploiting a vulnerable dependency or an unauthenticated internal service endpoint. That container shares its worker node with workloads from the other four node groups, and the attacker holds nothing beyond that one workload's ordinary execution rights.",
+      "step_2_abuse_technique": "From inside that container, the attacker abuses a privileged mount already present in the workload's specification — a hostPath bind to the node's root filesystem or the container-runtime socket — or, where no such mount exists, calls the node's local kubelet API to obtain host-level execution. Either route gives the attacker write access to the worker node itself rather than just to their own container.",
+      "step_3_exploit_effect": "With write access to the node, the attacker modifies kubelet and container-runtime settings, node OS parameters and cached image layers in place, so that altered service logic is scheduled and launched on the next container start. The node still passes its health checks and rejoins the cluster normally, so the control plane keeps assigning work to it.",
+      "step_4_control_gap": "This succeeds and persists because the node has no signed baseline against which kubelet configuration, runtime settings and pinned image digests are verified, and no file-integrity monitoring reports node-side changes. Nothing on the node or in the cluster compares running state to an expected, cryptographically trusted value, so a tampered node remains fully trusted and no alert is raised.",
+      "step_5_threat_realization": "The undetected tampering breaks the container boundary the node was enforcing between co-located workloads, letting the attacker's altered container reach the mounted secrets, environment variables and storage volumes of every other service scheduled on that node. Integrity of the EKS worker node asset is lost cluster-wide in effect: modified service logic executes under trusted node identity while cross-workload confidentiality and isolation collapse."
+    },
+    "cvss_metrics": {
+      "attack_vector": "L",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 3,
+    "afr_label": "medium",
+    "justifications": {
+      "attack_vector": "Local: the attacker must already be executing code inside a workload container on the target worker node, and the node group is private rather than internet-reachable. Every subsequent action — writing through the hostPath or runtime socket, or calling the node's own kubelet endpoint — is performed from within that node's boundary, so no network or adjacent position is sufficient on its own.",
+      "attack_complexity": "Low: once the container foothold exists, the privileged mount or local kubelet endpoint is a static, always-present property of the node configuration, so the escape and the in-place rewrites succeed deterministically and are repeatable at will. The path involves no race condition, no man-in-the-middle positioning and no timing dependency that the attacker must win.",
+      "privileges_required": "Low: the attacker needs only the ordinary, non-administrative execution rights of one workload container — no cluster-admin, node-root or AWS IAM privilege is held beforehand, and node write access is produced by the attack rather than required as a precondition. Scope is Changed, because the escape crosses out of the workload sandbox into the node OS and container-runtime authority, which the vulnerable workload does not control, and from there into other tenants' workloads.",
+      "user_interaction": "None: no operator, developer, fleet user or vehicle owner has to click a link, approve a request or authenticate for any part of the chain. Node tampering, continued cluster membership and cross-workload secret access all proceed autonomously once the container foothold is in place."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_05",
+    "threat_id": "TH_05",
+    "damage_scenario_id": "DS_05",
+    "asset_id": "AS_03",
+    "attack_description": "An attacker holding compromised cluster or Envoy control-plane credentials pushes an unsigned, unverified xDS/HTTPRoute update to the Envoy Gateway, which reloads its port 443 TLS-terminating listener and silently reroutes internet client requests to attacker-chosen backends, returning altered API responses that clients accept as genuine because they arrive under the gateway's valid TLS session.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is an external intruder who has already established a foothold in the platform's Kubernetes environment — for example by compromising a workload pod and harvesting its service-account token, or by obtaining a developer's kubeconfig or control-plane credential leaked from a CI/CD secret store.",
+      "step_2_abuse_technique": "Using that credential against the cluster API, the attacker rewrites the Envoy Gateway routing plane — patching the Gateway/HTTPRoute resources or pushing a crafted xDS EnvoyRouteConfiguration to the control plane — so that the port 443 TLS-terminating listener maps a high-value public API hostname to an attacker-chosen backend service or an upstream cluster they control.",
+      "step_3_exploit_effect": "With the new route accepted, the gateway hot-reloads its listener configuration and begins forwarding genuine client requests for that hostname to the attacker-selected backend, returning whatever content that backend produces back through the same authenticated TLS session the client already trusts.",
+      "step_4_control_gap": "This succeeds because the gateway has no authenticated or signed configuration baseline for control-plane updates — no admission-control policy, no route-config signing, and no drift detection to reject an unauthorized change — and no upstream WAF or CDN inspects or normalizes traffic before it reaches the load balancer, so the malicious route is indistinguishable from a legitimate deployment.",
+      "step_5_threat_realization": "Internet-facing API traffic is therefore silently misdirected and the responses clients receive carry altered content while still bearing the gateway's valid certificate, realizing the integrity damage scenario: the platform's front door serves attacker-influenced data as genuine, with no alert raised and no means for clients or operators to detect the substitution."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "H",
+      "user_interaction": "N"
+    },
+    "afr_value": 2,
+    "afr_label": "low",
+    "justifications": {
+      "attack_vector": "Network — every action in the path is performed by submitting API calls to the cluster and Envoy control plane over the network, and the resulting traffic redirection affects internet-facing clients. No physical presence or shared network segment is required once the harvested credential is in hand.",
+      "attack_complexity": "Low — applying a route change is a deterministic, repeatable write to the gateway configuration that takes effect on the next listener reload. The attack needs no race condition, timing window, session-state guessing, or man-in-the-middle positioning beyond the credentials already assumed in Privileges Required.",
+      "privileges_required": "High — rewriting the authoritative routing configuration of the platform's front-door gateway demands administrative write access to the Envoy control plane or the Gateway/HTTPRoute CRDs. That is well beyond an anonymous or standard user, so the attacker must already hold elevated cluster credentials. Scope is Unchanged: the tampering is executed and realized within the gateway's own routing authority rather than through SSRF-into-IAM, RCE-to-OS, or cross-tenant object access patterns.",
+      "user_interaction": "None — the tampering completes entirely server-side when the gateway reloads the pushed configuration. Victims' subsequent requests are misdirected passively; no click, login, approval, or other action by a legitimate user is needed for the exploit to succeed."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_06",
+    "threat_id": "TH_06",
+    "damage_scenario_id": "DS_06",
+    "asset_id": "AS_03",
+    "attack_description": "An unauthenticated external attacker identifies envoy-gateway-lb as the platform's only public entry point and drives sustained TLS handshake floods, HTTP request floods, and slow held-open connections at it — traffic that reaches the NLB and Envoy data plane unfiltered because no CDN, WAF, edge scrubbing, rate limiting, or secondary ingress exists — saturating worker slots and downstream connection pools until every API endpoint stops answering, all authenticated sessions terminate together, and no alternate path remains to serve traffic while the front door is restored.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is an external, unauthenticated actor operating from ordinary internet connectivity who resolves the platform's public hostname and confirms that envoy-gateway-lb — the Envoy Gateway fronting a public network load balancer — is the single route by which any internet traffic reaches the platform. No alternate ingress, partner path, or direct-to-service endpoint is exposed, so this one asset is the whole attack surface for availability.",
+      "step_2_abuse_technique": "With that target identified, the attacker rents commodity load-generation capacity (a booter service or a small rented botnet) and begins sending a blended traffic profile at the public listeners: rapid incomplete TLS handshakes, high-volume HTTP request floods, and slow-rate connections deliberately held open without completing a request. This mix is chosen so that both the cryptographic handshake path and the connection-slot accounting are consumed at once.",
+      "step_3_exploit_effect": "Because no CDN, WAF, or edge scrubbing layer sits in front of the gateway, the full volume arrives directly at the NLB and the Envoy data plane rather than being absorbed or filtered upstream. Envoy worker connection slots and downstream connection pool capacity begin filling with attacker-held sessions, and legitimate traffic — vehicle diagnostic queries, configuration retrieval, active authenticated sessions — starts queuing, timing out, and being refused at the front door.",
+      "step_4_control_gap": "This succeeds because the asset lacks both per-source rate limiting and connection caps at the listener, and because the architecture provides no secondary ingress route or upstream absorption tier to divert traffic while the primary path is degraded. There is therefore no control that can distinguish the flood from legitimate load, shed it, or route around it — a single unscaleable choke point converts endpoint-level resource exhaustion into platform-wide unavailability.",
+      "step_5_threat_realization": "With no filtering and no failover path, the NLB and Envoy data plane reach saturation at the same moment and every API endpoint behind them stops answering simultaneously. All active authenticated sessions terminate together, vehicle diagnostic and configuration services become unreachable to legitimate users and fleet operators, and the outage persists — with no alternate route able to serve traffic — until the single public front door is restored, realizing DS_06."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "N",
+      "user_interaction": "N"
+    },
+    "afr_value": 5,
+    "afr_label": "very high",
+    "justifications": {
+      "attack_vector": "Network: the attack target is a public network load balancer hostname reachable from any internet connection, and all flood traffic is delivered directly to the Envoy listeners over the open internet. The attacker needs no adjacency to a corporate or vehicle network segment, no local shell on any platform host, and no physical access to any component.",
+      "attack_complexity": "Low: no race condition, session-state knowledge, man-in-the-middle position, or environment setup outside the attacker's control is required. Sustained volume combined with slow held-open connections deterministically consumes Envoy worker slots and connection pool capacity each time it is applied, using commodity, publicly documented load-generation and booter tooling — the attack is reliably repeatable rather than condition-dependent.",
+      "privileges_required": "None: TLS handshakes and HTTP connection establishment are processed by the gateway before any authentication or authorization decision occurs, so the attacker needs no account, API token, tenant membership, or insider access. The resources being exhausted are consumed at a layer where the platform cannot use identity to reject the attacker, and legitimate credentials offer no advantage in executing it.",
+      "user_interaction": "None: the exploit completes entirely between the attacker's infrastructure and the gateway/NLB, with no requirement that a vehicle owner, technician, or administrator click a link, open a file, load a page, or authenticate. Legitimate users are purely victims of the resulting outage and their behaviour neither enables nor blocks the attack."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_07",
+    "threat_id": "TH_07",
+    "damage_scenario_id": "DS_07",
+    "asset_id": "AS_04",
+    "attack_description": "A legitimately credentialed, low-tier single-tenant subscriber authenticates to the Kong API gateway and then re-issues requests with another tenant's record identifier or an ACL group they were never granted against /core/v2, /data/v2 and /pandora/v1 routes outside their subscription; because the gateway's ACL and tenant-scoping plugins confirm only that the credential is authentic and active rather than that the requested route and tenant fall inside the caller's granted scope, the requests are proxied upstream and another tenant's diagnostic and vehicle data is returned, so the gateway's access rules stop functioning as the boundary between tenants (DS_07).",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is a legitimate but low-tier API consumer — for example a single-brand dealer partner or small fleet customer — who has been issued valid Kong consumer credentials whose subscription covers only their own tenant record set and a subset of the gateway's routes.",
+      "step_2_abuse_technique": "Using those genuine credentials, the attacker authenticates to the Kong gateway as normal, is granted a valid consumer identity, and then re-issues the same request pattern against /core/v2, /data/v2 and /pandora/v1 paths while substituting another tenant's record identifier or naming an ACL group they were never assigned.",
+      "step_3_exploit_effect": "With a request that carries an authentic, active credential, the gateway's route-level ACL and tenant-scoping plugins treat the call as authorized, match the route, and proxy it upstream — so records belonging to a different tenant are served back in the HTTP response to a caller whose role never covered them.",
+      "step_4_control_gap": "This succeeds because the authorization plugins verify only credential authenticity and active status: they never compare the requested route family or the tenant identifier in the request against the consumer's granted subscription and ACL group list, and upstream services trust the gateway-forwarded identity instead of re-checking entitlement, leaving no second authorization decision anywhere in the path.",
+      "step_5_threat_realization": "As a result, the attacker can iterate tenant identifiers across all three route families and systematically harvest other tenants' diagnostic and vehicle data, realizing DS_07 — out-of-scope requests are accepted and answered, one tenant's data is disclosed to an unauthorized party, and the gateway's access rules can no longer be trusted as the tenant boundary."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Network: the Kong API gateway is the internet-facing front door for /core/v2, /data/v2 and /pandora/v1, and the entire escalation is performed with ordinary remote HTTPS API calls from the attacker's own subscriber account. No adjacent network position, local shell, or physical access to any component is required.",
+      "attack_complexity": "Low: the escalation is a deterministic identifier and ACL-group substitution inside an already-authenticated request, with no race condition, no session-state guessing, no man-in-the-middle position, and no environment preparation outside the attacker's control. Each attempt succeeds or fails repeatably, and the same technique applies unchanged across all three route families.",
+      "privileges_required": "Low: the attacker must possess a real issued consumer credential — the attack cannot be run anonymously — but the lowest-tier single-tenant subscription level is sufficient, and no administrative, gateway-configuration, or backend privilege is needed. Scope is Changed here, since the attacker escapes their own tenant's security authority into data governed by a different tenant's authority (the cross-tenant BOLA/BFLA pattern), which raises the PR weight but does not change the Low rating.",
+      "user_interaction": "None: authorization is evaluated server-side by the gateway plugins and the requests are fulfilled directly by upstream services. No victim tenant, vehicle owner, dealer user, or administrator has to click a link, load a page, or approve anything for the out-of-scope data to be returned in the response."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_08",
+    "threat_id": "TH_08",
+    "damage_scenario_id": "DS_08",
+    "asset_id": "AS_05",
+    "attack_description": "A legitimately provisioned single-tenant user of the internet-exposed Hasura GraphQL engine forges or elevates the client-supplied session claims (x-hasura-role / tenant identifier) that the engine trusts — because permission rules evaluate only the supplied role with no enforced server-side tenant_id row filter and the admin secret or JWT signing key pinning those claims is guessable or leaked — and thereby reads and writes diagnostic session histories, vehicle identifiers, work-order details and configuration records belonging to every other tenant, collapsing the tenant isolation boundary across the entire core database.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is an ordinary, legitimately onboarded tenant user — for example a small fleet operator or third-party integrator — who holds valid single-tenant credentials for the Hasura GraphQL endpoint that fronts the core database. This gives them an authenticated foothold on the same API surface that serves every other tenant's data.",
+      "step_2_abuse_technique": "With that valid account, the attacker inspects the GraphQL schema and captured request headers to learn which session variables Hasura uses for authorization, then re-issues queries and mutations carrying a manipulated x-hasura-role value (e.g. an administrative or broader tenant role) or a substituted tenant identifier. Because Hasura derives every row- and column-level permission decision from these client-supplied claims, the request is evaluated in a context the caller was never granted.",
+      "step_3_exploit_effect": "Because the admin secret or JWT signing key that should pin those claims is guessable or has leaked, the engine accepts the forged or elevated role as authentic and resolves the request against the wider permission set. The attacker now receives diagnostic session histories, vehicle identifiers (VINs), work-order details and configuration records belonging to other tenants, and can submit mutations that the engine writes to those same foreign rows.",
+      "step_4_control_gap": "This succeeds because the table and column permission rules are written to match only the supplied role and omit an enforced tenant_id predicate bound server-side to the authenticated identity, and because there is no allowlist rejecting client-supplied x-hasura-* session variables, no strong key management for the admin secret/JWT signing key, and no alerting on role or tenant claims that do not match the caller's provisioned scope. Hasura is therefore the sole authorization decision point and it is trusting attacker-controlled input as the basis for that decision.",
+      "step_5_threat_realization": "As a result, tenant isolation ceases to exist for every data set the engine fronts: the attacker can enumerate and export, and silently alter or delete, other organizations' diagnostic and vehicle records at will. This directly realizes DS_08 — unauthorized read and modification of cross-tenant data through the Hasura GraphQL engine — with regulatory, safety-relevant and contractual consequences across the whole customer base."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Network: the Hasura GraphQL engine is exposed as an internet-reachable API endpoint, and every step — schema introspection, claim manipulation, query and mutation submission — is performed with ordinary HTTPS GraphQL requests. No physical, local or same-network-segment position is required at any point in the path.",
+      "attack_complexity": "Low: the attack is a deterministic, repeatable request-header/claim substitution against a documented authorization mechanism, with no race condition, timing dependency, man-in-the-middle position or victim-specific state needed. Standard GraphQL tooling suffices, and the same forged claim can be replayed to enumerate the entire database once discovered.",
+      "privileges_required": "Low: the attacker needs only ordinary, legitimately issued single-tenant credentials to reach the endpoint and submit requests — not an administrative or technician account, since the elevated role is supplied by the attacker in the session claim rather than pre-granted. Scope is Changed here, as the cross-tenant broken-function-level-access pattern lets the caller escape its own tenant boundary into data governed by a different security authority, so the higher PR weight applies.",
+      "user_interaction": "None: the exploit is entirely server-side — Hasura evaluates the manipulated claim and returns or writes the foreign tenant's rows without any action, click, login or approval by a victim user or administrator."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_09",
+    "threat_id": "TH_09",
+    "damage_scenario_id": "DS_09",
+    "asset_id": "AS_06",
+    "attack_description": "A standard tenant user injects an UPDATE/INSERT statement through an unsanitized backend API query, which executes under the application's own over-privileged Aurora connection and silently rewrites the cloudapi database's role, access-policy and tenant-binding rows — after which every authorization decision is made against attacker-chosen permission data and the platform's record of who was permitted to do what can no longer be trusted.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker is an external party holding a legitimate low-privilege account on the platform (a self-registered fleet or dealership tenant user) and can call the authenticated backend APIs that manage vehicles, users and configuration records for their own tenant.",
+      "step_2_abuse_technique": "Using that authenticated session, the attacker probes API endpoints whose filters and identifiers — role name, tenant ID, record ID — are concatenated directly into SQL rather than passed as bound parameters, and submits a crafted request whose payload appends an attacker-written UPDATE or INSERT statement to the query the database actually executes.",
+      "step_3_exploit_effect": "Because the injected statement runs under the single database connection the application uses for all of its work, the attacker is not confined to ordinary business records: the write reaches the cloudapi database's role definition, access policy and tenant binding tables — the rows that determine what any account is allowed to do — and the database commits them as valid configuration.",
+      "step_4_control_gap": "The write succeeds because the Aurora cloudapi database exposes no least-privilege separation between business data and authorization configuration: there is no distinct restricted database role, no separate privileged or approval-mediated path for permission records, no row-level integrity validation or schema-level constraint checking who is entitled to hold a role, and no change-review or approval gate, so an injected permission change is indistinguishable from a legitimate administrator edit.",
+      "step_5_threat_realization": "From this point every authorization decision the platform makes is evaluated against the altered rows — the attacker's account now carries an elevated role and tenant bindings nobody assigned, resolving policy checks in their favour and opening other organizations' data and administrative functions — while the recorded state of granted permissions is corrupted, so the organization can no longer prove or reconstruct who was authorized to do what, realizing DS_09."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Network — the entire chain is carried out over the internet through the platform's own public-facing backend API from an ordinary authenticated web session. At no point does the attacker need adjacency to a private subnet, local shell access, or physical contact with the Aurora instance or its hosting environment.",
+      "attack_complexity": "Low — the attack is a single crafted HTTP request against an endpoint that concatenates user input into SQL, a deterministic and repeatable condition rather than a race, a timing dependency, or a man-in-the-middle position. No special environment setup is required: once the unsanitized parameter is identified, the same payload can be replayed and refined at will, and the absence of an approval gate means the write commits immediately.",
+      "privileges_required": "Low — reaching the injectable endpoint requires only a valid standard tenant account, obtainable through normal self-registration, and no administrator, DBA, or cloud credentials. The elevated write authority comes from the application's own shared database connection, which the attacker borrows rather than has to acquire; Scope is Unchanged because the tampering stays inside the same database and application trust boundary that the vulnerable component already controls.",
+      "user_interaction": "None — the injected UPDATE or INSERT executes server-side the moment the database processes the request, so no other user has to click a link, open a file, load a page, or approve a change. The missing change-review gate on permission records means no human is positioned to intercept or validate the modification before it takes effect."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_10",
+    "threat_id": "TH_10",
+    "damage_scenario_id": "DS_10",
+    "asset_id": "AS_07",
+    "attack_description": "An attacker who has taken over a lower-trusted internal service or operator workstation holding directordb connection credentials uses them to log into the Aurora directordb database and rewrite per-ECU reported firmware versions and campaign targeting rules with direct UPDATE/DELETE statements — writes the database accepts because service accounts hold blanket write scope with no per-row authorization tied to the update-signing workflow, no field-level integrity constraints or checksums, and no signed append-only change journal — causing the director to cryptographically sign update instructions computed from falsified state, so vehicles receive bundles mismatched to their actual ECU firmware (aborting mid-flash or bricking the ECU) while ECUs genuinely needing remediation are silently excluded by the altered eligibility rules.",
+    "attack_path": {
+      "step_1_initial_precondition": "The attacker has already compromised a lower-trusted internal service or an operator workstation that stores directordb connection credentials in its configuration or environment, giving them a valid database login and a routable path to the Aurora cluster. No physical vehicle access and no internet-facing entry point are needed at this stage.",
+      "step_2_abuse_technique": "With those stolen credentials, the attacker connects to the Aurora directordb endpoint and enumerates the schema to locate the tables holding each ECU's reported installed firmware version and the campaign targeting rules that gate update eligibility. Because the login is an ordinary application/service account, the session presents as normal operational traffic and raises no alert.",
+      "step_3_exploit_effect": "This access allows the attacker to issue direct UPDATE and DELETE statements that rewrite recorded firmware versions, flip eligibility predicates, and reorder campaign rule conditions for selected vehicles or ECUs. The changes take effect immediately in the authoritative state that the OTA director reads when computing update instructions.",
+      "step_4_control_gap": "Because the database grants application and service accounts broad write privileges with no per-row or per-column authorization tied to the update-signing workflow, no field-level integrity constraints or checksums on version and rule records, and no append-only or signed change journal, these out-of-band modifications are accepted and leave no tamper-evident trace. Nothing in the environment distinguishes the attacker's SQL from legitimate service writes, so the corruption is neither blocked at commit time nor discovered afterwards.",
+      "step_5_threat_realization": "The director then computes and cryptographically signs update instructions from the falsified state, so the signature certifies authenticity while vouching for facts that are no longer true. Vehicles in the field receive bundles mismatched to their actual ECU firmware — aborting mid-flash or leaving the ECU inoperable — while the ECUs that genuinely require the remediation campaign are excluded by the altered targeting rules and never receive the signed instruction at all."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Network: the tampering is carried out by issuing SQL over the network to the Aurora directordb endpoint from a host that already holds valid credentials. The attacker needs no physical contact with a vehicle or ECU and no shared-LAN presence beyond the compromised host's existing routable path to the database; the barrier to reaching the component is credential possession, which is scored under Privileges Required.",
+      "attack_complexity": "Low: once a credential-holding host is compromised, the write path is deterministic — standard UPDATE/DELETE statements against known version and rule tables, with no race condition, no timing dependency, no man-in-the-middle positioning, and no attacker-unknown state required. The same modification can be repeated, extended, or reverted reliably, and no live vehicle attestation exists to contradict it.",
+      "privileges_required": "Low: the attack needs only an ordinary application or service account credential, not a database administrator account — the threat turns precisely on those non-privileged accounts already holding blanket write scope over the firmware-version and targeting-rule tables. Scope is Unchanged because the vulnerable component is the directordb data store whose integrity is directly modified; no separate cloud IAM authority is seized and no cross-tenant boundary is escaped.",
+      "user_interaction": "None: no operator, technician, or vehicle owner must click, approve, or re-authenticate anything. The attacker's SQL executes server-side, and the OTA director subsequently consumes the altered records automatically as part of its normal campaign computation and signing run."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  },
+  {
+    "attack_id": "AT_11",
+    "threat_id": "TH_11",
+    "damage_scenario_id": "DS_11",
+    "asset_id": "AS_08",
+    "attack_description": "A low-privilege user of the vehicle provisioning service exploits an unsanitized VIN/enrollment-ID parameter to inject SQL against Aurora pandoradb, and — because the application's database role is write-capable and enrollment rows carry no per-row integrity value or tamper-evident change log — issues UPDATE statements that rebind a target vehicle identity's enrollment record to a device certificate belonging to a different identity, leaving pandoradb authoritatively but falsely stating which device holds which credential while downstream provisioning flows trust the wrong vehicle.",
+    "attack_path": {
+      "step_1_initial_precondition": "An attacker holds a standard, low-privilege account on the vehicle provisioning service — such as a fleet-integrator login or a stolen technician-portal session — which allows them to submit ordinary enrollment lookups that pass a VIN or enrollment ID through to Aurora pandoradb. No administrative access, internal network position, or physical proximity to any vehicle is required.",
+      "step_2_abuse_technique": "Using that legitimate lookup function, the attacker probes the VIN/enrollment-ID parameter and confirms it is concatenated into the SQL statement instead of being bound as a parameter, typically evidenced by raw database error text returned in the API response. This gives them a working SQL injection point into the authoritative enrollment database (OWASP A03 Injection).",
+      "step_3_exploit_effect": "With a confirmed injection point, the attacker can now execute arbitrary SQL under the provisioning service's own database role — a role that holds write permission on the enrollment and certificate-binding tables. This reaches the authoritative identity-to-certificate mapping for any enrolled vehicle, not just the attacker's own records.",
+      "step_4_control_gap": "This write access succeeds because pandoradb enforces neither least-privilege restriction on the application role nor integrity protection on enrollment data: rows carry no checksum or HMAC, writes are not confined to a reviewed stored procedure, and changes are not captured in a tamper-evident audit trail. Nothing therefore rejects the attacker's modification and nothing records it, so the altered binding cannot be detected or attributed (A03 Injection enabled by A09 Logging Failures).",
+      "step_5_threat_realization": "Exploiting that gap, the attacker issues an UPDATE rebinding a target vehicle identity's enrollment row to a device certificate enrolled under a different identity. pandoradb now authoritatively but falsely states which device holds which credential, downstream provisioning flows trust and provision the wrong vehicle, and the integrity breach persists silently with no forensic record of who made the change."
+    },
+    "cvss_metrics": {
+      "attack_vector": "N",
+      "attack_complexity": "L",
+      "privileges_required": "L",
+      "user_interaction": "N"
+    },
+    "afr_value": 4,
+    "afr_label": "high",
+    "justifications": {
+      "attack_vector": "Network: the attack is delivered entirely through the internet-reachable provisioning service API that forwards the VIN/enrollment-ID parameter to Aurora pandoradb. The attacker needs no adjacent network segment, no console or SSH access to the database host, and no physical contact with a vehicle.",
+      "attack_complexity": "Low: the vulnerable parameter is concatenated into SQL on every request, so a crafted payload executes deterministically and can be repeated and automated at will. The path involves no race condition, no timing dependency, no man-in-the-middle positioning, and no environment state outside the attacker's control.",
+      "privileges_required": "Low: reaching the injectable lookup requires an authenticated provisioning-service account, but only an ordinary user-level one — the endpoint is exposed to standard fleet-integrator and technician roles and performs no elevated authorization check before building the query. Scope is Unchanged here (SQL injection within the same component, not a cross-tenant object reference or pivot into cloud IAM), so the standard Unchanged PR weight applies.",
+      "user_interaction": "None: the injection and the subsequent UPDATE execute server-side against the database. No vehicle owner, technician, or administrator needs to click a link, open a page, or approve anything for the false certificate binding to be written and accepted."
+    },
+    "created_timestamp": "2026-10-09T19:32:16.398Z"
+  }
+]

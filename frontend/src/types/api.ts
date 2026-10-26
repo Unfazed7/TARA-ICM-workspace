@@ -19,6 +19,23 @@ export interface PipelineRunStatus {
   error_message: string | null;
 }
 
+export interface PipelineRunAttempt {
+  attempt_id: string;
+  assessment_id: string;
+  stage_num: number;
+  stage_name: string;
+  status: PipelineRunStatus['status'];
+  provider: string | null;
+  model: string | null;
+  error_message: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+  duration_ms: number | null;
+  size_bytes: number;
+  filename: string | null;
+  log_available: boolean;
+}
+
 export interface StageDefinition {
   stage_num: number;
   key: string;

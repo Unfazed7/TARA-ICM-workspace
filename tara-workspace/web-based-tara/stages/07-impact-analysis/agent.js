@@ -109,6 +109,186 @@ function extractToolUse(response) {
   return toolUse.input;
 }
 
+function parseTextImpact(response) {
+  const text = (response?.content || [])
+    .filter((item) => item.type === 'text' && typeof item.text === 'string')
+    .map((item) => item.text)
+    .join('\n')
+    .trim();
+  if (!text) return null;
+
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+  const candidates = [
+    fenced?.[1],
+    firstBrace >= 0 && lastBrace > firstBrace ? text.slice(firstBrace, lastBrace + 1) : null,
+    text
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    try {
+      const parsed = JSON.parse(candidate);
+      if (Array.isArray(parsed?.impact_analysis)) return parsed.impact_analysis[0] || null;
+      return parsed;
+    } catch {
+      // Try the next representation; prose-only responses fall back below.
+    }
+  }
+  return null;
+}
+
+function isUsableTextImpact(impact) {
+  if (!impact || typeof impact.impact_narrative !== 'string' || !impact.impact_narrative.trim()) return false;
+  const toolUser = impact.tool_user;
+  const others = impact.other_stakeholders;
+  if (!toolUser || !others) return false;
+  const ratings = [
+    toolUser.privacy,
+    toolUser.operational,
+    others.legal,
+    others.financial,
+    others.business
+  ];
+  if (!ratings.every((rating) => RATINGS.includes(rating))) return false;
+  return [
+    toolUser.rationale_privacy,
+    toolUser.rationale_operational,
+    others.rationale_legal,
+    others.rationale_financial,
+    others.rationale_business
+  ].every((rationale) => typeof rationale === 'string' && rationale.trim());
+}
+
+function isCompleteToolImpact(impact) {
+  if (!impact || typeof impact.impact_narrative !== 'string' || !impact.impact_narrative.trim()) return false;
+  const toolUser = impact.tool_user;
+  const others = impact.other_stakeholders;
+  if (!toolUser || !others) return false;
+  return [
+    toolUser.privacy,
+    toolUser.operational,
+    toolUser.rationale_privacy,
+    toolUser.rationale_operational,
+    others.legal,
+    others.financial,
+    others.business,
+    others.rationale_legal,
+    others.rationale_financial,
+    others.rationale_business
+  ].every((value) => typeof value === 'string' && value.trim());
+}
+
+function includesAny(text, patterns) {
+  return patterns.some((pattern) => pattern.test(text));
+}
+
+function buildFallbackImpact(threat, damageScenario, fallbackReason) {
+  const text = `${damageScenario.damage_scenario} ${threat.threat_statement}`.toLowerCase();
+  const affectsOrganization = damageScenario.stakeholder_affected !== 'tool_user';
+  const hasExposure = includesAny(text, [
+    /\bdisclos/, /\bexpos/, /\bextract/, /accessed without authorization/, /\breveal/, /\bleak/,
+    /\breadable\b/, /\bretrieve\b/, /\bserved to\b/, /\boutside (?:their|the) permitted scope\b/,
+    /\bother tenants?\b/, /\blaid bare\b/, /\bno longer (?:exists|separate)\b/
+  ]);
+  const sensitiveExposure = includesAny(text, [
+    /personal/, /credential/, /token/, /identity/, /authentication/, /session/, /sensitive/,
+    /vehicle identifiers?/, /tenant.*data/, /diagnostic.*data/, /work-order/, /cloud identity/
+  ]);
+  const majorOperational = includesAny(text, [
+    /\bunavailable/, /complete interruption/, /no practical workaround/, /\bhalts?\b/, /\bdisabled?\b/,
+    /\bunreachable\b/, /\bstop working\b/, /\bno alternate\b/, /\bunmanageable\b/, /\bunusable\b/,
+    /\bno new .+ can be\b/, /\bcannot be (?:updated|repaired|completed|performed)\b/
+  ]);
+  const moderateOperational = includesAny(text, [
+    /\bdisrupt/, /\bdegrad/, /\bdelay/, /\bretr/, /incorrect/, /unauthorized/, /without valid/,
+    /\baltered?\b/, /\bmodified\b/, /\bfails? to\b/, /\bskipped\b/, /cannot be relied/,
+    /\bfalse basis\b/, /\bwrong\b/, /\boutside (?:their|the) permitted scope\b/
+  ]);
+  const explicitFinancial = includesAny(text, [
+    /financial (?:loss|impact|cost)/,
+    /monetary (?:loss|impact|cost)/,
+    /(?:revenue|budget) (?:loss|impact|reduction)/,
+    /(?:incident response|recovery|remediation|service outage) costs?/
+  ]);
+  const majorFinancial = explicitFinancial && includesAny(text, [
+    /substantial/, /major/, /long-term/, /catastrophic/, /survival/
+  ]);
+  const majorLegal = includesAny(text, [
+    /criminal liability/, /operating licen[cs]e/, /significant fines?/, /lawsuits?/, /contractual breach/
+  ]);
+  const moderateLegal = includesAny(text, [
+    /regulat/, /\blegal/, /compliance/, /unauthorized/, /privacy/, /personal data/,
+    /other tenants?/, /outside (?:their|the) permitted scope/
+  ]);
+  const majorBusiness = includesAny(text, [
+    /customer churn/, /market share/, /major reputational/, /at scale/, /shutdown/, /irreversible/
+  ]);
+  const moderateBusiness = includesAny(text, [
+    /trust/, /reputation/, /customer/, /service operations?/, /business/, /workflow/, /\boperations?\b/
+  ]);
+
+  const materiallyAffectsOrganization = affectsOrganization && (
+    ['confidentiality', 'integrity', 'availability', 'authenticity', 'authorization', 'non_repudiation']
+      .includes(damageScenario.property)
+    || hasExposure
+    || majorOperational
+    || moderateOperational
+  );
+
+  const privacy = hasExposure ? (sensitiveExposure ? 'Major' : 'Moderate') : 'Negligible';
+  const operational = majorOperational ? 'Major' : moderateOperational ? 'Moderate' : 'Negligible';
+  const legal = affectsOrganization
+    ? (majorLegal ? 'Major' : (moderateLegal || hasExposure) ? 'Moderate' : 'Negligible')
+    : 'Negligible';
+  const financial = affectsOrganization && explicitFinancial ? (majorFinancial ? 'Major' : 'Moderate') : 'Negligible';
+  const business = affectsOrganization
+    ? (majorBusiness ? 'Major' : (moderateBusiness || materiallyAffectsOrganization) ? 'Moderate' : 'Negligible')
+    : 'Negligible';
+  const reason = fallbackReason || `the model did not return the required ${TOOL_NAME} tool call after two attempts`;
+
+  return {
+    impact_narrative: `${threat.asset_title} is compromised through ${String(threat.stride_category).replace(/_/g, ' ')}, causing this consequence: ${damageScenario.damage_scenario}`,
+    tool_user: {
+      privacy,
+      operational,
+      rationale_privacy: privacy === 'Negligible'
+        ? 'The damage scenario contains no explicit exposure of personal, work-related, session, identity, vehicle, or tenant data.'
+        : `The damage scenario explicitly describes ${sensitiveExposure ? 'sensitive' : 'limited'} data exposure affecting users or tenant data.`,
+      rationale_operational: operational === 'Negligible'
+        ? 'The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation.'
+        : `The described loss or degradation of service and operational capability has a ${operational.toLowerCase()} effect.`,
+    },
+    other_stakeholders: {
+      legal,
+      financial,
+      business,
+      rationale_legal: legal === 'Negligible'
+        ? 'No explicit organizational legal or regulatory consequence is described.'
+        : `The organizational consequence contains legal, compliance, or unauthorized-action indicators rated ${legal.toLowerCase()}.`,
+      rationale_financial: financial === 'Negligible'
+        ? 'No explicit financial loss, revenue impact, or direct monetary cost is described.'
+        : `The damage scenario explicitly describes a ${financial.toLowerCase()} financial consequence for the organization.`,
+      rationale_business: business === 'Negligible'
+        ? 'No explicit organizational business, customer, or service consequence is described.'
+        : `The described service or business disruption has a ${business.toLowerCase()} organizational impact.`
+    },
+    fallback_reason: reason
+  };
+}
+
+function formatRequestError(error) {
+  const details = [error?.message || String(error)];
+  if (error?.cause?.code) details.push(error.cause.code);
+  if (error?.cause?.message && error.cause.message !== error.message) details.push(error.cause.message);
+  return details.join(' — ');
+}
+
+function isNonRecoverableRequestError(error) {
+  return /API key not set|(LLM|Anthropic) API error (400|401|403|404)\b|Configured LLM model .* is unavailable/i
+    .test(error?.message || String(error));
+}
+
 async function callClaudeForThreat(threat, damageScenario, fetchImpl = fetch) {
   return callLLM({
     model: MODEL,
@@ -121,12 +301,38 @@ async function callClaudeForThreat(threat, damageScenario, fetchImpl = fetch) {
 }
 
 async function generateImpactForThreat(threat, damageScenario, fetchImpl) {
+  let lastRequestError = null;
+  let lastResponseIssue = `the model returned free text or invalid JSON instead of ${TOOL_NAME}`;
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await callClaudeForThreat(threat, damageScenario, fetchImpl);
-    const impact = extractToolUse(response);
-    if (impact) return impact;
+    try {
+      const response = await callClaudeForThreat(threat, damageScenario, fetchImpl);
+      const toolImpact = extractToolUse(response);
+      if (toolImpact && isCompleteToolImpact(toolImpact)) return toolImpact;
+      if (toolImpact) {
+        lastResponseIssue = `the model returned an incomplete ${TOOL_NAME} payload`;
+      }
+      const textImpact = parseTextImpact(response);
+      if (isUsableTextImpact(textImpact)) return textImpact;
+      if (!toolImpact && textImpact) {
+        lastResponseIssue = 'the model returned JSON that does not satisfy the impact-analysis contract';
+      }
+      lastRequestError = null;
+    } catch (error) {
+      lastRequestError = error;
+    }
   }
-  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${threat.threat_id}`);
+  if (lastRequestError && isNonRecoverableRequestError(lastRequestError)) {
+    throw new Error(
+      `LLM request failed for ${threat.threat_id} after two attempts: ${formatRequestError(lastRequestError)}`
+    );
+  }
+  const fallbackReason = lastRequestError
+    ? `the LLM request failed twice (${formatRequestError(lastRequestError)})`
+    : lastResponseIssue;
+  console.warn(
+    `Using deterministic Stage 7 impact fallback for existing threat ${threat.threat_id} because ${fallbackReason}.`
+  );
+  return buildFallbackImpact(threat, damageScenario, fallbackReason);
 }
 
 async function buildImpactAnalysisWithClaude(threats, damageScenarios, options = {}) {
@@ -229,11 +435,13 @@ if (require.main === module) {
 
 module.exports = {
   buildImpactAnalysisWithClaude,
+  buildFallbackImpact,
   buildImpactTool,
   buildSystemPrompt,
   buildUserMessage,
   callClaudeForThreat,
   extractToolUse,
+  parseTextImpact,
   generateImpactForThreat,
   run,
   validateImpactAnalysis

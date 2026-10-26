@@ -3,10 +3,10 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const RATING_STYLE: Record<string, string> = {
-  severe:     'bg-red-500/20 text-red-400',
-  major:      'bg-amber-500/20 text-amber-400',
-  moderate:   'bg-yellow-500/20 text-yellow-400',
-  negligible: 'bg-slate-500/20 text-slate-400',
+  severe:     'bg-red-500/15 text-red-700 dark:text-red-300',
+  major:      'bg-orange-500/15 text-orange-700 dark:text-orange-300',
+  moderate:   'bg-amber-500/15 text-amber-700 dark:text-amber-300',
+  negligible: 'bg-muted text-muted-foreground',
 };
 
 function RatingBadge({ value }: { value: string }) {
@@ -42,28 +42,34 @@ export function ImpactRatingTab() {
   const assetById  = new Map(assets.map((a) => [a.id, a]));
 
   return (
-    <div className="h-full flex flex-col bg-[#05070a]">
-      <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
-        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">Clause 15.5 — Impact Analysis</p>
+    <div className="h-full flex flex-col bg-background">
+      <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Clause 15.5 — Impact Analysis</p>
+          <p className="mt-1 text-xs text-muted-foreground">Tool-user and organizational impacts are rated separately.</p>
+        </div>
         <Badge variant="default" className="text-xs">{impacts.length} records</Badge>
       </div>
 
       <div className="flex-1 overflow-auto">
         <div className="stage-result-table">
           {/* Column headers */}
-          <div className="stage-result-header bg-[#080c14] border-b border-white/5 sticky top-0 z-10">
+          <div className="stage-result-header bg-card border-b border-border sticky top-0 z-10">
             <div className="w-[90px]  min-w-[90px]  px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">IM ID</div>
             <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Asset</div>
-            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Safety</div>
-            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Financial</div>
-            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Operational</div>
-            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-slate-500 font-mono">Privacy</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">User Safety</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">User Privacy</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">User Operational</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">User Financial</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Org Legal</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Org Financial</div>
+            <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Org Business</div>
           </div>
 
           {impacts.map((impact) => {
             const asset = assetById.get(impact.linkedAssetId);
             return (
-              <div key={impact.id} className="stage-result-row border-b border-white/5 transition-colors">
+              <div key={impact.id} className="stage-result-row border-b border-border transition-colors">
                 <div className="w-[90px] min-w-[90px] px-3 py-3 flex items-center">
                   <span className="text-xs font-mono text-primary">{impact.id}</span>
                 </div>
@@ -72,9 +78,12 @@ export function ImpactRatingTab() {
                   <p className="text-xs text-foreground truncate mt-0.5">{asset?.name ?? '—'}</p>
                 </div>
                 <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.safety} /></div>
-                <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.financial} /></div>
-                <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.operational} /></div>
                 <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.privacy} /></div>
+                <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.operational} /></div>
+                <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.financial} /></div>
+                <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.legal ?? 'negligible'} /></div>
+                <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.organizationFinancial ?? 'negligible'} /></div>
+                <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center"><RatingBadge value={impact.business ?? 'negligible'} /></div>
               </div>
             );
           })}

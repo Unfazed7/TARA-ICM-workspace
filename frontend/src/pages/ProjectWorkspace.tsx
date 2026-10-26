@@ -7,6 +7,7 @@ import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 import { ModuleSidebar, WorkflowStep } from '@/components/workspace/ModuleSidebar';
 import { WorkspaceTabs } from '@/components/workspace/WorkspaceTabs';
+import { RunHistoryDialog } from '@/components/workspace/RunHistoryDialog';
 
 import { ItemDefinition } from '@/components/workspace/ItemDefinition';
 import { AssumptionScope } from '@/components/workspace/AssumptionScope';
@@ -236,7 +237,7 @@ function StageRunnerPanel({ assessmentId, stageNums, onStageStart }: { assessmen
         });
         const canRun = stage.available
           && blockingDependency === undefined
-          && (status === 'not_started' || status === 'failed' || status === 'cancelled');
+          && (status === 'not_started' || status === 'failed' || status === 'cancelled' || status === 'complete');
         return (
           <div key={stage.stage_num} className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -256,7 +257,7 @@ function StageRunnerPanel({ assessmentId, stageNums, onStageStart }: { assessmen
                   className="h-6 text-xs px-2"
                   onClick={() => handleRun(stage.stage_num)}
                 >
-                  Run
+                  {status === 'complete' ? 'Rerun' : 'Run'}
                 </Button>
               )}
               {status === 'running' && (
@@ -440,6 +441,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
 
         <div className="flex items-center gap-2">
           <ThemeToggle className="h-7 w-7" />
+          <RunHistoryDialog assessmentId={projectId} />
           <Button
             variant="ghost"
             size="sm"

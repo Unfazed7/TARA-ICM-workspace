@@ -1,0 +1,101 @@
+[
+  {
+    "damage_id": "DS_01",
+    "asset_id": "AS_01",
+    "asset_title": "EKS Kubernetes API server",
+    "property": "availability",
+    "damage_scenario": "The EKS Kubernetes API server is the single control-plane entry point through which every workload deployment, configuration change, scaling action, and remediation task for the ap-south-1-cluster is issued. If its availability is compromised, the control plane becomes unreachable and no new workloads can be deployed, no running deployment can be updated, scaled, rolled back, or restarted, and no failed node or pod can be repaired through normal operations — leaving the platform frozen and unmanageable even as the already-running services continue serving traffic without any means of intervention.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_02",
+    "asset_id": "AS_01",
+    "asset_title": "EKS Kubernetes API server",
+    "property": "authorization",
+    "damage_scenario": "The EKS Kubernetes API server applies IAM/OIDC identity combined with Kubernetes RBAC to determine exactly which principals are permitted to create, modify, or delete workloads and cluster-level permissions in the ap-south-1-cluster. If its authorization is compromised, a principal holding only limited rights — such as a read-only service account or a narrowly scoped IAM role — can issue requests beyond its permitted scope and create or alter deployments, DaemonSets, and ClusterRoleBindings, ending up with unchecked control over what software runs on every node of the cluster while the recorded RBAC policy still shows it as restricted.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_03",
+    "asset_id": "AS_02",
+    "asset_title": "EKS worker nodes",
+    "property": "confidentiality",
+    "damage_scenario": "The EKS worker nodes are the roughly 22 Graviton EC2 instances that host every platform workload, and each one carries the container runtime, mounted pod secrets, service configuration in environment variables, and the instance metadata endpoint that dispenses cloud identity credentials. If the confidentiality of these nodes is compromised, the secrets mounted into pod volumes and passed as environment variables, the service account tokens resident in node memory, and the short-lived cloud credentials obtainable from IMDS all become readable in plain text, so the platform's internal credential and configuration material is laid bare instead of remaining known only to the specific workloads that were granted it.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_04",
+    "asset_id": "AS_02",
+    "asset_title": "EKS worker nodes",
+    "property": "integrity",
+    "damage_scenario": "The worker nodes supply the operating system, kubelet and container runtime on which all five private node groups execute the platform's services, and they enforce the boundary that keeps each workload confined to its own container. If the integrity of these nodes is compromised, node OS settings, kubelet and runtime configuration, cached workload images and the code actually executing on the node can be altered in place, so the platform runs modified service logic and the separation between co-located workloads can no longer be relied upon.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_05",
+    "asset_id": "AS_03",
+    "asset_title": "Envoy Gateway + public NLB (envoy-gateway-lb)",
+    "property": "integrity",
+    "damage_scenario": "The Envoy Gateway and its public network load balancer form the single front door for all internet traffic, terminating TLS on port 443 and routing every incoming request to the correct backend service inside the cluster. If its integrity is compromised, the routing configuration or the traffic passing through it is silently altered, so requests are delivered to unintended backend services and API responses reach clients with modified content that is accepted as genuine — with no upstream web application firewall or CDN layer in place to inspect or correct that traffic before it enters the platform.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_06",
+    "asset_id": "AS_03",
+    "asset_title": "Envoy Gateway + public NLB (envoy-gateway-lb)",
+    "property": "availability",
+    "damage_scenario": "The Envoy Gateway and public network load balancer are the only path from the internet into the platform, with no secondary ingress route, CDN, or edge layer sitting in front of them. If their availability is compromised, every API endpoint behind them becomes unreachable at the same moment — vehicle diagnostic queries, configuration retrieval, and all active authenticated sessions stop working simultaneously — and there is no alternate route through which the platform can continue serving traffic while the front door is being restored.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_07",
+    "asset_id": "AS_04",
+    "asset_title": "Kong API gateway",
+    "property": "authorization",
+    "damage_scenario": "The Kong API gateway is the single front door that evaluates every incoming request's credentials and decides which of the /core/v2, /data/v2 and /pandora/v1 routes, and which tenant's resources behind them, that caller is permitted to reach. If its authorization is compromised, a caller holding perfectly valid but low-privilege or single-tenant credentials has requests to routes and records outside their permitted scope accepted and answered instead of rejected at the gateway, so one tenant's diagnostic and vehicle data is served to a party whose subscription and role never granted access to it and the gateway's access rules can no longer be relied on as the boundary between tenants.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_08",
+    "asset_id": "AS_05",
+    "asset_title": "Hasura GraphQL engine",
+    "property": "authorization",
+    "damage_scenario": "The Hasura GraphQL engine is the single data API sitting in front of the core database, and its role and tenant permission rules determine exactly which rows and fields each authenticated caller is permitted to read or change. If its authorization is compromised, a caller holding only a limited role or a single tenant's credentials can retrieve and modify records belonging to other tenants — diagnostic session histories, vehicle identifiers, work-order details and configuration settings that were never within that caller's permitted scope — so the tenant isolation boundary that keeps each customer's data set separate effectively no longer exists.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_09",
+    "asset_id": "AS_06",
+    "asset_title": "Aurora cloudapi database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora PostgreSQL database stores the platform's core records, including the role definitions, access policies and tenant bindings that every authorization decision reads before granting access to data or functions. If its integrity is compromised, these records no longer reflect the approved permission model: accounts can carry roles or tenant bindings they were never assigned and policies can evaluate against corrupted configuration data, so the platform silently grants or withholds access on a false basis and the recorded state of who was permitted to do what can no longer be trusted.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_10",
+    "asset_id": "AS_07",
+    "asset_title": "Aurora directordb database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora directordb database is the authoritative record of which firmware version is installed on each ECU in the field and of the campaign targeting rules that determine which vehicles are eligible to receive a given signed update instruction. If its integrity is compromised, the stored version state and targeting criteria no longer match the real fleet, so update instructions are signed and issued for software bundles that do not correspond to the ECU's actual installed version — vehicles receive incompatible or redundant firmware that fails to flash or leaves the ECU in an unusable state, while the vehicles that genuinely require a remediation campaign are skipped and never receive it.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  },
+  {
+    "damage_id": "DS_11",
+    "asset_id": "AS_08",
+    "asset_title": "Aurora pandoradb database",
+    "property": "integrity",
+    "damage_scenario": "The Aurora pandoradb database is the authoritative store of device provisioning state, recording which vehicle identities are enrolled and which device certificate each identity is bound to. If its integrity is compromised, enrollment entries and certificate-to-identity bindings can be altered without detection, so a vehicle is provisioned against a certificate belonging to a different enrolled identity and the database no longer truthfully states which device holds which credential.",
+    "stakeholder_affected": "organization",
+    "created_timestamp": "2026-10-09T10:47:02.970Z"
+  }
+]

@@ -18,6 +18,10 @@ def new_assessment_id():
     return f"ASS_{uuid4().hex[:6].upper()}"
 
 
+def new_attempt_id():
+    return f"RUN_{uuid4().hex[:12].upper()}"
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -71,6 +75,44 @@ class PipelineRun(Base):
     __table_args__ = (
         UniqueConstraint("assessment_id", "stage_num", name="uq_run_assessment_stage"),
     )
+
+
+class PipelineRunAttempt(Base):
+    """Immutable execution history for a pipeline stage.
+
+    PipelineRun remains the current-state projection used throughout the UI.
+    A new attempt row is created for every execution so reruns cannot erase
+    earlier diagnostics.
+    """
+
+    __tablename__ = "pipeline_run_attempts"
+
+    attempt_id = Column(String, primary_key=True, default=new_attempt_id)
+    assessment_id = Column(String, nullable=False, index=True)
+    stage_num = Column(Integer, nullable=False, index=True)
+    stage_name = Column(String, nullable=False)
+    status = Column(
+        Enum(
+            "pending",
+            "running",
+            "paused",
+            "cancelled",
+            "complete",
+            "failed",
+            name="run_attempt_status",
+        ),
+        nullable=False,
+        default="pending",
+    )
+    provider = Column(String, nullable=True)
+    model = Column(String, nullable=True)
+    log_path = Column(String, nullable=True)
+    error_message = Column(String, nullable=True)
+    started_at = Column(DateTime(timezone=True), nullable=True)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+    duration_ms = Column(Integer, nullable=True)
+    size_bytes = Column(Integer, nullable=False, default=0)
+    created_at = Column(DateTime(timezone=True), default=utc_now, nullable=False, index=True)
 
 
 class Checkpoint(Base):

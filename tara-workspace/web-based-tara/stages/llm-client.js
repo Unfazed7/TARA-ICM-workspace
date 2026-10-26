@@ -120,6 +120,7 @@ async function callLLM(params, fetchImpl = fetch) {
     };
     if (params.tools) body.tools = params.tools;
     if (params.tool_choice) body.tool_choice = params.tool_choice;
+    if (params.thinking) body.thinking = params.thinking;
 
     const res = await fetchImpl(`${config.baseUrl}/messages`, {
       method: 'POST',

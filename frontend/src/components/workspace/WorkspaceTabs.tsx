@@ -8,7 +8,7 @@ import { DamageAnalysisTab } from './tara-tabs/DamageAnalysisTab';
 import { ThreatAnalysisTab } from './tara-tabs/ThreatAnalysisTab';
 import { ImpactRatingTab } from './tara-tabs/ImpactRatingTab';
 import { AttackPathTab } from './tara-tabs/AttackPathTab';
-import { FeasibilityTab } from './tara-tabs/FeasibilityTab';
+import { RiskScoringTab } from './tara-tabs/RiskScoringTab';
 import { RiskTreatmentTab } from './tara-tabs/RiskTreatmentTab';
 import { CybersecurityGoalsTab } from './tara-tabs/CybersecurityGoalsTab';
 import { AttackTreesTab } from './tara-tabs/AttackTreesTab';
@@ -29,7 +29,7 @@ const taraSteps = [
   { id: 'attack-trees' as TaraTab, step: 4, label: 'Attack Trees', description: 'Visual attack tree diagrams for threat paths', icon: GitBranch },
   { id: 'impact-rating' as TaraTab, step: 5, label: 'Impact Analysis', description: 'Impact rating per damage scenario (Clause 15.5)', icon: Gauge },
   { id: 'attack-path' as TaraTab, step: 6, label: 'Attack Path', description: 'Attack path & vector analysis (Clause 15.6)', icon: Route },
-  { id: 'feasibility' as TaraTab, step: 7, label: 'Feasibility', description: 'Attack feasibility rating (Clause 15.7)', icon: Activity },
+  { id: 'feasibility' as TaraTab, step: 7, label: 'Risk Scoring', description: 'Risk ranking from impact and attack feasibility (Clause 15.8)', icon: Activity },
   { id: 'risk-treatment' as TaraTab, step: 8, label: 'Risk Determination & Decision', description: 'Risk determination & treatment decision (Clause 15.8 & 15.9)', icon: ShieldAlert },
   { id: 'cybersecurity-goals' as TaraTab, step: 9, label: 'Cybersecurity Goals', description: 'Cybersecurity goals, claims & controls (Clause 15.9)', icon: Shield },
   { id: 'residual-risk' as TaraTab, step: 10, label: 'Residual Risk', description: 'Post-treatment feasibility & residual risk assessment', icon: ShieldCheck },
@@ -161,7 +161,7 @@ export function WorkspaceTabs({ activeTab, onTabChange, phase, stageStatuses }: 
           <TabsContent value="attack-trees" className="h-full m-0 p-0"><AttackTreesTab /></TabsContent>
           <TabsContent value="impact-rating" className="h-full m-0 p-0"><ImpactRatingTab /></TabsContent>
           <TabsContent value="attack-path" className="h-full m-0 p-0"><AttackPathTab /></TabsContent>
-          <TabsContent value="feasibility" className="h-full m-0 p-0"><FeasibilityTab /></TabsContent>
+          <TabsContent value="feasibility" className="h-full m-0 p-0"><RiskScoringTab /></TabsContent>
           <TabsContent value="risk-treatment" className="h-full m-0 p-0"><RiskTreatmentTab /></TabsContent>
           <TabsContent value="cybersecurity-goals" className="h-full m-0 p-0"><CybersecurityGoalsTab /></TabsContent>
           <TabsContent value="residual-risk" className="h-full m-0 p-0"><ResidualRiskTab /></TabsContent>

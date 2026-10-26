@@ -129,6 +129,23 @@ class PipelineRunResponse(BaseModel):
     completed_at: datetime | None = None
 
 
+class PipelineRunAttemptResponse(BaseModel):
+    attempt_id: str
+    assessment_id: str
+    stage_num: int
+    stage_name: str
+    status: RunStatus
+    provider: str | None = None
+    model: str | None = None
+    error_message: str | None = None
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
+    duration_ms: int | None = None
+    size_bytes: int = 0
+    filename: str | None = None
+    log_available: bool = False
+
+
 class StageDefinitionResponse(BaseModel):
     stage_num: int
     key: str

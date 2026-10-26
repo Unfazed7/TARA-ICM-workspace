@@ -1,0 +1,397 @@
+[
+  {
+    "treatment_id": "TRT_01",
+    "risk_id": "RSK_01",
+    "threat_id": "TH_01",
+    "damage_scenario_id": "DS_01",
+    "attack_id": "AT_01",
+    "impact_id": "IM_01",
+    "asset_id": "AS_01",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_01 carries risk_score=10 at risk_level=high, which is above the project acceptance threshold of <= low, so acceptance is not permitted. The threat is a volume-based denial of service against the single publicly resolvable control-plane entry point for ap-south-1-cluster: because the endpoint answers from any internet source with no AWS WAF or IP allowlist, no client-side rate limiting, and no API Priority and Fairness reservations, even partly unauthenticated well-formed traffic occupies the same finite request-thread and connection pool used by kubectl, the autoscaler, operators and every kubelet. AFR=very high (5) combined with Major operational impact for the tool user and Moderate business impact for the organization makes the loss of manageability of the entire cluster an intolerable steady-state condition — while already-running services keep serving traffic, no deployment, scaling, rollback or node/pod repair is possible, so any concurrent incident becomes unrecoverable through normal operations. The attack mechanism is entirely removable by layered edge and admission controls rather than accepted, and no third party can absorb the residual exposure (the cluster control plane is operated by the organization on AWS, so transfer would not reduce likelihood or impact). Avoidance would require removing the public API server endpoint entirely, which would break legitimate remote administration of ap-south-1-cluster and is disproportionate given that rate limiting, edge filtering and APF reservation restore availability without changing the platform's operating model. Reduction therefore targets the three specific enabling gaps named in AT_01 step_4: unfiltered internet reachability, absence of per-client throttling of expensive LIST/WATCH requests, and absence of reserved capacity for system-critical clients, with detection layered on to catch saturation that still gets through.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_01",
+      "goal_statement": "The EKS Kubernetes API server SHALL restrict public reachability of its endpoint to allowlisted source addresses behind AWS WAF rules, enforce per-client rate limits and request-cost throttling on cluster-wide LIST/WATCH queries and anonymous requests, and reserve guaranteed API Priority and Fairness capacity for kubelets and core controllers, to protect availability against request-thread and connection-pool exhaustion caused by high-cost LIST/WATCH flooding and anonymous request saturation from unauthenticated internet sources.",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_01.",
+      "self_test_note": "This goal would not transfer unchanged to another asset sharing the availability property. It is bound to the exact asset_title (EKS Kubernetes API server), to the ap-south-1-cluster public endpoint named in AT_01 step_1, and to the specific abuse mechanism in step_2/step_3 — cluster-wide LIST/WATCH amplification plus anonymous requests consuming the shared concurrency pool used by kubectl, the autoscaler, operators and node agents. A generic availability goal such as \"the service SHALL resist denial of service\" would apply equally to a web frontend or a database and would fail this test; the API Priority and Fairness reservation for kubelets and core controllers is unique to a Kubernetes control plane and has no meaning for any other asset type. Verifiability is testable: the AWS WAF web ACL and IP allowlist can be confirmed on the public endpoint, per-client throttling can be validated by issuing repeated cluster-wide LIST requests and confirming 429 responses, and APF flow schema reservation can be verified by confirming kubelet and core-controller request classes retain priority under simulated flood. No attacker language is used — the mechanism is described, not the actor."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_43",
+        "control_title": "DDoS Mitigation",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_43 — DDoS Mitigation (preventive, availability, denial_of_service, ISO A.8.6/A.8.20, NIST PR.IR-01): directly closes the first enabling gap in AT_01 step_1 and step_4 — the publicly resolvable ap-south-1-cluster API server endpoint answers from any internet source with nothing at the edge to drop traffic. Volumetric and protocol-level protection with traffic scrubbing and rate-based blocking is applied to the diagnostic platform endpoints including this control-plane entry point, so the flood is absorbed before it reaches the finite request-thread and connection pool that kubectl, the autoscaler, operators and every kubelet share."
+      },
+      {
+        "control_id": "CTR_32",
+        "control_title": "API Rate Limiting and Throttling",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_32 — API Rate Limiting and Throttling (preventive, availability, denial_of_service, ISO A.8.6/A.8.21, NIST PR.PS-04): addresses the abuse technique in AT_01 step_2/step_3 where repeated cluster-wide LIST/WATCH queries give the attacker cheap amplification — modest outbound traffic forcing the API server to enumerate and serialize large object sets. Per-client and per-endpoint limits with 429 on threshold breach and exponential backoff on repeated failures cap how many concurrent or expensive requests a single source may drive, and the same mechanism supports the API Priority and Fairness flow schema reservation that guarantees capacity for kubelets and core controllers rather than queueing them behind the flood."
+      },
+      {
+        "control_id": "CTR_33",
+        "control_title": "API Abuse Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_33 — API Abuse Detection (detective, availability/authorization, denial_of_service, ISO A.8.16/A.8.21, NIST DE.CM-01): the attack traffic in AT_01 step_2 is well-formed and partly unauthenticated, so it looks like ordinary client activity and authentication and RBAC never engage — a purely preventive posture cannot confirm saturation is under way. This control detects the residual case: volume spikes, unusual user-agent strings from the attacker's automated scripts, and access pattern deviations from baseline on the API server endpoint, with alerting and auto-block on confirmed abuse, giving operators the signal needed to intervene before the control plane is fully frozen and unmanageable."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_02",
+    "risk_id": "RSK_02",
+    "threat_id": "TH_06",
+    "damage_scenario_id": "DS_06",
+    "attack_id": "AT_06",
+    "impact_id": "IM_06",
+    "asset_id": "AS_03",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_02 carries risk_score=10 at risk_level=high (AFR=very high (5); impact Major operational / Moderate business), which is above the project acceptance ceiling of <= low, so accept is not available; the platform cannot avoid the capability (public ingress to the diagnostic API is required for the product to function) and there is no counterparty to which ingress availability can be contractually transferred. The residual exposure is therefore reduced by closing the two specific gaps identified in AT_06 step_4_control_gap: (a) no upstream absorption/scrubbing tier in front of the single choke point, and (b) no per-source rate limiting or connection caps at the Envoy/NLB listeners. Layered edge scrubbing plus listener-level connection and handshake caps directly negate the blended flood profile (TLS handshake floods, HTTP request floods, slow held-open connections) that consumes Envoy worker slots and downstream connection pool capacity, and detective abuse monitoring provides shedding/auto-block for flood variants that fall below static thresholds.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_02",
+      "goal_statement": "The Envoy Gateway + public NLB (envoy-gateway-lb) SHALL place volumetric traffic scrubbing and edge absorption in front of its single public ingress path and SHALL enforce per-source request rate limits, TLS handshake rate caps, and maximum concurrent/held-open connection caps at every public listener, so that blended TLS handshake floods, HTTP request floods, and slow held-open connections are absorbed, shed, or rejected before they saturate Envoy worker slots and downstream connection pool capacity — protecting the availability of all API endpoints behind the gateway and preventing simultaneous termination of vehicle diagnostic queries, configuration retrieval, and active authenticated sessions.",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_02.",
+      "self_test_note": "Self-test: this goal could not be reused unchanged on another availability-flagged asset. It names the exact asset_title (Envoy Gateway + public NLB (envoy-gateway-lb)), it is bound to the AT_06 mechanism (TLS handshake floods + HTTP request floods + slow held-open connections exhausting Envoy worker slots and downstream connection pools), and it addresses the asset-specific architectural condition from DS_06 — a single-path public ingress with no upstream absorption tier — rather than generic \"protect against DoS\". It is verifiable: presence of an upstream scrubbing/absorption tier, measured listener-level per-source rate limits, TLS handshake rate caps, and max concurrent/held-open connection caps can each be configuration-audited and load-tested against the flood profile described in AT_06 step_2."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_43",
+        "control_title": "DDoS Mitigation",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_43 (DDoS Mitigation - Cloudflare, preventive): directly closes the architectural gap named in AT_06 step_3 and DS_06 - no CDN, edge scrubbing layer, or upstream absorption tier sits in front of envoy-gateway-lb. Deploying volumetric and protocol-level DDoS protection with traffic scrubbing and rate-based blocking at the edge absorbs the commodity booter/botnet load before it reaches the NLB and Envoy data plane, so the single public front door is no longer the first component to receive the full flood volume."
+      },
+      {
+        "control_id": "CTR_32",
+        "control_title": "API Rate Limiting and Throttling",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_32 (API Rate Limiting and Throttling, preventive): closes the listener-level control gap in AT_06 step_4 - the asset lacks per-source rate limiting and connection caps. Enforcing per-client and per-endpoint rate limits, 429 responses on threshold breach, and exponential backoff on repeated failures caps the number of Envoy worker connection slots and downstream connection pool entries any single source can occupy, specifically defeating the slow held-open connection and high-volume HTTP request components of the blended attack profile."
+      },
+      {
+        "control_id": "CTR_33",
+        "control_title": "API Abuse Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_33 (API Abuse Detection with Rate Limiting, detective): provides the detection-and-response layer that static thresholds cannot cover for a flood profile deliberately mixed to stay under fixed limits. Monitoring for volume spikes, access-pattern deviation from baseline, and unusual user-agent strings, with alerting and auto-block on confirmed abuse, lets the platform distinguish flood traffic from legitimate diagnostic load and shed it while the primary path is degraded - the preventive + detective combination required rather than two preventive controls for the same mechanism."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_03",
+    "risk_id": "RSK_03",
+    "threat_id": "TH_03",
+    "damage_scenario_id": "DS_03",
+    "attack_id": "AT_03",
+    "impact_id": "IM_03",
+    "asset_id": "AS_02",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_03 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_03",
+      "goal_statement": "The EKS worker nodes SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_03.",
+      "self_test_note": "Verify that the controls are enforced specifically on EKS worker nodes and prevent or detect the AT_03 mechanism; a generic control applied only to another asset does not satisfy this goal."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_03."
+      },
+      {
+        "control_id": "CTR_22",
+        "control_title": "Privileged Session Monitoring",
+        "control_type": "detective",
+        "assignment_rationale": "Privileged Session Monitoring directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_03."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "medium",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_04",
+    "risk_id": "RSK_04",
+    "threat_id": "TH_07",
+    "damage_scenario_id": "DS_07",
+    "attack_id": "AT_07",
+    "impact_id": "IM_07",
+    "asset_id": "AS_04",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_04 is rated high (risk_score=8, AFR=high(4), impact rating Major on tool-user privacy with Moderate operational, legal and business effects), which is above the project acceptance threshold of <= low, so acceptance is not permitted and the risk must be treated. Sharing is not viable: the broken authorization decision is made by the Kong gateway's own ACL and tenant-scoping plugin configuration, which the organization owns and configures directly — no third party can absorb cross-tenant disclosure of tenant diagnostic and vehicle data. Avoidance would require removing the multi-tenant /core/v2, /data/v2 and /pandora/v1 API surface, which is the product's core delivery mechanism. Reduction is therefore the only appropriate option: close the control gap in AT_07 step_4 by making the gateway compare the requested route family and tenant identifier/ACL group against the consumer's granted subscription scope (rather than only confirming the credential is authentic and active), add an independent entitlement re-check so upstream services no longer trust the gateway-forwarded identity, and layer detective monitoring for cross-tenant object access and tenant-ID enumeration so any residual gap is caught while harvesting is in progress.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_04",
+      "goal_statement": "The Kong API gateway SHALL enforce a per-consumer authorization decision on every request to the /core/v2, /data/v2 and /pandora/v1 route families that compares the requested route family and the tenant record identifier or ACL group named in the request against the authenticated consumer's granted subscription and ACL group list, rejecting with 403 and logging any request whose route or tenant claim falls outside that granted scope, so that its authorization property is protected against out-of-scope access obtained by substituting another tenant's record identifier or an unassigned ACL group into an otherwise validly credentialed request.",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_04.",
+      "self_test_note": "Passes the self-test: the goal could not be applied unchanged to a different asset with the same authorization property. It names the specific asset (Kong API gateway), the three specific protected route families (/core/v2, /data/v2, /pandora/v1), and the exact mechanism from AT_07 step_2/step_4 — substitution of another tenant's record identifier or an ungranted ACL group into a request carrying an authentic, active low-tier consumer credential, which the current plugins accept because they verify credential authenticity and active status only. A backend service or data store goal would have to reference re-checking entitlement on gateway-forwarded identity instead of route-family/tenant-scope matching at the gateway, so the text is not portable. It is verifiable: issue a valid single-tenant consumer credential, replay the same request pattern against each route family with a foreign tenant ID and an unassigned ACL group, and confirm 403 rejection plus an audit log entry rather than a proxied upstream response containing another tenant's records."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_31",
+        "control_title": "API Gateway Security Controls",
+        "control_type": "preventive",
+        "assignment_rationale": "CTR_31 (API Gateway Security Controls, preventive) closes the exact control gap in AT_07 step_4: it moves authorization enforcement to the gateway layer itself so that route matching, schema validation and policy evaluation happen centrally on every /core/v2, /data/v2 and /pandora/v1 request instead of the ACL/tenant-scoping plugins merely confirming that the presented consumer credential is authentic and active. Implemented as entitlement-aware gateway policy (consumer subscription and ACL group list bound to permitted route families and tenant scope), it makes the gateway's access rules function again as the boundary between tenants, which is the property DS_07 says is lost."
+      },
+      {
+        "control_id": "CTR_26",
+        "control_title": "BOLA / Broken Object Level Authorization Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_26 (BOLA / Broken Object Level Authorization Detection, detective) directly targets the step_2/step_3 technique of re-issuing an authenticated request pattern with another tenant's record identifier. It detects cross-tenant data access anomalies, authorization failures and ID substitution patterns at the object level, so even where a route-family ACL rule is misconfigured or a new endpoint is added without tenant scoping, the resulting out-of-scope reads are alerted on rather than silently proxied upstream and answered."
+      },
+      {
+        "control_id": "CTR_38",
+        "control_title": "API Enumeration Attack Detection",
+        "control_type": "detective",
+        "assignment_rationale": "CTR_38 (API Enumeration Attack Detection, detective) addresses step_5, where the attacker iterates tenant identifiers across all three route families to systematically harvest other tenants' diagnostic and vehicle data. Sequential object-ID enumeration and parameter fuzzing detection catches the harvesting loop early — the distinguishing signal between a single mistaken cross-tenant read and sustained bulk exfiltration — and provides the alerting needed to revoke the offending consumer credential before the privacy impact rated Major is realised at scale."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_05",
+    "risk_id": "RSK_05",
+    "threat_id": "TH_08",
+    "damage_scenario_id": "DS_08",
+    "attack_id": "AT_08",
+    "impact_id": "IM_08",
+    "asset_id": "AS_05",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_05 is high with score 8; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_05",
+      "goal_statement": "The Hasura GraphQL engine SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+      "cal": 3,
+      "cal_rationale": "CAL 3 derived from high risk level for RSK_05.",
+      "self_test_note": "Verify that the controls are enforced specifically on Hasura GraphQL engine and prevent or detect the AT_08 mechanism; a generic control applied only to another asset does not satisfy this goal."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_08."
+      },
+      {
+        "control_id": "CTR_22",
+        "control_title": "Privileged Session Monitoring",
+        "control_type": "detective",
+        "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_08."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 3,
+    "residual_risk_expected": "medium",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_06",
+    "risk_id": "RSK_06",
+    "threat_id": "TH_10",
+    "damage_scenario_id": "DS_10",
+    "attack_id": "AT_10",
+    "impact_id": "IM_10",
+    "asset_id": "AS_07",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_06 is medium with score 6; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_06",
+      "goal_statement": "The Aurora directordb database SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect integrity against unauthorized configuration or data modifications.",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_06.",
+      "self_test_note": "Verify that the controls are enforced specifically on Aurora directordb database and prevent or detect the AT_10 mechanism; a generic control applied only to another asset does not satisfy this goal."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_32",
+        "control_title": "API Rate Limiting and Throttling",
+        "control_type": "preventive",
+        "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects unauthorized configuration or data modifications in AT_10."
+      },
+      {
+        "control_id": "CTR_33",
+        "control_title": "API Abuse Detection",
+        "control_type": "detective",
+        "assignment_rationale": "API Abuse Detection directly reduces or detects unauthorized configuration or data modifications in AT_10."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_07",
+    "risk_id": "RSK_07",
+    "threat_id": "TH_02",
+    "damage_scenario_id": "DS_02",
+    "attack_id": "AT_02",
+    "impact_id": "IM_02",
+    "asset_id": "AS_01",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_07 is medium with score 4; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_07",
+      "goal_statement": "The EKS Kubernetes API server SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_07.",
+      "self_test_note": "Verify that the controls are enforced specifically on EKS Kubernetes API server and prevent or detect the AT_02 mechanism; a generic control applied only to another asset does not satisfy this goal."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_02."
+      },
+      {
+        "control_id": "CTR_22",
+        "control_title": "Privileged Session Monitoring",
+        "control_type": "detective",
+        "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_02."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_08",
+    "risk_id": "RSK_08",
+    "threat_id": "TH_09",
+    "damage_scenario_id": "DS_09",
+    "attack_id": "AT_09",
+    "impact_id": "IM_09",
+    "asset_id": "AS_06",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_08 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_08",
+      "goal_statement": "The Aurora cloudapi database SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect integrity against unauthorized configuration or data modifications.",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_08.",
+      "self_test_note": "Verify that the controls are enforced specifically on Aurora cloudapi database and prevent or detect the AT_09 mechanism; a generic control applied only to another asset does not satisfy this goal."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_32",
+        "control_title": "API Rate Limiting and Throttling",
+        "control_type": "preventive",
+        "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects unauthorized configuration or data modifications in AT_09."
+      },
+      {
+        "control_id": "CTR_33",
+        "control_title": "API Abuse Detection",
+        "control_type": "detective",
+        "assignment_rationale": "API Abuse Detection directly reduces or detects unauthorized configuration or data modifications in AT_09."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_09",
+    "risk_id": "RSK_09",
+    "threat_id": "TH_11",
+    "damage_scenario_id": "DS_11",
+    "attack_id": "AT_11",
+    "impact_id": "IM_11",
+    "asset_id": "AS_08",
+    "treatment_option": "reduce",
+    "treatment_rationale": "RSK_09 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+    "cybersecurity_goal": {
+      "goal_id": "CG_09",
+      "goal_statement": "The Aurora pandoradb database SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect integrity against unauthorized configuration or data modifications.",
+      "cal": 2,
+      "cal_rationale": "CAL 2 derived from medium risk level for RSK_09.",
+      "self_test_note": "Verify that the controls are enforced specifically on Aurora pandoradb database and prevent or detect the AT_11 mechanism; a generic control applied only to another asset does not satisfy this goal."
+    },
+    "cybersecurity_claim": null,
+    "controls_assigned": [
+      {
+        "control_id": "CTR_16",
+        "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+        "control_type": "preventive",
+        "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects unauthorized configuration or data modifications in AT_11."
+      },
+      {
+        "control_id": "CTR_22",
+        "control_title": "Privileged Session Monitoring",
+        "control_type": "detective",
+        "assignment_rationale": "Privileged Session Monitoring directly reduces or detects unauthorized configuration or data modifications in AT_11."
+      }
+    ],
+    "avoidance_action": null,
+    "cal": 2,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_10",
+    "risk_id": "RSK_10",
+    "threat_id": "TH_04",
+    "damage_scenario_id": "DS_04",
+    "attack_id": "AT_04",
+    "impact_id": "IM_04",
+    "asset_id": "AS_02",
+    "treatment_option": "accept",
+    "treatment_rationale": "RSK_10 is low with score 3, which is within the project acceptance threshold of low or below.",
+    "cybersecurity_goal": null,
+    "cybersecurity_claim": {
+      "claim_id": "CC_01",
+      "claim_statement": "The risk of EKS worker nodes: An attacker who gets code running inside one workload on a private EKS node group escalates onto the underlying worker node through a privileged container mount or the node's own kubelet API, then rewrites kubelet and container-runtime settings, node OS parameters and cached image layers in place because nothing verifies those node-level configurations and pinned images against a signed baseline and no file-integrity monitoring reports node-side changes, so the node keeps joining the cluster while scheduling modified service logic and the container boundary that kept the five node groups' workloads apart stops holding, letting one altered container read the mounted secrets, environment and storage of every other service co-located on that node. affecting EKS worker nodes integrity is accepted because AFR is medium (AFR=3), impact is Moderate (score=1), risk_score is 3, and risk_level is low, which is within the project acceptance threshold of <= low.",
+      "acceptance_basis": "RSK_10 is classified low, within the documented acceptance threshold of informational or low."
+    },
+    "controls_assigned": [],
+    "avoidance_action": null,
+    "cal": 1,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  },
+  {
+    "treatment_id": "TRT_11",
+    "risk_id": "RSK_11",
+    "threat_id": "TH_05",
+    "damage_scenario_id": "DS_05",
+    "attack_id": "AT_05",
+    "impact_id": "IM_05",
+    "asset_id": "AS_03",
+    "treatment_option": "accept",
+    "treatment_rationale": "RSK_11 is classified low with a risk score of 2, which falls at or below the project acceptance threshold (<= low), so acceptance is a permitted treatment under the TARA decision rules. The attack path AT_05 requires the attacker to already hold high-privilege cluster or Envoy control-plane credentials (CVSS Privileges Required = High) — an administrative precondition that places the scenario well beyond anonymous or standard-user reach and confines likelihood to AFR=low (2). Realisation is entirely server-side (User Interaction = None) but the resulting damage is limited to misdirection of gateway routing and altered API response content: the impact rating resolves to low (1), with tool-user safety, privacy and financial all Negligible per the fixed web-TARA domain constraints, and only operational (Moderate) and organizational business (Moderate) effects recorded. There is no confidentiality, authenticity, authorization or non-repudiation exposure on AS_03 in this chain, and no pathway to vehicle-level safety outcomes within web-TARA scope. Given a low-likelihood, low-impact, high-privilege tampering scenario whose worst case is a detectable-on-review routing deviation rather than data loss or safety harm, investing new controls is not proportionate; the risk is accepted as-is without committing to future mitigations.",
+    "cybersecurity_goal": null,
+    "cybersecurity_claim": {
+      "claim_id": "CC_02",
+      "claim_statement": "The risk of an attacker who has gained a foothold inside the cluster or obtained Envoy control-plane credentials pushing a modified, unsigned xDS/HTTPRoute configuration that the Envoy Gateway applies without an authenticated or signed configuration baseline, silently rerouting port 443 TLS-terminating client requests to attacker-chosen backend services and returning altered API responses accepted as genuine, affecting the Envoy Gateway + public NLB (envoy-gateway-lb) integrity, is accepted because the attack feasibility rating is low (AFR=2) and the impact rating is low (score=1), yielding an overall risk score of 2 and a risk level of low; the risk is therefore classified as low, which is within the project acceptance threshold of <= low.",
+      "acceptance_basis": "Quantitative basis: AFR=low (2) x impact rating=low (1) = risk_score 2, risk_level low, at or below the project acceptance threshold of <= low, making acceptance an authorised treatment. Qualitative basis: exploitation demands pre-existing administrative write access to the Envoy control plane or the Gateway/HTTPRoute CRDs (Privileges Required = High), so no unprivileged or internet-anonymous actor can realise TH_05; the compromised CIAAAN property is integrity only, with confidentiality, authenticity, authorization and non-repudiation not in scope for AS_03; tool-user safety, privacy and financial impacts are Negligible under the fixed web-TARA domain constraints, and legal and other-stakeholder financial impacts are Negligible, leaving Moderate operational and Moderate business effects as the worst-case outcome. The accepted risk is recorded as-is; this claim commits to no future controls or remediations."
+    },
+    "controls_assigned": [],
+    "avoidance_action": null,
+    "cal": 1,
+    "residual_risk_expected": "low",
+    "created_timestamp": "2026-10-09T19:46:54.462Z"
+  }
+]

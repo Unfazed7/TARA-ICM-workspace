@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, R
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import type { Assessment } from '@/types/api';
+import { mapRiskScore, type RawRiskScore, type TaraRiskScore } from '@/lib/risk-scoring';
 import {
   calculateRiskValue,
   feasibilityLevelToNumber,
@@ -65,12 +66,17 @@ export interface TaraImpact {
   financial: ImpactLevel;
   operational: ImpactLevel;
   privacy: ImpactLevel;
+  legal: ImpactLevel;
+  organizationFinancial: ImpactLevel;
+  business: ImpactLevel;
 }
 
 export interface TaraAttackPath {
   id: string;
   linkedThreatId: string;
   attackVector: string;
+  afrValue?: number;
+  afrLabel?: string;
   description: string;
   narrative: string;
   steps: string[];
@@ -141,6 +147,8 @@ interface RawAttackPath {
   attack_description?: string;
   attack_path?: Record<string, string>;
   cvss_metrics?: { attack_vector?: string };
+  afr_value?: number | null;
+  afr_label?: string | null;
 }
 
 interface RawImpact {
@@ -151,6 +159,11 @@ interface RawImpact {
     financial?: string;
     operational?: string;
     privacy?: string;
+  };
+  other_stakeholders?: {
+    legal?: string;
+    financial?: string;
+    business?: string;
   };
 }
 
@@ -163,6 +176,15 @@ interface RawTreatment {
   goal_statement?: string | null;
   claim_statement?: string | null;
   control_ids?: string[];
+  cybersecurity_goal?: {
+    goal_statement?: string | null;
+  } | null;
+  cybersecurity_claim?: {
+    claim_statement?: string | null;
+  } | null;
+  controls_assigned?: Array<{
+    control_id: string;
+  }>;
   residual_risk_expected?: string;
 }
 
@@ -232,21 +254,23 @@ function mapDamageScenario(raw: RawDamageScenario): TaraDamageScenario {
   };
 }
 
-const STEP_LABELS = [
-  'Initial Precondition',
-  'Abuse Technique',
-  'Exploit Effect',
-  'Control Gap',
-  'Threat Realization',
+const ATTACK_PATH_STEP_KEYS = [
+  'step_1_initial_precondition',
+  'step_2_abuse_technique',
+  'step_3_exploit_effect',
+  'step_4_control_gap',
+  'step_5_threat_realization',
 ];
 
 function mapAttackPath(raw: RawAttackPath): TaraAttackPath {
   const rawSteps = raw.attack_path ?? {};
-  const steps = Object.values(rawSteps);
+  const steps = ATTACK_PATH_STEP_KEYS.map((key) => rawSteps[key] ?? '');
   return {
     id: raw.attack_id,
     linkedThreatId: raw.threat_id,
     attackVector: CVSS_VECTOR_MAP[raw.cvss_metrics?.attack_vector ?? ''] ?? 'network',
+    afrValue: raw.afr_value ?? undefined,
+    afrLabel: raw.afr_label ?? undefined,
     description: raw.attack_description ?? '',
     narrative: raw.attack_description ?? '',
     steps,
@@ -261,6 +285,9 @@ function mapImpact(raw: RawImpact, threatIdToAssetId: Map<string, string>): Tara
     financial: RATING_MAP[raw.tool_user?.financial ?? ''] ?? 'negligible',
     operational: RATING_MAP[raw.tool_user?.operational ?? ''] ?? 'negligible',
     privacy: RATING_MAP[raw.tool_user?.privacy ?? ''] ?? 'negligible',
+    legal: RATING_MAP[raw.other_stakeholders?.legal ?? ''] ?? 'negligible',
+    organizationFinancial: RATING_MAP[raw.other_stakeholders?.financial ?? ''] ?? 'negligible',
+    business: RATING_MAP[raw.other_stakeholders?.business ?? ''] ?? 'negligible',
   };
 }
 
@@ -273,9 +300,9 @@ function mapTreatment(raw: RawTreatment): TaraTreatment {
     linkedThreatId: raw.threat_id ?? '',
     riskValue: riskLevelMap[raw.residual_risk_expected ?? ''] ?? 1,
     decision: (['avoid', 'reduce', 'share', 'accept'].includes(raw.treatment_option ?? '') ? raw.treatment_option : 'reduce') as TreatmentDecision,
-    cybersecurityGoal: raw.goal_statement ?? '',
-    cybersecurityClaim: raw.claim_statement ?? '',
-    controls: (raw.control_ids ?? []).join(', '),
+    cybersecurityGoal: raw.cybersecurity_goal?.goal_statement ?? raw.goal_statement ?? '',
+    cybersecurityClaim: raw.cybersecurity_claim?.claim_statement ?? raw.claim_statement ?? '',
+    controls: (raw.controls_assigned?.map((control) => control.control_id) ?? raw.control_ids ?? []).join(', '),
     residualRisk: riskLevelMap[raw.residual_risk_expected ?? ''] ?? 1,
   };
 }
@@ -292,6 +319,7 @@ interface TaraContextType {
   attackPaths: TaraAttackPath[];
   feasibilities: TaraFeasibility[];
   treatments: TaraTreatment[];
+  riskScores: TaraRiskScore[];
   stageStatuses: Record<string, StageStatus>;
   runStage: (stageNum: number) => Promise<void>;
   pauseStage: (stageNum: number) => Promise<void>;
@@ -400,6 +428,12 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
     enabled: !!assessmentId && stageStatuses?.['07'] === 'complete',
   });
 
+  const { data: rawRiskScores } = useQuery({
+    queryKey: ['stage-output', assessmentId, 8],
+    queryFn: () => api.pipeline.output<RawRiskScore[]>(assessmentId, 8),
+    enabled: !!assessmentId && stageStatuses?.['08'] === 'complete',
+  });
+
   const { data: rawTreatments } = useQuery({
     queryKey: ['stage-output', assessmentId, 9],
     queryFn: () => api.pipeline.output<RawTreatment[]>(assessmentId, 9),
@@ -430,6 +464,11 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
   const pipelineTreatments = useMemo(
     () => (rawTreatments ?? []).map(mapTreatment),
     [rawTreatments],
+  );
+
+  const riskScores = useMemo(
+    () => (rawRiskScores ?? []).map(mapRiskScore).sort((a, b) => a.rank - b.rank),
+    [rawRiskScores],
   );
 
   const assets = draft.assets ?? pipelineAssets;
@@ -546,7 +585,18 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
       ...current,
       impacts: existing
         ? source.map((item) => item.linkedAssetId === assetId ? { ...item, ...updates } : item)
-        : [...source, { id: crypto.randomUUID(), linkedAssetId: assetId, safety: 'negligible', financial: 'negligible', operational: 'negligible', privacy: 'negligible', ...updates }],
+        : [...source, {
+          id: crypto.randomUUID(),
+          linkedAssetId: assetId,
+          safety: 'negligible',
+          financial: 'negligible',
+          operational: 'negligible',
+          privacy: 'negligible',
+          legal: 'negligible',
+          organizationFinancial: 'negligible',
+          business: 'negligible',
+          ...updates,
+        }],
     };
   });
   const addAttackPath = (path: Omit<TaraAttackPath, 'id'>) => updateDraft((current) => ({
@@ -619,6 +669,7 @@ export function TaraProvider({ children, projectId }: TaraProviderProps) {
       attackPaths,
       feasibilities,
       treatments,
+      riskScores,
       stageStatuses: stageStatuses ?? {},
       runStage,
       pauseStage: (stageNum) => controlStage(stageNum, 'pause', 'paused'),

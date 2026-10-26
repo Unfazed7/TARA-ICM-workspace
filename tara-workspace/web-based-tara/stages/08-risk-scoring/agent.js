@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { computeRiskScore, getRiskLevel } = require('../../_engines/risk-score');
+const { calculateCVSSAFR } = require('../../_engines/cvss-afr-calc');
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -66,6 +67,19 @@ function buildRiskRegister(impactRecords, attackRecords, timestamp = new Date().
   return ranked;
 }
 
+function prepareAttackRecordsForRiskScoring(attackRecords) {
+  return attackRecords.map((attack) => {
+    const expected = calculateCVSSAFR(attack.cvss_metrics);
+    const missing = attack.afr_value === null || attack.afr_value === undefined
+      || attack.afr_label === null || attack.afr_label === undefined;
+    if (missing) return { ...attack, ...expected };
+    if (attack.afr_value !== expected.afr_value || attack.afr_label !== expected.afr_label) {
+      throw new Error(`${attack.attack_id}: stored AFR does not match its CVSS metrics`);
+    }
+    return { ...attack };
+  });
+}
+
 function validateRiskRegister(risks, impactRecords, attackRecords) {
   const impactIds = new Set(impactRecords.map((impact) => impact.impact_id));
   const attackIds = new Set(attackRecords.map((attack) => attack.attack_id));
@@ -88,19 +102,42 @@ function validateRiskRegister(risks, impactRecords, attackRecords) {
   });
 }
 
+function run(options) {
+  readJson(path.resolve(__dirname, '../../_config/iso-21434-risk-matrix.json'));
+  const sourceAttacks = readJson(options.attacks);
+  const missingCount = sourceAttacks.filter((attack) => (
+    attack.afr_value === null || attack.afr_value === undefined
+    || attack.afr_label === null || attack.afr_label === undefined
+  )).length;
+  const attacks = prepareAttackRecordsForRiskScoring(sourceAttacks);
+  if (missingCount > 0) {
+    console.warn(`Calculated missing AFR values for ${missingCount} existing attack path${missingCount === 1 ? '' : 's'} from CVSS metrics.`);
+  }
+  const riskRegister = buildRiskRegister(readJson(options.impact), attacks, options.timestamp);
+  writeJson(options.out, riskRegister);
+  return riskRegister;
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.impact || !args.attacks || !args.out) {
     throw new Error('Usage: node agent.js --impact <impact-analysis.json> --attacks <attack-paths.json> --out <risk-register.json>');
   }
-
-  readJson(path.resolve(__dirname, '../../_config/iso-21434-risk-matrix.json'));
-  const riskRegister = buildRiskRegister(readJson(args.impact), readJson(args.attacks));
-  writeJson(args.out, riskRegister);
+  return run({ impact: args.impact, attacks: args.attacks, out: args.out });
 }
 
 if (require.main === module) {
-  main();
+  try {
+    main();
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
 }
 
-module.exports = { buildRiskRegister, validateRiskRegister };
+module.exports = {
+  buildRiskRegister,
+  prepareAttackRecordsForRiskScoring,
+  run,
+  validateRiskRegister
+};

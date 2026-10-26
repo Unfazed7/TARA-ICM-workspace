@@ -5,8 +5,12 @@ const path = require('path');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
+  buildFallbackAttackPath,
   buildAttackPathsWithClaude,
   callClaudeForThreat,
+  generateAttackPathForThreat,
+  parseTextAttackPath,
+  run,
   THINKING,
   validateAttackPaths
 } = require('../../tara-workspace/web-based-tara/stages/06-attack-path-modelling/agent');
@@ -49,7 +53,9 @@ function validToolResponse() {
 async function buildWithMockedClaude(overrides = {}) {
   const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
   const previousKey = process.env.ANTHROPIC_API_KEY;
+  const previousProvider = process.env.LLM_PROVIDER;
   process.env.ANTHROPIC_API_KEY = 'test-key';
+  process.env.LLM_PROVIDER = 'anthropic';
   let requestBody = null;
   const fakeFetch = async (_url, options) => {
     requestBody = JSON.parse(options.body);
@@ -69,6 +75,7 @@ async function buildWithMockedClaude(overrides = {}) {
     timestamp: '2026-06-01T10:03:00Z'
   });
   restoreEnv('ANTHROPIC_API_KEY', previousKey);
+  restoreEnv('LLM_PROVIDER', previousProvider);
   return { paths, requestBody, threats };
 }
 
@@ -80,6 +87,7 @@ test('attack path modelling creates pre-engine paths with null AFR fields', asyn
   assert.deepEqual(requestBody.thinking, THINKING);
   assert.deepEqual(requestBody.tool_choice, { type: 'tool', name: 'submit_attack_path' });
   assert.equal(requestBody.tools[0].name, 'submit_attack_path');
+  assert.equal(requestBody.max_tokens, 4096);
   assert.equal(validateSchema(paths, readJson(schemaPath(6))).valid, true);
 });
 
@@ -122,6 +130,30 @@ test('CVSS engine CLI fills AFR fields', async () => {
   fs.rmSync(tmpDir, { recursive: true, force: true });
 });
 
+test('Stage 06 run publishes attack paths with AFR already calculated', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(ROOT, 'tests', '.tmp-'));
+  const threatsFile = fixturePath('valid', 'stage-05-threats.json');
+  const output = path.join(tmpDir, 'attack-paths.json');
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  const fetchImpl = async () => ({
+    ok: true,
+    json: async () => ({
+      content: [{ type: 'tool_use', name: 'submit_attack_path', input: validToolResponse() }]
+    })
+  });
+
+  try {
+    const paths = await run({ threats: threatsFile, out: output, fetchImpl });
+    assert.equal(paths[0].afr_value >= 1 && paths[0].afr_value <= 5, true);
+    assert.equal(typeof paths[0].afr_label, 'string');
+    assert.deepEqual(readJson(output), paths);
+  } finally {
+    restoreEnv('ANTHROPIC_API_KEY', previousKey);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
 test('attack path modelling fails without API key', async () => {
   const previousKey = process.env.ANTHROPIC_API_KEY;
   delete process.env.ANTHROPIC_API_KEY;
@@ -130,7 +162,7 @@ test('attack path modelling fails without API key', async () => {
       readJson(fixturePath('valid', 'stage-05-threats.json'))[0],
       async () => { throw new Error('not called'); }
     ),
-    /ANTHROPIC_API_KEY is required/
+    /LLM API key not set/
   );
   restoreEnv('ANTHROPIC_API_KEY', previousKey);
 });
@@ -161,3 +193,103 @@ test('attack path modelling retries once on free text before accepting tool_use'
   assert.equal(calls, 2);
   assert.equal(paths.length, 1);
 });
+
+test('incomplete Qwen tool payload is rejected and retried', async () => {
+  const threats = readJson(fixturePath('valid', 'stage-05-threats.json'));
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  const previousProvider = process.env.LLM_PROVIDER;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  process.env.LLM_PROVIDER = 'anthropic';
+  let calls = 0;
+  const fakeFetch = async () => {
+    calls += 1;
+    const input = calls === 1
+      ? { ...validToolResponse(), attack_path: { step_1_initial_precondition: 'Only one step.' } }
+      : validToolResponse();
+    return {
+      ok: true,
+      json: async () => ({ content: [{ type: 'tool_use', name: 'submit_attack_path', input }] })
+    };
+  };
+
+  try {
+    const paths = await buildAttackPathsWithClaude(threats, { fetchImpl: fakeFetch });
+    assert.equal(calls, 2);
+    assert.equal(paths[0].attack_path.step_5_threat_realization.length > 0, true);
+  } finally {
+    restoreEnv('ANTHROPIC_API_KEY', previousKey);
+    restoreEnv('LLM_PROVIDER', previousProvider);
+  }
+});
+
+test('valid fenced JSON text is accepted as an attack path', () => {
+  const response = {
+    content: [{ type: 'text', text: `Here is the result:\n\n\`\`\`json\n${JSON.stringify(validToolResponse())}\n\`\`\`` }]
+  };
+  assert.deepEqual(parseTextAttackPath(response), validToolResponse());
+});
+
+test('transient network failures are retried then use a deterministic fallback with diagnostics', async () => {
+  const threat = readJson(fixturePath('valid', 'stage-05-threats.json'))[0];
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  const previousProvider = process.env.LLM_PROVIDER;
+  process.env.ANTHROPIC_API_KEY = 'test-key';
+  process.env.LLM_PROVIDER = 'anthropic';
+  let calls = 0;
+  const warnings = [];
+  const previousWarn = console.warn;
+  console.warn = (message) => warnings.push(String(message));
+  const terminated = new Error('terminated');
+  terminated.cause = { code: 'UND_ERR_SOCKET', message: 'other side closed' };
+
+  try {
+    const result = await generateAttackPathForThreat(threat, async () => {
+      calls += 1;
+      throw terminated;
+    });
+    assert.equal(calls, 2);
+    assert.equal(result.attack_path.step_5_threat_realization.length > 0, true);
+    assert.equal(CVSS_VALUES_VALID(result.cvss_metrics), true);
+    assert.ok(warnings.some((line) => line.includes(threat.threat_id)));
+    assert.ok(warnings.some((line) => line.includes('UND_ERR_SOCKET')));
+  } finally {
+    console.warn = previousWarn;
+    restoreEnv('ANTHROPIC_API_KEY', previousKey);
+    restoreEnv('LLM_PROVIDER', previousProvider);
+  }
+});
+
+test('deterministic fallback is complete for a threat', () => {
+  const threat = readJson(fixturePath('valid', 'stage-05-threats.json'))[0];
+  const fallback = buildFallbackAttackPath(threat);
+  assert.equal(Object.keys(fallback.attack_path).length, 5);
+  assert.equal(Object.keys(fallback.justifications).length, 4);
+  assert.equal(CVSS_VALUES_VALID(fallback.cvss_metrics), true);
+});
+
+test('authentication failures remain fatal and never use fallback', async () => {
+  const threat = readJson(fixturePath('valid', 'stage-05-threats.json'))[0];
+  const previousKey = process.env.ANTHROPIC_API_KEY;
+  const previousLlmKey = process.env.LLM_API_KEY;
+  const previousProvider = process.env.LLM_PROVIDER;
+  delete process.env.ANTHROPIC_API_KEY;
+  delete process.env.LLM_API_KEY;
+  process.env.LLM_PROVIDER = 'anthropic';
+  try {
+    await assert.rejects(
+      () => generateAttackPathForThreat(threat, async () => { throw new Error('not called'); }),
+      /LLM API key not set/
+    );
+  } finally {
+    restoreEnv('ANTHROPIC_API_KEY', previousKey);
+    restoreEnv('LLM_API_KEY', previousLlmKey);
+    restoreEnv('LLM_PROVIDER', previousProvider);
+  }
+});
+
+function CVSS_VALUES_VALID(metrics) {
+  return ['N', 'A', 'L', 'P'].includes(metrics.attack_vector)
+    && ['L', 'H'].includes(metrics.attack_complexity)
+    && ['N', 'L', 'H'].includes(metrics.privileges_required)
+    && ['N', 'R'].includes(metrics.user_interaction);
+}

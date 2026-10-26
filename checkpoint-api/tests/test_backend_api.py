@@ -1,3 +1,5 @@
+import asyncio
+import io
 import os
 import sys
 import tempfile
@@ -10,9 +12,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pytest
 from fastapi.testclient import TestClient
 
-from checkpoint_api.database import Base, engine
+from checkpoint_api.database import Base, SessionLocal, engine
 from checkpoint_api.main import app
-from checkpoint_api.models import BoundaryEdit, BoundaryState, Checkpoint, PipelineRun
+from checkpoint_api.models import BoundaryEdit, BoundaryState, Checkpoint, PipelineRun, PipelineRunAttempt
+from checkpoint_api.run_logs import RunLogWriter, redact_log_text
 
 
 @pytest.fixture(autouse=True)
@@ -93,6 +96,174 @@ def test_auth_register_login_and_assessment_crud(client):
     assert deleted.status_code == 204
     missing = client.get(f"/api/v1/assessments/{assessment_id}", headers=headers)
     assert missing.status_code == 404
+
+
+def test_run_history_is_authenticated_and_logs_are_downloadable(client, monkeypatch):
+    from checkpoint_api import pipeline_runner
+
+    with tempfile.TemporaryDirectory() as workspace_root:
+        monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
+        headers = register_and_login(client)
+        assessment_id = create_assessment(client, headers)["assessment_id"]
+        log_relative = Path("artifacts") / assessment_id / "logs" / "stage-04-test.log"
+        log_path = Path(workspace_root) / log_relative
+        log_path.parent.mkdir(parents=True)
+        log_path.write_text("2026-10-09 | INFO | run.complete | done\n", encoding="utf-8")
+
+        db = SessionLocal()
+        try:
+            attempt = PipelineRunAttempt(
+                assessment_id=assessment_id,
+                stage_num=4,
+                stage_name="damage-analysis",
+                status="complete",
+                provider="openrouter",
+                model="qwen/test",
+                log_path=log_relative.as_posix(),
+                size_bytes=log_path.stat().st_size,
+            )
+            db.add(attempt)
+            db.commit()
+            db.refresh(attempt)
+            attempt_id = attempt.attempt_id
+        finally:
+            db.close()
+
+        listed = client.get(f"/api/v1/assessments/{assessment_id}/runs", headers=headers)
+        assert listed.status_code == 200
+        assert listed.json()[0]["attempt_id"] == attempt_id
+        assert listed.json()[0]["log_available"] is True
+        assert listed.json()[0]["filename"] == "stage-04-test.log"
+
+        viewed = client.get(
+            f"/api/v1/assessments/{assessment_id}/runs/{attempt_id}/log",
+            headers=headers,
+        )
+        assert viewed.status_code == 200
+        assert "run.complete" in viewed.text
+        assert viewed.headers["cache-control"] == "no-store"
+
+        downloaded = client.get(
+            f"/api/v1/assessments/{assessment_id}/runs/{attempt_id}/log/download",
+            headers=headers,
+        )
+        assert downloaded.status_code == 200
+        assert "stage-04-test.log" in downloaded.headers["content-disposition"]
+        assert downloaded.content == log_path.read_bytes()
+
+        assert client.get(f"/api/v1/assessments/{assessment_id}/runs").status_code == 401
+
+
+def test_run_log_path_cannot_escape_assessment_directory(client, monkeypatch):
+    from checkpoint_api import pipeline_runner
+
+    with tempfile.TemporaryDirectory() as workspace_root:
+        monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", workspace_root)
+        headers = register_and_login(client)
+        assessment_id = create_assessment(client, headers)["assessment_id"]
+        db = SessionLocal()
+        try:
+            attempt = PipelineRunAttempt(
+                assessment_id=assessment_id,
+                stage_num=4,
+                stage_name="damage-analysis",
+                status="failed",
+                log_path="../../outside.log",
+            )
+            db.add(attempt)
+            db.commit()
+            db.refresh(attempt)
+            attempt_id = attempt.attempt_id
+        finally:
+            db.close()
+
+        response = client.get(
+            f"/api/v1/assessments/{assessment_id}/runs/{attempt_id}/log",
+            headers=headers,
+        )
+        assert response.status_code == 404
+
+
+def test_run_log_writer_redacts_credentials(tmp_path, monkeypatch):
+    monkeypatch.setenv("LLM_API_KEY", "top-secret-key")
+    log_path = tmp_path / "run.log"
+    with RunLogWriter(log_path, secrets=("runtime-secret",)) as writer:
+        writer.write(
+            "ERROR",
+            "stderr",
+            "Authorization: Bearer abc.def.ghi api_key=top-secret-key token=runtime-secret",
+        )
+
+    content = log_path.read_text(encoding="utf-8")
+    assert "top-secret-key" not in content
+    assert "runtime-secret" not in content
+    assert "abc.def.ghi" not in content
+    assert content.count("[REDACTED]") >= 2
+    assert "Authorization" in content
+    assert redact_log_text("password=hunter2") == "password=[REDACTED]"
+
+
+def test_pipeline_runner_streams_output_and_completes_attempt(client, tmp_path, monkeypatch):
+    from checkpoint_api import pipeline_runner
+
+    headers = register_and_login(client)
+    assessment_id = create_assessment(client, headers)["assessment_id"]
+    db = SessionLocal()
+    try:
+        run = PipelineRun(
+            assessment_id=assessment_id,
+            stage_num=4,
+            stage_name="damage-analysis",
+            status="pending",
+        )
+        attempt = PipelineRunAttempt(
+            assessment_id=assessment_id,
+            stage_num=4,
+            stage_name="damage-analysis",
+            status="pending",
+        )
+        db.add_all([run, attempt])
+        db.commit()
+        db.refresh(attempt)
+        attempt_id = attempt.attempt_id
+    finally:
+        db.close()
+
+    class FakeProcess:
+        pid = 4242
+
+        def __init__(self):
+            self.stdout = io.BytesIO(b"starting damage analysis\napi_key=should-not-appear\n")
+            self.stderr = io.BytesIO(b"model fallback recovered\n")
+
+        def wait(self):
+            return 0
+
+        def poll(self):
+            return None
+
+    monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", str(tmp_path))
+    monkeypatch.setattr(pipeline_runner.subprocess, "Popen", lambda *_args, **_kwargs: FakeProcess())
+    asyncio.run(pipeline_runner.run_stage_subprocess(assessment_id, 4, None, attempt_id))
+
+    db = SessionLocal()
+    try:
+        completed = db.query(PipelineRunAttempt).filter_by(attempt_id=attempt_id).one()
+        current = db.query(PipelineRun).filter_by(assessment_id=assessment_id, stage_num=4).one()
+        assert completed.status == "complete"
+        assert completed.completed_at is not None
+        assert completed.duration_ms is not None
+        assert completed.size_bytes > 0
+        assert current.status == "complete"
+        log_path = tmp_path / completed.log_path
+    finally:
+        db.close()
+
+    content = log_path.read_text(encoding="utf-8")
+    assert "starting damage analysis" in content
+    assert "model fallback recovered" in content
+    assert "run.complete" in content
+    assert "should-not-appear" not in content
 
 
 def test_login_rejects_bad_password(client):

@@ -65,23 +65,25 @@ export const LeafNode = memo(({ data, selected }: NodeProps<AttackTreeNodeData>)
     {data.detail && (
       <div className="text-[10px] text-emerald-400/50 mt-1 line-clamp-2">{data.detail}</div>
     )}
-    <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-emerald-500/20">
-      <span className="text-[9px] text-emerald-400/60 font-mono">DIFFICULTY</span>
-      <div className="flex gap-0.5">
-        {[1, 2, 3, 4, 5].map(i => (
-          <div
-            key={i}
-            className={cn(
-              'w-2.5 h-2.5 rounded-sm transition-colors',
-              i <= (data.difficulty ?? 0)
-                ? 'bg-emerald-400'
-                : 'bg-emerald-500/20'
-            )}
-          />
-        ))}
+    {data.difficulty !== undefined && (
+      <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-emerald-500/20">
+        <span className="text-[9px] text-emerald-400/60 font-mono">DIFFICULTY</span>
+        <div className="flex gap-0.5">
+          {[1, 2, 3, 4, 5].map(i => (
+            <div
+              key={i}
+              className={cn(
+                'w-2.5 h-2.5 rounded-sm transition-colors',
+                i <= data.difficulty!
+                  ? 'bg-emerald-400'
+                  : 'bg-emerald-500/20'
+              )}
+            />
+          ))}
+        </div>
+        <span className="text-[10px] text-emerald-300 font-mono font-bold ml-auto">{data.difficulty}</span>
       </div>
-      <span className="text-[10px] text-emerald-300 font-mono font-bold ml-auto">{data.difficulty ?? '?'}</span>
-    </div>
+    )}
   </div>
 ));
 LeafNode.displayName = 'LeafNode';

@@ -75,6 +75,30 @@ npm install
 npm run dev
 ```
 
+### Execution logs
+
+Every pipeline attempt writes a separate, human-readable log to
+`artifacts/<assessment-id>/logs/`. Logs capture lifecycle events plus the
+stage process's stdout and stderr, and redact API keys, bearer tokens,
+passwords, and known secrets before they reach disk. Authenticated users can
+also view or download their assessment logs from **Run history** in the
+workspace top bar.
+
+Retention defaults are deliberately bounded: the newest 10 attempts per
+stage are preserved, successful attempts expire after 30 days, failed or
+cancelled attempts after 90 days, and each assessment is capped at 250 MB.
+Override these values in `checkpoint-api/.env` when required:
+
+```dotenv
+RUN_LOG_KEEP_PER_STAGE=10
+RUN_LOG_SUCCESS_DAYS=30
+RUN_LOG_FAILURE_DAYS=90
+RUN_LOG_MAX_BYTES=262144000
+```
+
+Deleting an assessment deletes its run history and log directory. Log files
+are runtime data and are ignored by Git.
+
 ---
 
 ## Data policy

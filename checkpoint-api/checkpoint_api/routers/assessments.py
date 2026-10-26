@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from .. import pipeline_runner
-from ..models import Assessment, BoundaryEdit, BoundaryState, Checkpoint, PipelineRun
+from ..models import Assessment, BoundaryEdit, BoundaryState, Checkpoint, PipelineRun, PipelineRunAttempt
 from ..pipeline_runner import STAGE_OUTPUT_FILES, get_output_path
 from ..schemas import AssessmentCreate, AssessmentResponse, AssessmentUpdate
 from ..stage_catalog import STAGES
@@ -141,6 +141,7 @@ def delete_assessment(
     db.query(Checkpoint).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
     db.query(BoundaryEdit).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
     db.query(BoundaryState).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
+    db.query(PipelineRunAttempt).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
     db.query(PipelineRun).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
     db.delete(assessment)
     db.commit()
