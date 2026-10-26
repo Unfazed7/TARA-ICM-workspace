@@ -61,7 +61,13 @@
         ]
       },
       "input_mode": { "type": "string", "enum": ["csv", "diagram", "manual"] },
-      "created_timestamp": { "type": "string", "format": "date-time" }
+      "created_timestamp": { "type": "string", "format": "date-time" },
+      "source_element_id": { "type": "string", "pattern": "^(EL|IF|FN)-\\d{2,}$" },
+      "reason": { "type": "string", "minLength": 1 },
+      "ciaaan_reasons": {
+        "type": "object",
+        "additionalProperties": { "type": "string", "minLength": 1 }
+      }
     }
   },
   "uniqueItemProperties": ["asset_id"]

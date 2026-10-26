@@ -388,6 +388,30 @@ def stage_output(
         return json.load(output_file)
 
 
+@router.get("/{assessment_id}/stages/{stage_num}/rationale-file")
+def stage_rationale_file(
+    assessment_id: str,
+    stage_num: int,
+    db: Session = Depends(get_db),
+    claims: dict = Depends(get_current_claims),
+):
+    """Assumptions a pipeline stage (03, 10) wrote next to its output, read-only (D-54).
+    Same shape as GET .../stages/{stage}/rationale so the same list shows them."""
+    validate_stage_num(stage_num)
+    get_assessment_for_user(db, assessment_id, claims)
+    rationale_path = Path(get_output_path(stage_num, assessment_id)).with_name("rationale.json")
+    if not rationale_path.is_file():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Stage {stage_num} has no Assumptions yet")
+    with open(rationale_path, "r", encoding="utf-8") as rationale_file:
+        items = json.load(rationale_file)
+    items.sort(key=lambda item: 0 if item.get("attention") == "needs_attention" else 1)
+    counts = {"needs_attention": 0, "information": 0, "unreviewed": 0, "confirmed": 0, "disputed": 0}
+    for item in items:
+        counts[item.get("attention", "information")] += 1
+        counts[(item.get("review") or {}).get("status", "unreviewed")] += 1
+    return {"stage": f"{stage_num:02d}", "run_number": 1, "counts": counts, "items": items}
+
+
 @router.delete("/{assessment_id}/stages/{stage_num}/reset", response_model=PipelineRunResponse)
 def reset_stage(
     assessment_id: str,

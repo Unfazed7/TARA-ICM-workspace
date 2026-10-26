@@ -117,6 +117,14 @@
           "note": {
             "type": "string",
             "minLength": 3
+          },
+          "from_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(EL|IF|FN|CTR|ZN|FCT|AS|DS|TH|AT|IM|RSK|TRT)[-_]\\d{2,}$"
+            },
+            "description": "Stored items a later-stage item was worked out from (Item Definition ids for Stage 03, threat and risk ids for Stage 10). Used where there is no document to quote (D-54)."
           }
         },
         "anyOf": [
@@ -139,6 +147,18 @@
             ],
             "properties": {
               "based_on_rationale_ids": {
+                "type": "array",
+                "minItems": 1
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "from_ids"
+            ],
+            "properties": {
+              "from_ids": {
                 "type": "array",
                 "minItems": 1
               }
@@ -170,7 +190,7 @@
         "minItems": 1,
         "items": {
           "type": "string",
-          "pattern": "^(FCT-\\d{3,}|CNF-\\d{3,}|DOC-\\d{2,}|EL-\\d{3,}|IF-\\d{2,}|CTR-\\d{2,}|ZN-\\d{2,}|FN-\\d{3,}|ASM-\\d{2,}|Q-\\d{3,}|SD-\\d{3,})$"
+          "pattern": "^(FCT-\\d{3,}|CNF-\\d{3,}|DOC-\\d{2,}|EL-\\d{3,}|IF-\\d{2,}|CTR-\\d{2,}|ZN-\\d{2,}|FN-\\d{3,}|ASM-\\d{2,}|Q-\\d{3,}|SD-\\d{3,}|(AS|DS|TH|AT|IM|RSK|TRT)_\\d{2,})$"
         }
       },
       "review": {

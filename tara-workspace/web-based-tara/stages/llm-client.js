@@ -417,7 +417,8 @@ async function callModel(params, fetchImpl) {
   const config = getConfig();
   if (!config.apiKey) {
     const keyVar = KEY_VARS[config.provider] || 'LLM_API_KEY';
-    throw new Error(`${keyVar} is required (or set LLM_API_KEY) for LLM_PROVIDER=${config.provider}.`);
+    // The words "API key not set" are matched by the stage agents to stop instead of falling back.
+    throw new Error(`LLM API key not set: ${keyVar} is required (or set LLM_API_KEY) for LLM_PROVIDER=${config.provider}.`);
   }
 
   let result;
