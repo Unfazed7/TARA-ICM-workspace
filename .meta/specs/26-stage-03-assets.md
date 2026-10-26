@@ -1,6 +1,6 @@
 # Spec 26: Stage 03 Asset Identification (C12, part 1: derivation)
 
-**Status:** draft, waiting for the analyst (2026-10-26).
+**Status:** draft, waiting for the analyst (2026-10-26). Analyst choices: table first, the AI proposes changes; asset types with no row and optional properties are added only by the model with a reason.
 **Code:** `stages/03-asset-identification/agent.js` and `lib/`, `_engines/asset-rules.js` (new), `_config/asset-rules.md` (new), `src/schemas/stage-03-assets.schema.json` (new).
 **Decisions:** D-36, D-37, D-46, D-52. **Read first:** DR-15, answers G1 to G4.
 
@@ -41,11 +41,12 @@ WILL add the files above and tests. WON'T touch Stages 01 and 02, or Stages 04 t
    - Containers and third-party internals never produce assets.
    - `interface` elements produce only the item's side: the link, the external party's identity (Au, NR) and credentials the item holds.
    - `out_of_scope` elements produce no assets.
-2. **Default properties by code**, from the same table.
+2. **Default properties by code**, from the same table: Default, plus "If data" properties from Stage 02's data categories. "Model may add" properties start off.
 3. **The model, in one call, writes:**
    - a plain description and a reason per applied property;
    - proposed changes to properties, each with a reason;
-   - asset rows that duplicate another row.
+   - asset rows that duplicate another row;
+   - assets and properties for asset types with no table row, each with a reason.
 
    It cannot add assets that have no source.
 4. **Code checks the reply:**
@@ -55,7 +56,7 @@ WILL add the files above and tests. WON'T touch Stages 01 and 02, or Stages 04 t
 5. **Rationale items** (topic `assets`):
    - every change the model makes to a default property: needs attention;
    - every removed row: information;
-   - every `unknown_kind` element with no table row: needs attention;
+   - every asset from an asset type with no table row: needs attention;
    - every client asset-list hint that maps to nothing: needs attention.
 
 ## Validation Rules
