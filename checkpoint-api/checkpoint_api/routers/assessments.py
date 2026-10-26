@@ -1,12 +1,17 @@
 import os
+import shutil
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import Assessment, PipelineRun
+from .. import pipeline_runner
+from ..models import Assessment, BoundaryEdit, BoundaryState, Checkpoint, PipelineRun, PipelineRunAttempt
 from ..pipeline_runner import STAGE_OUTPUT_FILES, get_output_path
 from ..schemas import AssessmentCreate, AssessmentResponse, AssessmentUpdate
+from ..stage_catalog import STAGES
+from ..stage_models import StageBase
 from .auth import get_current_claims
 
 
@@ -36,14 +41,17 @@ def require_assessment_access(assessment: Assessment, claims: dict) -> None:
 def stage_statuses(db: Session, assessment_id: str) -> dict[str, str]:
     runs = db.query(PipelineRun).filter_by(assessment_id=assessment_id).all()
     by_stage = {run.stage_num: run.status for run in runs}
-    return {f"{stage_num:02d}": by_stage.get(stage_num, "not_started") for stage_num in range(1, 8)}
+    return {
+        f"{stage.number:02d}": by_stage.get(stage.number, "not_started")
+        for stage in STAGES
+    }
 
 
-def stage_outputs_available() -> list[int]:
+def stage_outputs_available(assessment_id: str) -> list[int]:
     return [
         stage_num
         for stage_num in STAGE_OUTPUT_FILES
-        if os.path.exists(get_output_path(stage_num))
+        if os.path.exists(get_output_path(stage_num, assessment_id))
     ]
 
 
@@ -58,7 +66,7 @@ def to_response(db: Session, assessment: Assessment) -> AssessmentResponse:
         owner_id=assessment.owner_id,
         completion_percentage=assessment.completion_percentage,
         stages=stage_statuses(db, assessment.assessment_id),
-        stage_outputs_available=stage_outputs_available(),
+        stage_outputs_available=stage_outputs_available(assessment.assessment_id),
         created_at=assessment.created_at,
         updated_at=assessment.updated_at,
     )
@@ -130,7 +138,19 @@ def delete_assessment(
 ):
     assessment = get_assessment_or_404(db, assessment_id)
     require_assessment_access(assessment, claims)
-    db.query(PipelineRun).filter_by(assessment_id=assessment_id).delete()
+    pipeline_runner.cancel_assessment_processes(assessment_id)
+    db.query(Checkpoint).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
+    db.query(BoundaryEdit).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
+    db.query(BoundaryState).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
+    db.query(PipelineRunAttempt).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
+    db.query(PipelineRun).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
+    # Stage 01/02 rows: every stage_models table holding an assessment_id. Deleting the
+    # stage_runs rows cascades to their child tables (foreign keys are on, see database.py).
+    for table in StageBase.metadata.sorted_tables:
+        if "assessment_id" in table.c:
+            db.execute(table.delete().where(table.c.assessment_id == assessment_id))
     db.delete(assessment)
     db.commit()
+    shutil.rmtree(Path(pipeline_runner.WORKSPACE_ROOT) / "artifacts" / assessment_id, ignore_errors=True)
+    shutil.rmtree(Path(pipeline_runner.UPLOAD_DIR) / assessment_id, ignore_errors=True)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

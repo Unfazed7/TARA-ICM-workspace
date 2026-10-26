@@ -615,6 +615,7 @@ export function AssetListPanel({ className }: AssetListPanelProps) {
                             variant="ghost"
                             className="h-8 w-8"
                             onClick={() => handleDeleteDataFlowAsset(asset.id)}
+                            aria-label={`Delete data flow ${asset.name}`}
                           >
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>
@@ -686,6 +687,7 @@ export function AssetListPanel({ className }: AssetListPanelProps) {
                           )}
                         </div>
                       </TableCell>
+                      <TableCell>
                         <div className="flex gap-1">
                           {asset.cybersecurityProperties.map(prop => {
                             const Icon = getCybersecurityIcon(prop);
@@ -696,6 +698,7 @@ export function AssetListPanel({ className }: AssetListPanelProps) {
                             );
                           })}
                         </div>
+                      </TableCell>
                       <TableCell>
                         <div className="flex gap-1">
                           <Button
@@ -703,6 +706,7 @@ export function AssetListPanel({ className }: AssetListPanelProps) {
                             variant="ghost"
                             className="h-8 w-8"
                             onClick={() => handleDeleteDataAtRestAsset(asset.id)}
+                            aria-label={`Delete data-at-rest asset ${asset.name}`}
                           >
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>

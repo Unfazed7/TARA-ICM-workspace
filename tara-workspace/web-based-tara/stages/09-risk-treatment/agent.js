@@ -31,7 +31,18 @@ function buildTreatmentTool() {
     description: 'Submit the risk treatment decision for one RSK_## record',
     input_schema: {
       type: 'object',
-      required: ['treatment_option', 'treatment_rationale', 'residual_risk_expected'],
+      required: [
+        'treatment_option',
+        'treatment_rationale',
+        'goal_statement',
+        'goal_self_test_note',
+        'claim_statement',
+        'acceptance_basis',
+        'control_ids',
+        'control_assignment_rationales',
+        'avoidance_action',
+        'residual_risk_expected'
+      ],
       properties: {
         treatment_option: { type: 'string', enum: TREATMENT_OPTIONS },
         treatment_rationale: { type: 'string' },
@@ -178,6 +189,34 @@ function extractToolUse(response) {
   return toolUse?.input || null;
 }
 
+function parseTextTreatment(response) {
+  const text = (response?.content || [])
+    .filter((item) => item.type === 'text' && typeof item.text === 'string')
+    .map((item) => item.text)
+    .join('\n')
+    .trim();
+  if (!text) return null;
+
+  const candidates = [text];
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced) candidates.unshift(fenced[1].trim());
+  const objectStart = text.indexOf('{');
+  const objectEnd = text.lastIndexOf('}');
+  if (objectStart >= 0 && objectEnd > objectStart) {
+    candidates.push(text.slice(objectStart, objectEnd + 1));
+  }
+
+  for (const candidate of candidates) {
+    try {
+      const parsed = JSON.parse(candidate);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+    } catch {
+      // Try the next representation.
+    }
+  }
+  return null;
+}
+
 async function callClaudeForRiskChain(chain, systemPrompt, fetchImpl = fetch) {
   return callLLM({
     model: MODEL,
@@ -189,13 +228,55 @@ async function callClaudeForRiskChain(chain, systemPrompt, fetchImpl = fetch) {
   }, fetchImpl);
 }
 
-async function generateTreatmentForChain(chain, systemPrompt, fetchImpl) {
+function formatRequestError(error) {
+  const details = [error?.message || String(error)];
+  if (error?.cause?.code) details.push(error.cause.code);
+  if (error?.cause?.message && error.cause.message !== error.message) details.push(error.cause.message);
+  return details.join(' — ');
+}
+
+function isNonRecoverableRequestError(error) {
+  return /API key not set|(LLM|Anthropic) API error (400|401|403|404)\b|Configured LLM model .* is unavailable/i
+    .test(error?.message || String(error));
+}
+
+async function generateTreatmentForChain(chain, systemPrompt, fetchImpl, options = {}) {
+  let lastIssue = `the model returned free text or invalid JSON instead of ${TOOL_NAME}`;
+  let lastRequestError = null;
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await callClaudeForRiskChain(chain, systemPrompt, fetchImpl);
-    const treatment = extractToolUse(response);
-    if (treatment) return treatment;
+    try {
+      const response = await callClaudeForRiskChain(chain, systemPrompt, fetchImpl);
+      const treatment = extractToolUse(response) || parseTextTreatment(response);
+      if (treatment) {
+        try {
+          if (options.validate) options.validate(treatment);
+          return treatment;
+        } catch (error) {
+          lastIssue = `the model returned an invalid ${TOOL_NAME} payload (${error.message})`;
+        }
+      }
+      lastRequestError = null;
+    } catch (error) {
+      lastRequestError = error;
+    }
   }
-  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${chain.risk.risk_id}`);
+
+  if (lastRequestError && isNonRecoverableRequestError(lastRequestError)) {
+    throw new Error(
+      `LLM request failed for ${chain.risk.risk_id} after two attempts: ${formatRequestError(lastRequestError)}`
+    );
+  }
+
+  const fallbackReason = lastRequestError
+    ? `the LLM request failed twice (${formatRequestError(lastRequestError)})`
+    : lastIssue;
+  if (options.fallback) {
+    console.warn(
+      `Using deterministic Stage 9 treatment fallback for ${chain.risk.risk_id} because ${fallbackReason}.`
+    );
+    return options.fallback(fallbackReason);
+  }
+  throw new Error(`Model did not return a valid ${TOOL_NAME} payload for ${chain.risk.risk_id}: ${fallbackReason}`);
 }
 
 function deriveCAL(riskLevel) {
@@ -346,6 +427,91 @@ function validateTreatments(treatments, chains, catalogueMap) {
   }
 }
 
+const FALLBACK_CONTROLS_BY_STRIDE = {
+  spoofing: ['CTR_01', 'CTR_11'],
+  tampering: ['CTR_34', 'CTR_58'],
+  repudiation: ['CTR_57', 'CTR_59'],
+  information_disclosure: ['CTR_50', 'CTR_54'],
+  denial_of_service: ['CTR_32', 'CTR_33'],
+  elevation_of_privilege: ['CTR_16', 'CTR_22']
+};
+
+const FALLBACK_MECHANISM_BY_STRIDE = {
+  spoofing: 'unverified identities and credential replay',
+  tampering: 'unauthorized configuration or data modifications',
+  repudiation: 'security-relevant actions without tamper-evident attribution',
+  information_disclosure: 'unauthorized retrieval of sensitive data and credentials',
+  denial_of_service: 'resource-exhaustion requests and connection floods',
+  elevation_of_privilege: 'requests that exceed the authenticated identity and authorization scope'
+};
+
+function selectFallbackControlIds(chain, catalogueMap) {
+  const text = `${chain.attack.attack_description || ''} ${JSON.stringify(chain.attack.attack_path || {})}`.toLowerCase();
+  let controlIds = FALLBACK_CONTROLS_BY_STRIDE[chain.threat.stride_category] || ['CTR_36', 'CTR_61'];
+
+  if (/flood|rate limit|resource exhaustion|held-open|connection/.test(text)) {
+    controlIds = ['CTR_32', 'CTR_33'];
+  } else if (/rbac|authorization|privilege|permission|tenant/.test(text)) {
+    controlIds = ['CTR_16', 'CTR_22'];
+  } else if (/secret|token|credential|metadata|imds/.test(text)) {
+    controlIds = ['CTR_55', 'CTR_63'];
+  } else if (/configuration|xds|container|runtime|image|node|pipeline/.test(text)) {
+    controlIds = ['CTR_72', 'CTR_74'];
+  } else if (/inject|schema|input|payload/.test(text)) {
+    controlIds = ['CTR_42', 'CTR_58'];
+  }
+
+  const available = controlIds.filter((controlId) => catalogueMap.has(controlId));
+  if (available.length > 0) return available.slice(0, 2);
+  return [...catalogueMap.keys()].slice(0, 1);
+}
+
+function buildFallbackTreatment(chain, catalogueMap) {
+  const { risk, threat, attack, damageScenario, asset } = chain;
+  const option = ACCEPTABLE_RISK_LEVELS.has(risk.risk_level) ? 'accept' : 'reduce';
+  const residualRiskExpected = risk.risk_level === 'critical'
+    ? 'high'
+    : risk.risk_level === 'high'
+      ? 'medium'
+      : risk.risk_level === 'medium'
+        ? 'low'
+        : risk.risk_level;
+
+  if (option === 'accept') {
+    return {
+      treatment_option: 'accept',
+      treatment_rationale: `${risk.risk_id} is ${risk.risk_level} with score ${risk.risk_score}, which is within the project acceptance threshold of low or below.`,
+      goal_statement: null,
+      goal_self_test_note: null,
+      claim_statement: `The risk of ${threat.threat_statement} affecting ${asset.asset_title} ${damageScenario.property} is accepted because AFR is ${risk.afr_label} (AFR=${risk.afr_value}), impact is ${risk.impact_rating_label} (score=${risk.impact_rating_value}), risk_score is ${risk.risk_score}, and risk_level is ${risk.risk_level}, which is within the project acceptance threshold of <= low.`,
+      acceptance_basis: `${risk.risk_id} is classified ${risk.risk_level}, within the documented acceptance threshold of informational or low.`,
+      control_ids: [],
+      control_assignment_rationales: [],
+      avoidance_action: null,
+      residual_risk_expected: residualRiskExpected
+    };
+  }
+
+  const controlIds = selectFallbackControlIds(chain, catalogueMap);
+  const controlTitles = controlIds.map((controlId) => catalogueMap.get(controlId).title);
+  const mechanism = FALLBACK_MECHANISM_BY_STRIDE[threat.stride_category]
+    || `the attack mechanism documented in ${attack.attack_id}`;
+  return {
+    treatment_option: 'reduce',
+    treatment_rationale: `${risk.risk_id} is ${risk.risk_level} with score ${risk.risk_score}; reducing the likelihood of ${mechanism} is required before residual-risk acceptance.`,
+    goal_statement: `The ${asset.asset_title} SHALL enforce ${controlTitles.join(' and ')} to protect ${damageScenario.property} against ${mechanism}.`,
+    goal_self_test_note: `Verify that the controls are enforced specifically on ${asset.asset_title} and prevent or detect the ${attack.attack_id} mechanism; a generic control applied only to another asset does not satisfy this goal.`,
+    claim_statement: null,
+    acceptance_basis: null,
+    control_ids: controlIds,
+    control_assignment_rationales: controlIds.map((controlId) =>
+      `${catalogueMap.get(controlId).title} directly reduces or detects ${mechanism} in ${attack.attack_id}.`
+    ),
+    avoidance_action: null,
+    residual_risk_expected: residualRiskExpected
+  };
+}
+
 function summarizeTreatments(treatments) {
   return {
     total_treatments: treatments.length,
@@ -369,7 +535,22 @@ async function buildRiskTreatments(inputs, options = {}) {
   const treatments = [];
 
   for (const chain of chains) {
-    const toolArgs = await generateTreatmentForChain(chain, systemPrompt, options.fetchImpl);
+    const validateCandidate = (candidate) => {
+      const preview = buildTreatmentRecord(
+        candidate,
+        chain,
+        catalogueMap,
+        { ...counters },
+        timestamp
+      );
+      validateTreatments([preview], [chain], catalogueMap);
+    };
+    const toolArgs = await generateTreatmentForChain(chain, systemPrompt, options.fetchImpl, {
+      validate: validateCandidate,
+      fallback: options.allowFallback
+        ? () => buildFallbackTreatment(chain, catalogueMap)
+        : undefined
+    });
     treatments.push(buildTreatmentRecord(toolArgs, chain, catalogueMap, counters, timestamp));
   }
 
@@ -386,10 +567,13 @@ async function run(options) {
     impacts: readJson(options.impacts),
     assets: readJson(options.assets)
   };
-  const treatments = await buildRiskTreatments(inputs, { fetchImpl: options.fetchImpl });
+  const treatments = await buildRiskTreatments(inputs, {
+    fetchImpl: options.fetchImpl,
+    allowFallback: true
+  });
   writeJson(options.out, treatments);
   await submitCheckpoint(options.assessmentId, {
-    stage_num: 7,
+    stage_num: 9,
     stage_name: 'risk-treatment',
     output_summary: summarizeTreatments(treatments)
   });
@@ -429,9 +613,11 @@ module.exports = {
   callClaudeForRiskChain,
   deriveCAL,
   extractToolUse,
+  parseTextTreatment,
   generateTreatmentForChain,
   hydrateControls,
   parseControlsCatalogue,
+  buildFallbackTreatment,
   run,
   summarizeTreatments,
   validateAcceptance,

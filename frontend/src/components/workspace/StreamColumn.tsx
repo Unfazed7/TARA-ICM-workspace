@@ -68,24 +68,31 @@ export function StreamColumn({
 interface StreamItemProps {
   id: string;
   isSelected: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   children: ReactNode;
 }
 
 export function StreamItem({ id, isSelected, onClick, children }: StreamItemProps) {
+  const className = cn(
+    'w-full text-left px-4 py-3 border-b border-border transition-all relative',
+    isSelected
+      ? 'bg-primary/10 text-primary'
+      : 'text-muted-foreground hover:text-foreground hover:bg-foreground/[0.03]'
+  );
+
+  if (!onClick) {
+    return <div data-id={id} className={className}>{children}</div>;
+  }
+
   return (
     <button
       data-id={id}
       onClick={onClick}
-      className={cn(
-        'w-full text-left px-4 py-3 border-b border-border transition-all relative',
-        isSelected
-          ? 'bg-primary/10 text-primary'
-          : 'text-muted-foreground hover:text-foreground hover:bg-foreground/[0.03]'
-      )}
+      aria-pressed={isSelected}
+      className={className}
     >
       {isSelected && (
-        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary" />
+        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-state-blue " />
       )}
       {children}
     </button>

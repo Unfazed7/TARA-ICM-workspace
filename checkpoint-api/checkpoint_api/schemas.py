@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class CheckpointCreate(BaseModel):
-    stage_num: int = Field(ge=1, le=8)
+    stage_num: int = Field(ge=1, le=10)
     stage_name: str = Field(min_length=1)
     output_summary: dict[str, Any] | None = None
 
@@ -61,7 +61,7 @@ class CheckpointReviewResponse(BaseModel):
 
 VehicleType = Literal["sedan", "suv", "truck", "van", "bus", "motorcycle", "commercial"]
 AssessmentStatus = Literal["active", "archived"]
-RunStatus = Literal["not_started", "pending", "running", "complete", "failed"]
+RunStatus = Literal["not_started", "pending", "running", "paused", "cancelled", "complete", "failed"]
 
 
 class RegisterRequest(BaseModel):
@@ -129,10 +129,51 @@ class PipelineRunResponse(BaseModel):
     completed_at: datetime | None = None
 
 
+class PipelineRunAttemptResponse(BaseModel):
+    attempt_id: str
+    assessment_id: str
+    stage_num: int
+    stage_name: str
+    status: RunStatus
+    provider: str | None = None
+    model: str | None = None
+    error_message: str | None = None
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
+    duration_ms: int | None = None
+    size_bytes: int = 0
+    filename: str | None = None
+    log_available: bool = False
+
+
+class StageDefinitionResponse(BaseModel):
+    stage_num: int
+    key: str
+    name: str
+    description: str
+    dependencies: list[int]
+    outputs: list[str]
+    checkpoint: str | None
+    available: bool
+
+
 class UploadResponse(BaseModel):
     uploaded: bool
     filename: str | None = None
     size_bytes: int = 0
+
+
+class AssetRegisterImportResponse(BaseModel):
+    filename: str
+    asset_count: int
+    stage_num: int = 3
+    status: Literal["complete"] = "complete"
+
+
+class AssetRegisterStatusResponse(BaseModel):
+    uploaded: bool
+    filename: str | None = None
+    asset_count: int = 0
 
 
 # --- Stage 1 CP1: element-level boundary review ------------------------------

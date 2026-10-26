@@ -21,6 +21,25 @@ Loaded by `run-web-tara.js` at the start of each assessment. The flow and its ru
 
 Stages 01 and 02 run automatically one after the other; each stage's output and Rationale appear on its page as soon as it finishes (D-36, D-37). Stages 03 onwards are started by hand until they are rebuilt. Only Stage 01 reads client documents. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
 
+### Runtime catalogue
+
+The checkpoint runtime exposes this ten-stage flow from
+`checkpoint-api/checkpoint_api/stage_catalog.py`. The runtime catalogue is the
+operational source for stage numbers, names, dependencies, output artifacts,
+checkpoint labels, and implementation availability. The backend and frontend
+must consume that catalogue rather than maintain separate stage lists.
+
+The former seven-stage numbering is not supported. Stages 01, 02, 03, and 10
+remain visible but unavailable until their runners are implemented. An
+unavailable stage must be rejected before dependency checks or process launch.
+
+During initial Stage 04-09 testing, an authenticated user may seed Stage 03 by
+uploading a CSV or XLSX Asset list through the workspace. The runtime normalizes
+and validates it as `asset-register.json`, stores it under the assessment's
+artifact directory, and records Stage 03 as complete. This temporary seam must
+be removed when the Stage 03 runner is connected. It may not replace an Asset
+register after any downstream stage has started.
+
 ---
 
 ## Layer 3 Loading Map

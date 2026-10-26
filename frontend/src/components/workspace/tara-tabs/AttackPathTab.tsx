@@ -8,16 +8,24 @@ const VECTOR_COLORS: Record<string, string> = {
   physical: 'bg-sev-1 text-sev-1-foreground',
 };
 
+const AFR_COLORS: Record<string, string> = {
+  'very high': 'border-state-red-border bg-state-red text-destructive ',
+  high: 'border-state-yellow-border bg-state-yellow text-signal-ink ',
+  medium: 'border-state-yellow-border bg-state-yellow text-signal-ink ',
+  low: 'border-state-green-border bg-state-green text-primary ',
+  'very low': 'border-border bg-muted text-muted-foreground ',
+};
+
 function EmptyState({ status }: { status: string }) {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
-      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">4</div>
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">6</div>
       <div>
         <p className="text-sm font-semibold text-foreground">No attack path data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 04 — Attack Path Modelling is running…'
-            : 'Run Stage 04 — Attack Path Modelling from the pipeline panel above.'}
+            ? 'Stage 06 — Attack Path Modelling is running…'
+            : 'Run Stage 06 — Attack Path Modelling from the pipeline panel above.'}
         </p>
       </div>
     </div>
@@ -26,7 +34,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function AttackPathTab() {
   const { attackPaths, threats, assets, stageStatuses } = useTara();
-  const status = stageStatuses['04'] ?? 'not_started';
+  const status = stageStatuses['06'] ?? 'not_started';
 
   if (attackPaths.length === 0) return <EmptyState status={status} />;
 
@@ -41,21 +49,23 @@ export function AttackPathTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
-          <div className="flex bg-card border-b border-border sticky top-0 z-10">
+        <div className="stage-result-table">
+          <div className="stage-result-header bg-card border-b border-border sticky top-0 z-10">
             <div className="w-[90px]  min-w-[90px]  px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">ID</div>
             <div className="w-[160px] min-w-[160px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Asset</div>
             <div className="w-[90px]  min-w-[90px]  px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Threat</div>
             <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Vector</div>
-            <div className="flex-1 min-w-[500px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Attack Path</div>
+            <div className="w-[130px] min-w-[130px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">AFR</div>
+            <div className="w-[480px] min-w-[480px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Attack Path</div>
           </div>
 
           {attackPaths.map((ap) => {
             const threat = threatById.get(ap.linkedThreatId);
             const asset  = threat ? assetById.get(threat.linkedAssetId) : undefined;
-            const vectorClass = VECTOR_COLORS[ap.attackVector] ?? 'bg-muted-foreground/20 text-muted-foreground';
+            const vectorClass = VECTOR_COLORS[ap.attackVector] ?? 'bg-sev-1 text-sev-1-foreground';
+            const afrClass = AFR_COLORS[ap.afrLabel ?? ''] ?? AFR_COLORS['very low'];
             return (
-              <div key={ap.id} className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors">
+              <div key={ap.id} className="stage-result-row border-b border-border transition-colors">
                 <div className="w-[90px] min-w-[90px] px-3 py-3 flex items-start pt-3.5">
                   <span className="text-xs font-mono text-primary">{ap.id}</span>
                 </div>
@@ -71,7 +81,16 @@ export function AttackPathTab() {
                     {ap.attackVector}
                   </span>
                 </div>
-                <div className="flex-1 min-w-[500px] px-3 py-3">
+                <div className="w-[130px] min-w-[130px] px-3 py-3 flex items-start pt-3.5">
+                  {ap.afrValue !== undefined ? (
+                    <span className={`rounded border px-2 py-0.5 text-[10px] font-mono font-medium capitalize ${afrClass}`}>
+                      {ap.afrValue}/5 · {ap.afrLabel}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">Not calculated</span>
+                  )}
+                </div>
+                <div className="w-[480px] min-w-[480px] px-3 py-3">
                   <p className="text-xs text-foreground leading-relaxed whitespace-pre-wrap">{ap.description}</p>
                 </div>
               </div>

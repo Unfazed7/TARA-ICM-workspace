@@ -23,3 +23,8 @@ tara-workspace/web-based-tara/stages/*/output/*
 
 # Run log (local only)
 logs/
+artifacts/*/logs/
+
+# Pipeline run outputs and OS noise (client-derived, DR-10)
+artifacts/
+.DS_Store

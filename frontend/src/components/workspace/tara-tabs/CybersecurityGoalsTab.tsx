@@ -1,5 +1,5 @@
 import { useTara } from '@/contexts/TaraContext';
-import { TreatmentDecision, getRiskColor, getRiskTextColor, getRiskLabel } from '@/types/risk-assessment';
+import { TreatmentDecision, getRiskColor, getRiskLabel } from '@/types/risk-assessment';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -28,9 +28,9 @@ export function CybersecurityGoalsTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
+        <div className="stage-result-table">
           {/* Header */}
-          <div className="flex bg-card border-b border-border sticky top-0 z-10">
+          <div className="stage-result-header bg-card border-b border-border sticky top-0 z-10">
             <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Asset</div>
             <div className="w-[100px] min-w-[100px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Risk</div>
             <div className="w-[120px] min-w-[120px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Risk Decision</div>
@@ -49,7 +49,7 @@ export function CybersecurityGoalsTab() {
             const decision = treatment?.decision ?? 'reduce';
 
             return (
-              <div key={threat.id} className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors">
+              <div key={threat.id} className="stage-result-row border-b border-border transition-colors">
                 {/* Asset */}
                 <div className="w-[200px] min-w-[200px] px-3 py-3">
                   <div className="text-sm text-foreground truncate">{asset?.name ?? '—'}</div>
@@ -59,8 +59,8 @@ export function CybersecurityGoalsTab() {
                 {/* Risk */}
                 <div className="w-[100px] min-w-[100px] px-3 py-3 flex items-center gap-2">
                   <span
-                    className="inline-flex h-7 min-w-7 px-1.5 items-center justify-center rounded text-sm font-semibold font-mono"
-                    style={{ background: riskColor, color: getRiskTextColor(riskValue) }}
+                    className={cn('text-xl font-bold font-mono', riskValue >= 4 && '')}
+                    style={{ color: riskColor, ...(riskValue >= 4 ? { filter: `drop-shadow(0 0 12px ${riskColor})` } : {}) }}
                   >
                     {riskValue}
                   </span>

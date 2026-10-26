@@ -291,7 +291,7 @@ export function ReportExportCenter({ scenarios, className }: ReportExportCenterP
           </DialogHeader>
           
           <ScrollArea className="flex-1 mt-4">
-            <div className="bg-card border border-border rounded-lg p-8 prose prose-sm dark:prose-invert max-w-none">
+            <div className="bg-card border border-border rounded-lg p-8 prose prose-sm max-w-none">
               {generatedReport && (
                 <div dangerouslySetInnerHTML={{ __html: generatedReport }} />
               )}

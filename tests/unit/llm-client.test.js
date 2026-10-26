@@ -148,18 +148,48 @@ test('throws on an HTTP error with the status', async () => {
   );
 });
 
-test('the repo models.json pins a model for every stage', () => {
+test('the repo models.json has one default model and no host pin (D-53)', () => {
   const real = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'tara-workspace', 'web-based-tara', '_config', 'models.json'), 'utf8'));
-  for (const [stage, entry] of Object.entries({ default: real.default, ...real.stages })) {
-    assert.notEqual(entry.model, 'UNSET', `${stage} has no model`);
-    assert.notEqual(entry.provider, 'UNSET', `${stage} has no provider`);
-    assert.ok(entry.provider || entry.routing, `${stage} has neither a pinned host nor routing rules`);
+  assert.notEqual(real.default.model, 'UNSET');
+  assert.equal(real.default.provider, null);
+  for (const [stage, entry] of Object.entries(real.stages)) {
+    assert.ok(!('model' in entry), `${stage} should inherit default.model`);
+    assert.ok(!('provider' in entry), `${stage} should not pin a host`);
   }
-  // Steps that send images or scanned PDF pages stay on a model that reads them (D-49).
-  for (const stage of ['01-extract-image', '01-extract-pdf-page']) {
-    assert.match(real.stages[stage].model, /^anthropic\//, `${stage} must read images`);
-  }
-  assert.equal(real.provider_routing.allow_fallbacks, false);
+});
+
+test('a stage entry inherits the default model and only overrides what it sets', async () => {
+  writeModels({ 'slim': { max_tokens: 77 } });
+  const cap = {};
+  await callLLM({ stage: 'slim', messages: [{ role: 'user', content: 'x' }] }, fakeFetch(okResponse, cap));
+  assert.equal(cap.body.model, 'anthropic/claude-sonnet-5.5');
+  assert.equal(cap.body.max_tokens, 77);
+});
+
+test('changing default.model switches every stage and no host is pinned when provider is null', async () => {
+  const models = JSON.parse(fs.readFileSync(modelsFile, 'utf8'));
+  models.default = { ...models.default, model: 'some-lab/other-model', provider: null };
+  models.stages['01-extract-text'] = { max_tokens: 50, prompt_version: 'extract-v1' };
+  fs.writeFileSync(modelsFile, JSON.stringify(models));
+  const cap = {};
+  await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'x' }] }, fakeFetch(okResponse, cap));
+  assert.equal(cap.body.model, 'some-lab/other-model');
+  assert.equal(cap.body.provider, undefined);
+});
+
+test('an empty LLM_MODEL (as the API passes it) leaves models.json in charge', async () => {
+  process.env.LLM_MODEL = '';
+  const cap = {};
+  await callLLM({ messages: [{ role: 'user', content: 'x' }] }, fakeFetch(okResponse, cap));
+  assert.equal(cap.body.model, 'anthropic/claude-sonnet-5.5');
+});
+
+test('an unavailable OpenRouter model reports the model and the corrective setting', async () => {
+  const missing = async () => ({ ok: false, status: 404, text: async () => 'No endpoints found for stealth/space-bunny-alpha.' });
+  await assert.rejects(
+    () => callLLM({ messages: [{ role: 'user', content: 'x' }] }, missing),
+    /Configured LLM model "anthropic\/claude-sonnet-5.5" is unavailable.*LLM_MODEL/
+  );
 });
 
 test('nullable enums are sent in a form strict providers accept', () => {

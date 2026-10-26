@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview"

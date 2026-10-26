@@ -1,117 +1,90 @@
-import { Node, Edge } from 'reactflow';
-import { AttackTreeNodeData } from './attack-tree-types';
+import type { Edge, Node } from 'reactflow';
+import type { AttackTreeNodeData } from './attack-tree-types.ts';
 
-/* ── Demo Data ── */
-export function buildDemoTree(): { nodes: Node<AttackTreeNodeData>[]; edges: Edge[] } {
+export interface AttackPathTreeSource {
+  id: string;
+  linkedThreatId: string;
+  description: string;
+  steps: string[];
+  afrValue?: number;
+  afrLabel?: string;
+}
+
+const STEP_LABELS = [
+  '1. Initial Precondition',
+  '2. Abuse Technique',
+  '3. Exploit Effect',
+  '4. Control Gap',
+  '5. Threat Realization',
+];
+
+function concise(value: string, maxLength: number): string {
+  const normalized = value.replace(/\s+/g, ' ').trim();
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, maxLength - 1).trimEnd()}…`;
+}
+
+export function buildAttackTreeFromPath(
+  attackPath: AttackPathTreeSource,
+  threatLabel?: string,
+): { nodes: Node<AttackTreeNodeData>[]; edges: Edge[] } {
+  const rootId = `${attackPath.id}-root`;
+  const gateId = `${attackPath.id}-and`;
+  const rootLabel = concise(
+    `${attackPath.linkedThreatId}: ${threatLabel || attackPath.description}`,
+    180,
+  );
+
   const nodes: Node<AttackTreeNodeData>[] = [
     {
-      id: 'root-1',
+      id: rootId,
       type: 'attackTreeRoot',
-      position: { x: 400, y: 40 },
-      data: { label: 'Spoof Low Beam Signal', type: 'root' },
+      position: { x: 470, y: 20 },
+      data: {
+        label: rootLabel,
+        type: 'root',
+        detail: attackPath.description,
+      },
     },
     {
-      id: 'or-1',
+      id: gateId,
       type: 'attackTreeGate',
-      position: { x: 400, y: 200 },
-      data: { label: 'OR', type: 'or-gate' },
+      position: { x: 520, y: 210 },
+      data: {
+        label: 'AND',
+        type: 'and-gate',
+        detail: `${attackPath.id} requires all five steps${attackPath.afrLabel ? ` · AFR ${attackPath.afrValue}/5 (${attackPath.afrLabel})` : ''}`,
+      },
     },
-    {
-      id: 'and-1',
-      type: 'attackTreeGate',
-      position: { x: 200, y: 380 },
-      data: { label: 'AND (Remote)', type: 'and-gate', detail: 'Remote Attack Path' },
-    },
-    {
-      id: 'leaf-1',
+    ...STEP_LABELS.map((label, index): Node<AttackTreeNodeData> => ({
+      id: `${attackPath.id}-step-${index + 1}`,
       type: 'attackTreeLeaf',
-      position: { x: 60, y: 560 },
-      data: { label: 'Compromise Telematics', type: 'leaf', difficulty: 3 },
-    },
-    {
-      id: 'leaf-2',
-      type: 'attackTreeLeaf',
-      position: { x: 260, y: 560 },
-      data: { label: 'Pivot to Gateway', type: 'leaf', difficulty: 4 },
-    },
-    {
-      id: 'leaf-3',
-      type: 'attackTreeLeaf',
-      position: { x: 460, y: 560 },
-      data: { label: 'Inject CAN Message', type: 'leaf', difficulty: 2 },
-    },
-    {
-      id: 'leaf-4',
-      type: 'attackTreeLeaf',
-      position: { x: 650, y: 380 },
-      data: { label: 'Connect to OBD-II', type: 'leaf', difficulty: 1, detail: 'Physical access required' },
-    },
+      position: { x: 20 + index * 245, y: 420 },
+      data: {
+        label,
+        type: 'leaf',
+        detail: attackPath.steps[index] || 'Step not supplied by Stage 6.',
+      },
+    })),
   ];
 
   const edges: Edge[] = [
-    { id: 'e-root-or', source: 'root-1', target: 'or-1', type: 'smoothstep', style: { stroke: 'rgba(239,68,68,0.5)', strokeWidth: 2 } },
-    { id: 'e-or-and', source: 'or-1', target: 'and-1', type: 'smoothstep', style: { stroke: 'rgba(59,130,246,0.5)', strokeWidth: 2 } },
-    { id: 'e-or-leaf4', source: 'or-1', target: 'leaf-4', type: 'smoothstep', style: { stroke: 'rgba(59,130,246,0.5)', strokeWidth: 2 } },
-    { id: 'e-and-leaf1', source: 'and-1', target: 'leaf-1', type: 'smoothstep', style: { stroke: 'rgba(59,130,246,0.5)', strokeWidth: 2 } },
-    { id: 'e-and-leaf2', source: 'and-1', target: 'leaf-2', type: 'smoothstep', style: { stroke: 'rgba(59,130,246,0.5)', strokeWidth: 2 } },
-    { id: 'e-and-leaf3', source: 'and-1', target: 'leaf-3', type: 'smoothstep', style: { stroke: 'rgba(59,130,246,0.5)', strokeWidth: 2 } },
+    {
+      id: `${attackPath.id}-root-to-and`,
+      source: rootId,
+      target: gateId,
+      type: 'smoothstep',
+      animated: true,
+      style: { stroke: 'rgba(239,68,68,0.55)', strokeWidth: 2 },
+    },
+    ...STEP_LABELS.map((_, index): Edge => ({
+      id: `${attackPath.id}-and-to-step-${index + 1}`,
+      source: gateId,
+      target: `${attackPath.id}-step-${index + 1}`,
+      type: 'smoothstep',
+      style: { stroke: 'rgba(59,130,246,0.55)', strokeWidth: 2 },
+    })),
   ];
 
   return { nodes, edges };
-}
-
-/* ── Feasibility Calculation ── */
-export function calculateFeasibility(
-  nodes: Node<AttackTreeNodeData>[],
-  edges: Edge[]
-): number | null {
-  const nodeMap = new Map(nodes.map(n => [n.id, n]));
-
-  function getChildren(nodeId: string): string[] {
-    return edges.filter(e => e.source === nodeId).map(e => e.target);
-  }
-
-  function computeScore(nodeId: string): number | null {
-    const node = nodeMap.get(nodeId);
-    if (!node) return null;
-
-    const data = node.data as AttackTreeNodeData;
-
-    if (data.type === 'leaf') {
-      return data.difficulty ?? null;
-    }
-
-    const childIds = getChildren(nodeId);
-    if (childIds.length === 0) return null;
-
-    const childScores = childIds.map(computeScore).filter((s): s is number => s !== null);
-    if (childScores.length === 0) return null;
-
-    if (data.type === 'and-gate') {
-      return childScores.reduce((sum, s) => sum + s, 0);
-    }
-    if (data.type === 'or-gate') {
-      return Math.min(...childScores);
-    }
-
-    // root: treat like pass-through to single child
-    if (data.type === 'root') {
-      if (childScores.length === 1) return childScores[0];
-      return Math.min(...childScores);
-    }
-
-    return null;
-  }
-
-  const rootNode = nodes.find(n => (n.data as AttackTreeNodeData).type === 'root');
-  if (!rootNode) return null;
-  return computeScore(rootNode.id);
-}
-
-export function feasibilityLabel(score: number): { label: string; color: string } {
-  if (score <= 2) return { label: 'Very High', color: 'text-destructive' };
-  if (score <= 5) return { label: 'High', color: 'text-signal-ink' };
-  if (score <= 9) return { label: 'Medium', color: 'text-signal-ink' };
-  if (score <= 14) return { label: 'Low', color: 'text-primary' };
-  return { label: 'Very Low', color: 'text-muted-foreground' };
 }

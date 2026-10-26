@@ -7,7 +7,10 @@ const {
   computeRiskScore,
   getRiskLevel
 } = require('../../tara-workspace/web-based-tara/_engines/risk-score');
-const { buildRiskRegister } = require('../../tara-workspace/web-based-tara/stages/08-risk-scoring/agent');
+const {
+  buildRiskRegister,
+  prepareAttackRecordsForRiskScoring
+} = require('../../tara-workspace/web-based-tara/stages/08-risk-scoring/agent');
 const { fixturePath, readJson } = require('../helpers/schema-validation');
 
 test('impact rating is the max of applicable Stage 05 dimensions', () => {
@@ -75,4 +78,12 @@ test('missing AFR fails before scoring', () => {
   const impact = readJson(fixturePath('valid', 'stage-07-impact-analysis.json'))[0];
   const attack = readJson(fixturePath('valid', 'stage-06-attack-paths.json'))[0];
   assert.throws(() => computeRiskScore(impact, attack), /afr_value not computed/);
+});
+
+test('Stage 08 prepares legacy attack paths by calculating missing AFR', () => {
+  const attacks = readJson(fixturePath('valid', 'stage-06-attack-paths.json'));
+  const prepared = prepareAttackRecordsForRiskScoring(attacks);
+  assert.equal(prepared[0].afr_value >= 1 && prepared[0].afr_value <= 5, true);
+  assert.equal(typeof prepared[0].afr_label, 'string');
+  assert.equal(attacks[0].afr_value, null, 'input remains immutable');
 });

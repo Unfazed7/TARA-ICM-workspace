@@ -1,86 +1,60 @@
 {
-  "_note": "D-50: every step uses Claude Sonnet 5.5 via OpenRouter, served only by Google Vertex (global), no fallbacks (D-48). DeepSeek (D-49) was tried and withdrawn. temperature null means not sent (current Claude models reject non-default sampling). prompt_version is set when each stage's prompt is written. LLM_MODEL overrides the model for local experiments and is recorded in the audit log.",
-  "provider_routing": {
-    "service": "openrouter",
-    "allow_fallbacks": false
-  },
+  "_note": "D-53: one default model serves every stage. Change default.model here (or set env LLM_MODEL) to switch all stages at once. A stage entry below only overrides single settings (max_tokens, prompt_version); add model or provider to a stage only if that stage must differ. Set provider only if you want to pin one host on OpenRouter. temperature null means not sent (current models reject non-default sampling). LLM_MODEL is recorded in the audit log.",
   "default": {
     "model": "anthropic/claude-sonnet-5.5",
-    "provider": "google-vertex/global",
+    "provider": null,
     "temperature": null,
     "max_tokens": 16000,
     "prompt_version": "UNSET"
   },
   "stages": {
     "01-extract-text": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 16000,
       "prompt_version": "extract-v1"
     },
     "01-extract-image": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "image-v1"
     },
     "01-extract-pdf-page": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "extract-v1"
     },
     "01-reconcile-leftovers": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 16000,
       "prompt_version": "compare-v1"
     },
     "02-build": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 32000,
       "prompt_version": "build-v1"
     },
     "02-generate-questions": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "suggest-v1"
     },
     "02-answer-check": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 8000,
       "prompt_version": "answer-v1"
     },
     "02-explain": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 4000,
       "prompt_version": "explain-v1"
     },
     "03-assets": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
-      "max_tokens": 8000,
-      "prompt_version": "UNSET"
+      "max_tokens": 16000,
+      "prompt_version": "assets-v1"
     },
     "review-assistant": {
-      "model": "anthropic/claude-sonnet-5.5",
-      "provider": "google-vertex/global",
-      "temperature": null,
       "max_tokens": 2000,
       "prompt_version": "UNSET"
+    },
+    "10-residual": {
+      "max_tokens": 4000,
+      "prompt_version": "residual-v1"
     }
+  },
+  "provider_routing": {
+    "service": "openrouter",
+    "allow_fallbacks": false
   }
 }

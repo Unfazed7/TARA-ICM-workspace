@@ -1,5 +1,5 @@
 import { useTara } from '@/contexts/TaraContext';
-import { getFeasibilityLevel, FeasibilityLevel, FeasibilityFactors, calculateRiskValue, impactToNumber, feasibilityLevelToNumber, getRiskColor, getRiskTextColor, getRiskLabel } from '@/types/risk-assessment';
+import { getFeasibilityLevel, FeasibilityLevel, FeasibilityFactors, calculateRiskValue, impactToNumber, feasibilityLevelToNumber, getRiskColor, getRiskLabel } from '@/types/risk-assessment';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -81,14 +81,14 @@ export function ResidualRiskTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
+        <div className="stage-result-table">
           {/* Header */}
-          <div className="flex bg-card border-b border-border sticky top-0 z-10">
+          <div className="stage-result-header bg-card border-b border-border sticky top-0 z-10">
             <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Asset</div>
             <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-medium">Attack Path</div>
             {/* Post Feasibility Rating group header */}
             <div className="flex flex-col">
-              <div className="px-3 py-1 text-[10px] uppercase tracking-widest text-muted-foreground font-mono font-semibold border-b border-border text-center" style={{ width: `${factorColumns.length * 140 + 100}px` }}>
+              <div className="px-3 py-1 text-[10px] uppercase tracking-widest text-sev-1-foreground font-mono font-semibold border-b border-border text-center" style={{ width: `${factorColumns.length * 140 + 100}px` }}>
                 Post Feasibility Rating
               </div>
               <div className="flex">
@@ -116,7 +116,7 @@ export function ResidualRiskTab() {
             const riskLabel = getRiskLabel(residualRisk);
 
             return (
-              <div key={threat.id} className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors items-center">
+              <div key={threat.id} className="stage-result-row border-b border-border transition-colors items-center">
                 {/* Asset */}
                 <div className="w-[200px] min-w-[200px] px-3 py-3">
                   <div className="text-sm text-foreground truncate">{asset?.name ?? '—'}</div>
@@ -126,7 +126,7 @@ export function ResidualRiskTab() {
                 {/* Attack Path */}
                 <div className="w-[180px] min-w-[180px] px-3 py-3">
                   <div className="text-xs text-foreground capitalize">{ap?.attackVector ?? '—'}</div>
-                  <div className="text-[10px] text-muted-foreground truncate">{ap?.description?.slice(0, 50) ?? '—'}{ap && ap.description.length > 50 ? '...' : ''}</div>
+                  <div className="text-[10px] text-muted-foreground leading-relaxed">{ap?.description ?? '—'}</div>
                 </div>
 
                 {/* Post Feasibility Factor Selects */}
@@ -161,8 +161,8 @@ export function ResidualRiskTab() {
                 {/* Residual Risk */}
                 <div className="w-[120px] min-w-[120px] px-3 py-3 flex items-center gap-2">
                   <span
-                    className="inline-flex h-7 min-w-7 px-1.5 items-center justify-center rounded text-sm font-semibold font-mono"
-                    style={{ background: riskColor, color: getRiskTextColor(residualRisk) }}
+                    className={cn('text-xl font-bold font-mono', residualRisk >= 4 && '')}
+                    style={{ color: riskColor, ...(residualRisk >= 4 ? { filter: `drop-shadow(0 0 12px ${riskColor})` } : {}) }}
                   >
                     {residualRisk}
                   </span>

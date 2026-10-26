@@ -28,13 +28,15 @@ import type { ProjectScope } from '@/types/tara';
 export interface ComponentTemplate {
   id: string;
   label: string;
-  nodeType: 'ecu' | 'gateway' | 'sensor' | 'actuator' | 'group' | 'bus';
+  nodeType: 'ecu' | 'gateway' | 'sensor' | 'actuator' | 'group' | 'bus' | 'asset';
   layer?: 'powertrain' | 'infotainment' | 'chassis' | 'adas' | 'body';
   busType?: 'can' | 'can-fd' | 'lin' | 'ethernet' | 'flexray' | 'most';
   orientation?: 'horizontal' | 'vertical';
   description: string;
   vendor?: string;
   isCustom?: boolean;
+  assetCategory?: string;
+  taraScope?: ProjectScope;
 }
 
 // --- Color & metadata mappings ---
@@ -114,6 +116,7 @@ const nodeTypeIcons = {
   actuator: CircuitBoard,
   group: Layers,
   bus: Cable,
+  asset: Package,
 };
 
 const categoryColors: Record<string, string> = {
@@ -615,8 +618,8 @@ export function ComponentLibrary({ onDragStart }: ComponentLibraryProps) {
                 <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Layer</Label>
                 <Select
                   value={newComponent.layer}
-                  onValueChange={(value: ComponentTemplate['layer']) =>
-                    setNewComponent(prev => ({ ...prev, layer: value }))
+                  onValueChange={(value) =>
+                    setNewComponent(prev => ({ ...prev, layer: value as ComponentTemplate['layer'] }))
                   }
                 >
                   <SelectTrigger><SelectValue /></SelectTrigger>

@@ -1,17 +1,18 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
-import { ModuleSidebar } from '@/components/workspace/ModuleSidebar';
+import { ModuleSidebar, WorkflowStep } from '@/components/workspace/ModuleSidebar';
 import { WorkspaceTabs } from '@/components/workspace/WorkspaceTabs';
+import { RunHistoryDialog } from '@/components/workspace/RunHistoryDialog';
+import { StageRunnerPanel } from '@/components/stages/StageRunnerPanel';
 
 import { ItemDefinition } from '@/components/workspace/ItemDefinition';
 import { AssumptionScope } from '@/components/workspace/AssumptionScope';
-import { FeatureAnalysis } from '@/components/workspace/FeatureAnalysis';
-import { CALDetermination } from '@/components/workspace/CALDetermination';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { TaraProvider, useTara } from '@/contexts/TaraContext';
-import { ModuleType } from '@/types/tara';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProjects } from '@/contexts/ProjectContext';
 import { Badge } from '@/components/ui/badge';
@@ -32,8 +33,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import {
@@ -47,125 +46,62 @@ import {
   KeyRound,
   UserCircle,
   Upload,
+  LoaderCircle,
+  Pause,
+  Square,
+  FileSpreadsheet,
+  RefreshCw,
 } from 'lucide-react';
-
-const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  not_started: 'outline',
-  pending: 'secondary',
-  running: 'secondary',
-  complete: 'default',
-  failed: 'destructive',
-};
-
-const STAGE_LABELS = [
-  { num: 1, label: '01 — Input Normalization' },
-  { num: 2, label: '02 — Damage Analysis' },
-  { num: 3, label: '03 — Threat Identification' },
-  { num: 4, label: '04 — Attack Path Modelling' },
-  { num: 5, label: '05 — Impact Analysis' },
-  { num: 6, label: '06 — Risk Scoring' },
-  { num: 7, label: '07 — Risk Treatment' },
-];
-
-function StageRunnerPanel({ assessmentId }: { assessmentId: string }) {
-  const { stageStatuses, runStage } = useTara();
-  const [uploading, setUploading] = useState(false);
-  const [csvReady, setCsvReady] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    try {
-      await api.uploads.csv(assessmentId, file);
-      setCsvReady(true);
-      toast.success('CSV uploaded successfully');
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Upload failed');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleRun = async (stageNum: number) => {
-    try {
-      await runStage(stageNum);
-      toast.success(`Stage ${stageNum} queued`);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to start stage');
-    }
-  };
-
-  return (
-    <div className="border border-border rounded-lg p-4 space-y-3">
-      <div className="flex items-center gap-2 mb-2">
-        <Play className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">Pipeline Stages</span>
-      </div>
-
-      {/* CSV Upload */}
-      <div className="flex items-center gap-2 pb-3 border-b border-border">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".csv"
-          className="hidden"
-          onChange={handleCsvUpload}
-        />
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-1.5 text-xs"
-          disabled={uploading}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <Upload className="w-3.5 h-3.5" />
-          {uploading ? 'Uploading...' : csvReady ? 'Replace CSV' : 'Upload Assets CSV'}
-        </Button>
-        {csvReady && <span className="text-xs text-primary">✓ CSV ready</span>}
-      </div>
-
-      {/* Stage rows */}
-      {STAGE_LABELS.map(({ num, label }) => {
-        const key = String(num).padStart(2, '0');
-        const status = stageStatuses[key] ?? 'not_started';
-        const canRun = status === 'not_started' || status === 'failed';
-        return (
-          <div key={num} className="flex items-center gap-3">
-            <span className="text-xs w-44 text-muted-foreground">{label}</span>
-            <Badge variant={STATUS_VARIANT[status]}>{status.replace('_', ' ')}</Badge>
-            {canRun && (
-              <Button size="sm" variant="ghost" className="h-6 text-xs px-2" onClick={() => handleRun(num)}>
-                Run
-              </Button>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 // Inner component that can use useTara
 function WorkspaceContent({ projectId }: { projectId: string }) {
   const navigate = useNavigate();
-  const { user, logout, changePassword } = useAuth();
-  const { getProject, updateProject } = useProjects();
-  const { saveProgress, isSaving, hasUnsavedChanges } = useTara();
+  const { user, logout } = useAuth();
+  const { getProject, updateProject, isLoading: projectsLoading, error: projectsError } = useProjects();
+  const { saveProgress, isSaving, hasUnsavedChanges, lastSavedAt, stageStatuses } = useTara();
 
-  const [activeModule, setActiveModule] = useState<ModuleType>('tara');
+  const [activeModule, setActiveModule] = useState<WorkflowStep>('scope');
   const [activeTab, setActiveTab] = useState<string>('asset-damage');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const selectWorkflow = (next: WorkflowStep) => {
+    setActiveModule(next);
+    const defaults: Partial<Record<WorkflowStep, string>> = {
+      'assets-damage': 'asset-id',
+      'threat-analysis': 'threat-analysis',
+      'risk-treatment': 'impact-rating',
+      'review-publish': 'final-tara',
+    };
+    if (defaults[next]) setActiveTab(defaults[next]!);
+  };
 
-  // Change Password State
-  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const showStageResult = (stageNum: number) => {
+    const destination: Record<number, { module: WorkflowStep; tab?: string }> = {
+      1: { module: 'scope' },
+      2: { module: 'item-definition' },
+      3: { module: 'assets-damage', tab: 'asset-id' },
+      4: { module: 'assets-damage', tab: 'damage-analysis' },
+      5: { module: 'threat-analysis', tab: 'threat-analysis' },
+      6: { module: 'threat-analysis', tab: 'attack-path' },
+      7: { module: 'risk-treatment', tab: 'impact-rating' },
+      8: { module: 'risk-treatment', tab: 'feasibility' },
+      9: { module: 'risk-treatment', tab: 'risk-treatment' },
+      10: { module: 'risk-treatment', tab: 'residual-risk' },
+    };
+    const target = destination[stageNum];
+    if (!target) return;
+    setActiveModule(target.module);
+    if (target.tab) setActiveTab(target.tab);
+  };
 
   const project = getProject(projectId);
+
+  if (projectsLoading) {
+    return <div className="grid h-[100dvh] place-items-center bg-background text-sm text-muted-foreground" role="status">Loading assessment…</div>;
+  }
+
+  if (projectsError) {
+    return <div className="grid h-[100dvh] place-items-center bg-background p-6" role="alert"><div className="max-w-md rounded-md border border-destructive/30 bg-destructive/5 p-5"><p className="font-medium">Could not load this assessment</p><p className="mt-1 text-sm text-muted-foreground">{projectsError.message}</p><Button className="mt-4" variant="outline" onClick={() => navigate('/dashboard')}>Return to dashboard</Button></div></div>;
+  }
 
   if (!project) {
     return <Navigate to="/dashboard" replace />;
@@ -176,42 +112,6 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
     navigate('/login');
   };
 
-  const handleChangePassword = () => {
-    setPasswordError('');
-
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setPasswordError('All fields are required');
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordError('New passwords do not match');
-      return;
-    }
-    if (newPassword.length < 6) {
-      setPasswordError('New password must be at least 6 characters');
-      return;
-    }
-
-    const result = changePassword(currentPassword, newPassword);
-    if (result.success) {
-      toast.success('Password changed successfully');
-      setShowPasswordDialog(false);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } else {
-      setPasswordError(result.error || 'Failed to change password');
-    }
-  };
-
-  const openPasswordDialog = () => {
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    setPasswordError('');
-    setShowPasswordDialog(true);
-  };
-
   const handleSaveClick = () => {
     setShowSaveDialog(true);
   };
@@ -220,13 +120,11 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
     try {
       await saveProgress();
       // Update project's updatedAt timestamp
-      updateProject(projectId, {
-        updatedAt: new Date().toISOString(),
-      });
+      await updateProject(projectId, { updatedAt: new Date().toISOString() });
       setShowSaveDialog(false);
       toast.success('Progress saved successfully', {
-        description: `${project.name} — saved to database`,
-        icon: <CheckCircle2 className="w-4 h-4 text-primary" />,
+        description: `${project.name} — browser draft saved`,
+        icon: <CheckCircle2 className="w-4 h-4 text-bar-foreground" />,
       });
     } catch {
       toast.error('Failed to save progress', {
@@ -235,49 +133,88 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
     }
   };
 
+  const isResultPhase = (['assets-damage', 'threat-analysis', 'risk-treatment', 'review-publish'] as WorkflowStep[]).includes(activeModule);
+  const resultPhase = activeModule as 'assets-damage' | 'threat-analysis' | 'risk-treatment' | 'review-publish';
+  const stageNums = activeModule === 'assets-damage' ? [3, 4] : activeModule === 'threat-analysis' ? [5, 6] : [7, 8, 9];
+
+  const mainPanel = (
+    <main className="result-surface flex min-w-0 flex-1 flex-col overflow-hidden">
+      {activeModule === 'scope' && (
+        <ResizablePanelGroup direction="vertical" autoSaveId="autotara-scope-layout-v2" className="relative">
+          <ResizablePanel defaultSize={75} minSize={25} maxSize={85} className="relative z-10 overflow-auto p-3">
+            <StageRunnerPanel assessmentId={projectId} stageNums={[1]} onStageStart={showStageResult} />
+          </ResizablePanel>
+          <ResizableHandle withHandle className="z-30 data-[panel-group-direction=vertical]:h-2 hover:bg-primary/30" />
+          <ResizablePanel defaultSize={25} minSize={15} maxSize={75} className="relative z-20 overflow-hidden bg-background"><AssumptionScope /></ResizablePanel>
+        </ResizablePanelGroup>
+      )}
+      {activeModule === 'item-definition' && (
+        <ResizablePanelGroup direction="vertical" autoSaveId="autotara-item-layout-v2" className="relative">
+          <ResizablePanel defaultSize={75} minSize={25} maxSize={85} className="relative z-10 overflow-auto p-3">
+            <StageRunnerPanel assessmentId={projectId} stageNums={[2]} onStageStart={showStageResult} />
+          </ResizablePanel>
+          <ResizableHandle withHandle className="z-30 data-[panel-group-direction=vertical]:h-2 hover:bg-primary/30" />
+          <ResizablePanel defaultSize={25} minSize={15} maxSize={75} className="relative z-20 overflow-hidden bg-background"><ItemDefinition assessmentId={projectId} /></ResizablePanel>
+        </ResizablePanelGroup>
+      )}
+      {isResultPhase && activeModule !== 'review-publish' && (
+        <ResizablePanelGroup direction="vertical" autoSaveId={`autotara-${activeModule}-layout-v2`} className="relative">
+          <ResizablePanel defaultSize={75} minSize={25} maxSize={85} className="relative z-10 overflow-auto p-3">
+            <StageRunnerPanel assessmentId={projectId} stageNums={stageNums} onStageStart={showStageResult} />
+          </ResizablePanel>
+          <ResizableHandle withHandle className="z-30 data-[panel-group-direction=vertical]:h-2 hover:bg-primary/30" />
+          <ResizablePanel defaultSize={25} minSize={15} maxSize={75} className="relative z-20 overflow-hidden bg-background">
+            <WorkspaceTabs activeTab={activeTab} onTabChange={setActiveTab} phase={resultPhase} stageStatuses={stageStatuses} />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      )}
+      {activeModule === 'review-publish' && (
+        <WorkspaceTabs activeTab={activeTab} onTabChange={setActiveTab} phase="review-publish" stageStatuses={stageStatuses} />
+      )}
+    </main>
+  );
+
   return (
-    <div className="h-screen w-full flex flex-col overflow-hidden bg-background">
-      {/* Top Bar — 3a navy app bar */}
-      <header className="h-11 flex items-center justify-between gap-3 px-4 bg-bar text-bar-foreground shrink-0">
-        <div className="flex items-center gap-2.5 text-[13px] min-w-0">
+    <div className="h-[100dvh] w-full flex flex-col overflow-hidden bg-background">
+      {/* Top Bar */}
+      <header className="h-11 flex items-center justify-between px-4 bg-bar border-border bg-card shrink-0">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-bar-foreground hover:bg-bar-foreground/10 hover:text-bar-foreground"
+            className="h-7 w-7"
             onClick={() => navigate('/dashboard')}
+            aria-label="Back to dashboard"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <span className="aegis-wordmark">AutoTARA</span>
-          <span className="opacity-[0.55]">/</span>
-          <span className="truncate">{project.name}</span>
-          <span className="font-mono text-[11px] px-1.5 py-0.5 rounded border border-bar-foreground/30">
+          <span className="font-semibold text-sm">AutoTARA</span>
+          <span className="text-muted-foreground">/</span>
+          <span className="truncate text-sm text-muted-foreground">{project.name}</span>
+          <Badge variant="outline" className="hidden text-xs font-mono sm:inline-flex">
             {project.catalogVersion}
-          </span>
+          </Badge>
           {hasUnsavedChanges && (
-            <span className="aegis-signal-pill px-2 py-0.5 text-[11px]">Unsaved</span>
+            <span className="w-2 h-2 rounded-full bg-state-yellow animate-pulse" title="Unsaved changes" />
           )}
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2">
+          <RunHistoryDialog assessmentId={projectId} />
           <Button
             variant="ghost"
             size="sm"
-            className="h-[30px] gap-2 text-bar-foreground hover:bg-bar-foreground/10 hover:text-bar-foreground"
+            className="h-7 gap-2"
             onClick={handleSaveClick}
           >
             <Save className="w-4 h-4" />
             <span className="hidden sm:inline">Save</span>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-[30px] gap-2 bg-transparent border-bar-foreground text-bar-foreground font-semibold hover:bg-bar-foreground/10 hover:text-bar-foreground"
-          >
+          <Button variant="ghost" size="sm" className="h-7 gap-2" disabled title="Validation summary is not available yet">
             <Play className="w-4 h-4" />
             <span className="hidden sm:inline">Validate</span>
           </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-bar-foreground hover:bg-bar-foreground/10 hover:text-bar-foreground">
+          <Button variant="ghost" size="icon" className="h-7 w-7" disabled aria-label="More actions unavailable">
             <MoreHorizontal className="w-4 h-4" />
           </Button>
           <div className="w-px h-5 bg-bar-foreground/25 mx-1" />
@@ -288,6 +225,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
                 variant="ghost"
                 size="icon"
                 className="w-8 h-8 rounded-full bg-bar-foreground/10 border border-bar-foreground/30 hover:bg-bar-foreground/20"
+                aria-label="Open account menu"
               >
                 <span className="text-xs font-bold text-bar-foreground">
                   {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || <UserCircle className="w-4 h-4" />}
@@ -303,9 +241,9 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={openPasswordDialog} className="cursor-pointer">
+              <DropdownMenuItem disabled title="Password changes are not available yet">
                 <KeyRound className="mr-2 w-4 h-4" />
-                Change Password
+                Password change unavailable
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
@@ -318,34 +256,29 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
       </header>
 
       {/* Main Layout */}
-      <div className="flex-1 flex overflow-hidden">
-        <ModuleSidebar activeModule={activeModule} onModuleChange={setActiveModule} />
-
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {activeModule === 'cal-determination' && <CALDetermination />}
-          {activeModule === 'feature-analysis' && <FeatureAnalysis />}
-          {activeModule === 'assumption-scope' && <AssumptionScope />}
-          {activeModule === 'item-definition' && <ItemDefinition assessmentId={projectId} />}
-          {activeModule === 'tara' && (
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <div className="px-4 pt-3 pb-2 border-b border-border shrink-0">
-                <StageRunnerPanel assessmentId={projectId} />
-              </div>
-              <WorkspaceTabs activeTab={activeTab} onTabChange={setActiveTab} />
-            </div>
-          )}
-        </main>
+      <div className="bg-bar p-2 md:hidden">
+        <label htmlFor="mobile-workflow-step" className="sr-only">Workflow step</label>
+        <select id="mobile-workflow-step" value={activeModule} onChange={(event) => {
+          selectWorkflow(event.target.value as WorkflowStep);
+        }} className="h-10 w-full rounded-md border bg-background px-3 text-sm">
+          <option value="scope">1. Define scope</option><option value="item-definition">2. Item definition</option><option value="assets-damage">3. Assets &amp; damage</option><option value="threat-analysis">4. Threat analysis</option><option value="risk-treatment">5. Risk &amp; treatment</option><option value="review-publish">6. Review &amp; publish</option>
+        </select>
+      </div>
+      <div className="flex flex-1 overflow-hidden">
+        <ModuleSidebar activeModule={activeModule} onModuleChange={selectWorkflow} />
+        {mainPanel}
       </div>
 
       {/* Status Bar */}
       <footer className="h-6 flex items-center justify-between px-3 border-t border-border bg-card text-xs text-muted-foreground shrink-0">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-primary" />
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             Connected
           </span>
           <span>
             {project.domains.length} Domains • {project.threatCount || 0} Threats
+            {lastSavedAt && <span className="hidden sm:inline">• Draft saved {new Date(lastSavedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>}
           </span>
         </div>
         <div className="flex items-center gap-4">
@@ -356,9 +289,9 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
 
       {/* ═════ Save Confirmation Dialog ═════ */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="sm:max-w-md z-[100] glass-card-premium border-border/30">
+        <DialogContent className="sm:max-w-md z-[100] aegis-card border-border">
           <DialogHeader className="text-center sm:text-center">
-            <DialogTitle className="gradient-text flex items-center justify-center gap-2 text-xl">
+            <DialogTitle className="flex items-center justify-center gap-2 text-xl">
               <AlertTriangle className="w-6 h-6 text-signal-ink" />
               Save Progress
             </DialogTitle>
@@ -383,7 +316,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
               </div>
             </div>
             <p className="text-xs text-muted-foreground text-center mt-3">
-              All TARA analysis data will be saved to the local database.
+              Editable analysis fields are stored as a browser draft. Pipeline outputs remain on the server.
             </p>
           </div>
 
@@ -394,7 +327,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
             <Button
               onClick={handleConfirmSave}
               disabled={isSaving}
-              className="gap-2 px-6"
+              className="gap-2 px-6 "
             >
               {isSaving ? (
                 <>
@@ -407,70 +340,6 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
                   Yes, Save Progress
                 </>
               )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      {/* ═════ Change Password Dialog ═════ */}
-      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent className="sm:max-w-md z-[100] glass-card-premium border-border/30">
-          <DialogHeader className="text-center sm:text-center">
-            <DialogTitle className="gradient-text flex items-center justify-center gap-2 text-xl">
-              <KeyRound className="w-5 h-5" />
-              Change Password
-            </DialogTitle>
-            <DialogDescription className="text-center">
-              Enter your current password and choose a new one
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-2">
-            <div className="space-y-2">
-              <Label className="text-xs">Current Password</Label>
-              <Input
-                type="password"
-                placeholder="Enter current password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                className="bg-card/40 border-border/40"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs">New Password</Label>
-              <Input
-                type="password"
-                placeholder="Enter new password (min 6 chars)"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="bg-card/40 border-border/40"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs">Confirm New Password</Label>
-              <Input
-                type="password"
-                placeholder="Confirm new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="bg-card/40 border-border/40"
-              />
-            </div>
-
-            {passwordError && (
-              <p className="text-sm text-destructive text-center">{passwordError}</p>
-            )}
-          </div>
-
-          <DialogFooter className="sm:justify-center gap-2">
-            <Button variant="ghost" onClick={() => setShowPasswordDialog(false)} className="px-6">
-              Cancel
-            </Button>
-            <Button
-              onClick={handleChangePassword}
-              className="gap-2 px-6"
-            >
-              <KeyRound className="w-4 h-4" />
-              Update Password
             </Button>
           </DialogFooter>
         </DialogContent>

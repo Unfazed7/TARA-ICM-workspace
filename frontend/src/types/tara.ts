@@ -61,9 +61,9 @@ export type ProjectScope = 'vehicle' | 'domain' | 'component' | 'ecu';
 export type WorkflowMode = 'ai-assisted' | 'guided' | 'manual';
 
 // New types for project management
-export type VehicleType = 'sedan' | 'suv' | 'truck' | 'electric' | 'commercial' | 'motorcycle' | 'other';
+export type VehicleType = 'sedan' | 'suv' | 'truck' | 'van' | 'bus' | 'commercial' | 'motorcycle';
 
-export type ProjectDomain = 'powertrain' | 'chassis' | 'infotainment' | 'networks' | 'adas' | 'body';
+export type ProjectDomain = 'powertrain' | 'chassis' | 'infotainment' | 'networks' | 'adas' | 'body' | 'web-based';
 
 export type ProjectStatus = 'draft' | 'active' | 'completed' | 'archived';
 
@@ -78,6 +78,14 @@ export interface Project {
   workflowMode: WorkflowMode;
   objectives?: string;
   directory?: string;
+  documentId?: string;
+  templateVersion?: string;
+  version?: string;
+  authors?: string;
+  reviewers?: string;
+  confirmationReviewer?: string;
+  approver?: string;
+  workHistory?: Array<{ id: string; date: string; version: string; status: string; author: string; changeDescription: string }>;
   status: ProjectStatus;
   createdAt: string;
   updatedAt: string;
@@ -98,10 +106,10 @@ export const vehicleTypeOptions: { id: VehicleType; label: string }[] = [
   { id: 'sedan', label: 'Sedan' },
   { id: 'suv', label: 'SUV' },
   { id: 'truck', label: 'Truck' },
-  { id: 'electric', label: 'Electric Vehicle' },
+  { id: 'van', label: 'Van' },
+  { id: 'bus', label: 'Bus' },
   { id: 'commercial', label: 'Commercial Vehicle' },
   { id: 'motorcycle', label: 'Motorcycle' },
-  { id: 'other', label: 'Other' },
 ];
 
 // Domain options for checkboxes

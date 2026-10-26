@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, Trash2 } from 'lucide-react';
 import { Project } from '@/types/tara';
 import {
   Dialog,
@@ -21,6 +21,7 @@ interface StatTileProps {
   dialogTitle?: string;
   dialogDescription?: string;
   projects?: Project[];
+  onDelete?: (project: Project) => void;
 }
 
 const statusColors: Record<string, string> = {
@@ -30,7 +31,7 @@ const statusColors: Record<string, string> = {
   archived: 'bg-muted text-muted-foreground',
 };
 
-export function StatTile({ label, value, icon: Icon, subtitle, accentClass, dialogTitle, dialogDescription, projects = [] }: StatTileProps) {
+export function StatTile({ label, value, icon: Icon, subtitle, accentClass, dialogTitle, dialogDescription, projects = [], onDelete }: StatTileProps) {
   const [open, setOpen] = useState(false);
   const hasPopup = projects.length > 0 || dialogTitle;
 
@@ -97,6 +98,17 @@ export function StatTile({ label, value, icon: Icon, subtitle, accentClass, dial
                       <span className="text-xs font-mono text-muted-foreground">
                         {p.completionPercentage ?? 0}%
                       </span>
+                      {onDelete && (
+                        <button
+                          type="button"
+                          onClick={() => onDelete(p)}
+                          aria-label={`Delete ${p.name}`}
+                          title="Delete project"
+                          className="flex size-8 items-center justify-center rounded-md text-destructive transition-colors hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))

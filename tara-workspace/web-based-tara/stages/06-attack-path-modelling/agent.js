@@ -11,9 +11,19 @@ const {
 } = require('../agent-utils');
 
 const { callLLM, getConfig } = require('../llm-client');
+const { calculateCVSSAFR } = require('../../_engines/cvss-afr-calc');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_attack_path';
 const THINKING = { type: 'enabled', budget_tokens: 8000 };
+const MAX_OUTPUT_TOKENS = 4096;
+
+const ATTACK_PATH_STEPS = [
+  'step_1_initial_precondition',
+  'step_2_abuse_technique',
+  'step_3_exploit_effect',
+  'step_4_control_gap',
+  'step_5_threat_realization'
+];
 
 const CVSS_ENUMS = {
   attack_vector: ['N', 'A', 'L', 'P'],
@@ -42,6 +52,22 @@ function validateAttackPaths(paths, threats) {
     }
     if (path.afr_value !== null || path.afr_label !== null) {
       throw new Error(`${path.attack_id} must have null AFR fields before engine execution`);
+    }
+  }
+}
+
+function enrichAttackPathsWithAFR(paths) {
+  return paths.map((attackPath) => ({
+    ...attackPath,
+    ...calculateCVSSAFR(attackPath.cvss_metrics)
+  }));
+}
+
+function validateEnrichedAttackPaths(paths) {
+  for (const attackPath of paths) {
+    const expected = calculateCVSSAFR(attackPath.cvss_metrics);
+    if (attackPath.afr_value !== expected.afr_value || attackPath.afr_label !== expected.afr_label) {
+      throw new Error(`${attackPath.attack_id}: AFR does not match its CVSS metrics`);
     }
   }
 }
@@ -142,10 +168,141 @@ function extractToolUse(response) {
   return toolUse?.input || null;
 }
 
+function parseTextAttackPath(response) {
+  const text = (response?.content || [])
+    .filter((item) => item.type === 'text' && typeof item.text === 'string')
+    .map((item) => item.text)
+    .join('\n')
+    .trim();
+  if (!text) return null;
+
+  const candidates = [text];
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced) candidates.unshift(fenced[1].trim());
+  const objectStart = text.indexOf('{');
+  const objectEnd = text.lastIndexOf('}');
+  if (objectStart >= 0 && objectEnd > objectStart) {
+    candidates.push(text.slice(objectStart, objectEnd + 1));
+  }
+
+  for (const candidate of candidates) {
+    try {
+      const parsed = JSON.parse(candidate);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+    } catch {
+      // Try the next representation.
+    }
+  }
+  return null;
+}
+
+function validateAttackPathPayload(attackPath) {
+  if (!attackPath || typeof attackPath !== 'object' || Array.isArray(attackPath)) {
+    throw new Error('attack-path payload must be an object');
+  }
+  if (typeof attackPath.attack_description !== 'string' || !attackPath.attack_description.trim()) {
+    throw new Error('attack_description is required');
+  }
+  if (!attackPath.attack_path || typeof attackPath.attack_path !== 'object') {
+    throw new Error('attack_path is required');
+  }
+  for (const step of ATTACK_PATH_STEPS) {
+    if (typeof attackPath.attack_path[step] !== 'string' || !attackPath.attack_path[step].trim()) {
+      throw new Error(`${step} is required`);
+    }
+  }
+  if (!attackPath.cvss_metrics || typeof attackPath.cvss_metrics !== 'object') {
+    throw new Error('cvss_metrics is required');
+  }
+  for (const [metric, allowed] of Object.entries(CVSS_ENUMS)) {
+    if (!allowed.includes(attackPath.cvss_metrics[metric])) {
+      throw new Error(`Invalid CVSS metric ${metric}`);
+    }
+  }
+  if (!attackPath.justifications || typeof attackPath.justifications !== 'object') {
+    throw new Error('justifications are required');
+  }
+  for (const metric of Object.keys(CVSS_ENUMS)) {
+    if (typeof attackPath.justifications[metric] !== 'string' || !attackPath.justifications[metric].trim()) {
+      throw new Error(`Justification for ${metric} is required`);
+    }
+  }
+  return attackPath;
+}
+
+function compact(value, maxLength = 280) {
+  const normalized = String(value || '').replace(/\s+/g, ' ').trim();
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, maxLength - 1).trimEnd()}…`;
+}
+
+function buildFallbackAttackPath(threat) {
+  const source = `${threat.threat_statement || ''} ${threat.derivation_note || ''}`.toLowerCase();
+  const attackVector = /physical|on-site|obd/.test(source)
+    ? 'P'
+    : /adjacent|same network|local network|private network/.test(source)
+      ? 'A'
+      : /local shell|local access|host access/.test(source)
+        ? 'L'
+        : 'N';
+  const attackComplexity = /race condition|timing|specific condition|co-scheduled|depends on|cannot guarantee/.test(source)
+    ? 'H'
+    : 'L';
+  const privilegesRequired = /anonymous|unauthenticated|no account|without credentials/.test(source)
+    ? 'N'
+    : /cluster-admin|administrator|admin-level|control-plane credentials|privileged credential/.test(source)
+      ? 'H'
+      : 'L';
+  const userInteraction = /phishing|user must|victim must|clicks? (?:a|the)|opens? (?:a|the) link/.test(source)
+    ? 'R'
+    : 'N';
+  const mechanism = String(threat.stride_category || 'threat').replace(/_/g, ' ');
+  const statement = compact(threat.threat_statement, 320);
+  const derivation = compact(threat.derivation_note, 260);
+
+  return {
+    attack_description: compact(
+      `${threat.asset_title}: the ${mechanism} mechanism described in ${threat.threat_id} is exercised until ${threat.property} is compromised.`,
+      420
+    ),
+    attack_path: {
+      step_1_initial_precondition: `The threat actor has the ${attackVector === 'N' ? 'network reachability' : attackVector === 'A' ? 'adjacent-network position' : attackVector === 'L' ? 'local execution position' : 'physical access'} and ${privilegesRequired === 'N' ? 'requires no prior privileges' : privilegesRequired === 'L' ? 'holds a limited authenticated or execution context' : 'holds a privileged administrative context'} needed to reach ${threat.asset_title}.`,
+      step_2_abuse_technique: `Using this position, the actor applies the ${mechanism} technique captured by ${threat.threat_id}: ${statement}`,
+      step_3_exploit_effect: `This action gives the actor the capability to interfere with ${threat.asset_title} and advance from initial access to a direct compromise of its ${threat.property} property.`,
+      step_4_control_gap: `Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. ${derivation}`,
+      step_5_threat_realization: `This completes the path by realizing ${threat.threat_id} and compromising ${threat.asset_title} ${threat.property}, producing the linked ${threat.damage_scenario_id} consequence.`
+    },
+    cvss_metrics: {
+      attack_vector: attackVector,
+      attack_complexity: attackComplexity,
+      privileges_required: privilegesRequired,
+      user_interaction: userInteraction
+    },
+    justifications: {
+      attack_vector: `Attack Vector is ${attackVector} because the initial position described for ${threat.threat_id} is ${attackVector === 'N' ? 'remotely network reachable' : attackVector === 'A' ? 'limited to an adjacent network' : attackVector === 'L' ? 'local to the target environment' : 'dependent on physical access'}.`,
+      attack_complexity: `Attack Complexity is ${attackComplexity} because the documented chain ${attackComplexity === 'H' ? 'depends on conditions outside the actor’s direct control' : 'uses a repeatable sequence without a separate race or unpredictable prerequisite'}.`,
+      privileges_required: `Privileges Required is ${privilegesRequired} because the initial precondition ${privilegesRequired === 'N' ? 'does not require an authenticated identity' : privilegesRequired === 'L' ? 'starts from limited access rather than administration' : 'requires an administrative or control-plane context'}.`,
+      user_interaction: `User Interaction is ${userInteraction} because the path ${userInteraction === 'R' ? 'requires a separate user or victim action' : 'can be completed by the actor without a separate user action'}.`
+    }
+  };
+}
+
+function formatRequestError(error) {
+  const details = [error?.message || String(error)];
+  if (error?.cause?.code) details.push(error.cause.code);
+  if (error?.cause?.message && error.cause.message !== error.message) details.push(error.cause.message);
+  return details.join(' — ');
+}
+
+function isNonRecoverableRequestError(error) {
+  return /API key not set|(LLM|Anthropic) API error (400|401|403|404)\b|Configured LLM model .* is unavailable/i
+    .test(error?.message || String(error));
+}
+
 async function callClaudeForThreat(threat, fetchImpl = fetch) {
   const params = {
     model: MODEL,
-    max_tokens: 16000,
+    max_tokens: MAX_OUTPUT_TOKENS,
     system: buildSystemPrompt(),
     messages: [{ role: 'user', content: buildUserMessage(threat) }],
     tools: [buildAttackPathTool()],
@@ -159,12 +316,32 @@ async function callClaudeForThreat(threat, fetchImpl = fetch) {
 }
 
 async function generateAttackPathForThreat(threat, fetchImpl) {
+  let lastIssue = `the model returned free text or invalid JSON instead of ${TOOL_NAME}`;
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await callClaudeForThreat(threat, fetchImpl);
-    const attackPath = extractToolUse(response);
-    if (attackPath) return attackPath;
+    try {
+      const response = await callClaudeForThreat(threat, fetchImpl);
+      const attackPath = extractToolUse(response) || parseTextAttackPath(response);
+      if (attackPath) {
+        try {
+          return validateAttackPathPayload(attackPath);
+        } catch (error) {
+          lastIssue = `invalid ${TOOL_NAME} payload (${error.message})`;
+        }
+      }
+      console.warn(
+        `Stage 6 ${threat.threat_id} attempt ${attempt + 1}/2 did not produce a valid attack path: ${lastIssue}`
+      );
+    } catch (error) {
+      const details = formatRequestError(error);
+      if (isNonRecoverableRequestError(error)) {
+        throw new Error(`LLM request failed for ${threat.threat_id}: ${details}`);
+      }
+      lastIssue = `transient LLM request failure (${details})`;
+      console.warn(`Stage 6 ${threat.threat_id} attempt ${attempt + 1}/2 failed: ${details}`);
+    }
   }
-  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${threat.threat_id}`);
+  console.warn(`Using deterministic Stage 6 attack-path fallback for ${threat.threat_id} because ${lastIssue}.`);
+  return validateAttackPathPayload(buildFallbackAttackPath(threat));
 }
 
 async function buildAttackPathsWithClaude(threats, options = {}) {
@@ -172,7 +349,9 @@ async function buildAttackPathsWithClaude(threats, options = {}) {
 
   const paths = [];
   const timestamp = options.timestamp || new Date().toISOString();
-  for (const threat of threats) {
+  for (let index = 0; index < threats.length; index += 1) {
+    const threat = threats[index];
+    console.log(`Stage 6 processing ${threat.threat_id} (${index + 1}/${threats.length})`);
     const attackPath = await generateAttackPathForThreat(threat, options.fetchImpl);
     paths.push({
       attack_id: formatId('AT', paths.length),
@@ -195,7 +374,9 @@ async function buildAttackPathsWithClaude(threats, options = {}) {
 
 async function run(options) {
   const threats = readJson(options.threats);
-  const attackPaths = await buildAttackPathsWithClaude(threats, { fetchImpl: options.fetchImpl });
+  const preEnginePaths = await buildAttackPathsWithClaude(threats, { fetchImpl: options.fetchImpl });
+  const attackPaths = enrichAttackPathsWithAFR(preEnginePaths);
+  validateEnrichedAttackPaths(attackPaths);
   writeJson(options.out, attackPaths);
   return attackPaths;
 }
@@ -222,9 +403,15 @@ module.exports = {
   buildSystemPrompt,
   buildUserMessage,
   callClaudeForThreat,
+  buildFallbackAttackPath,
   extractToolUse,
+  enrichAttackPathsWithAFR,
   generateAttackPathForThreat,
+  parseTextAttackPath,
   run,
   validateAttackPaths,
+  validateEnrichedAttackPaths,
+  validateAttackPathPayload,
+  MAX_OUTPUT_TOKENS,
   THINKING
 };

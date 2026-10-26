@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { PageTransition } from '@/components/layout/PageTransition';
-import { AnimatedShield } from '@/components/effects/AnimatedShield';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -74,60 +73,23 @@ export default function Login() {
 
   return (
     <PageTransition variant="scale">
-      <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background">
+      <div className="min-h-[100dvh] w-full flex items-center justify-center bg-background px-4 py-10">
         {/* Skip to main content - accessibility */}
         <a href="#login-card" className="skip-link">
           Skip to login
         </a>
 
-        {/* Background layers with parallax */}
-        <div className="absolute inset-0 animated-grid" />
-
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-accent/10" />
-        </div>
-
-        {/* Blurred vehicle wireframe effect */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[450px] opacity-[0.04]">
-          <svg viewBox="0 0 800 400" className="w-full h-full">
-            <defs>
-              <linearGradient id="wireGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(var(--primary))" />
-                <stop offset="100%" stopColor="hsl(var(--primary))" />
-              </linearGradient>
-            </defs>
-            <path
-              d="M100,200 Q200,100 400,120 Q600,140 700,200 Q650,280 400,300 Q150,280 100,200 Z"
-              fill="none"
-              stroke="url(#wireGradient)"
-              strokeWidth="1.5"
-            />
-            <circle cx="200" cy="280" r="45" fill="none" stroke="url(#wireGradient)" strokeWidth="1.5" />
-            <circle cx="600" cy="280" r="45" fill="none" stroke="url(#wireGradient)" strokeWidth="1.5" />
-            <path d="M250,150 Q400,100 550,150" fill="none" stroke="url(#wireGradient)" strokeWidth="0.5" opacity="0.5" />
-            <path d="M180,200 L280,200" fill="none" stroke="url(#wireGradient)" strokeWidth="0.5" opacity="0.5" />
-            <path d="M520,200 L620,200" fill="none" stroke="url(#wireGradient)" strokeWidth="0.5" opacity="0.5" />
-          </svg>
-        </div>
-
-        {/* Premium Glass Login Card */}
         <div
           id="login-card"
           className={cn(
-            'relative z-10 w-full max-w-lg mx-4',
+            'w-full max-w-md',
             showError && 'error-shake'
           )}
         >
-          <div className="glass-card-premium rounded-2xl p-8" style={{ boxShadow: 'var(--shadow-elevated)' }}>
-            {/* Top glow accent */}
-            <div className="absolute -top-px left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-
-            {/* Logo and Title with animations */}
+          <div className="rounded-md border bg-card p-6 sm:p-8">
             <div className="flex flex-col items-center mb-8 relative">
-              <AnimatedShield size="md" />
-
-              <h1 className="text-2xl font-semibold tracking-tight mt-6 gradient-text letter-spacing-hover">
+              <div className="grid size-12 place-items-center rounded border bg-background"><ShieldCheck className="size-6" /></div>
+              <h1 className="mt-5 font-serif text-2xl font-semibold tracking-tight">
                 AutoTARA
               </h1>
               <p className="text-xs text-muted-foreground mt-2 tracking-wide animated-underline active">
@@ -183,7 +145,7 @@ export default function Login() {
 
                 {/* Error message */}
                 {error && (
-                  <div className="flex items-center gap-2 text-destructive text-xs animate-fade-in p-2 rounded-lg bg-destructive/10 border border-destructive/20">
+                  <div className="flex items-center gap-2 text-destructive text-xs p-2 rounded bg-destructive/10 border border-destructive/20" role="alert" aria-live="polite">
                     <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0" />
                     {error}
                   </div>
@@ -295,20 +257,16 @@ export default function Login() {
                 <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
                   <ShieldCheck className="w-8 h-8 text-primary animate-pulse" />
                 </div>
-                <p className="text-sm font-medium gradient-text">Authentication Successful</p>
+                <p className="text-sm font-medium ">Authentication Successful</p>
                 <p className="text-xs text-muted-foreground">Redirecting to your dashboard...</p>
                 <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
               </div>
             )}
 
-            {/* Status Bar */}
             <div className="mt-8 pt-4 border-t border-border/20">
               <div className="flex items-center justify-center gap-2">
                 <div className="version-badge">
-                  <span className="relative flex h-2 w-2 mr-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary/80 status-dot-pulse" />
-                  </span>
+                  <ShieldCheck className="mr-2 size-3.5" aria-hidden="true" />
                   <span>ISO 21434 v2.4.1</span>
                   <span className="mx-2 text-muted-foreground/40">•</span>
                   <span className="text-muted-foreground/60">Secure Login</span>
@@ -318,15 +276,6 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Corner accents */}
-        <div className="absolute top-8 left-8 w-20 h-20 border-l border-t border-primary/20 rounded-tl-2xl" />
-        <div className="absolute top-8 right-8 w-20 h-20 border-r border-t border-primary/20 rounded-tr-2xl" />
-        <div className="absolute bottom-8 left-8 w-20 h-20 border-l border-b border-accent/20 rounded-bl-2xl" />
-        <div className="absolute bottom-8 right-8 w-20 h-20 border-r border-b border-accent/20 rounded-br-2xl" />
-
-        {/* Glowing accent lines */}
-        <div className="absolute top-0 left-0 right-0 h-px glow-line" />
-        <div className="absolute bottom-0 left-0 right-0 h-px glow-line" />
       </div>
     </PageTransition>
   );

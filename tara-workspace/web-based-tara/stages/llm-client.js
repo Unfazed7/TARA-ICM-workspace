@@ -1,16 +1,19 @@
 'use strict';
 
 /**
- * The only path to a model (spec .meta/specs/17-llm-client.md, decision D-40).
+ * The only path to a model (spec .meta/specs/17-llm-client.md, decisions D-40, D-53).
  *
- *   LLM_PROVIDER=openrouter → OpenRouter, model and provider pinned per stage in
- *                             _config/models.json (default)
- *   LLM_PROVIDER=anthropic  → Anthropic native API (legacy, not used in the rebuild)
- *   LLM_PROVIDER=openai     → any OpenAI-compatible endpoint (legacy, not used in the rebuild)
+ * One default model serves every stage: `default.model` in _config/models.json.
+ * A `stages.<key>` entry only overrides single settings (max_tokens, prompt_version, ...).
+ * Change the model once, in models.json or with LLM_MODEL, and every stage follows.
+ *
+ *   LLM_PROVIDER=openrouter → OpenRouter (default)
+ *   LLM_PROVIDER=openai     → any OpenAI-compatible endpoint, including local servers (set LLM_BASE_URL)
+ *   LLM_PROVIDER=anthropic  → Anthropic native API (one more provider option)
  *
  * Environment variables:
- *   OPENROUTER_API_KEY / ANTHROPIC_API_KEY / LLM_API_KEY   API key
- *   LLM_MODEL       overrides the model for local experiments (recorded in the audit log)
+ *   LLM_API_KEY     API key for any provider (else OPENROUTER_API_KEY / ANTHROPIC_API_KEY / OPENAI_API_KEY)
+ *   LLM_MODEL       overrides the model for every stage (recorded in the audit log)
  *   LLM_BASE_URL    base URL override
  *   LLM_MODELS_FILE path to models.json (default: ../_config/models.json)
  *   LLM_AUDIT_FILE  audit log path (default: ../audit/llm-calls.jsonl)
@@ -52,7 +55,9 @@ function isUnset(value) {
  */
 function resolveStageSettings(stage) {
   const config = loadModelsConfig();
-  const entry = (stage && config.stages && config.stages[stage]) || config.default;
+  const stageEntry = stage && config.stages && config.stages[stage];
+  // A stage entry inherits everything it does not set from `default`.
+  const entry = config.default || stageEntry ? { ...(config.default || {}), ...(stageEntry || {}) } : null;
   const label = stage || 'default';
   if (!entry) throw new Error(`No entry for stage ${label} in _config/models.json`);
   const model = process.env.LLM_MODEL || entry.model;
@@ -421,7 +426,7 @@ async function callModel(params, fetchImpl) {
   let prepared = null;
 
   if (config.provider === 'anthropic') {
-    requestedModel = process.env.LLM_MODEL || params.model;
+    requestedModel = process.env.LLM_MODEL || params.model || resolveStageSettings(params.stage).model.replace(/^anthropic\//, '');
     const body = {
       model: requestedModel,
       max_tokens: params.max_tokens,
@@ -501,6 +506,12 @@ async function callModel(params, fetchImpl) {
       });
       if (!res.ok) {
         const text = await res.text().catch(() => '');
+        if (config.provider === 'openrouter' && res.status === 404 && /no endpoints found/i.test(text) && (!params.response_schema || !SCHEMA_TOO_BIG.test(text))) {
+          throw new Error(
+            `Configured LLM model "${settings.model}" is unavailable on OpenRouter. `
+            + 'Set LLM_MODEL (or default.model in _config/models.json) to a currently available model, then retry the stage.'
+          );
+        }
         const err = new Error(`LLM API error ${res.status}: ${text}`);
         err.retryable = RETRY_STATUS.has(res.status);
         throw err;

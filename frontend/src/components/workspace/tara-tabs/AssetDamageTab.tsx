@@ -18,8 +18,8 @@ function EmptyState({ status }: { status: string }) {
         <p className="text-sm font-semibold text-foreground">No asset data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 01 — Input Normalization is running…'
-            : 'Upload a CSV file and run Stage 01 — Input Normalization from the pipeline panel above.'}
+            ? 'Stage 03 — Asset Identification is running…'
+            : 'Complete the Item Definition and run Stage 03 — Asset Identification.'}
         </p>
       </div>
     </div>
@@ -28,7 +28,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function AssetDamageTab() {
   const { assets, stageStatuses } = useTara();
-  const status = stageStatuses['01'] ?? 'not_started';
+  const status = stageStatuses['03'] ?? 'not_started';
 
   if (assets.length === 0) return <EmptyState status={status} />;
 
@@ -40,26 +40,26 @@ export function AssetDamageTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
-          <div className="flex bg-card border-b border-border sticky top-0 z-10">
+        <div className="stage-result-table">
+          <div className="stage-result-header bg-card border-b border-border sticky top-0 z-10">
             <div className="w-[100px] min-w-[100px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">ID</div>
             <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Asset Title</div>
-            <div className="w-[200px] min-w-[200px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Description</div>
-            <div className="flex-1 min-w-[260px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">CIAAAN Properties</div>
+            <div className="w-[380px] min-w-[380px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Description</div>
+            <div className="w-[300px] min-w-[300px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">CIAAAN Properties</div>
           </div>
 
           {assets.map((asset) => (
-            <div key={asset.id} className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors">
+            <div key={asset.id} className="stage-result-row border-b border-border transition-colors">
               <div className="w-[100px] min-w-[100px] px-3 py-3 flex items-center">
                 <span className="text-xs font-mono text-primary">{asset.assetId}</span>
               </div>
               <div className="w-[200px] min-w-[200px] px-3 py-3">
                 <p className="text-sm font-semibold text-foreground">{asset.name}</p>
               </div>
-              <div className="w-[200px] min-w-[200px] px-3 py-3">
-                <p className="text-xs text-muted-foreground line-clamp-3">{asset.description || '—'}</p>
+              <div className="w-[380px] min-w-[380px] px-3 py-3">
+                <p className="text-xs text-muted-foreground leading-relaxed whitespace-normal break-words">{asset.description || '—'}</p>
               </div>
-              <div className="flex-1 min-w-[260px] px-3 py-3 flex items-center gap-1.5 flex-wrap">
+              <div className="w-[300px] min-w-[300px] px-3 py-3 flex items-center gap-1.5 flex-wrap">
                 {CIAAAN.filter((p) => asset[p.key]).map((p) => (
                   <span key={p.key} className="px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-mono font-medium">
                     {p.label}

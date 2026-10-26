@@ -53,6 +53,12 @@ export interface ThreatAsset {
   ciaaanId: string;
   name: string;
   category: 'data' | 'io' | 'firmware';
+  confidentiality?: boolean;
+  integrity?: boolean;
+  availability?: boolean;
+  authenticity?: boolean;
+  authorization?: boolean;
+  nonRepudiation?: boolean;
 }
 
 export interface AssociatedECU {

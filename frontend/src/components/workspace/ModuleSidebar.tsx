@@ -1,46 +1,45 @@
 import { useState } from 'react';
-import { Box, Search, Shield, ShieldCheck, ChevronsLeft, ChevronsRight, ClipboardList } from 'lucide-react';
+import { Boxes, ChevronLeft, ChevronRight, FileCheck2, GitBranch, ListChecks, Scale, Shield } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { ModuleType } from '@/types/tara';
 
-const modules: { id: ModuleType; label: string; icon: React.ElementType }[] = [
-  { id: 'feature-analysis', label: 'Feature Analysis', icon: Search },
-  { id: 'assumption-scope', label: 'Assumption Scope', icon: ClipboardList },
-  { id: 'item-definition', label: 'Item Definition', icon: Box },
-  { id: 'tara', label: 'TARA', icon: Shield },
-  { id: 'cal-determination', label: 'CAL', icon: ShieldCheck },
+export type WorkflowStep = 'scope' | 'item-definition' | 'assets-damage' | 'threat-analysis' | 'risk-treatment' | 'review-publish';
+
+const modules: { id: WorkflowStep; step: number; label: string; icon: React.ElementType }[] = [
+  { id: 'scope', step: 1, label: 'Define scope', icon: ListChecks },
+  { id: 'item-definition', step: 2, label: 'Item definition', icon: Boxes },
+  { id: 'assets-damage', step: 3, label: 'Assets & damage', icon: Shield },
+  { id: 'threat-analysis', step: 4, label: 'Threat analysis', icon: GitBranch },
+  { id: 'risk-treatment', step: 5, label: 'Risk & treatment', icon: Scale },
+  { id: 'review-publish', step: 6, label: 'Review & publish', icon: FileCheck2 },
 ];
 
 interface ModuleSidebarProps {
-  activeModule: ModuleType;
-  onModuleChange: (module: ModuleType) => void;
+  activeModule: WorkflowStep;
+  onModuleChange: (module: WorkflowStep) => void;
 }
 
 export function ModuleSidebar({ activeModule, onModuleChange }: ModuleSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div
-      className={cn(
-        'shrink-0 flex flex-col h-full bg-muted border-r border-border transition-all duration-300 overflow-hidden',
-        collapsed ? 'w-16' : 'w-64'
-      )}
-    >
+    <aside className={cn(
+      'relative hidden h-full shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-200 md:flex',
+      collapsed ? 'w-16' : 'w-64',
+    )}>
       {/* Logo / Brand Area */}
       <div className="flex items-center gap-3 px-4 pt-5 pb-4">
-        <div className="w-8 h-8 rounded bg-primary text-primary-foreground flex items-center justify-center">
+        <div className="w-8 h-8 rounded border bg-background flex items-center justify-center">
           <Shield className="w-4 h-4" />
         </div>
-        {!collapsed && (
-          <span className="aegis-wordmark text-[13px] text-foreground whitespace-nowrap">
+        {!collapsed && <span className="truncate text-xs font-semibold tracking-[0.08em] uppercase whitespace-nowrap">
             AutoTARA
-          </span>
-        )}
+        </span>}
       </div>
 
-      <div className="px-3 mb-3">
-        <div className="h-px bg-border" />
+      {/* Tech Separator — fades at both ends */}
+      <div className="px-3 mb-4">
+        <div className="h-px bg-primary-soft from-transparent via-white/10 to-transparent" />
       </div>
 
       {/* Navigation Items */}
@@ -53,29 +52,32 @@ export function ModuleSidebar({ activeModule, onModuleChange }: ModuleSidebarPro
             <button
               key={mod.id}
               onClick={() => onModuleChange(mod.id)}
+              aria-current={active ? 'step' : undefined}
               className={cn(
-                'group relative flex items-center gap-3 rounded transition-colors min-h-[38px] w-full',
-                collapsed ? 'justify-center px-0' : 'px-3',
+                'group relative flex items-center gap-3 rounded-md transition-all duration-200 min-h-[40px] w-full',
+                collapsed ? 'justify-center px-2' : 'px-3',
                 active
-                  ? 'bg-primary-soft text-foreground font-semibold'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-background'
+                  ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                  : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
               )}
             >
+              {/* Active laser line */}
               {active && (
-                <div className="absolute left-0 inset-y-0 w-[3px] rounded-l bg-primary" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-5 rounded-full bg-foreground" />
               )}
 
+              {!collapsed && <span className="w-5 shrink-0 text-center text-xs font-mono" aria-hidden="true">{mod.step}</span>}
               <Icon
                 className={cn(
                   'w-[18px] h-[18px] shrink-0 transition-all duration-200',
-                  active ? 'text-primary' : 'group-hover:text-foreground'
+                  active
+                    ? 'text-foreground'
+                    : 'group-hover:text-foreground'
                 )}
               />
-              {!collapsed && (
-                <span className="text-[13px] whitespace-nowrap">
+              {!collapsed && <span className="truncate text-[11px] font-medium tracking-[0.12em] uppercase whitespace-nowrap">
                   {mod.label}
-                </span>
-              )}
+              </span>}
             </button>
           );
 
@@ -90,16 +92,17 @@ export function ModuleSidebar({ activeModule, onModuleChange }: ModuleSidebarPro
         })}
       </nav>
 
-      {/* Bottom separator + collapse toggle */}
-      <div className="px-3 mt-auto pt-2">
-        <div className="h-px bg-border mb-2" />
+      <div className="mt-auto border-t border-sidebar-border p-2">
+        <button
+          type="button"
+          onClick={() => setCollapsed((value) => !value)}
+          aria-label={collapsed ? 'Expand workflow navigation' : 'Collapse workflow navigation'}
+          aria-expanded={!collapsed}
+          className="flex h-9 w-full items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+        >
+          {collapsed ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
+        </button>
       </div>
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center w-full h-9 mb-2 text-muted-foreground hover:text-foreground transition-colors"
-      >
-        {collapsed ? <ChevronsRight className="w-4 h-4" /> : <ChevronsLeft className="w-4 h-4" />}
-      </button>
-    </div>
+    </aside>
   );
 }

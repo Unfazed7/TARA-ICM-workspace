@@ -22,7 +22,7 @@ import { GroupNode, GroupNodeData } from '@/components/visualizer/GroupNode';
 import { BusNode, BusNodeData } from '@/components/visualizer/BusNode';
 import { AssetNode, AssetNodeData } from '@/components/visualizer/AssetNode';
 import { ProtocolEdge, ProtocolEdgeData } from '@/components/visualizer/ProtocolEdge';
-import { ComponentLibrary } from '@/components/visualizer/ComponentLibrary';
+import { ComponentLibrary, type ComponentTemplate } from '@/components/visualizer/ComponentLibrary';
 import { FloatingToolbar } from '@/components/visualizer/FloatingToolbar';
 import { AIScanOverlay } from '@/components/visualizer/AIScanOverlay';
 import { InspectorPanel } from '@/components/layout/InspectorPanel';
@@ -174,7 +174,7 @@ function ArchitectureVisualizerInner({ onNodeSelect }: ArchitectureVisualizerInn
       const templateData = event.dataTransfer.getData('application/reactflow');
       if (!templateData || !reactFlowWrapper.current) return;
 
-      const template = JSON.parse(templateData);
+      const template = JSON.parse(templateData) as ComponentTemplate;
       const bounds = reactFlowWrapper.current.getBoundingClientRect();
       const viewport = getViewport();
 
@@ -183,12 +183,12 @@ function ArchitectureVisualizerInner({ onNodeSelect }: ArchitectureVisualizerInn
         y: (event.clientY - bounds.top - viewport.y) / viewport.zoom,
       };
 
-      let nodeType = 'ecu';
+      let nodeType: ComponentTemplate['nodeType'] = 'ecu';
       if (template.nodeType === 'group') nodeType = 'group';
       if (template.nodeType === 'bus') nodeType = 'bus';
       if (template.nodeType === 'asset') nodeType = 'asset';
 
-      let nodeData: any;
+      let nodeData: ECUNodeData | GroupNodeData | BusNodeData | AssetNodeData;
       if (nodeType === 'asset') {
         nodeData = {
           label: template.label,
@@ -197,8 +197,10 @@ function ArchitectureVisualizerInner({ onNodeSelect }: ArchitectureVisualizerInn
         };
       } else if (nodeType === 'bus') {
         nodeData = { label: template.label, busType: template.busType || 'can', orientation: template.orientation || 'horizontal' };
+      } else if (nodeType === 'group') {
+        nodeData = { label: template.label, layer: template.layer, expanded: false };
       } else {
-        nodeData = { label: template.label, nodeType: template.nodeType, layer: template.layer };
+        nodeData = { label: template.label, nodeType, layer: template.layer };
       }
 
       const newNode: Node = {
@@ -213,7 +215,7 @@ function ArchitectureVisualizerInner({ onNodeSelect }: ArchitectureVisualizerInn
     [getViewport, setNodes]
   );
 
-  const handleDragStart = useCallback((event: React.DragEvent, template: any) => {
+  const handleDragStart = useCallback((event: React.DragEvent, template: ComponentTemplate) => {
     event.dataTransfer.setData('application/reactflow', JSON.stringify(template));
     event.dataTransfer.effectAllowed = 'move';
   }, []);

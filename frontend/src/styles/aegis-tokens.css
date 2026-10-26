@@ -436,3 +436,82 @@
 @media (prefers-reduced-motion: reduce) {
   .aegis-bar { animation: none; transform: scaleX(.6); }
 }
+
+/* Stage result workspaces (stages 03 to 10, merged from the pipeline branch, D-53).
+ * Same D-51 tokens as the rest of the app: ids and counts keep Geist Mono. */
+.result-surface {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+}
+
+.result-surface :where(table, th, td, input, textarea, button, [role="tab"]) {
+  font-family: var(--font-sans);
+}
+
+/* Stage result tables: each column owns an explicit width, long values wrap. */
+.stage-result-table {
+  width: max-content;
+  min-width: 100%;
+}
+
+.stage-result-header,
+.stage-result-row {
+  display: flex;
+  width: 100%;
+}
+
+.stage-result-header > *,
+.stage-result-row > * {
+  flex: 0 0 auto;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.stage-result-table .truncate,
+.stage-result-table .line-clamp-3 {
+  display: block;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  -webkit-line-clamp: unset;
+}
+
+.stage-result-header {
+  background-color: hsl(var(--muted));
+}
+
+.stage-result-row:nth-child(even) {
+  background-color: hsl(var(--card));
+}
+
+.stage-result-row:nth-child(odd) {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.stage-result-row:hover {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Running progress strip: blue means running (D-51). */
+@keyframes result-progress-sweep {
+  from { background-position: 1rem 0; }
+  to { background-position: 0 0; }
+}
+
+.result-progress-running {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    hsl(var(--state-blue-foreground)),
+    hsl(var(--state-blue-foreground)) 0.35rem,
+    hsl(var(--state-blue-foreground) / 0.35) 0.35rem,
+    hsl(var(--state-blue-foreground) / 0.35) 0.7rem
+  );
+  background-size: 1rem 1rem;
+  animation: result-progress-sweep 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .result-progress-running { animation: none; }
+}

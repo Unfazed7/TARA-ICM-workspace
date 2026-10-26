@@ -2,7 +2,6 @@ import { useTara } from '@/contexts/TaraContext';
 import { Badge } from '@/components/ui/badge';
 
 const STRIDE_COLORS: Record<string, string> = {
-  // STRIDE is a category, not a risk level: one neutral structural chip.
   spoofing:               'bg-primary-soft text-foreground',
   tampering:              'bg-primary-soft text-foreground',
   repudiation:            'bg-primary-soft text-foreground',
@@ -14,13 +13,13 @@ const STRIDE_COLORS: Record<string, string> = {
 function EmptyState({ status }: { status: string }) {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 text-center px-8">
-      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">3</div>
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">5</div>
       <div>
         <p className="text-sm font-semibold text-foreground">No threat data yet</p>
         <p className="text-xs text-muted-foreground mt-1">
           {status === 'running'
-            ? 'Stage 03 — Threat Identification is running…'
-            : 'Run Stage 02 (Damage Analysis) then Stage 03 (Threat Identification) from the pipeline panel above.'}
+            ? 'Stage 05 — Threat Identification is running…'
+            : 'Complete Stage 04 — Damage Analysis, then run Stage 05 — Threat Identification.'}
         </p>
       </div>
     </div>
@@ -29,7 +28,7 @@ function EmptyState({ status }: { status: string }) {
 
 export function ThreatAnalysisTab() {
   const { threats, assets, stageStatuses } = useTara();
-  const status = stageStatuses['03'] ?? 'not_started';
+  const status = stageStatuses['05'] ?? 'not_started';
 
   if (threats.length === 0) return <EmptyState status={status} />;
 
@@ -43,19 +42,19 @@ export function ThreatAnalysisTab() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="min-w-max">
-          <div className="flex bg-card border-b border-border sticky top-0 z-10">
+        <div className="stage-result-table">
+          <div className="stage-result-header bg-card border-b border-border sticky top-0 z-10">
             <div className="w-[90px]  min-w-[90px]  px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">ID</div>
             <div className="w-[160px] min-w-[160px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Asset</div>
             <div className="w-[180px] min-w-[180px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">STRIDE</div>
-            <div className="flex-1 min-w-[400px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Threat Statement</div>
+            <div className="w-[480px] min-w-[480px] px-3 py-2.5 text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Threat Statement</div>
           </div>
 
           {threats.map((threat) => {
             const asset = assetById.get(threat.linkedAssetId);
             const strideClass = STRIDE_COLORS[threat.strideCategory] ?? 'bg-muted-foreground/20 text-muted-foreground';
             return (
-              <div key={threat.id} className="flex border-b border-border hover:bg-foreground/[0.02] transition-colors">
+              <div key={threat.id} className="stage-result-row border-b border-border transition-colors">
                 <div className="w-[90px] min-w-[90px] px-3 py-3 flex items-center">
                   <span className="text-xs font-mono text-primary">{threat.threatId}</span>
                 </div>
@@ -68,7 +67,7 @@ export function ThreatAnalysisTab() {
                     {threat.strideCategory.replace(/-/g, ' ')}
                   </span>
                 </div>
-                <div className="flex-1 min-w-[400px] px-3 py-3">
+                <div className="w-[480px] min-w-[480px] px-3 py-3">
                   <p className="text-xs text-foreground leading-relaxed">{threat.scenario}</p>
                 </div>
               </div>

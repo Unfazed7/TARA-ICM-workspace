@@ -10,9 +10,10 @@ import { AttackTreeNodeData } from './attack-tree-types';
 interface Props {
   selectedNode: Node<AttackTreeNodeData> | null;
   onUpdate: (id: string, data: Partial<AttackTreeNodeData>) => void;
+  readOnly?: boolean;
 }
 
-export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
+export function AttackTreeInspector({ selectedNode, onUpdate, readOnly = false }: Props) {
   if (!selectedNode) {
     return (
       <div className="h-full flex flex-col items-center justify-center text-muted-foreground px-4 text-center gap-3">
@@ -53,7 +54,7 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
             value={data.label}
             onChange={(e) => onUpdate(selectedNode.id, { label: e.target.value })}
             className="h-8 text-xs bg-foreground/5 border-border"
-            readOnly={isRoot}
+            readOnly={readOnly || isRoot}
           />
         </div>
 
@@ -65,11 +66,12 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
             onChange={(e) => onUpdate(selectedNode.id, { detail: e.target.value })}
             className="text-xs bg-foreground/5 border-border min-h-[60px] resize-none"
             placeholder="Optional description..."
+            readOnly={readOnly}
           />
         </div>
 
         {/* Gate Type Toggle */}
-        {isGate && (
+        {isGate && !readOnly && (
           <div className="space-y-1.5">
             <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Gate Type</Label>
             <div className="flex gap-2">
@@ -99,7 +101,7 @@ export function AttackTreeInspector({ selectedNode, onUpdate }: Props) {
         )}
 
         {/* Difficulty Score */}
-        {isLeaf && (
+        {isLeaf && !readOnly && (
           <div className="space-y-3">
             <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Difficulty Score</Label>
             <div className="flex items-center gap-3">

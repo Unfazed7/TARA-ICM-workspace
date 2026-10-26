@@ -21,6 +21,45 @@ const OWASP_REFERENCES = [
   'API1', 'API2', 'API3', 'API4', 'API5', 'API6', 'API7', 'API8', 'API9', 'API10'
 ];
 
+const FALLBACK_THREAT_BY_PROPERTY = {
+  confidentiality: {
+    stride_category: 'information_disclosure',
+    action: 'gain unauthorized access to data or responses exposed by',
+    control_gap: 'access-control or data-exposure safeguards are bypassed',
+    owasp_reference: 'A01'
+  },
+  integrity: {
+    stride_category: 'tampering',
+    action: 'alter data, configuration, or processing performed by',
+    control_gap: 'integrity validation or change controls are bypassed',
+    owasp_reference: 'A08'
+  },
+  availability: {
+    stride_category: 'denial_of_service',
+    action: 'exhaust, block, or disable',
+    control_gap: 'availability and resource-protection controls are insufficient',
+    owasp_reference: 'API4'
+  },
+  authenticity: {
+    stride_category: 'spoofing',
+    action: 'impersonate a trusted identity or source accepted by',
+    control_gap: 'identity verification controls are bypassed',
+    owasp_reference: 'A07'
+  },
+  authorization: {
+    stride_category: 'elevation_of_privilege',
+    action: 'invoke privileged operations through',
+    control_gap: 'authorization enforcement is bypassed',
+    owasp_reference: 'A01'
+  },
+  non_repudiation: {
+    stride_category: 'repudiation',
+    action: 'remove or falsify activity evidence recorded by',
+    control_gap: 'audit-trail integrity and accountability controls are bypassed',
+    owasp_reference: 'A09'
+  }
+};
+
 function ensureDamageScenarios(damageScenarios) {
   if (!Array.isArray(damageScenarios) || damageScenarios.length === 0) {
     throw new Error('No damage scenarios to process');
@@ -99,6 +138,62 @@ function extractToolUse(response) {
   return toolUse?.input || null;
 }
 
+function isUsableThreatPayload(threat) {
+  return Boolean(
+    threat
+    && STRIDE_CATEGORIES.includes(threat.stride_category)
+    && typeof threat.threat_statement === 'string'
+    && threat.threat_statement.trim()
+    && typeof threat.derivation_note === 'string'
+    && threat.derivation_note.trim()
+    && (threat.owasp_reference == null || OWASP_REFERENCES.includes(threat.owasp_reference))
+  );
+}
+
+function buildFallbackThreat(damageScenario, fallbackReason) {
+  const mapping = FALLBACK_THREAT_BY_PROPERTY[damageScenario.property];
+  if (!mapping) {
+    throw new Error(
+      `Cannot derive fallback threat for unsupported property ${damageScenario.property} on ${damageScenario.damage_id}`
+    );
+  }
+
+  return {
+    stride_category: mapping.stride_category,
+    threat_statement: [
+      `An attacker could ${mapping.action} ${damageScenario.asset_title} after ${mapping.control_gap},`,
+      `resulting in the damage described by ${damageScenario.damage_id}: ${damageScenario.damage_scenario}`
+    ].join(' '),
+    derivation_note: [
+      `${damageScenario.property} maps to ${mapping.stride_category} under the STRIDE taxonomy.`,
+      fallbackReason
+        ? `This deterministic fallback was used because ${fallbackReason}.`
+        : `This deterministic fallback was used because the model did not return the required ${TOOL_NAME} tool call after two attempts.`
+    ].join(' '),
+    owasp_reference: mapping.owasp_reference
+  };
+}
+
+function formatRequestError(error) {
+  const details = [error?.message || String(error)];
+  if (error?.cause?.code) details.push(error.cause.code);
+  if (error?.cause?.message && error.cause.message !== error.message) {
+    details.push(error.cause.message);
+  }
+  return details.join(' — ');
+}
+
+function isNonRecoverableRequestError(error) {
+  const message = error?.message || String(error);
+  return /API key not set|LLM API error (400|401|403|404)\b/i.test(message);
+}
+
+function ensureAssetTitleInStatement(statement, assetTitle) {
+  const trimmed = String(statement || '').trim();
+  if (trimmed.includes(assetTitle)) return trimmed;
+  return `${assetTitle}: ${trimmed}`;
+}
+
 async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
   return callLLM({
     model: MODEL,
@@ -111,12 +206,30 @@ async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
 }
 
 async function generateThreatForDamageScenario(damageScenario, fetchImpl) {
+  let lastRequestError = null;
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const response = await callClaudeForDamageScenario(damageScenario, fetchImpl);
-    const threat = extractToolUse(response);
-    if (threat) return threat;
+    try {
+      const response = await callClaudeForDamageScenario(damageScenario, fetchImpl);
+      const threat = extractToolUse(response);
+      if (isUsableThreatPayload(threat)) return threat;
+      lastRequestError = null;
+    } catch (error) {
+      lastRequestError = error;
+    }
   }
-  throw new Error(`Claude returned free text instead of ${TOOL_NAME} tool_use for ${damageScenario.damage_id}`);
+  if (lastRequestError) {
+    const formattedError = formatRequestError(lastRequestError);
+    if (isNonRecoverableRequestError(lastRequestError)) {
+      throw new Error(
+        `LLM request failed for ${damageScenario.damage_id} after two attempts: ${formattedError}`
+      );
+    }
+    return buildFallbackThreat(
+      damageScenario,
+      `the LLM request failed twice (${formattedError})`
+    );
+  }
+  return buildFallbackThreat(damageScenario);
 }
 
 async function buildThreatsWithClaude(damageScenarios, options = {}) {
@@ -133,7 +246,7 @@ async function buildThreatsWithClaude(damageScenarios, options = {}) {
       asset_title: scenario.asset_title,
       property: scenario.property,
       stride_category: threat.stride_category,
-      threat_statement: threat.threat_statement,
+      threat_statement: ensureAssetTitleInStatement(threat.threat_statement, scenario.asset_title),
       derivation_note: threat.derivation_note,
       owasp_reference: threat.owasp_reference ?? null,
       created_timestamp: timestamp
@@ -149,7 +262,7 @@ async function run(options) {
   const threats = await buildThreatsWithClaude(damageScenarios, { fetchImpl: options.fetchImpl });
   writeJson(options.out, threats);
   await submitCheckpoint(options.assessmentId, {
-    stage_num: 3,
+    stage_num: 5,
     stage_name: 'threat-identification',
     output_summary: {
       total_threats: threats.length,
@@ -178,6 +291,9 @@ if (require.main === module) {
 
 module.exports = {
   buildSystemPrompt,
+  buildFallbackThreat,
+  ensureAssetTitleInStatement,
+  isUsableThreatPayload,
   buildThreatTool,
   buildThreatsWithClaude,
   buildUserMessage,
