@@ -2,7 +2,7 @@
 
 **Type:** AI
 **Checkpoint:** light asset review (full review of the CIAAAN column)
-**Spec:** pending, `.meta/specs/16-asset-identification.md` (C12)
+**Spec:** `.meta/specs/26-stage-03-assets.md` (derivation), 27 (store and run), 28 (screen); C12, D-52
 **Load from `_config/`:** `web-asset-types.md`, `ciaaan-properties.md`
 
 ---

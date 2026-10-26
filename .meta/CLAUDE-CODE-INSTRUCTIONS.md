@@ -597,11 +597,11 @@ Full rules are in `.meta/web-item-definition-questions.md` section M. Summary:
 ---
 
 #### C12. Stage 03 Asset Identification
-> **On hold (D-41).** Focus is stages 01 and 02.
+> **Resumed (D-52).** Specs 26, 27 and 28 replace the planned spec 16.
 
 **Read first:** DR-15, `.meta/web-item-definition-questions.md` answers G1 to G4.
 **Do:**
-1. Spec `.meta/specs/16-asset-identification.md` first (HUMAN GATE on the spec).
+1. Specs `.meta/specs/26-stage-03-assets.md`, `27-stage-03-store-and-run.md` and `28-stage-03-screen.md` first (HUMAN GATE on the specs).
 2. Agent: input is the finalized Item Definition from the API only. Derive assets per DR-15 with a plain reason per asset and per CIAAAN property; output `asset-register.json` valid against `stage-03-asset-register.schema.json` (extend the schema with source element id, reason fields and asset prefix scheme if the spec requires).
 3. Light review endpoint and screen for the asset list; full review for the CIAAAN column (every property shows its reason).
 **Acceptance:** on item-01, every in-scope element produces zero or more assets with reasons; no asset from an out-of-scope element; the CIAAAN rule holds (tests for the Authorization vs Confidentiality case).

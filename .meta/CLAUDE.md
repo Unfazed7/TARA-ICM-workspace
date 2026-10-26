@@ -159,7 +159,7 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `13a-rationale-items.md` | Rationale item fields (replaces CP0 and CP1 specs) | approved (B5 gate) |
 | `13b-rationale-defaults-and-api.md` | Rationale defaults (general principle plus named kinds), attention rule, review API | approved (B5 gate) |
 | `15-evaluation.md` | Evaluation scorer | deferred (D-39) |
-| `16-asset-identification.md` | Stage 03 | planned, C12 |
+| `16-asset-identification.md` | Stage 03 | replaced by specs 26 to 28 (D-52) |
 | `17-llm-client.md` | Model client: OpenRouter, pinned per stage, strict JSON, refusals, audit | approved (C1) |
 | `18-stage-data-store.md` | Stage 01 and 02 tables, run endpoint, refusals R-18 to R-20, roles | approved (C3) |
 | `19-stage-01-reading.md` | Stage 01 reading: register, readers per format, quote check, hiding | approved (C4) |
@@ -169,4 +169,7 @@ Spec numbers are file IDs, not stage numbers. Two existing specs share number 05
 | `23-c7-data-changes.md` | Document groups, asset type rename, Assumption topics, answers | approved (C7) |
 | `24-c7-stage-screens.md` | Stage 01 and 02 screens with the Assumptions panel | approved (C7); theme and layout updated by D-51 (C15) |
 | `25-c10-exports.md` | Excel and draw.io exports of the Item Definition | draft (C10) |
+| `26-stage-03-assets.md` | Stage 03 derivation: candidates and default properties by code, reasons by the model | draft (C12) |
+| `27-stage-03-store-and-run.md` | Stage 03 tables, run after Stage 02, asset and property review API | draft (C12) |
+| `28-stage-03-screen.md` | 03 Assets tab: asset list and CIAAAN review | draft (C12) |
 | none | Stage 10 Residual Risk and the orchestrator | no spec; outside this rebuild |
