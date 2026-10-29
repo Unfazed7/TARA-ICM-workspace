@@ -1,0 +1,2643 @@
+[
+  {
+    "asset_id": "EXT-01",
+    "family": "EXT",
+    "name": "Operators identity",
+    "type_label": "Identity",
+    "description": "Operators identity as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-001"
+      ],
+      "label": "EL-001 Operators",
+      "scope": "interface"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-001",
+      "FCT-004"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Operators identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Operators identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Operators identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Operators identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Operators identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Operators identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "EXT-02",
+    "family": "EXT",
+    "name": "Security admins identity",
+    "type_label": "Identity",
+    "description": "Security admins identity as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-002"
+      ],
+      "label": "EL-002 Security admins",
+      "scope": "interface"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-002",
+      "FCT-004"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Security admins identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Security admins identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Security admins identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Security admins identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Security admins identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Security admins identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "EXT-03",
+    "family": "EXT",
+    "name": "Internal services identity",
+    "type_label": "Identity",
+    "description": "Internal services identity as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-003"
+      ],
+      "label": "EL-003 Internal services",
+      "scope": "interface"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-003",
+      "FCT-048"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Internal services identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Internal services identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Internal services identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Internal services identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Internal services identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Internal services identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "EXT-04",
+    "family": "EXT",
+    "name": "Corporate SSO identity",
+    "type_label": "Identity",
+    "description": "Corporate SSO identity as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-004"
+      ],
+      "label": "EL-004 Corporate SSO",
+      "scope": "interface"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-006",
+      "FCT-007"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Corporate SSO identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Corporate SSO identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Corporate SSO identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Corporate SSO identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Corporate SSO identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Corporate SSO identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "EXT-05",
+    "family": "EXT",
+    "name": "Container registry identity",
+    "type_label": "Identity",
+    "description": "Container registry identity as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-021"
+      ],
+      "label": "EL-021 Container registry",
+      "scope": "interface"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-041",
+      "FCT-047"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Container registry identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Container registry identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Container registry identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Container registry identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Container registry identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Container registry identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "EXT-06",
+    "family": "EXT",
+    "name": "Notification service identity",
+    "type_label": "Identity",
+    "description": "Notification service identity as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-024"
+      ],
+      "label": "EL-024 Notification service",
+      "scope": "interface"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-044",
+      "FCT-045"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Notification service identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Notification service identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Notification service identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Notification service identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Notification service identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Notification service identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "EXT-07",
+    "family": "EXT",
+    "name": "CI/CD pipeline identity",
+    "type_label": "Identity",
+    "description": "CI/CD pipeline identity as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-025"
+      ],
+      "label": "EL-025 CI/CD pipeline",
+      "scope": "interface"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-046",
+      "FCT-047",
+      "FCT-056"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "CI/CD pipeline identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "CI/CD pipeline identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "CI/CD pipeline identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "CI/CD pipeline identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "CI/CD pipeline identity does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "CI/CD pipeline identity needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "NET-01",
+    "family": "NET",
+    "name": "Internet-facing load balancer routing configuration",
+    "type_label": "Configuration",
+    "description": "Internet-facing load balancer routing configuration as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-011"
+      ],
+      "label": "EL-011 Internet-facing load balancer",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-012",
+      "FCT-013"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Internet-facing load balancer routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Internet-facing load balancer routing configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Internet-facing load balancer routing configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Internet-facing load balancer routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Internet-facing load balancer routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Internet-facing load balancer routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "NET-02",
+    "family": "NET",
+    "name": "NAT gateway routing configuration",
+    "type_label": "Configuration",
+    "description": "NAT gateway routing configuration as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-012"
+      ],
+      "label": "EL-012 NAT gateway",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-024"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "NAT gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "NAT gateway routing configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "NAT gateway routing configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "NAT gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "NAT gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "NAT gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "NET-03",
+    "family": "NET",
+    "name": "Internet gateway routing configuration",
+    "type_label": "Configuration",
+    "description": "Internet gateway routing configuration as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-013"
+      ],
+      "label": "EL-013 Internet gateway",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-025"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Internet gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Internet gateway routing configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Internet gateway routing configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Internet gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Internet gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Internet gateway routing configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "NET-04",
+    "family": "NET",
+    "name": "Network boundary configuration exposure configuration",
+    "type_label": "Configuration",
+    "description": "Network boundary configuration exposure configuration as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-014"
+      ],
+      "label": "EL-014 Network boundary configuration",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-021",
+      "FCT-022",
+      "FCT-023"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Network boundary configuration exposure configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Network boundary configuration exposure configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Network boundary configuration exposure configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Network boundary configuration exposure configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Network boundary configuration exposure configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Network boundary configuration exposure configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "WL-01",
+    "family": "WL",
+    "name": "CRL publisher function logic",
+    "type_label": "Service logic",
+    "description": "CRL publisher function logic as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-008"
+      ],
+      "label": "EL-008 CRL publisher",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-031",
+      "FCT-063"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "CRL publisher function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "CRL publisher function logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "CRL publisher function logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "CRL publisher function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "CRL publisher function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "CRL publisher function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "WL-02",
+    "family": "WL",
+    "name": "Token authorizer function logic",
+    "type_label": "Service logic",
+    "description": "Token authorizer function logic as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-010"
+      ],
+      "label": "EL-010 Token authorizer",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-008",
+      "FCT-049"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Token authorizer function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Token authorizer function logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Token authorizer function logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Token authorizer function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Token authorizer function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Token authorizer function logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "WL-03",
+    "family": "WL",
+    "name": "Certificate service logic",
+    "type_label": "Service logic",
+    "description": "Certificate service logic as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-015"
+      ],
+      "label": "EL-015 Certificate service",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-027",
+      "FCT-054",
+      "FCT-058"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Certificate service logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Certificate service logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Certificate service logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Certificate service logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "The service has no entitlement check, so anyone could read the requests it handles.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Certificate service logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "WL-04",
+    "family": "WL",
+    "name": "Key service logic",
+    "type_label": "Service logic",
+    "description": "Key service logic as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-016"
+      ],
+      "label": "EL-016 Key service",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-028",
+      "FCT-060"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Key service logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Key service logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Key service logic needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Key service logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Key service logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Key service logic does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "DS-01",
+    "family": "DS",
+    "name": "Portal UI bucket stored content",
+    "type_label": "Data store",
+    "description": "Portal UI bucket stored content as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-006"
+      ],
+      "label": "EL-006 Portal UI bucket",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-016",
+      "FCT-055"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Portal UI bucket stored content does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Portal UI bucket stored content needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Portal UI bucket stored content needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Portal UI bucket stored content needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Portal UI bucket stored content does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Portal UI bucket stored content does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "DS-02",
+    "family": "DS",
+    "name": "Revocation list bucket stored content",
+    "type_label": "Data store",
+    "description": "Revocation list bucket stored content as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-007"
+      ],
+      "label": "EL-007 Revocation list bucket",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-032"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Revocation list bucket stored content does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Revocation list bucket stored content needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Revocation list bucket stored content needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Revocation list bucket stored content needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Revocation list bucket stored content does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Revocation list bucket stored content does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "DS-03",
+    "family": "DS",
+    "name": "Cache session and sign-in state",
+    "type_label": "Data store",
+    "description": "Cache session and sign-in state as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-017"
+      ],
+      "label": "EL-017 Cache",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-030"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Cache session and sign-in state needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Cache session and sign-in state needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Cache session and sign-in state needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Nothing relies on proving where the cached data came from.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Cache session and sign-in state does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Cache session and sign-in state does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "DS-04",
+    "family": "DS",
+    "name": "Certificate database records held",
+    "type_label": "Data store",
+    "description": "Certificate database records held as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-018"
+      ],
+      "label": "EL-018 Certificate database",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-033",
+      "FCT-034",
+      "FCT-035"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Certificate database records held needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Certificate database records held needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Certificate database records held needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Certificate database records held does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Certificate database records held does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Certificate database records held needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "DS-05",
+    "family": "DS",
+    "name": "Audit trail audit records",
+    "type_label": "Data store",
+    "description": "Audit trail audit records as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-022"
+      ],
+      "label": "EL-022 Audit trail",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-042"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Audit trail audit records does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Audit trail audit records needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Audit trail audit records needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Audit trail audit records does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Audit trail audit records does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Audit trail audit records needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "DS-06",
+    "family": "DS",
+    "name": "Logs and metrics logs and records",
+    "type_label": "Data store",
+    "description": "Logs and metrics logs and records as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-023"
+      ],
+      "label": "EL-023 Logs and metrics",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-043"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Application logs may contain request details that only staff should read.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "I": {
+        "applies": true,
+        "reason": "Logs and metrics logs and records needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Logs and metrics logs and records needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Logs and metrics logs and records does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Logs and metrics logs and records does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Logs and metrics logs and records needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "INF-01",
+    "family": "INF",
+    "name": "API gateway function and its sign-in configuration",
+    "type_label": "Configuration",
+    "description": "API gateway function and its sign-in configuration as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-009"
+      ],
+      "label": "EL-009 API gateway",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-009",
+      "FCT-010"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "API gateway function and its sign-in configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "API gateway function and its sign-in configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "API gateway function and its sign-in configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "API gateway function and its sign-in configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "API gateway function and its sign-in configuration needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "API gateway function and its sign-in configuration does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "INF-02",
+    "family": "INF",
+    "name": "CDN delivery settings",
+    "type_label": "Configuration",
+    "description": "How the CDN serves the portal pages and the revocation list to users.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-005"
+      ],
+      "label": "EL-005 CDN",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document showing the CDN serves nothing of the portal.",
+    "fact_ids": [
+      "FCT-014",
+      "FCT-015"
+    ],
+    "asset_type_row": false,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "It plays no part in this on its own.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "I": {
+        "applies": true,
+        "reason": "A changed or missing delivery would reach every user.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "A": {
+        "applies": true,
+        "reason": "A changed or missing delivery would reach every user.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "Au": {
+        "applies": false,
+        "reason": "It plays no part in this on its own.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "Az": {
+        "applies": false,
+        "reason": "It plays no part in this on its own.",
+        "origin": "model",
+        "reviewed": false
+      },
+      "NR": {
+        "applies": false,
+        "reason": "It plays no part in this on its own.",
+        "origin": "model",
+        "reviewed": false
+      }
+    }
+  },
+  {
+    "asset_id": "API-01",
+    "family": "API",
+    "name": "Sign in",
+    "type_label": "Business function",
+    "description": "Sign in as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-001"
+      ],
+      "label": "FN-001 Sign in",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-057"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Sign in does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Sign in needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Sign in needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Sign in needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Sign in needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Sign in does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-02",
+    "family": "API",
+    "name": "Request a certificate",
+    "type_label": "Business function",
+    "description": "Request a certificate as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-002"
+      ],
+      "label": "FN-002 Request a certificate",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-058"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Request a certificate does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Request a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Request a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Request a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Request a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Request a certificate does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-03",
+    "family": "API",
+    "name": "Approve a request",
+    "type_label": "Business function",
+    "description": "Approve a request as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-003"
+      ],
+      "label": "FN-003 Approve a request",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-059"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Approve a request does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Approve a request needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Approve a request needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Approve a request needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Approve a request needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Approve a request needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-04",
+    "family": "API",
+    "name": "Issue a certificate",
+    "type_label": "Business function",
+    "description": "Issue a certificate as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-004"
+      ],
+      "label": "FN-004 Issue a certificate",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-060"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Issue a certificate does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Issue a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Issue a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Issue a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Issue a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Issue a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-05",
+    "family": "API",
+    "name": "Download a certificate",
+    "type_label": "Business function",
+    "description": "Download a certificate as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-005"
+      ],
+      "label": "FN-005 Download a certificate",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-061"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Download a certificate does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Download a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Download a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Download a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Download a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Download a certificate does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-06",
+    "family": "API",
+    "name": "Revoke a certificate",
+    "type_label": "Business function",
+    "description": "Revoke a certificate as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-006"
+      ],
+      "label": "FN-006 Revoke a certificate",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-062"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Revoke a certificate does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Revoke a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Revoke a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Revoke a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Revoke a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Revoke a certificate needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-07",
+    "family": "API",
+    "name": "Publish the revocation list",
+    "type_label": "Business function",
+    "description": "Publish the revocation list as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-007"
+      ],
+      "label": "FN-007 Publish the revocation list",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-063"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Publish the revocation list does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Publish the revocation list needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Publish the revocation list needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Publish the revocation list needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Publish the revocation list needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Publish the revocation list does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-08",
+    "family": "API",
+    "name": "Send expiry reminders",
+    "type_label": "Business function",
+    "description": "Send expiry reminders as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-008"
+      ],
+      "label": "FN-008 Send expiry reminders",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-064"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Send expiry reminders does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Send expiry reminders needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Send expiry reminders needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Send expiry reminders needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Send expiry reminders needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Send expiry reminders does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-09",
+    "family": "API",
+    "name": "Rotate the CA signing key",
+    "type_label": "Business function",
+    "description": "Rotate the CA signing key as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-009"
+      ],
+      "label": "FN-009 Rotate the CA signing key",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-065"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Rotate the CA signing key does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Rotate the CA signing key needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Rotate the CA signing key needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Rotate the CA signing key needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Rotate the CA signing key needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Rotate the CA signing key needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-10",
+    "family": "API",
+    "name": "View audit history",
+    "type_label": "Business function",
+    "description": "View audit history as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-010"
+      ],
+      "label": "FN-010 View audit history",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-066"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "View audit history does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "View audit history needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "View audit history needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "View audit history needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "View audit history needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "View audit history needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "API-11",
+    "family": "API",
+    "name": "Deploy a new version",
+    "type_label": "Business function",
+    "description": "Deploy a new version as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "function",
+      "ids": [
+        "FN-011"
+      ],
+      "label": "FN-011 Deploy a new version",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-067",
+      "FCT-047"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": false,
+        "reason": "Deploy a new version does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Deploy a new version needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "Deploy a new version needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Deploy a new version needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": true,
+        "reason": "Deploy a new version needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": true,
+        "reason": "Deploy a new version needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "IAM-01",
+    "family": "IAM",
+    "name": "CA signing key material and key policy",
+    "type_label": "Key material",
+    "description": "CA signing key material and key policy as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "element",
+      "ids": [
+        "EL-019"
+      ],
+      "label": "EL-019 CA signing key",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-037",
+      "FCT-038"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "CA signing key material and key policy needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "CA signing key material and key policy needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": true,
+        "reason": "CA signing key material and key policy needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "CA signing key material and key policy needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "CA signing key material and key policy does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "CA signing key material and key policy does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "IAM-02",
+    "family": "IAM",
+    "name": "Database password",
+    "type_label": "Credential",
+    "description": "Database password as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "item",
+      "ids": [
+        "EL-020"
+      ],
+      "label": "EL-020 Secrets store: Database password",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-039",
+      "FCT-040"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Database password needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Database password does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Database password does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Database password needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Database password does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Database password does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "IAM-03",
+    "family": "IAM",
+    "name": "Notification service API key",
+    "type_label": "Credential",
+    "description": "Notification service API key as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "item",
+      "ids": [
+        "EL-020"
+      ],
+      "label": "EL-020 Secrets store: Notification service API key",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-039",
+      "FCT-040"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Notification service API key needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": false,
+        "reason": "Notification service API key does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Notification service API key does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": true,
+        "reason": "Notification service API key needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Notification service API key does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Notification service API key does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "COMM-01",
+    "family": "COMM",
+    "name": "Data sent to API gateway",
+    "type_label": "Data in transit",
+    "description": "Data sent to API gateway as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "link",
+      "ids": [
+        "IF-01",
+        "IF-02",
+        "IF-06"
+      ],
+      "label": "IF-01, IF-02, IF-06",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-004",
+      "FCT-010",
+      "FCT-057",
+      "FCT-059",
+      "FCT-003",
+      "FCT-048"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Data sent to API gateway needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Data sent to API gateway needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Data sent to API gateway does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Data sent to API gateway does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Data sent to API gateway does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Data sent to API gateway does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "COMM-02",
+    "family": "COMM",
+    "name": "Data sent to CDN",
+    "type_label": "Data in transit",
+    "description": "Data sent to CDN as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "link",
+      "ids": [
+        "IF-03",
+        "IF-04"
+      ],
+      "label": "IF-03, IF-04",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-004",
+      "FCT-014",
+      "FCT-015"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Data sent to CDN needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Data sent to CDN needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Data sent to CDN does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Data sent to CDN does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Data sent to CDN does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Data sent to CDN does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "COMM-03",
+    "family": "COMM",
+    "name": "Data sent to Internal load balancer",
+    "type_label": "Data in transit",
+    "description": "Data sent to Internal load balancer as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "link",
+      "ids": [
+        "IF-08",
+        "IF-09"
+      ],
+      "label": "IF-08, IF-09",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-050",
+      "FCT-051",
+      "FCT-013"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Data sent to Internal load balancer needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Data sent to Internal load balancer needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Data sent to Internal load balancer does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Data sent to Internal load balancer does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Data sent to Internal load balancer does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Data sent to Internal load balancer does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "COMM-04",
+    "family": "COMM",
+    "name": "Data sent to Secrets store",
+    "type_label": "Data in transit",
+    "description": "Data sent to Secrets store as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "link",
+      "ids": [
+        "IF-14"
+      ],
+      "label": "IF-14",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-040"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Data sent to Secrets store needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Data sent to Secrets store needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Data sent to Secrets store does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Data sent to Secrets store does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Data sent to Secrets store does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Data sent to Secrets store does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "COMM-05",
+    "family": "COMM",
+    "name": "Data sent to Notification service",
+    "type_label": "Data in transit",
+    "description": "Data sent to Notification service as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "link",
+      "ids": [
+        "IF-15"
+      ],
+      "label": "IF-15",
+      "scope": "in_scope"
+    },
+    "interface": true,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-045",
+      "FCT-064"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Data sent to Notification service needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Data sent to Notification service needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Data sent to Notification service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Data sent to Notification service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Data sent to Notification service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Data sent to Notification service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "COMM-06",
+    "family": "COMM",
+    "name": "Data sent to Certificate service",
+    "type_label": "Data in transit",
+    "description": "Data sent to Certificate service as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "link",
+      "ids": [
+        "IF-20",
+        "IF-25"
+      ],
+      "label": "IF-20, IF-25",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-056",
+      "FCT-067",
+      "FCT-047"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Data sent to Certificate service needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Data sent to Certificate service needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Data sent to Certificate service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Data sent to Certificate service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Data sent to Certificate service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Data sent to Certificate service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  },
+  {
+    "asset_id": "COMM-07",
+    "family": "COMM",
+    "name": "Data sent to Key service",
+    "type_label": "Data in transit",
+    "description": "Data sent to Key service as the item definition describes it, kept for the item's own use.",
+    "source": {
+      "kind": "link",
+      "ids": [
+        "IF-21",
+        "IF-26"
+      ],
+      "label": "IF-21, IF-26",
+      "scope": "in_scope"
+    },
+    "interface": false,
+    "would_change": "A document that says this component is handled differently.",
+    "fact_ids": [
+      "FCT-056",
+      "FCT-067",
+      "FCT-047"
+    ],
+    "asset_type_row": true,
+    "properties": {
+      "C": {
+        "applies": true,
+        "reason": "Data sent to Key service needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "I": {
+        "applies": true,
+        "reason": "Data sent to Key service needs this property protected.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "A": {
+        "applies": false,
+        "reason": "Data sent to Key service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Au": {
+        "applies": false,
+        "reason": "Data sent to Key service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "Az": {
+        "applies": false,
+        "reason": "Data sent to Key service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      },
+      "NR": {
+        "applies": false,
+        "reason": "Data sent to Key service does not need this property protected on its own.",
+        "origin": "default",
+        "reviewed": true
+      }
+    }
+  }
+]

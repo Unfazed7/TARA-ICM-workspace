@@ -1,0 +1,167 @@
+[
+  {
+    "rationale_id": "RAT-365003",
+    "stage": "03",
+    "topic": "assets",
+    "review": {
+      "status": "unreviewed"
+    },
+    "kind": "assumption",
+    "attention": "needs_attention",
+    "title": "Authorization is proposed to apply to \"Certificate service logic\"",
+    "concluded": "The service has no entitlement check, so anyone could read the requests it handles.",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, shape 'Cert Service'",
+          "quote": "Cert Service"
+        },
+        {
+          "doc_id": "DOC-04",
+          "location": "section 1",
+          "quote": "Requests are handled by the certificate service"
+        },
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, arrow from 'Cert Service' to 'Cert DB'",
+          "quote": "Cert Service -> Cert DB (unlabelled arrow)"
+        }
+      ]
+    },
+    "assumed": "Because the reason is about a missing check on who may do what, it is recorded as Authorization instead of Confidentiality. It is used until you decide.",
+    "would_change": "A document that says this component is handled differently.",
+    "affects": [
+      "WL-03.Az"
+    ]
+  },
+  {
+    "rationale_id": "RAT-306987",
+    "stage": "03",
+    "topic": "assets",
+    "review": {
+      "status": "unreviewed"
+    },
+    "kind": "assumption",
+    "attention": "needs_attention",
+    "title": "Authenticity is proposed to not apply to \"Cache session and sign-in state\"",
+    "concluded": "Nothing relies on proving where the cached data came from.",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, shape 'Cache'",
+          "quote": "Cache"
+        }
+      ]
+    },
+    "assumed": "The proposal is used until you confirm it or change it.",
+    "would_change": "A document that says this component is handled differently.",
+    "affects": [
+      "DS-03.Au"
+    ]
+  },
+  {
+    "rationale_id": "RAT-392537",
+    "stage": "03",
+    "topic": "assets",
+    "review": {
+      "status": "unreviewed"
+    },
+    "kind": "assumption",
+    "attention": "needs_attention",
+    "title": "Confidentiality is proposed to apply to \"Logs and metrics logs and records\"",
+    "concluded": "Application logs may contain request details that only staff should read.",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, shape 'Logs & metrics'",
+          "quote": "Logs & metrics"
+        },
+        {
+          "doc_id": "DOC-03",
+          "location": "answer 10",
+          "quote": "Application logs and metrics go to the cloud logging service"
+        }
+      ]
+    },
+    "assumed": "The proposal is used until you confirm it or change it.",
+    "would_change": "A document that says this component is handled differently.",
+    "affects": [
+      "DS-06.C"
+    ]
+  },
+  {
+    "rationale_id": "RAT-345034",
+    "stage": "03",
+    "topic": "assets",
+    "review": {
+      "status": "unreviewed"
+    },
+    "kind": "assumption",
+    "attention": "information",
+    "title": "\"Internal load balancer routing configuration\" is left out because \"Internet-facing load balancer routing configuration\" already covers it",
+    "concluded": "Everything that could go wrong with \"Internal load balancer routing configuration\" is already covered by \"Internet-facing load balancer routing configuration\".",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, shape 'internal ALB'",
+          "quote": "internal ALB"
+        },
+        {
+          "doc_id": "DOC-03",
+          "location": "answer 3",
+          "quote": "an internal load balancer in front of our services"
+        },
+        {
+          "doc_id": "DOC-03",
+          "location": "answer 3",
+          "quote": "Everything else is only reachable from inside the network"
+        }
+      ]
+    },
+    "assumed": "Only \"Internet-facing load balancer routing configuration\" is kept as an asset.",
+    "would_change": "The analyst deciding that this should be an asset of its own.",
+    "affects": [
+      "EL-026"
+    ]
+  },
+  {
+    "rationale_id": "RAT-309317",
+    "stage": "03",
+    "topic": "assets",
+    "review": {
+      "status": "unreviewed"
+    },
+    "kind": "gap",
+    "attention": "needs_attention",
+    "title": "\"CDN delivery settings\" is proposed as an asset",
+    "concluded": "Both the pages and the revocation list reach users through it.",
+    "why": {
+      "sources": [
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, shape 'CDN'",
+          "quote": "CDN"
+        },
+        {
+          "doc_id": "DOC-04",
+          "location": "section 1",
+          "quote": "The portal web pages are served from a storage bucket through the CDN"
+        },
+        {
+          "doc_id": "DOC-01",
+          "location": "page 1, arrow from 'Internet' to 'CDN'",
+          "quote": "Internet -> CDN (unlabelled arrow)"
+        }
+      ]
+    },
+    "assumed": "This kind of component has no row in the asset rules yet, so the asset and every property are proposed and used until you decide.",
+    "would_change": "A document showing the CDN serves nothing of the portal.",
+    "affects": [
+      "INF-02"
+    ]
+  }
+]

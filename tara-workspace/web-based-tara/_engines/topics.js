@@ -5,7 +5,7 @@
  * template that writes the item, never by a model.
  */
 
-const TOPICS = ['exposure', 'sign_in', 'scope', 'environment', 'data', 'naming', 'reading'];
+const TOPICS = ['exposure', 'sign_in', 'scope', 'environment', 'data', 'naming', 'reading', 'assets'];
 
 const ASPECT_TOPIC = {
   exposure: 'exposure', existence: 'scope', environment: 'environment', ownership: 'scope',

@@ -3,7 +3,7 @@
 Used by: Stage 03 (Asset Identification). Source: the analyst's answers G1 and G2, decision D-52. Spec: `.meta/specs/26-stage-03-assets.md`.
 Read by code on every run (`_engines/asset-rules.js`), like `scoping-facts.md`, so rules can be refined here without code changes.
 
-**Status: draft for the analyst's review (2026-10-26).**
+**Status: in use by Stage 03 (D-56). Refine the tables here; code reads them on every run.**
 
 Properties: C Confidentiality, I Integrity, A Availability, Au Authenticity, Az Authorization, NR Non-repudiation.
 
@@ -82,3 +82,50 @@ It never gives the external system's internals.
 1. If the wrong party gets data because an entitlement check is missing, the property is Authorization, not Confidentiality.
 2. Confidentiality on a workload stays off unless it holds data that no DS row covers.
 3. A row whose every consequence is owned by other rows is removed and listed as information.
+
+## 6. Asset type labels
+
+The "Asset type" column on screen. Code picks the first row whose Source matches: the element type or the kind of source (`credential`, `key`, `function`, `link`), or `any`.
+
+| Prefix | Source | Label |
+|---|---|---|
+| IAM | kms_key, signing_service, key | Key material |
+| IAM | secrets_store, credential | Credential |
+| IAM | identity_provider | Identity |
+| EXT | any | Identity |
+| WL | any | Service logic |
+| DS | any | Data store |
+| INF | any | Configuration |
+| NET | any | Configuration |
+| API | any | Business function |
+| COMM | any | Data in transit |
+
+## 7. What the later stages receive
+
+Stages 04 to 10 read a register in an older shape, which has seven asset types. Code writes the register from the assets with this mapping, and gives each asset a stable `AS_nn` number.
+
+| Prefix | Register asset type |
+|---|---|
+| WL | function |
+| API | function |
+| DS | data_store |
+| INF | cloud_service |
+| NET | cloud_service |
+| IAM | auth_credential |
+| COMM | communication_path |
+| EXT | auth_credential |
+
+## 8. Families on screen
+
+The order and names of the groups in the asset list.
+
+| Prefix | Name |
+|---|---|
+| EXT | External identities |
+| NET | Network |
+| WL | Workloads |
+| DS | Data stores |
+| INF | Infrastructure |
+| API | Business functions |
+| IAM | Credentials and keys |
+| COMM | Data in transit |

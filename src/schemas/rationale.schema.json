@@ -77,7 +77,8 @@
           "environment",
           "data",
           "naming",
-          "reading"
+          "reading",
+          "assets"
         ],
         "description": "The group the Assumptions panel shows it under. Set by code from the template that wrote the item, never by a model (spec 23)."
       },
@@ -190,7 +191,7 @@
         "minItems": 1,
         "items": {
           "type": "string",
-          "pattern": "^(FCT-\\d{3,}|CNF-\\d{3,}|DOC-\\d{2,}|EL-\\d{3,}|IF-\\d{2,}|CTR-\\d{2,}|ZN-\\d{2,}|FN-\\d{3,}|ASM-\\d{2,}|Q-\\d{3,}|SD-\\d{3,}|(AS|DS|TH|AT|IM|RSK|TRT)_\\d{2,})$"
+          "pattern": "^(FCT-\\d{3,}|CNF-\\d{3,}|DOC-\\d{2,}|EL-\\d{3,}|IF-\\d{2,}|CTR-\\d{2,}|ZN-\\d{2,}|FN-\\d{3,}|ASM-\\d{2,}|Q-\\d{3,}|SD-\\d{3,}|(AS|DS|TH|AT|IM|RSK|TRT)_\\d{2,}|(EXT|NET|INF|WL|DS|IAM|API|COMM)-\\d{2,}(\\.(C|I|A|Au|Az|NR))?)$"
         }
       },
       "review": {
