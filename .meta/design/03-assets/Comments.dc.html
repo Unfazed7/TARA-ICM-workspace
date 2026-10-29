@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>03 Assets</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#ECEAE4}
+html,*{scrollbar-width:thin;scrollbar-color:#CBC8C0 transparent}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#CBC8C0;border-radius:99px;border:3px solid transparent;background-clip:padding-box}::-webkit-scrollbar-thumb:hover{background:#A9A7A0;border:3px solid transparent;background-clip:padding-box}
+a{color:#1C1B19}a:hover{color:#1F6C9F}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.panel{background:#FFFFFF;border:1px solid rgba(28,27,25,.09);border-radius:14px;box-shadow:0 0 0 5px #E3E0D8,0 0 0 6px rgba(28,27,25,.05),0 28px 48px -30px rgba(28,27,25,.28);overflow:clip;min-width:0}
+.phead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:12px 24px;background:#F3F1EC;border-bottom:1px solid #DAD8D1}
+.lbl{font-size:12px;font-weight:600;letter-spacing:0;color:#6B6A66}
+.tag{display:inline-flex;align-items:center;gap:6px;border-radius:9999px;padding:2px 9px;font-size:11.5px;font-weight:500;letter-spacing:0;white-space:nowrap}
+.t-red{background:#FDEBEC;color:#9F2F2D}.t-blue{background:#E1F3FE;color:#1F6C9F}.t-green{background:#EDF3EC;color:#346538}.t-yellow{background:#FBF3DB;color:#956400}.t-ink{background:#E6E2D9;color:#1C1B19;font-weight:600}.t-grey{background:#F1F0EC;color:#5F5E5B}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 14px;box-sizing:border-box;border-radius:10px;font:inherit;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;transition:transform .32s cubic-bezier(.32,.72,0,1),background-color .2s cubic-bezier(.32,.72,0,1),border-color .2s cubic-bezier(.32,.72,0,1),color .2s cubic-bezier(.32,.72,0,1),box-shadow .32s cubic-bezier(.32,.72,0,1)}
+.btn:active{transform:translateY(1px) scale(.98)}
+.btn-dark{background:#1C1B19;color:#FFFFFF;border:1px solid #1C1B19}.btn-dark:hover{background:#33322F;color:#FFFFFF}
+.btn-line{background:#FFFFFF;color:#1C1B19;border:1px solid #DAD8D1}.btn-line:hover{background:#F7F6F2;transform:translateY(-1px);box-shadow:0 6px 14px -10px rgba(28,27,25,.35)}
+.btn:disabled{background:#F1F0EC;border-color:#DAD8D1;color:#8E8D89;cursor:not-allowed;transform:none}
+.btn:focus-visible,.navlink:focus-visible,.cell:focus-visible,.fld:focus-visible,.seg:focus-visible,.card:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.navlink{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border:0;border-radius:999px;font:inherit;font-size:13.5px;text-decoration:none;color:#5F5E5B;background:transparent;cursor:pointer;white-space:nowrap}
+.navlink:hover{color:#1C1B19;background:rgba(28,27,25,.05)}
+.fld{box-sizing:border-box;border:1px solid #DAD8D1;border-radius:10px;background:#FAF9F7;font:inherit;font-size:14px;color:#1C1B19;transition:border-color .2s,box-shadow .2s,background-color .2s}
+.fld:focus{outline:none;background:#FFFFFF;border-color:#1F6C9F;box-shadow:0 0 0 3px #E1F3FE}
+.grid-lines{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:repeating-linear-gradient(0deg,rgba(28,27,25,.035) 0 1px,transparent 1px 40px),repeating-linear-gradient(90deg,rgba(28,27,25,.035) 0 1px,transparent 1px 40px);-webkit-mask-image:linear-gradient(#000,rgba(0,0,0,0) 55%);mask-image:linear-gradient(#000,rgba(0,0,0,0) 55%)}
+table.assets{border-collapse:separate;border-spacing:0;width:100%;min-width:960px;font-size:13.5px}
+table.assets th{position:sticky;top:0;z-index:2;background:#E6E2D9;font-weight:600;text-align:left;color:#2F2E2B;border-bottom:1px solid #CFCAC0;box-shadow:0 6px 10px -10px rgba(28,27,25,.25);padding:16px 12px 10px;font-size:12px;line-height:1.3}
+table.assets td{border-bottom:1px solid #EEECE7;padding:0;vertical-align:middle;background:#FFFFFF;transition:background-color .25s cubic-bezier(.32,.72,0,1)}
+table.assets tr.row td{position:relative}
+table.assets tr.row td:first-child{box-shadow:inset 0 0 0 0 rgba(31,108,159,0);transition:background-color .3s cubic-bezier(.32,.72,0,1),box-shadow .32s cubic-bezier(.32,.72,0,1)}
+table.assets tr.row td::after{content:"";position:absolute;inset:0;background:rgba(28,27,25,.035);opacity:0;transition:opacity .28s cubic-bezier(.32,.72,0,1);pointer-events:none}
+table.assets tr.row:hover td::after{opacity:1}
+
+table.assets th.pc::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;border-radius:2px;background:var(--pc);transform:scaleX(0);transition:transform .3s cubic-bezier(.32,.72,0,1);pointer-events:none}
+table.assets th.pc:hover{color:var(--pc)}table.assets th.pc{transition:color .25s cubic-bezier(.32,.72,0,1)}table.assets:has(td.k0:hover) th.k0{color:var(--pc)}table.assets:has(td.k1:hover) th.k1{color:var(--pc)}table.assets:has(td.k2:hover) th.k2{color:var(--pc)}table.assets:has(td.k3:hover) th.k3{color:var(--pc)}table.assets:has(td.k4:hover) th.k4{color:var(--pc)}table.assets:has(td.k5:hover) th.k5{color:var(--pc)}
+table.assets th.pc:hover::after,table.assets:has(td.k0:hover) th.k0::after,table.assets:has(td.k1:hover) th.k1::after,table.assets:has(td.k2:hover) th.k2::after,table.assets:has(td.k3:hover) th.k3::after,table.assets:has(td.k4:hover) th.k4::after,table.assets:has(td.k5:hover) th.k5::after{transform:scaleX(1)}
+table.assets th{vertical-align:bottom}
+table.assets thead th+th:not(.k0)::before{content:"";position:absolute;left:0;top:34%;bottom:22%;width:1px;border-radius:1px;background:#C9C4B9;pointer-events:none}
+table.assets th.pc{text-align:center;padding:16px 6px 10px;font-size:12px;vertical-align:bottom;white-space:nowrap;background:#F3F1EC;color:#4A4946}
+.pcell{transition:background-color .25s cubic-bezier(.32,.72,0,1)}
+table.assets tr.band td{background:#F3F1EC;padding:6px 8px;border-bottom:1px solid #E6E4DE;border-top:1px solid #E6E4DE}
+table.assets tbody tr.band:first-child td{border-top:0}
+.bandbtn{display:inline-flex;align-items:center;gap:10px;border:0;background:transparent;font-family:'Geist',ui-sans-serif,system-ui,sans-serif;font-size:13.5px;font-weight:600;letter-spacing:-0.01em;color:#3A3936;cursor:pointer;padding:4px 8px 4px 6px;border-radius:8px;transition:background-color .2s cubic-bezier(.32,.72,0,1)}.bandbtn:hover{background:rgba(255,255,255,.55)}
+.fcode{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:6px;background:#E4E1DA;color:#4A4946;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;font-weight:500;letter-spacing:.04em}
+.fcount{font-size:12.5px;font-weight:400;letter-spacing:0;color:#6B6A66;font-variant-numeric:tabular-nums}.bandbtn:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.bandbtn svg{transition:transform .32s cubic-bezier(.32,.72,0,1)}.bandbtn[aria-expanded="true"] svg{transform:rotate(90deg)}
+.chip{font-size:11px;font-weight:500;color:#5F5E5B;background:#F1F0EC;border-radius:99px;padding:1px 7px}
+table.compact .cell{padding:5px 12px;font-size:12.5px}table.compact .pcell{min-height:32px}table.compact .clamp{-webkit-line-clamp:1}table.compact tr.band td{padding:3px 8px}
+.cell{display:block;width:100%;box-sizing:border-box;border:0;background:transparent;font:inherit;color:inherit;text-align:left;padding:8px 12px;cursor:pointer;position:relative;transition:background-color .25s cubic-bezier(.32,.72,0,1),padding .25s cubic-bezier(.32,.72,0,1)}
+
+.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pcell{position:relative;display:flex;align-items:center;justify-content:center;height:100%;min-height:40px;box-sizing:border-box;padding:0;cursor:pointer;border-radius:6px;box-shadow:inset 0 0 0 0 transparent;transition:box-shadow .28s cubic-bezier(.32,.72,0,1),background-color .25s cubic-bezier(.32,.72,0,1)}
+.pcell.sel{box-shadow:inset 0 0 0 2px var(--pc);animation:selin .32s cubic-bezier(.32,.72,0,1)}@keyframes selin{from{box-shadow:inset 0 0 0 6px transparent}}
+.sec{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 20px 8px;background:#FFFFFF;font-size:12.5px;font-weight:600;color:#3A3936}.sec .n{font-weight:500;color:#6B6A66;font-variant-numeric:tabular-nums}
+.facts{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 12px;margin:0;font-size:13.5px;line-height:1.45}.facts dt{color:#6B6A66}.facts dd{margin:0;color:#2F2E2B}
+.propsec{display:flex;flex-direction:column;gap:6px}
+.dsec{display:flex;flex-direction:column;gap:7px;margin:0;padding:12px 0 0;border-top:1px solid #EEECE7}
+.dsec.propsec{gap:10px}.dspacer{flex:none;height:0}.dhead+.dsec,.dhead~sc-if>.dsec:first-child,.dhead+sc-if>.dsec:first-child{border-top:0;padding-top:0}
+.dlabel{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;letter-spacing:-0.01em;color:#1C1B19}.dlabel::before{content:"";flex:none;width:4px;height:18px;border-radius:3px;background:#6F6B63}
+.propgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:3px}
+.split{position:relative;display:flex;align-items:stretch;height:36px;border-radius:10px;overflow:hidden;box-sizing:border-box;transition:background-color .28s cubic-bezier(.32,.72,0,1),color .28s cubic-bezier(.32,.72,0,1),box-shadow .28s cubic-bezier(.32,.72,0,1),transform .25s cubic-bezier(.32,.72,0,1)}
+.split.on:hover{background:color-mix(in srgb,var(--pc) 14%,#FFFFFF)}.split:not(.on):hover{background:#EDEAE3;box-shadow:inset 0 0 0 1px var(--pc),0 0 0 3px color-mix(in srgb,var(--pc) 6%,transparent);color:var(--pc)}
+.splitmain{flex:1 1 0;min-width:0;border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.01em;cursor:pointer;padding:0 2px 0 0;display:inline-flex;align-items:center;justify-content:flex-end;gap:5px;transition:transform .2s cubic-bezier(.32,.72,0,1)}.splitmain .sdot{width:6px;height:6px;border-radius:99px;background:currentColor;opacity:.9}.splitmain:active{transform:scale(.94)}
+.splitchev{flex:1 1 0;min-width:0;border:0;background:transparent;color:inherit;cursor:pointer;padding:1px 0 0 3px;display:inline-flex;align-items:center;justify-content:flex-start;opacity:.65;transition:opacity .2s cubic-bezier(.32,.72,0,1),background-color .2s cubic-bezier(.32,.72,0,1)}.splitchev:hover{opacity:1}.splitchev[aria-expanded="true"]{opacity:1}.splitchev svg{transition:transform .3s cubic-bezier(.32,.72,0,1)}.splitchev[aria-expanded="true"] svg{transform:rotate(180deg)}
+.splitmain:focus-visible,.splitchev:focus-visible{outline:2px solid #1F6C9F;outline-offset:-2px}
+.propbtn{flex:1 1 auto;display:inline-flex;align-items:center;gap:10px;min-height:38px;padding:0 12px;box-sizing:border-box;border-radius:10px;font:inherit;font-size:13.5px;font-weight:500;text-align:left;cursor:pointer;transition:background-color .28s cubic-bezier(.32,.72,0,1),color .28s cubic-bezier(.32,.72,0,1),border-color .28s cubic-bezier(.32,.72,0,1),transform .2s cubic-bezier(.32,.72,0,1),box-shadow .2s cubic-bezier(.32,.72,0,1)}.propbtn:hover{box-shadow:0 4px 12px -8px rgba(28,27,25,.35)}.propbtn:active{transform:scale(.98)}.propbtn:focus-visible,.chev:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.pbox{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:5px;box-sizing:border-box;flex:none}
+.chev{flex:none;width:38px;height:auto;min-height:38px;border:1px solid #DCD8CF;border-radius:10px;background:#FFFFFF;color:#6B6A66;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background-color .2s cubic-bezier(.32,.72,0,1)}.chev:hover{background:#F7F6F2;color:#1C1B19}.chev svg{transition:transform .3s cubic-bezier(.32,.72,0,1)}.chev[aria-expanded="true"] svg{transform:rotate(180deg)}
+.whywrap{display:grid;grid-template-rows:0fr;opacity:0;margin-top:-10px;transition:grid-template-rows .3s cubic-bezier(.32,.72,0,1),opacity .22s ease-out}.whywrap.open{grid-template-rows:1fr;opacity:1}.whyin{min-height:0;overflow:hidden}.whywrap .propwhy{transform:translateY(-4px);transition:transform .3s cubic-bezier(.32,.72,0,1)}.whywrap.open .propwhy{transform:none}
+.propwhy.fa{animation:wfa .28s cubic-bezier(.32,.72,0,1)}.propwhy.fb{animation:wfb .28s cubic-bezier(.32,.72,0,1)}@keyframes wfa{from{opacity:0}}@keyframes wfb{from{opacity:0}}
+.propwhy{margin:10px 0 4px;padding:10px 12px;border-radius:10px;background:#F7F6F2;font-size:13px;line-height:1.5;color:#2F2E2B;display:flex;flex-direction:column;gap:6px}.propwhy p{margin:0}
+.msg-c{padding-left:12px;border-left:2px solid #DAD8D1;font-size:14px;color:#2F2E2B;display:flex;flex-direction:column;gap:6px}.msg-c p{margin:0;line-height:1.5}
+.asm{position:relative;padding:12px 20px;border-top:1px solid #F1EFEA;display:flex;flex-direction:column;gap:8px;transition:background-color .2s cubic-bezier(.32,.72,0,1)}.asm:hover{background:#FAF9F6}.asm.open{box-shadow:inset 3px 0 0 #E8C66A}.asm p{margin:0;font-size:14px;line-height:1.5;color:#2F2E2B}
+.pdot,.ndot{position:absolute;top:7px;right:calc(50% - 19px);width:6px;height:6px;border-radius:99px;background:#E8C66A;box-shadow:0 0 0 2px #FFFFFF;pointer-events:none}.ndot{display:inline-block}
+.bar{height:4px;width:120px;border-radius:99px;background:#E9E7E1;overflow:hidden}
+.mark{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;border-radius:5px;box-sizing:border-box;cursor:pointer;font:inherit;transition:transform .25s cubic-bezier(.32,.72,0,1),background-color .2s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1)}
+.mark:hover{transform:scale(1.08);box-shadow:0 0 0 4px color-mix(in srgb,var(--pc) 16%,transparent)}
+td:hover .mark.on,.pcell.sel .mark.on{background:var(--pc)!important;border-color:var(--pc)!important}
+
+.mark:active{transform:scale(.92)}
+.mark:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.cdot{position:absolute;right:6px;top:50%;margin-top:-3px;width:6px;height:6px;border-radius:99px;background:#E8C66A}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#5F5E5B;cursor:pointer}.ibtn:hover{background:#F1F0EC;color:#1C1B19}
+.dens{width:36px;height:36px;border-radius:10px;box-shadow:inset 0 0 0 1px #DAD8D1;transition:background-color .25s cubic-bezier(.32,.72,0,1),color .25s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1),transform .25s cubic-bezier(.32,.72,0,1)}.dens:active{transform:scale(.94)}.dens[aria-pressed="true"]{background:#1C1B19;color:#FFFFFF;box-shadow:none}.dens[aria-pressed="true"]:hover{background:#33322F;color:#FFFFFF}.dens path{transition:transform .32s cubic-bezier(.32,.72,0,1)}.dens[aria-pressed="true"] .l1{transform:translateY(2px)}.dens[aria-pressed="true"] .l3{transform:translateY(-2px)}.dens:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.helpb{width:30px;height:30px;border-radius:99px;box-shadow:inset 0 0 0 1px #DAD8D1;font:inherit;font-size:13px;font-weight:600;color:#5F5E5B;transition:background-color .2s cubic-bezier(.32,.72,0,1),color .2s cubic-bezier(.32,.72,0,1)}.helpb[aria-expanded="true"]{background:#1C1B19;color:#FFFFFF;box-shadow:none}.helpb:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.legendpop{position:absolute;left:0;bottom:42px;z-index:5;display:flex;flex-direction:column;gap:8px;min-width:280px;padding:14px 16px;background:#FFFFFF;border:1px solid rgba(28,27,25,.09);border-radius:12px;box-shadow:0 18px 36px -18px rgba(28,27,25,.35);font-size:13px;color:#3A3936;animation:pop2 .28s cubic-bezier(.32,.72,0,1) both;transform-origin:bottom left}@keyframes pop2{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+.btn-sm{min-height:32px;padding:0 12px;font-size:13px;border-radius:8px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:#4A4946;cursor:pointer;white-space:nowrap}.switch input{position:absolute;opacity:0;width:1px;height:1px}.switch .track{position:relative;width:28px;height:16px;border-radius:99px;background:#CFCDC6;transition:background-color .2s}.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:99px;background:#FFFFFF;box-shadow:0 1px 2px rgba(28,27,25,.2);transition:transform .25s cubic-bezier(.16,1,.3,1)}.switch input:checked+.track{background:#1C1B19}.switch input:checked+.track::after{transform:translateX(12px)}.switch input:focus-visible+.track{outline:2px solid #1F6C9F;outline-offset:2px}
+.msg{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px}.msg-body{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:14px;color:#2F2E2B}.msg-body p{margin:0;line-height:1.5}.who{font-size:12.5px;color:#6B6A66}.who b{color:#1C1B19;font-weight:600}
+.av{width:24px;height:24px;border-radius:99px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}.av-c{background:#1C1B19;color:#FFFFFF}
+.quote{margin:2px 0 0;padding:2px 0 2px 12px;border-left:2px solid #DAD8D1}.quote p{font-size:13.5px;color:#3A3936}.quote footer{margin-top:2px;font-size:11.5px;color:#6B6A66}
+.proposal{display:flex;flex-direction:column;gap:10px;margin-top:4px;padding:12px;border-radius:12px;background:#F7F6F2;border:1px solid #E6E2D9}
+.decide{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:12px;background:#FAF9F7;border:1px solid #E6E4DE}
+.trow{transition:background-color .2s cubic-bezier(.32,.72,0,1);display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;color:inherit;cursor:pointer;background:transparent;border:0;border-top:1px solid #F1F0EC;padding:10px 20px}.trow:hover{background:#F7F6F2}.trow:focus-visible{outline:2px solid #1F6C9F;outline-offset:-2px}
+.composer{border:1px solid #DAD8D1;border-radius:12px;background:#FAF9F7;transition:border-color .2s,box-shadow .2s,background-color .2s}.composer:focus-within{background:#FFFFFF;border-color:#1F6C9F;box-shadow:0 0 0 3px #E1F3FE}.composer textarea{display:block;width:100%;box-sizing:border-box;border:0;background:transparent;resize:none;font:inherit;font-size:14px;color:#1C1B19;padding:10px 12px 6px;outline:none}
+.tlink{border:0;background:transparent;font:inherit;font-size:13px;color:#5F5E5B;cursor:pointer;padding:4px 2px;text-decoration:underline;text-underline-offset:3px;text-decoration-color:#CFCDC6}.tlink:hover{color:#1C1B19}
+.card{display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;color:inherit;cursor:pointer;background:#FFFFFF;border:1px solid #E6E4DE;border-radius:10px;padding:10px 12px}
+.card:hover{background:#FAF9F7}
+.seg{min-height:32px;padding:0 12px;border:0;border-radius:8px;font:inherit;font-size:13px;cursor:pointer;background:transparent;color:#5F5E5B;transition:background-color .28s cubic-bezier(.32,.72,0,1),color .2s cubic-bezier(.32,.72,0,1),box-shadow .28s cubic-bezier(.32,.72,0,1)}.seg:hover{color:#1C1B19}
+.fadein{animation:rise .4s cubic-bezier(.32,.72,0,1) both}
+.rise{}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.open{animation:open .45s cubic-bezier(.32,.72,0,1) both}
+.closing{animation:closepanel .3s cubic-bezier(.32,.72,0,1) forwards;pointer-events:none}
+.railwrap{position:absolute;top:0;right:0;bottom:0;width:400px;z-index:8;transition:transform .48s cubic-bezier(.32,.72,0,1),opacity .3s cubic-bezier(.32,.72,0,1);will-change:transform}
+.drawer{box-shadow:0 0 0 5px #E3E0D8,0 0 0 6px rgba(28,27,25,.05),-28px 0 56px -28px rgba(28,27,25,.4)}@keyframes closepanel{to{opacity:0;transform:translateX(16px)}}
+@keyframes open{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@media (max-width:767px){.hidesm{display:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.tickp{stroke-dashoffset:0}.mark:hover,.btn-line:hover{transform:none}}
+</style>
+</helmet>
+<div onClick="{{clearSel}}" style="position: relative; height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: #ECEAE4; color: #1C1B19; font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased">
+<div class="grid-lines" aria-hidden="true"></div>
+
+<div style="position: sticky; top: 0; z-index: 20; padding: 18px 16px 0; display: flex; justify-content: center; pointer-events: none">
+<nav aria-label="Assessment" style="pointer-events: auto; max-width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(255,255,255,.8); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); box-shadow: 0 0 0 1px rgba(28,27,25,.08), 0 18px 40px -22px rgba(28,27,25,.28), inset 0 1px 1px rgba(255,255,255,.9)">
+<a href="#" aria-label="Aegis, back to the dashboard" style="display: inline-flex; align-items: center; gap: 8px; padding: 0 12px 0 8px; font-size: 14px; font-weight: 600; white-space: nowrap; text-decoration: none; color: #1C1B19"><span style="width: 28px; height: 28px; border-radius: 999px; background: #1C1B19; display: inline-flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.2 2.9 7.8 7 9 4.1-1.2 7-4.8 7-9V6l-7-3Z"></path></svg></span>Aegis</a>
+<div class="hidesm" style="display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgba(28,27,25,.05)">
+<a href="#" class="navlink"><span class="mono" style="font-size: 11px">01</span>Documents</a>
+<a href="#" class="navlink"><span class="mono" style="font-size: 11px">02</span>Item Definition</a>
+<a href="#" aria-current="page" class="navlink" style="background: #FFFFFF; color: #1C1B19; font-weight: 500; box-shadow: 0 0 0 1px rgba(28,27,25,.08), 0 6px 12px -8px rgba(28,27,25,.35)"><span class="mono" style="font-size: 11px; color: #1F6C9F">03</span>Assets</a>
+</div>
+<button type="button" class="navlink" aria-expanded="{{railOpenStr}}" onClick="{{toggleRail}}" style="{{asmNav}}">Assumptions<sc-if value="{{hasNeed}}" hint-placeholder-val="{{ true }}"><span class="tag t-yellow" style="letter-spacing: 0; text-transform: none; font-size: 12px; font-weight: 600"><span style="width: 6px; height: 6px; border-radius: 99px; background: #956400"></span>{{needYou}} need you</span></sc-if></button>
+<a href="#" class="navlink" aria-label="Settings" style="width: 40px; padding: 0; justify-content: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg></a>
+<a href="#" aria-label="Open the menu" style="position: relative; width: 40px; height: 40px; border-radius: 999px; background: rgba(28,27,25,.06); flex: none"><span style="position: absolute; left: 13px; top: 16px; width: 14px; height: 1.5px; border-radius: 2px; background: #1C1B19"></span><span style="position: absolute; left: 13px; top: 22px; width: 14px; height: 1.5px; border-radius: 2px; background: #1C1B19"></span></a>
+</nav>
+</div>
+
+<main style="position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; width: 100%; max-width: 1600px; margin: 0 auto; padding: 24px clamp(16px, 2.5vw, 32px) 24px; box-sizing: border-box">
+
+<div class="rise" style="--i: 0; flex: none; margin-bottom: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-width: 0">
+<nav aria-label="Breadcrumb" style="display: inline-flex; align-items: baseline; gap: 6px; font-size: 14px; color: #6B6A66"><a href="#" style="color: inherit; text-decoration: none">Key and certificate portal</a><span aria-hidden="true">/</span></nav>
+<h1 style="margin: 0; font-size: 22px; line-height: 1.2; letter-spacing: -0.025em; font-weight: 600">Asset Analysis</h1>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 13px; color: #6B6A66"><span>Built from item definition:&nbsp;<span class="mono">run 3</span></span>
+</div>
+</div>
+
+<div style="position: relative; flex: 1 1 auto; min-height: 0; display: flex; gap: 0; align-items: stretch">
+
+<section class="panel rise" aria-label="Asset list" style="--i: 1; flex: 999 1 760px; min-width: 0; display: flex; flex-direction: column">
+<div class="phead">
+<span style="display: inline-flex; align-items: center; gap: 12px">
+<span style="font-size: 15px; font-weight: 600">Asset list</span>
+<span class="hidesm" style="font-size: 12.5px; color: #6B6A66"><span class="mono">{{shownCount}}</span> of <span class="mono">{{assetCount}}</span> assets</span>
+</span>
+<span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<button type="button" class="ibtn dens" aria-pressed="{{compactStr}}" aria-label="Compact rows" title="{{densTitle}}" onClick="{{toggleDensity}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M3 3.5h10"></path><path d="M3 8h10"></path><path class="l3" d="M3 12.5h10"></path></svg></button>
+<span role="group" aria-label="Show" style="display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #E9E7E1">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
+<button type="button" class="seg" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}" style="{{f.style}}">{{f.label}}</button>
+</sc-for>
+</span>
+<label style="display: inline-flex; align-items: center; position: relative">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search assets</span>
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B6A66" stroke-width="1.75" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 10px; pointer-events: none"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+<input class="fld" type="search" placeholder="Search assets" value="{{q}}" onChange="{{onSearch}}" style="height: 36px; width: 200px; padding: 0 10px 0 32px">
+</label>
+</span>
+</div>
+
+<div class="tscroll" style="flex: 1 1 auto; min-height: 0; overflow: auto">
+<table class="{{tableCls}}">
+<thead>
+<tr>
+<th style="width: 76px; text-align: center">Asset ID</th>
+<th style="text-align: center">Asset</th>
+<th style="width: 116px; text-align: center">Asset type</th>
+<th style="text-align: center; padding-left: 18px">Description</th>
+<sc-for list="{{propHeads}}" as="h" hint-placeholder-count="6">
+<th class="{{h.cls}}" style="{{h.style}}" title="{{h.title}}">{{h.name}}</th>
+</sc-for>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{lines}}" as="r" hint-placeholder-count="12">
+<sc-if value="{{r.isBand}}" hint-placeholder-val="{{ false }}">
+<tr class="band"><td colspan="10"><button type="button" class="bandbtn" aria-expanded="{{r.expanded}}" onClick="{{r.toggle}}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg><span class="fcode">{{r.code}}</span>{{r.name}}<span class="fcount">{{r.countLabel}}</span></button></td></tr>
+</sc-if>
+<sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}">
+<tr class="row" style="--r: {{r.n}}">
+<td style="{{r.idTd}}"><button type="button" class="cell mono" onClick="{{r.pickRow}}" onDoubleClick="{{r.dblRow}}" aria-label="{{r.rowLabel}}" style="font-size: 12.5px; color: #6B6A66; white-space: nowrap; text-align: center">{{r.id}}</button></td>
+<td style="{{r.assetTd}}"><button type="button" class="cell" onClick="{{r.pickRow}}" onDoubleClick="{{r.dblRow}}" style="font-size: 13.5px; font-weight: 500; line-height: 1.35; text-align: center">{{r.name}}</button></td>
+<td style="{{r.plainTd}}"><button type="button" class="cell" onClick="{{r.pickRow}}" onDoubleClick="{{r.dblRow}}" tabindex="-1" style="font-size: 13px; color: #5F5E5B; line-height: 1.35; text-align: center">{{r.type}}<sc-if value="{{r.iface}}" hint-placeholder-val="{{ false }}"><span class="tag t-grey" style="font-size: 10px; padding: 1px 7px; margin: 4px auto 0; display: table">Interface</span></sc-if></button></td>
+<td style="{{r.plainTd}}"><button type="button" class="cell" onClick="{{r.pickRow}}" onDoubleClick="{{r.dblRow}}" tabindex="-1" style="color: #1c1b19"><span class="{{r.descCls}}">{{r.desc}}</span></button><sc-if value="{{r.long}}" hint-placeholder-val="{{ false }}"><button type="button" class="tlink" onClick="{{r.toggleDesc}}" aria-expanded="{{r.descOpen}}" style="display: block; margin: 0 18px 10px; padding: 0; font-size: 12.5px">{{r.moreLabel}}</button></sc-if></td>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6">
+<td class="{{c.cls}}" style="{{c.td}}"><div class="{{c.pcls}}" onClick="{{c.pick}}" onDoubleClick="{{c.comment}}" title="Double-click to comment" style="{{c.btn}}"><button type="button" class="{{c.markCls}}" onClick="{{c.toggle}}" aria-pressed="{{c.pressed}}" aria-label="{{c.label}}" title="{{c.title}}" style="{{c.mark}}"><sc-if value="{{c.applies}}" hint-placeholder-val="{{ true }}"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="tickp" d="m5 12.5 4.5 4.5L19 7.5"></path></svg></sc-if></button><sc-if value="{{c.corner}}" hint-placeholder-val="{{ false }}"><span class="pdot" aria-hidden="true"></span></sc-if></div></td>
+</sc-for>
+</tr>
+</sc-if>
+</sc-for>
+</tbody>
+</table>
+<sc-if value="{{noRows}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 28px 24px; font-size: 14px; color: #6B6A66">No assets match. Clear the search or show all.</p>
+</sc-if>
+</div>
+
+<div style="flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 12px 24px; border-top: 1px solid #E6E4DE; background: #FAF9F7; font-size: 12.5px; color: #4A4946">
+<span style="position: relative; display: inline-flex; align-items: center; gap: 10px">
+<button type="button" class="ibtn helpb" aria-expanded="{{legendStr}}" aria-label="What the marks mean" title="What the marks mean" onClick="{{toggleLegend}}">?</button>
+<sc-if value="{{legendOpen}}" hint-placeholder-val="{{ false }}">
+<div class="legendpop" role="dialog" aria-label="What the marks mean">
+<span style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="width: 18px; height: 18px; border-radius: 5px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; background: #6F6B63"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>Applies</span>
+<span style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="width: 18px; height: 18px; border-radius: 5px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid #B9B7B0; background: #FFFFFF"></span>Does not apply</span>
+<span style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" class="ndot" style="position: static; box-shadow: none"></span>Has an assumption or comments</span>
+<span style="color: #6B6A66; padding-top: 6px; border-top: 1px solid #F1F0EC">Click a box to tick or untick it. Double-click a cell to comment.</span>
+</div>
+</sc-if>
+</span>
+<button type="button" class="btn btn-dark" disabled="{{cannotFinish}}" style="min-height: 38px; font-size: 13.5px">{{finishLabel}}</button>
+</div>
+</section>
+
+<div class="railwrap" style="{{railWrap}}">
+<sc-if value="{{railOpen}}" hint-placeholder-val="{{ false }}">
+<aside class="{{asideCls}}" aria-label="Assumptions" style="width: 400px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; min-height: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px 12px 20px; background: #F3F1EC; border-bottom: 1px solid #E6E4DE">
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}"><span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 12px; color: #6B6A66">03 Asset Analysis</span><span style="display: inline-flex; align-items: center; gap: 10px"><span style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em">Assumptions</span><sc-if value="{{hasNeed}}" hint-placeholder-val="{{ true }}"><span class="tag t-yellow">{{needYou}} need you</span></sc-if></span></span></sc-if><sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}"><nav aria-label="Breadcrumb" style="display: inline-flex; align-items: baseline; gap: 6px; min-width: 0"><button type="button" class="tlink" onClick="{{clearPick}}" title="Back to all assumptions" style="padding: 0; font-size: 13px; color: #6B6A66; text-decoration: none">Assumptions</button><span aria-hidden="true" style="font-size: 13px; color: #B5B4AF">/</span><span style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #1C1B19; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{crumb}}</span></nav></sc-if>
+<button type="button" class="ibtn" aria-label="Close assumptions" onClick="{{toggleRail}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px 10px 20px; border-bottom: 1px solid #E6E4DE">
+<span role="group" aria-label="Show" style="display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F1F0EC">
+<sc-for list="{{railFilters}}" as="f" hint-placeholder-count="3">
+<button type="button" class="seg" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}" style="{{f.style}}">{{f.label}}</button>
+</sc-for>
+</span>
+</div>
+</sc-if>
+
+<div class="dscroll" style="scrollbar-gutter: stable; flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; overflow-anchor: none; display: flex; flex-direction: column">
+
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+<article aria-label="{{sel.title}}" style="padding: 26px 20px 14px; border-bottom: 1px solid #E6E4DE; display: flex; flex-direction: column; gap: 10px">
+<header class="dhead" style="display: flex; align-items: flex-start; gap: 12px; position: sticky; top: -2px; z-index: 3; margin: -26px -20px 0; padding: 16px 20px 16px; align-items: center; background: #FFFFFF; border-bottom: 1px solid #EEECE7">
+<sc-if value="{{sel.isProp}}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="{{sel.markStyle}}"><sc-if value="{{sel.markApplies}}" hint-placeholder-val="{{ true }}"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></sc-if></span></sc-if>
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto"><span style="display: inline-flex; align-items: center; gap: 10px; min-width: 0"><span class="mono" style="flex: none; padding: 2px 7px; border-radius: 6px; box-shadow: inset 0 0 0 1px #CFCAC0; font-size: 12px; font-weight: 500; color: #4A4946">{{sel.code}}</span><span style="font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; color: #1C1B19; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{sel.sub}}</span></span>
+</span><span class="{{sel.stateCls}}" style="margin-top: 1px">{{sel.state}}</span>
+
+</header>
+<sc-if value="{{sel.isAsset}}" hint-placeholder-val="{{ false }}">
+<section class="dsec" aria-label="Description"><span class="dlabel">Description</span>
+<p style="margin: 0; font-size: 14px; line-height: 1.55; color: #2F2E2B">{{sel.desc}}</p>
+</section>
+<section class="dsec" aria-label="Why it is an asset"><span class="dlabel">Why it is an asset</span>
+<div class="msg-c" style="padding-left: 0; border-left: 0">
+<p>{{sel.reason}}</p>
+<sc-for list="{{sel.quotes}}" as="q" hint-placeholder-count="1">
+<blockquote class="quote"><footer style="margin: 0 0 3px; font-size: 11.5px; color: #6B6A66">Evidence from <span class="mono">{{q.w}}</span></footer><p>"{{q.q}}"</p></blockquote>
+</sc-for>
+<sc-if value="{{sel.hasFlip}}" hint-placeholder-val="{{ true }}">
+<p style="font-size: 13px; color: #5F5E5B"><span style="color: #1C1B19; font-weight: 500">Would change it:</span> {{sel.flip}}</p>
+</sc-if>
+</div>
+</section>
+<section class="dsec propsec" aria-label="Cybersecurity properties"><span class="dlabel">Cybersecurity properties</span>
+<div class="propgrid">
+<sc-for list="{{sel.props}}" as="p" hint-placeholder-count="6">
+<div class="{{p.cls}}" style="{{p.style}}"><button type="button" class="splitmain" aria-pressed="{{p.pressed}}" aria-label="{{p.title}}" onClick="{{p.toggle}}" title="{{p.title}}">{{p.code}}</button><button type="button" class="splitchev" aria-expanded="{{p.openStr}}" aria-label="{{p.whyLabel}}" title="{{p.whyLabel}}" onClick="{{p.toggleWhy}}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button></div>
+</sc-for>
+</div>
+<div class="{{sel.whyCls}}" aria-hidden="{{sel.whyHidden}}"><div class="whyin"><div class="{{sel.whyAnim}}"><p style="font-weight: 600">{{sel.whyName}} <span style="font-weight: 500; color: #6B6A66">{{sel.whyState}}</span></p><p>{{sel.whyReason}}</p><p style="color: #5F5E5B"><span style="color: #1C1B19; font-weight: 500">Would change it:</span> {{sel.whyFlip}}</p></div></div></div>
+</section>
+</sc-if>
+
+<sc-for list="{{sel.asms}}" as="x" hint-placeholder-count="1">
+<div class="decide" style="flex-direction: column; align-items: stretch; background: #FBF8EE; border-color: #F1E2B3">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span class="mono" style="font-size: 11.5px; color: #956400">{{x.id}} · assumption</span><span class="{{x.cls}}">{{x.state}}</span></span>
+<p style="margin: 0; font-size: 14px; color: #2F2E2B">{{x.text}}</p>
+<sc-if value="{{x.open}}" hint-placeholder-val="{{ true }}"><span style="display: flex; gap: 8px"><button type="button" class="btn btn-dark btn-sm" onClick="{{x.confirm}}">Confirm</button><button type="button" class="btn btn-line btn-sm" onClick="{{x.dispute}}">Dispute</button></span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{sel.hasDesc}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="lbl">Description</span><p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2F2E2B">{{sel.desc}}</p></div>
+</sc-if>
+<sc-if value="{{sel.notAsset}}" hint-placeholder-val="{{ true }}">
+<div class="msg-c">
+<span class="lbl">Why</span>
+<p>{{sel.reason}}</p>
+<sc-for list="{{sel.quotes}}" as="q" hint-placeholder-count="1">
+<blockquote class="quote"><footer style="margin: 0 0 3px; font-size: 11.5px; color: #6B6A66">Evidence from <span class="mono">{{q.w}}</span></footer><p>"{{q.q}}"</p></blockquote>
+</sc-for>
+<sc-if value="{{sel.hasFlip}}" hint-placeholder-val="{{ true }}">
+<p style="font-size: 13px; color: #5F5E5B"><span style="color: #1C1B19; font-weight: 500">Would change it:</span> {{sel.flip}}</p>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-for list="{{sel.msgs}}" as="m" hint-placeholder-count="2">
+<div style="{{m.wrap}}">
+<div class="msg-body">
+<sc-if value="{{m.mine}}" hint-placeholder-val="{{ true }}"><span class="who"><b>You</b> · {{m.when}}</span></sc-if>
+<p>{{m.text}}</p>
+<sc-if value="{{m.hasChange}}" hint-placeholder-val="{{ false }}">
+<div class="proposal">
+<span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px">
+<span style="font-weight: 500">{{m.changeProp}}</span>
+<span class="{{m.fromCls}}" style="text-decoration: line-through">{{m.fromWord}}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B6A66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+<span class="{{m.toCls}}">{{m.toWord}}</span>
+</span>
+<sc-if value="{{m.changeOpen}}" hint-placeholder-val="{{ true }}">
+<span style="display: flex; gap: 8px">
+<button type="button" class="btn btn-dark btn-sm" onClick="{{m.apply}}">Apply</button>
+<button type="button" class="btn btn-line btn-sm" onClick="{{m.keep}}">Keep as is</button>
+</span>
+</sc-if>
+<sc-if value="{{m.changeDone}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 12.5px; color: #6B6A66">{{m.changeDoneText}}</span>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-for>
+
+<sc-if value="{{sel.rowLeft}}" hint-placeholder-val="{{ false }}">
+<div class="decide">
+<span style="font-size: 13px; color: #4A4946">{{sel.rowLeftHint}}</span>
+<button type="button" class="btn btn-dark btn-sm" onClick="{{sel.confirmRow}}">{{sel.rowLeftLabel}}</button>
+</div>
+</sc-if>
+<sc-if value="{{sel.isProp}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{sel.canReview}}" hint-placeholder-val="{{ true }}">
+<div class="decide">
+<span style="font-size: 13px; color: #4A4946">Proposed: <b style="font-weight: 600; color: #1C1B19">{{sel.proposedWord}}</b></span>
+<span style="display: flex; gap: 8px">
+<button type="button" class="btn btn-dark btn-sm" onClick="{{sel.confirm}}">Confirm</button>
+<button type="button" class="btn btn-line btn-sm" onClick="{{sel.startChange}}">{{sel.changeLabel}}</button>
+</span>
+</div>
+</sc-if>
+<sc-if value="{{sel.changing}}" hint-placeholder-val="{{ false }}">
+<div class="decide" style="flex-direction: column; align-items: stretch">
+<label for="why" style="font-size: 13px; font-weight: 500">Why? A reason is kept with the change.</label>
+<textarea id="why" class="fld" rows="2" value="{{draft}}" onChange="{{onDraft}}" style="padding: 8px 10px; resize: vertical; background: #FFFFFF"></textarea>
+<span style="display: flex; gap: 8px">
+<button type="button" class="btn btn-dark btn-sm" disabled="{{draftShort}}" onClick="{{sel.saveChange}}">Save change</button>
+<button type="button" class="btn btn-line btn-sm" onClick="{{cancelChange}}">Cancel</button>
+</span>
+</div>
+</sc-if>
+</sc-if>
+</article>
+</sc-if>
+
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 18px 20px; font-size: 13.5px; color: #5F5E5B; border-bottom: 1px solid #E6E4DE">Confirm or dispute the assumptions below. Select a row, or double-click a property cell, to see the reasoning and comment.</p>
+</sc-if>
+
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}">
+<div class="sec"><span>Assumptions</span><span class="n">{{asmCount}}</span></div>
+<sc-for list="{{asmList}}" as="x" hint-placeholder-count="2">
+<div class="{{x.rowCls}}">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><button type="button" class="tlink" onClick="{{x.pick}}" style="padding: 0; font-size: 12px; color: #6B6A66; text-decoration: none"><span class="mono">{{x.about}}</span> · {{x.aboutName}}</button><span class="{{x.cls}}">{{x.state}}</span></span>
+<p>{{x.text}}</p>
+<sc-if value="{{x.open}}" hint-placeholder-val="{{ true }}"><span style="display: flex; gap: 8px"><button type="button" class="btn btn-dark btn-sm" onClick="{{x.confirm}}">Confirm</button><button type="button" class="btn btn-line btn-sm" onClick="{{x.dispute}}">Dispute</button></span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{asmEmpty}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 4px 20px 12px; font-size: 13px; color: #6B6A66">None here.</p>
+</sc-if>
+</sc-if>
+<sc-if value="{{showList}}" hint-placeholder-val="{{ true }}">
+<div class="sec"><span>{{listTitle}}</span><span class="n">{{threadCount}}</span></div>
+<div role="list">
+<sc-for list="{{threadList}}" as="t" hint-placeholder-count="4">
+<button type="button" role="listitem" class="trow" onClick="{{t.pick}}">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="font-size: 13.5px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"><span class="mono" style="font-size: 11.5px; color: #6B6A66; font-weight: 400; margin-right: 6px">{{t.key}}</span>{{t.title}}</span><span class="{{t.cls}}">{{t.tag}}</span></span>
+<span style="display: block; margin-top: 2px; font-size: 12.5px; color: #6B6A66; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{t.snippet}}</span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 4px 20px 16px; font-size: 13px; color: #6B6A66">Nothing here.</p>
+</sc-if>
+</sc-if>
+<div class="dspacer" aria-hidden="true"></div>
+</div>
+
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+<div style="padding: 12px 16px 14px 20px; border-top: 1px solid #E6E4DE; background: #FFFFFF">
+<label for="reply" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Reply</label>
+<div class="composer">
+<textarea id="reply" rows="2" placeholder="Reply, or ask for a change" value="{{reply}}" onChange="{{onReply}}"></textarea>
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 6px 6px 10px">
+<button type="button" class="tlink" onClick="{{sel.resolve}}">{{sel.resolveLabel}}</button>
+<button type="button" class="btn btn-dark btn-sm" disabled="{{replyShort}}" onClick="{{sel.send}}">Comment</button>
+</span>
+</div>
+</div>
+</sc-if>
+</aside>
+</sc-if>
+</div>
+
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startWith":{"editor":"enum","options":["table","comment-open","change-proposed"],"default":"change-proposed"},"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.PROPS = [
+      { k: 'C', name: 'Confidentiality', h: '#DCEEFB', b: '#F1F8FD', t: '#1F6C9F' },
+      { k: 'I', name: 'Integrity', h: '#E1EEDF', b: '#F3F8F2', t: '#346538' },
+      { k: 'A', name: 'Availability', h: '#F8ECC8', b: '#FDF8EA', t: '#8A5D00' },
+      { k: 'Au', name: 'Authenticity', h: '#EFE5F1', b: '#F9F5FA', t: '#6E3F73' },
+      { k: 'Az', name: 'Authorization', h: '#DCEFEC', b: '#F1F8F7', t: '#2A6B63' },
+      { k: 'NR', name: 'Non-repudiation', h: '#F5E5DA', b: '#FBF4EF', t: '#8A4B22' }
+    ];
+    this.ASSUMPTIONS = [
+      { id: 'AS-03-01', about: 'DS-02', prop: 'C', text: 'The cache holds certificate data. No document says what it holds.' },
+      { id: 'AS-03-02', about: 'INF-02', prop: 'Au', text: 'The internet-facing load balancer is a second way in, next to the API gateway.' },
+      { id: 'AS-03-03', about: 'IAM-04', prop: 'Az', text: 'The deploy identity can change the running services, so only the portal side of it is assessed.' }
+    ];
+    var Q = function (q, w) { return { q: q, w: w }; };
+    var A = function (id, fam, name, type, desc, from, scope, why, applies, done, quotes, iface) {
+      return { id: id, fam: fam, name: name, type: type, desc: desc, from: from, scope: scope, why: why, applies: applies.split(' '), done: done ? done.split(' ') : [], quotes: quotes || [], iface: !!iface };
+    };
+    this.FAMILIES = [['WL', 'Workloads'], ['DS', 'Data stores'], ['INF', 'Infrastructure'], ['API', 'Business functions'], ['IAM', 'Credentials and keys'], ['COMM', 'Data in transit']];
+    this.ASSETS = [
+      A('WL-01', 'WL', 'Certificate service logic', 'Service logic', 'Handles every certificate request: checks it, stores it and passes approved ones to the key service.', 'EL-015 Certificate service', 'in scope', 'It is the portal’s own service and every certificate request passes through it.', 'C I A Az', 'I A', [Q('Requests are handled by the certificate service', 'functional.md, section 1')]),
+      A('WL-02', 'WL', 'Key service signing logic', 'Service logic', 'Signs approved certificates with the CA signing key.', 'EL-016 Key service', 'in scope', 'It is the only service that uses the CA signing key.', 'I A Az', '', [Q('After approval, the signing service signs the certificate with the CA signing key', 'functional.md, section 3.4')]),
+      A('WL-03', 'WL', 'Token check', 'Service logic', 'Checks the sign-in token on every request that reaches the API gateway.', 'EL-010 Token authorizer', 'in scope', 'Every request to the portal depends on this check.', 'I A Au Az', 'I A'),
+      A('WL-04', 'WL', 'Revocation list builder', 'Service logic', 'Builds the certificate revocation list and writes it to storage.', 'EL-008 CRL publisher', 'in scope', 'Relying services trust the list it produces.', 'I A', 'I A'),
+      A('DS-01', 'DS', 'Certificate records', 'Data store', 'Certificate requests, issued certificates and the audit history.', 'EL-018 Certificate database', 'in scope', 'It holds every request and issued certificate, the record the portal relies on.', 'C I A NR', 'I', [Q('The certificate service stores the request', 'functional.md, section 3.2')]),
+      A('DS-02', 'DS', 'Cached certificate data', 'Data store', 'Recently used certificate and session data kept close to the certificate service.', 'EL-017 Cache', 'in scope', 'It sits next to the certificate service; no document says what it holds, so it is assumed to hold certificate data.', 'C I A Au', ''),
+      A('DS-03', 'DS', 'Revocation list', 'Data store', 'The published list of revoked certificates that relying services download.', 'EL-007 Revocation list bucket', 'in scope', 'Relying services decide whether to trust a certificate from it.', 'I A Au', 'I A Au', [Q('Relying services download the list through the CDN', 'functional.md, section 3.7')]),
+      A('DS-04', 'DS', 'Portal web pages', 'Data store', 'The portal’s web pages served to operators and security admins.', 'EL-006 Portal UI bucket', 'in scope', 'Changed pages could trick operators into acting on false information.', 'I Au', 'I Au'),
+      A('DS-05', 'DS', 'Application logs and metrics', 'Data store', 'Logs and metrics written by the certificate and key services.', 'EL-023 Logs and metrics', 'in scope', 'Investigations rely on these records.', 'I A NR', ''),
+      A('DS-06', 'DS', 'Audit trail records', 'Data store', 'Records of every API call made in the portal’s cloud account.', 'EL-022 Audit trail', 'in scope', 'It is the only record of changes to the account itself.', 'I A NR', 'I A NR'),
+      A('INF-01', 'INF', 'Network exposure settings', 'Configuration', 'Which parts of the portal’s network can be reached and from where.', 'EL-014 Network boundary configuration', 'in scope', 'A wrong setting exposes internal services.', 'I A', 'I A'),
+      A('INF-02', 'INF', 'Load balancer routing', 'Configuration', 'How the internet-facing and internal load balancers route requests to the services.', 'EL-011 and EL-026 Load balancers', 'in scope', 'The internet-facing load balancer is a second way in (assumed, see Assumptions).', 'I A', ''),
+      A('INF-03', 'INF', 'API gateway and its sign-in settings', 'Configuration', 'The public entry point for operators, security admins and internal services. Its settings decide which requests reach the portal: the sign-in token check, request size and rate limits, which paths are routed to the certificate service and which to the key service, and the logging of every call to the audit trail.', 'EL-009 API gateway', 'in scope', 'It is the documented public entry point.', 'I A Au Az', 'I A', [Q('The API gateway is the only public entry point', 'client-answers.md, answer 3')]),
+      A('INF-04', 'INF', 'CDN delivery settings', 'Configuration', 'How the CDN serves the portal pages and the revocation list.', 'EL-005 CDN', 'in scope', 'Both the pages and the revocation list reach users through it.', 'I A', 'I A'),
+      A('API-01', 'API', 'Certificate issuance', 'Business function', 'Requesting, approving and issuing a certificate.', 'Function inventory: issue', 'in scope', 'It is the portal’s main purpose.', 'I A Au Az NR', ''),
+      A('API-02', 'API', 'Certificate revocation', 'Business function', 'Revoking a certificate and publishing it on the revocation list.', 'Function inventory: revoke', 'in scope', 'A wrong or missed revocation leaves a bad certificate trusted.', 'I A Au Az NR', 'I A'),
+      A('IAM-01', 'IAM', 'CA signing key', 'Key material', 'The private key that signs every certificate the portal issues.', 'EL-019 CA signing key', 'in scope', 'Whoever holds it can issue trusted certificates.', 'C I Au', '', [Q('The CA signing key is held in the cloud key management service', 'client-answers.md, answer 6')]),
+      A('IAM-02', 'IAM', 'Database password', 'Credential', 'The password the certificate service uses for the certificate database.', 'EL-020 Secrets store', 'in scope', 'It is stored in the secrets store and opens the certificate records.', 'C Au', 'C Au'),
+      A('IAM-03', 'IAM', 'Notification API key', 'Credential', 'The key the portal holds for the outside notification service.', 'EL-024 Notification service', 'interface', 'The portal holds this key for an outside party, so only the portal’s side is assessed.', 'C Au', '', null, true),
+      A('IAM-04', 'IAM', 'Deploy identity', 'Identity', 'The identity the CI/CD pipeline uses to deploy into the portal.', 'EL-025 CI/CD pipeline', 'interface', 'The portal relies on this identity when code is deployed.', 'Au NR', '', null, true),
+      A('COMM-01', 'COMM', 'Certificate requests in transit', 'Data in transit', 'Requests from operators, security admins and internal services to the API gateway.', 'IF-01, IF-02, IF-06', 'in scope', 'They carry sign-in tokens and request data across the internet boundary.', 'C I Au', 'C I'),
+      A('COMM-02', 'COMM', 'Notifications in transit', 'Data in transit', 'Messages the certificate service sends to the outside notification service.', 'IF-15', 'interface', 'They leave the portal for an outside party over HTTPS.', 'C I', '', null, true)
+    ];
+    var start = props.startWith || 'table';
+    var threads = {};
+    var sel = null;
+    if (start === 'change-proposed') {
+      sel = 'WL-01.C';
+      threads['WL-01.C'] = [
+        { who: 'You', text: 'Confidentiality should not apply here. The service passes requests on and keeps nothing itself.' },
+        { who: 'reply', text: 'Agreed. The certificate service stores nothing of its own; the requests it handles are covered by DS-01 Certificate records. Under the D-22 rule this cell should be off.', change: { k: 'C', to: false, state: 'open' } }
+      ];
+    } else if (start === 'comment-open') {
+      sel = 'DS-01.asset';
+    }
+    threads['DS-02.C'] = [{ who: 'You', text: 'Ask the client what the cache holds before we confirm this.' }];
+    this.state = { legend: false, collapsed: {}, density: 'comfortable', open: {}, asm: { 'AS-03-03': 'confirmed' }, over: {}, threads: threads, resolved: {}, sel: sel, rail: start !== 'table', filter: 'all', q: '', railFilter: 'open', reply: '', draft: '', changing: false };
+  }
+
+  key(id, k) { return id + '.' + k; }
+
+  closeRail(clearSel) {
+    var self = this;
+    clearTimeout(this._close);
+    this.setState({ closing: true });
+    this._close = setTimeout(function () { var p = { rail: false, closing: false }; if (clearSel) p.sel = null; self.setState(p); }, 420);
+  }
+
+  morphWhy() {
+    if (typeof document === 'undefined') return;
+    var inn = document.querySelector('.whyin'), sc = document.querySelector('.dscroll'), sp = document.querySelector('.dspacer');
+    if (!inn || !sc || !sp) return;
+    var raf = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : function (f) { return setTimeout(f, 16); };
+    var h0 = inn.offsetHeight, st = sc.scrollTop, base = sc.scrollHeight - sp.offsetHeight;
+    sc._holding = true;
+    sp.style.height = (sp.offsetHeight + h0) + 'px';
+    inn.style.height = h0 + 'px';
+    raf(function () {
+      var box = inn.querySelector('.propwhy');
+      var h1 = box ? box.offsetHeight + parseFloat(getComputedStyle(box).marginTop) + parseFloat(getComputedStyle(box).marginBottom) : h0;
+      void inn.offsetHeight;
+      inn.style.transition = 'height .3s cubic-bezier(.32,.72,0,1)';
+      inn.style.height = h1 + 'px';
+      var to = Math.max(0, Math.min(st, base - h0 + h1 - sc.clientHeight));
+      var t0 = Date.now();
+      var step = function () {
+        var k = Math.min(1, (Date.now() - t0) / 300), e = 1 - Math.pow(1 - k, 3);
+        if (to < st) sc.scrollTop = st + (to - st) * e;
+        if (k < 1) raf(step);
+        else { inn.style.transition = ''; inn.style.height = ''; sc._holding = false; var need = sc.scrollTop + sc.clientHeight - (sc.scrollHeight - sp.offsetHeight); sp.style.height = Math.max(0, Math.ceil(need)) + 'px'; }
+      };
+      raf(step);
+    });
+  }
+
+  holdScroll() {
+    if (typeof document === 'undefined') return;
+    var sc = document.querySelector('.dscroll'), sp = document.querySelector('.dspacer'), w = document.querySelector('.whywrap');
+    if (!sc || !sp) return;
+    var fit = function () { if (sc._holding) return; var h = sp.offsetHeight; var need = sc.scrollTop + sc.clientHeight - (sc.scrollHeight - h); sp.style.height = Math.max(0, Math.ceil(need)) + 'px'; };
+    if (!sc._fitBound) { sc.addEventListener('scroll', fit, { passive: true }); sc._fitBound = true; }
+    var from = sc.scrollTop, wh = w ? w.offsetHeight : 0;
+    var to = Math.max(0, Math.min(from, sc.scrollHeight - sp.offsetHeight - wh - sc.clientHeight, typeof sc._pre === 'number' ? sc._pre : Infinity));
+    sc._pre = null;
+    sc._holding = true;
+    sp.style.height = (sp.offsetHeight + wh) + 'px';
+    var raf = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : function (f) { return setTimeout(f, 16); };
+    var t0 = Date.now(), D = 300;
+    var keep = function () {
+      var k = Math.min(1, (Date.now() - t0) / D), e = 1 - Math.pow(1 - k, 3);
+      sc.scrollTop = from + (to - from) * e;
+      if (k < 1 || Date.now() - t0 < 340) raf(keep); else { sc._holding = false; fit(); }
+    };
+    raf(keep);
+  }
+
+  revealWhy(n) {
+    var self = this;
+    var raf = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : function (f) { return setTimeout(f, 16); };
+    raf(function () {
+      var w = document.querySelector('.whywrap.open');
+      if (!w) { if (n < 20) self.revealWhy(n + 1); return; }
+      var sc = document.querySelector('.dscroll');
+      if (!sc) return;
+      var box = w.querySelector('.propwhy');
+      var t0 = Date.now();
+      var step = function () {
+        var need = w.getBoundingClientRect().top + (box ? box.offsetHeight + 14 : 0) + 16 - sc.getBoundingClientRect().bottom;
+        if (need > 0.5) sc.scrollTop = sc.scrollTop + Math.max(1, need * 0.22);
+        if (Date.now() - t0 < 700 && w.classList.contains('open')) raf(step);
+      };
+      raf(step);
+    });
+  }
+
+  renderVals() {
+    var self = this, s = this.state;
+    if (this._lastSel !== s.sel) {
+      this._lastSel = s.sel;
+      if (typeof document !== 'undefined') setTimeout(function () { var el = document.querySelector('.dscroll'); if (el) el.scrollTop = 0; }, 0);
+    }
+    var _u = 0, PROPS = this.PROPS;
+    var propOf = function (a, k) {
+      var o = s.over[a.id + '.' + k];
+      return o || { applies: a.applies.indexOf(k) >= 0, reviewed: true };
+    };
+    var hasThread = function (key) { return !!(s.threads[key] && s.threads[key].length) && !s.resolved[key]; };
+    var needRow = function (a) { return PROPS.some(function (p) { return !propOf(a, p.k).reviewed; }); };
+    var rowThreads = function (a) { return Object.keys(s.threads).some(function (t) { return t.indexOf(a.id + '.') === 0 && hasThread(t); }); };
+    var q = s.q.trim().toLowerCase();
+    var shown = this.ASSETS.filter(function (a) {
+      if (s.filter === 'notes' && !rowThreads(a) && !self.ASSUMPTIONS.some(function (x) { return x.about === a.id && !s.asm[x.id]; })) return false;
+      if (q && (a.id + ' ' + a.name + ' ' + a.desc + ' ' + a.type).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    var selRowId = s.sel ? s.sel.split('.')[0] : null;
+    var selCol = s.sel ? s.sel.split('.')[1] : null;
+    var lines = [];
+    var rn = 0;
+    this.FAMILIES.forEach(function (f) {
+      var rows = shown.filter(function (a) { return a.fam === f[0]; });
+      if (!rows.length) return;
+      var closed = !!s.collapsed[f[0]];
+      lines.push({ isBand: true, isRow: false, code: f[0], name: f[1], countLabel: rows.length + (rows.length === 1 ? ' asset' : ' assets'), count: rows.length, expanded: closed ? 'false' : 'true',
+        toggle: function () { var c = Object.assign({}, s.collapsed); c[f[0]] = !c[f[0]]; self.setState({ collapsed: c }); } });
+      if (closed) return;
+      rows.forEach(function (a, ri) {
+        var even = ri % 2 === 1;
+        var n = Math.min(rn++, 24);
+        var rowSel = selRowId === a.id && selCol === 'asset';
+        var bg = rowSel ? '#F4FAFE' : (even ? '#FAF9F6' : '#FFFFFF');
+        lines.push({
+          isBand: false, isRow: true, n: n, id: a.id, name: a.name, type: a.type, desc: a.desc, iface: a.iface,
+          long: a.desc.length > 120, descOpen: s.open[a.id] ? 'true' : 'false',
+          descCls: s.open[a.id] ? 'fadein' : 'clamp', moreLabel: s.open[a.id] ? 'Show less' : 'Show more',
+          descBtn: 'font-size: 13.5px; color: #3A3936; line-height: 1.55; text-align: left; padding: 10px 18px; max-width: 64ch' + (a.desc.length > 120 ? '; padding-bottom: 2px' : ''),
+          toggleDesc: function () { var o = Object.assign({}, s.open); o[a.id] = !o[a.id]; self.setState({ open: o }); },
+          rowLabel: a.id + ' ' + a.name + ', open comments',
+          rowCorner: hasThread(a.id + '.asset') || self.ASSUMPTIONS.some(function (x) { return x.about === a.id && !s.asm[x.id]; }),
+          idTd: 'background: ' + bg + (rowSel ? '; box-shadow: inset 3px 0 0 #1F6C9F' : ''),
+          assetTd: 'background: ' + bg,
+          plainTd: 'background: ' + bg,
+          pickRow: function () { self.setState({ sel: a.id + '.asset', reply: '', draft: '', changing: false }); },
+          dblRow: function (ev) { if (ev && ev.preventDefault) ev.preventDefault(); var k = a.id + '.asset'; if (self.state.rail && self.state.sel === k) self.closeRail(); else self.setState({ sel: k, rail: true, reply: '', draft: '', changing: false }); },
+          cells: PROPS.map(function (p, i) {
+            var v = propOf(a, p.k);
+            var key = a.id + '.' + p.k;
+            var on = s.sel === key;
+            return {
+              applies: v.applies, needs: !v.reviewed, corner: hasThread(key) || self.ASSUMPTIONS.some(function (x) { return x.about === a.id && x.prop === p.k && !s.asm[x.id]; }),
+              label: p.name + ' for ' + a.id + ': ' + (v.applies ? 'applies' : 'does not apply') + '. Double-click to comment.',
+              cls: 'k' + i,
+              markCls: v.applies ? 'mark on' : 'mark',
+              td: 'width: 100px; background: ' + (on ? '#FFFFFF' : (even ? '#F3F1EC' : '#F7F6F2')) + (i === 0 ? '; box-shadow: inset 1px 0 0 #DAD8D1' : ''),
+              btn: '--pc: ' + p.t,
+              pcls: on ? 'pcell sel' : 'pcell',
+              mark: '--pc: ' + p.t + '; ' + (v.applies ? 'background: #6F6B63; border: 1.5px solid #6F6B63' : (v.reviewed ? 'border: 1.5px solid #B9B7B0; background: #FFFFFF' : 'border: 1.5px dashed #B9B7B0; background: #FFFFFF')),
+              pressed: v.applies ? 'true' : 'false',
+              title: p.name + (v.applies ? ' applies. Click to untick.' : ' does not apply. Click to tick.') + ' Double-click to comment.',
+                            comment: function (ev) {
+                if (ev && ev.preventDefault) ev.preventDefault();
+                clearTimeout(self._tick); self._tick = null;
+                self.setState({ sel: key, rail: true, reply: '', draft: '', changing: false });
+              },
+              pick: function () { if (s.sel === key || !s.rail) { if (s.sel) self.setState({ sel: null, changing: false, draft: '' }); return; } self.setState({ sel: key, reply: '', draft: '', changing: false }); },
+              toggle: function (ev) {
+                if (ev && ev.stopPropagation) ev.stopPropagation();
+                if (ev && ev.detail > 1) return;
+                clearTimeout(self._tick);
+                self._tick = setTimeout(function () {
+                  self._tick = null;
+                  var o = Object.assign({}, self.state.over); o[key] = { applies: !v.applies, reviewed: true };
+                  self.setState({ over: o });
+                }, 220);
+              }
+            };
+          })
+        });
+      });
+    });
+
+    var needTotal = 0;
+    var cellTotal = this.ASSETS.length * PROPS.length;
+    var propHeads = PROPS.map(function (p, i) {
+      var n = self.ASSETS.filter(function (a) { return !propOf(a, p.k).reviewed; }).length;
+      needTotal += n;
+      return { cls: 'pc k' + i, name: p.name, title: p.name, style: 'width: 100px; background: #E6E2D9; color: #2F2E2B; font-weight: 600; --pc: ' + p.t + (i === 0 ? '; box-shadow: inset 1px 0 0 #C9C4B9' : '') };
+    });
+
+    var segStyle = function (on) { return on ? 'background: #FFFFFF; color: #1C1B19; font-weight: 500; box-shadow: 0 1px 2px rgba(28,27,25,.1)' : ''; };
+    var filters = [['all', 'All'], ['notes', 'With notes']].map(function (f) {
+      return { label: f[1], pressed: s.filter === f[0] ? 'true' : 'false', style: segStyle(s.filter === f[0]), pick: function () { self.setState({ filter: f[0] }); } };
+    });
+    var railFilters = [['open', 'Open'], ['resolved', 'Done']].map(function (f) {
+      return { label: f[1], pressed: s.railFilter === f[0] ? 'true' : 'false', style: segStyle(s.railFilter === f[0]), pick: function () { self.setState({ railFilter: f[0] }); } };
+    });
+
+    var byId = {}; this.ASSETS.forEach(function (a) { byId[a.id] = a; });
+    var propName = {}; PROPS.forEach(function (p) { propName[p.k] = p.name; });
+    var REASON = {
+      C: [function (a) { return a.name + ' holds data that only the right people may read, and no other row covers it.'; }, function (a) { return a.name + ' keeps no data of its own; what it handles is covered by other rows (D-22).'; }],
+      I: [function (a) { return 'An unauthorised change to ' + a.name.toLowerCase() + ' would change what the portal issues, stores or shows.'; }, function (a) { return 'Nothing in ' + a.name.toLowerCase() + ' can be changed in a way that matters on its own.'; }],
+      A: [function (a) { return 'If ' + a.name.toLowerCase() + ' stops, issuing, checking or revoking certificates stops with it.'; }, function (a) { return 'Losing ' + a.name.toLowerCase() + ' for a while does not stop the portal’s functions.'; }],
+      Au: [function (a) { return 'Others rely on ' + a.name.toLowerCase() + ' being genuine: who sent it, signed it or served it.'; }, function (a) { return 'No one relies on proving where ' + a.name.toLowerCase() + ' comes from.'; }],
+      Az: [function (a) { return a.name + ' decides or depends on who may do what; a missing check here is an Authorization problem (D-22).'; }, function (a) { return a.name + ' grants no rights of its own.'; }],
+      NR: [function (a) { return 'Actions recorded in or done through ' + a.name.toLowerCase() + ' must be provable later.'; }, function (a) { return 'Nothing done through ' + a.name.toLowerCase() + ' needs to be proven afterwards.'; }]
+    };
+    var FLIP = {
+      C: ['A document showing it keeps no data of its own.', 'A document showing it stores sensitive data that no other row covers.'],
+      I: ['The client showing its content cannot affect anything.', 'A document showing its content drives decisions.'],
+      A: ['The client confirming the portal keeps working without it.', 'A document showing a function stops without it.'],
+      Au: ['Nobody relying on where it comes from.', 'A party relying on proof of its origin.'],
+      Az: ['It making no access decision.', 'It deciding who may do what.'],
+      NR: ['No need to prove actions afterwards.', 'A requirement to prove who did what.']
+    };
+
+    var asmView = function (arr) {
+      return arr.map(function (x) {
+        var st = s.asm[x.id] || 'open';
+        return {
+          id: x.id, text: x.text, about: x.about, aboutName: (self.ASSETS.filter(function (a) { return a.id === x.about; })[0] || {}).name || '', open: st === 'open', rowCls: st === 'open' ? 'asm open' : 'asm',
+          state: st === 'open' ? 'Needs you' : (st === 'confirmed' ? 'Confirmed' : 'Disputed'),
+          cls: st === 'open' ? 'tag t-yellow' : (st === 'confirmed' ? 'tag t-grey' : 'tag t-red'),
+          confirm: function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); var m = Object.assign({}, s.asm); m[x.id] = 'confirmed'; self.setState({ asm: m }); },
+          dispute: function (ev) {
+            if (ev && ev.stopPropagation) ev.stopPropagation();
+            var m = Object.assign({}, s.asm); m[x.id] = 'disputed';
+            var key = x.about + '.asset';
+            var t = Object.assign({}, s.threads); t[key] = (t[key] || []).concat([{ who: 'You', text: 'Disputed ' + x.id + ': ' + x.text }]);
+            var r = Object.assign({}, s.resolved); delete r[key];
+            self.setState({ asm: m, threads: t, resolved: r, sel: key, reply: '' });
+          },
+          pick: function () { self.setState({ sel: x.about + '.asset', reply: '', draft: '', changing: false }); }
+        };
+      });
+    };
+    var openAsm = this.ASSUMPTIONS.filter(function (x) { return !s.asm[x.id]; });
+    var doneAsm = this.ASSUMPTIONS.filter(function (x) { return !!s.asm[x.id]; });
+    var selVals = { title: '', eyebrow: '', state: '', stateCls: '', reason: '', quotes: [], hasFlip: false, flip: '', msgs: [], code: '', sub: '', asms: [], hasDesc: false, desc: '', isAsset: false, notAsset: true, facts: [], props: [], hasWhy: false, whyAnim: 'propwhy', whyCls: 'whywrap', whyHidden: 'true', whyName: '', whyState: '', whyReason: '', whyFlip: '', isProp: false, markStyle: '', markApplies: false, proposedWord: '', rowLeftHint: '', rowLeft: false, rowLeftLabel: '', confirmRow: function () {}, canReview: false, askWhy: false, saveWhy: function () {}, undo: function () {}, changing: false, changeLabel: '', confirm: function () {}, startChange: function () {}, saveChange: function () {}, resolve: function () {}, resolveLabel: 'Resolve', send: function () {} };
+    if (s.sel) {
+      var parts = s.sel.split('.');
+      var a = byId[parts[0]];
+      var k = parts[1];
+      var isProp = k !== 'asset';
+      var v = isProp ? propOf(a, k) : null;
+      selVals.eyebrow = isProp ? a.id + '  ' + a.name : a.id + '  ·  ' + a.type;
+      selVals.code = a.id;
+      selVals.sub = isProp ? a.name + ' · ' + propName[k] : a.type;
+      selVals.title = isProp ? propName[k] : a.name;
+      selVals.isProp = isProp;
+      if (isProp) {
+        selVals.state = '';
+        selVals.stateCls = '';
+        selVals.reason = REASON[k][v.applies ? 0 : 1](a);
+        selVals.hasFlip = true;
+        selVals.flip = FLIP[k][v.applies ? 0 : 1];
+        selVals.canReview = !v.reviewed && !s.changing;
+        selVals.markApplies = v.applies;
+        selVals.proposedWord = v.applies ? 'applies' : 'does not apply';
+        var pc = PROPS.filter(function (x) { return x.k === k; })[0];
+        selVals.markStyle = 'flex: none; margin-top: 3px; width: 20px; height: 20px; border-radius: 5px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; ' + (v.applies ? 'background: ' + pc.t + (v.reviewed ? '' : '; opacity: .42') : (v.reviewed ? 'border: 1.5px solid #B9B7B0' : 'border: 1.5px dashed #B9B7B0'));
+        selVals.changing = s.changing;
+        selVals.changeLabel = v.applies ? 'Change to does not apply' : 'Change to applies';
+        selVals.confirm = function () { var o = Object.assign({}, s.over); o[s.sel] = { applies: v.applies, reviewed: true }; self.setState({ over: o }); };
+        selVals.startChange = function () { self.setState({ changing: true, draft: '' }); };
+        selVals.saveChange = function () {
+          var o = Object.assign({}, s.over); o[s.sel] = { applies: !v.applies, reviewed: true };
+          var t = Object.assign({}, s.threads); t[s.sel] = (t[s.sel] || []).concat([{ who: 'You', text: (v.applies ? 'Changed to does not apply. ' : 'Changed to applies. ') + s.draft.trim() }]);
+          self.setState({ over: o, threads: t, changing: false, draft: '' });
+        };
+      } else {
+        selVals.state = a.iface ? 'Interface' : '';
+        selVals.stateCls = a.iface ? 'tag t-grey' : '';
+        selVals.reason = a.why;
+        selVals.quotes = a.quotes;
+        selVals.isAsset = true;
+        selVals.notAsset = false;
+        selVals.desc = a.desc;
+        selVals.facts = [];
+        selVals.props = PROPS.map(function (p) {
+          var v = propOf(a, p.k);
+          var wk = a.id + '.' + p.k;
+          var open = s.propWhy === wk;
+          if (open) { selVals.whyCls = 'whywrap open'; selVals.whyHidden = 'false'; selVals.whyAnim = s.whySwap ? 'propwhy ' + (s.whySwap % 2 ? 'fa' : 'fb') : 'propwhy'; }
+          if (open || (!s.propWhy && s.whyLast === wk)) { selVals.hasWhy = true; selVals.whyName = p.name; selVals.whyState = v.applies ? 'applies' : 'does not apply'; selVals.whyReason = REASON[p.k][v.applies ? 0 : 1](a); selVals.whyFlip = FLIP[p.k][v.applies ? 0 : 1]; }
+          return {
+            name: p.name, code: p.k, on: v.applies, pressed: v.applies ? 'true' : 'false',
+            title: p.name + (v.applies ? ' applies. Click to untick.' : ' does not apply. Click to tick.'),
+            style: '--pc: ' + p.t + '; --ph: ' + p.h + '; ' + (v.applies ? '--ring: inset 0 0 0 1.5px ' + p.t + ', 0 0 0 3px color-mix(in srgb, ' + p.t + ' 12%, transparent); background: ' + p.h + '; color: ' + p.t + '; box-shadow: var(--ring)' : '--ring: inset 0 0 0 1px #C9C4B9; background: #F3F1EC; color: #7A776F; box-shadow: var(--ring)'),
+            cls: v.applies ? 'split on' : 'split',
+            box: v.applies ? 'background: rgba(255,255,255,.22); color: #FFFFFF' : 'box-shadow: inset 0 0 0 1.5px #CFCAC0',
+            toggle: function () { var o = Object.assign({}, s.over); o[wk] = { applies: !v.applies, reviewed: true }; self.setState({ over: o }); },
+            open: open, openStr: open ? 'true' : 'false',
+            whyLabel: (open ? 'Hide' : 'Show') + ' why ' + p.name + (v.applies ? ' applies' : ' does not apply'),
+            toggleWhy: function () {
+              var opening = s.propWhy !== wk, switching = opening && !!s.propWhy;
+              if (!opening) self.holdScroll();
+              else if (switching) self.morphWhy();
+              else if (typeof document !== 'undefined') { var _sc = document.querySelector('.dscroll'); if (_sc) _sc._pre = _sc.scrollTop; }
+              self.setState({ propWhy: opening ? wk : null, whyLast: wk, whySwap: (s.whySwap || 0) + (switching ? 1 : 0) });
+              if (opening && typeof document !== 'undefined') self.revealWhy(0);
+            },
+            reason: REASON[p.k][v.applies ? 0 : 1](a),
+            flip: FLIP[p.k][v.applies ? 0 : 1]
+          };
+        });
+        selVals.asms = asmView(self.ASSUMPTIONS.filter(function (x) { return x.about === a.id; }));
+        var left = PROPS.filter(function (p) { return !propOf(a, p.k).reviewed; });
+        selVals.rowLeft = left.length > 0;
+        selVals.rowLeftHint = left.length + ' of 6 properties are still proposed.';
+        selVals.rowLeftLabel = 'Confirm ' + (left.length === 1 ? 'it' : 'all ' + left.length);
+        selVals.confirmRow = function () { var o = Object.assign({}, s.over); left.forEach(function (p) { o[a.id + '.' + p.k] = { applies: propOf(a, p.k).applies, reviewed: true }; }); self.setState({ over: o }); };
+      }
+      var key = s.sel;
+      selVals.msgs = (s.threads[key] || []).map(function (m, i) {
+        var ch = m.change;
+        var you = m.who === 'You';
+        return {
+          mine: you, when: i === 0 ? 'yesterday' : 'just now', text: m.text,
+          wrap: you ? 'padding: 10px 12px; border-radius: 12px; background: #F7F6F2; border: 1px solid #ECE9E2' : 'padding-left: 12px; border-left: 2px solid #DAD8D1',
+          hasChange: !!ch,
+          changeProp: ch ? propName[ch.k] : '',
+          fromWord: ch ? (ch.to ? 'Does not apply' : 'Applies') : '', fromCls: 'tag t-grey',
+          toWord: ch ? (ch.to ? 'Applies' : 'Does not apply') : '', toCls: 'tag t-ink',
+          changeOpen: !!ch && ch.state === 'open', changeDone: !!ch && ch.state !== 'open',
+          changeDoneText: ch && ch.state === 'applied' ? 'Applied by you. The cell is updated.' : 'Kept as it is.',
+          apply: function () {
+            var t = Object.assign({}, s.threads); t[key] = t[key].map(function (x, j) { return j === i ? Object.assign({}, x, { change: Object.assign({}, x.change, { state: 'applied' }) }) : x; });
+            var o = Object.assign({}, s.over); o[key] = { applies: ch.to, reviewed: true };
+            var r = Object.assign({}, s.resolved); r[key] = true;
+            self.setState({ threads: t, over: o, resolved: r });
+          },
+          keep: function () {
+            var t = Object.assign({}, s.threads); t[key] = t[key].map(function (x, j) { return j === i ? Object.assign({}, x, { change: Object.assign({}, x.change, { state: 'kept' }) }) : x; });
+            self.setState({ threads: t });
+          }
+        };
+      });
+      selVals.resolveLabel = s.resolved[key] ? 'Reopen' : 'Resolve';
+      selVals.resolve = function () { var r = Object.assign({}, s.resolved); r[key] = !r[key]; self.setState({ resolved: r }); };
+      selVals.send = function () {
+        var t = Object.assign({}, s.threads);
+        t[key] = (t[key] || []).concat([{ who: 'You', text: s.reply.trim() }, { who: 'reply', text: 'Noted. This will be checked against the item definition, and a proposed change will appear here if one is needed.' }]);
+        var r = Object.assign({}, s.resolved); delete r[key];
+        self.setState({ threads: t, reply: '', resolved: r });
+      };
+    }
+
+    var titleOf = function (key) { var p = key.split('.'); return byId[p[0]].name + (p[1] === 'asset' ? '' : ' · ' + propName[p[1]]); };
+    var list = [];
+    if (s.railFilter === 'open') {
+      list = Object.keys(s.threads).filter(hasThread).map(function (t) { var m = s.threads[t]; var last = m[m.length - 1]; return { key: t, tag: 'Comment', cls: 'tag t-grey', title: titleOf(t), snippet: (last.who === 'You' ? 'You: ' : '') + last.text }; });
+    } else {
+      list = Object.keys(s.resolved).filter(function (t) { return s.resolved[t]; }).map(function (t) { return { key: t, tag: 'Resolved', cls: 'tag t-grey', title: titleOf(t), snippet: 'Resolved' }; });
+    }
+    list = list.filter(function (t) { return t.key !== s.sel && (!s.sel || t.key.indexOf(s.sel.split('.')[0] + '.') === 0); }).map(function (t, i) { return Object.assign({}, t, { i: i, pick: function () { self.setState({ sel: t.key, reply: '', draft: '', changing: false }); } }); });
+
+    var openThreads = Object.keys(s.threads).filter(hasThread).length;
+    var needYou = openAsm.length + openThreads;
+    return {
+      lines: lines, propHeads: propHeads,
+      asmCount: (s.railFilter === 'open' ? openAsm : doneAsm).length, threadCount: list.length,
+      legendOpen: s.legend, legendStr: s.legend ? 'true' : 'false', toggleLegend: function () { self.setState({ legend: !s.legend }); },
+      clearSel: function (ev) {
+        var t = ev && ev.target;
+        if (!t || !t.closest) return;
+        var patch = {};
+        if (s.legend && !t.closest('.legendpop, .helpb')) patch.legend = false;
+        if (s.sel && !t.closest('.pcell, .cell, .tlink, aside, nav, button, input, textarea, label, a, .legendpop')) { patch.sel = null; patch.changing = false; patch.draft = ''; }
+        if ('sel' in patch && s.rail && !s.closing) {
+          delete patch.sel;
+          if (Object.keys(patch).length) self.setState(patch);
+          self.closeRail(true);
+          return;
+        }
+        if (Object.keys(patch).length) self.setState(patch);
+      },
+      tableCls: 'assets' + (s.density === 'compact' ? ' compact' : ''),
+      compactStr: s.density === 'compact' ? 'true' : 'false',
+      densTitle: s.density === 'compact' ? 'Compact rows: on' : 'Compact rows: off',
+      toggleDensity: function () { self.setState({ density: s.density === 'compact' ? 'comfortable' : 'compact' }); },
+      bandTints: PROPS.map(function (p, i) { return 'background: #F7F6F2' + (i === 0 ? '; box-shadow: inset 1px 0 0 #DAD8D1' : ''); }),
+      asmList: asmView(s.railFilter === 'open' ? openAsm : doneAsm).map(function (x, i) { return Object.assign(x, { i: i }); }), asmEmpty: (s.railFilter === 'open' ? openAsm : doneAsm).length === 0,
+      needYou: needYou, hasNeed: needYou > 0,
+      needSplit: needYou ? ': ' + openAsm.length + (openAsm.length === 1 ? ' assumption, ' : ' assumptions, ') + openThreads + (openThreads === 1 ? ' comment' : ' comments') : '',
+      asmNav: 'font-weight: 500; gap: 8px; transition: background-color .25s cubic-bezier(.32,.72,0,1), color .25s cubic-bezier(.32,.72,0,1); ' + (s.rail ? 'background: #1C1B19; color: #FFFFFF' : 'color: #1C1B19'), filters: filters, railFilters: railFilters,
+      assetCount: this.ASSETS.length, shownCount: shown.length, noRows: shown.length === 0,
+      needTotal: needTotal, cellTotal: cellTotal, doneTotal: cellTotal - needTotal,
+      barFill: 'display: block; height: 100%; border-radius: 99px; background: #346538; width: ' + Math.round((cellTotal - needTotal) / cellTotal * 100) + '%',
+      openAsmCount: openAsm.length,
+      needDot: 'width: 7px; height: 7px; border-radius: 99px; background: ' + (needYou ? '#E8C66A' : '#346538'),
+      cannotFinish: openAsm.length > 0,
+      finishLabel: openAsm.length ? 'Finish review · ' + openAsm.length + ' assumptions open' : 'Finish asset review',
+      q: s.q, onSearch: function (ev) { self.setState({ q: ev.target.value }); },
+      railOpen: s.rail, railOpenStr: s.rail ? 'true' : 'false',
+      toggleRail: function () { if (s.rail && !s.closing) self.closeRail(); else self.setState({ rail: true, closing: false }); },
+      asideCls: 'panel drawer',
+      railWrap: (s.rail && !s.closing) ? 'transform: translateX(0); opacity: 1' : 'transform: translateX(calc(100% + 32px)); opacity: 0; pointer-events: none',
+      openThreads: openThreads,
+      hasSel: !!s.sel, noSel: !s.sel, sel: selVals,
+      reply: s.reply, onReply: function (ev) { self.setState({ reply: ev.target.value }); }, replyShort: s.reply.trim().length < 2,
+      draft: s.draft, onDraft: function (ev) { self.setState({ draft: ev.target.value }); }, draftShort: s.draft.trim().length < 3,
+      cancelChange: function () { self.setState({ changing: false, draft: '' }); },
+      listTitle: s.sel ? (s.railFilter === 'open' ? 'Other comments on this item' : 'Resolved on this item') : (s.railFilter === 'open' ? 'Open comments' : 'Resolved comments'),
+      showList: !s.sel || list.length > 0,
+      crumb: s.sel ? byId[s.sel.split('.')[0]].name : '',
+      clearPick: function () { self.setState({ sel: null, changing: false, draft: '', reply: '' }); },
+      threadList: list, listEmpty: list.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>
