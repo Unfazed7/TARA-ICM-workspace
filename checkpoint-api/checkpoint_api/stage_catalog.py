@@ -42,7 +42,7 @@ STAGES: tuple[StageDefinition, ...] = (
         (2,),
         ("asset-register.json",),
         "Asset review",
-        True,
+        False,
     ),
     StageDefinition(
         4,

@@ -1,4 +1,4 @@
-"""Document upload with type, and the automatic Stage 01 then Stage 02 run (spec 22, D-43)."""
+"""Document upload with type, and the automatic Stage 01, 02 and 03 run (specs 22 and 27, D-43)."""
 
 import json
 import re
@@ -175,7 +175,7 @@ def get_boundary(assessment_id: str, claims: dict = Depends(get_current_claims),
 def status_body(db: Session, assessment_id: str) -> dict:
     folder = documents_dir(assessment_id)
     stages = []
-    for stage in ("01", "02"):
+    for stage in ("01", "02", "03"):
         row = db.query(m.StageJob).filter_by(assessment_id=assessment_id, stage=stage).first()
         stages.append({
             "stage": stage,
@@ -207,8 +207,8 @@ def start_run(assessment_id: str, background_tasks: BackgroundTasks, claims: dic
     if not document_list(documents_dir(assessment_id)):
         log.warning("%s | Execute refused: no documents uploaded", assessment_id)
         raise HTTPException(status_code=422, detail="Upload at least one document first.")
-    j1, j2 = job(db, assessment_id, "01"), job(db, assessment_id, "02")
-    for row, state in ((j1, "pending"), (j2, "not_started")):
+    j1, j2, j3 = job(db, assessment_id, "01"), job(db, assessment_id, "02"), job(db, assessment_id, "03")
+    for row, state in ((j1, "pending"), (j2, "not_started"), (j3, "not_started")):
         row.status, row.error_message, row.run_number, row.refused_count = state, None, None, None
         row.started_at = row.completed_at = None
     db.commit()

@@ -18,7 +18,7 @@ from . import stage_models as m
 
 
 SCHEMAS_DIR = Path(os.getenv("TARA_SCHEMAS_DIR", Path(__file__).resolve().parents[2] / "src" / "schemas"))
-STAGES = ("01", "02")
+STAGES = ("01", "02", "03")
 EXTERNAL_ZONES = {"internet_external", "corporate_it", "third_party_saas", "vehicle_field_device"}
 
 MESSAGES = {
@@ -906,6 +906,10 @@ def read_stage_02(db: Session, run: m.StageRun) -> dict:
 
 
 def read_output(db: Session, run: m.StageRun) -> dict:
+    if run.stage == "03":
+        from . import stage03
+
+        return stage03.read_output(db, run)
     output = read_stage_01(db, run) if run.stage == "01" else read_stage_02(db, run)
     based_on = db.get(m.StageRun, run.based_on_run_id) if run.based_on_run_id else None
     return {
@@ -931,21 +935,38 @@ class NoStage01(Exception):
     pass
 
 
+class NoStage02(Exception):
+    pass
+
+
 def store_run(db: Session, assessment_id: str, stage: str, payload: dict, created_by: str) -> dict:
     """Stores one stage run. Raises NothingAccepted (and stores nothing) if every item is refused."""
-    stage01 = None
+    stage01 = stage02 = previous = None
     if stage == "02":
         stage01 = current_run(db, assessment_id, "01")
         if stage01 is None:
             raise NoStage01()
+    if stage == "03":
+        stage02 = current_run(db, assessment_id, "02")
+        if stage02 is None:
+            raise NoStage02()
+        previous = current_run(db, assessment_id, "03")
+    based_on = stage01 or stage02
     last = db.query(func.max(m.StageRun.run_number)).filter_by(assessment_id=assessment_id, stage=stage).scalar() or 0
     run = m.StageRun(
         assessment_id=assessment_id, stage=stage, run_number=last + 1, created_by=created_by,
-        based_on_run_id=stage01.id if stage01 else None,
+        based_on_run_id=based_on.id if based_on else None,
     )
     db.add(run)
     db.flush()
-    writer = write_stage_01(db, run, payload) if stage == "01" else write_stage_02(db, run, stage01, payload)
+    if stage == "01":
+        writer = write_stage_01(db, run, payload)
+    elif stage == "02":
+        writer = write_stage_02(db, run, stage01, payload)
+    else:
+        from . import stage03
+
+        writer = stage03.write_stage_03(db, run, stage02, previous, payload)
     result = writer.result()
     if result["accepted_total"] == 0:
         db.rollback()
@@ -953,4 +974,8 @@ def store_run(db: Session, assessment_id: str, stage: str, payload: dict, create
     run.accepted_count = result["accepted_total"]
     run.refused_count = len(result["refused"])
     db.commit()
+    if stage == "03":
+        from . import stage03_bridge
+
+        stage03_bridge.write_register(db, assessment_id)
     return result

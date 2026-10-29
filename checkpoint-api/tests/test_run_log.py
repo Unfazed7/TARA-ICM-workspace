@@ -20,6 +20,7 @@ def setup(tmp_path, monkeypatch):
     monkeypatch.setenv("UPLOAD_DIR", str(tmp_path / "uploads"))
     monkeypatch.setenv("STAGE01_AGENT", str(FAKES / "stage01.js"))
     monkeypatch.setenv("STAGE02_AGENT", str(FAKES / "stage02.js"))
+    monkeypatch.setenv("STAGE03_AGENT", str(FAKES / "stage03.js"))
     monkeypatch.delenv("FAKE_FAIL", raising=False)
     monkeypatch.setenv("LOG_FILE", str(tmp_path / "logs" / "aegis.log"))
     run_log.setup()
@@ -79,7 +80,7 @@ def test_an_unexpected_error_is_logged_with_its_traceback_and_never_shown_empty(
 
     monkeypatch.setattr(stage_pipeline.stage_store, "read_output", boom)
     _, stages = start(client)
-    assert [x["status"] for x in stages] == ["complete", "failed"]
+    assert [x["status"] for x in stages] == ["complete", "failed", "not_started"]
     errors = [x["error"] for x in stages if x["status"] == "failed"]
     assert errors and all(e.endswith("NotImplementedError") for e in errors)
     text = logged(tmp_path)
@@ -100,5 +101,5 @@ def test_a_relative_upload_folder_still_reaches_the_stage_programs(client, tmp_p
     monkeypatch.chdir(work)
     monkeypatch.setenv("UPLOAD_DIR", "uploads")
     _, stages = start(client)
-    assert [x["status"] for x in stages] == ["complete", "complete"]
+    assert [x["status"] for x in stages] == ["complete", "complete", "complete"]
     assert (work / "uploads").is_dir()

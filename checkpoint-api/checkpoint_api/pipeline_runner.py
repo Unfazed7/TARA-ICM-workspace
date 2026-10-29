@@ -251,37 +251,8 @@ def build_stage1_args(assessment_id: str) -> list[str]:
     ]
 
 
-def write_item_definition_file(assessment_id: str) -> str:
-    """Writes the stored current Stage 02 output (same JSON as GET .../stages/02/runs/current/output)
-    to the file the Stage 03 agent reads, and returns its path."""
-    from . import stage_store
-
-    session = SessionLocal()
-    try:
-        run = stage_store.current_run(session, assessment_id, "02")
-        if run is None:
-            raise RuntimeError("Stage 02 has no stored result yet.")
-        output = stage_store.read_output(session, run)
-    finally:
-        session.close()
-    path = os.path.join(
-        WORKSPACE_ROOT, "artifacts", assessment_id, STAGE_DIRS[2], STAGE_OUTPUT_FILES[2]
-    )
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as handle:
-        json.dump(output, handle, ensure_ascii=False, indent=2)
-    return path
-
-
 def build_stage_args(assessment_id: str, stage_num: int) -> list[str]:
     output = lambda number: get_output_path(number, assessment_id)
-    if stage_num == 3:
-        # Stage 03 is built from the stored Item Definition (D-54), never from client documents.
-        return [
-            "--item-definition", write_item_definition_file(assessment_id),
-            "--assessment-id", assessment_id,
-            "--out", output(3),
-        ]
     args_map = {
         1: build_stage1_args(assessment_id),
         4: ["--assets", output(3), "--assessment-id", assessment_id, "--out", output(4)],
@@ -521,6 +492,12 @@ async def run_stage_subprocess(
         update_assessment_completion(session, assessment_id)
         session.commit()
     finally:
+        try:
+            from . import stage03_bridge
+
+            stage03_bridge.flush_pending(session, assessment_id)
+        except Exception:  # noqa: BLE001 -- never let the hand-over hide how the stage ended
+            session.rollback()
         if writer is not None:
             writer.close()
             if attempt_id:

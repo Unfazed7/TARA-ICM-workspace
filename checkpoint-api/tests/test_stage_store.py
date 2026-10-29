@@ -100,7 +100,7 @@ def test_stage_02_needs_stage_01(client, headers, assessment):
 
 
 def test_unknown_stage_is_404(client, headers, assessment):
-    assert s.post_run(client, headers, assessment, "03", {}).status_code == 404
+    assert s.post_run(client, headers, assessment, "04", {}).status_code == 404
 
 
 def test_service_login_can_store(client, assessment):

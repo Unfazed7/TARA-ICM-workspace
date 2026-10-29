@@ -1,4 +1,4 @@
-"""Automatic run of Stage 01 then Stage 02 for one assessment (spec 22, D-36).
+"""Automatic run of Stage 01, then Stage 02, then Stage 03 for one assessment (specs 22 and 27, D-36).
 
 The stage programs only write files. This runner stores their output through the
 stage store directly, then gives Stage 02 the *stored* Stage 01 result, never the
@@ -43,7 +43,11 @@ def documents_dir(assessment_id: str) -> Path:
 
 
 def agent(stage: str) -> str:
-    defaults = {"01": STAGES / "01-input-normalization" / "agent.js", "02": STAGES / "02-item-definition" / "agent.js"}
+    defaults = {
+        "01": STAGES / "01-input-normalization" / "agent.js",
+        "02": STAGES / "02-item-definition" / "agent.js",
+        "03": STAGES / "03-asset-identification" / "agent.js",
+    }
     return os.getenv(f"STAGE{stage}_AGENT", str(defaults[stage]))
 
 
@@ -139,11 +143,63 @@ def failure_text(stage: str, code: int, stdout: str, stderr: str) -> str:
     text = (stderr or stdout).strip()
     if stage == "02" and code == 3:
         return "The Item Definition did not pass its checks. Details are in stage02-log.json in the run folder."
+    if stage == "03" and code == 3:
+        return "The assets did not pass their checks. Details are in stage03-log.json in the run folder."
     return text or f"Stage {stage} stopped with exit code {code}."
 
 
+async def run_stage_03(db, assessment_id: str, run_dir: Path) -> bool:
+    """Stage 03 on the *stored* Stage 02 result (and the stored Stage 01 facts, for quotes), never the documents."""
+    j3 = job(db, assessment_id, "03")
+    out03, inputs = run_dir / "stage-03", run_dir / "stage03-input"
+    for folder in (out03, inputs):
+        folder.mkdir(parents=True, exist_ok=True)
+    mark(db, j3, "running", output_dir=str(out03))
+    try:
+        run02 = stage_store.current_run(db, assessment_id, "02")
+        run01 = stage_store.current_run(db, assessment_id, "01")
+        (inputs / "stage02.json").write_text(json.dumps(stage_store.read_output(db, run02)), encoding="utf-8")
+        (inputs / "stage01.json").write_text(json.dumps(stage_store.read_output(db, run01)), encoding="utf-8")
+    except Exception as exc:  # noqa: BLE001
+        mark(db, j3, "failed", f"Stage 02 has no stored result yet. {describe(exc)}")
+        return False
+    code, stdout, stderr = await run_node([agent("03"), "--stage02", str(inputs / "stage02.json"), "--stage01", str(inputs / "stage01.json"), "--out", str(out03)], assessment_id, "03")
+    if code != 0:
+        mark(db, j3, "failed", failure_text("03", code, stdout, stderr))
+        log.error("%s | Stage 03 failed", assessment_id)
+        return False
+    try:
+        result = store(db, assessment_id, "03", {
+            "assets": read_json(out03 / "assets.json"),
+            "rationale": read_json(out03 / "rationale.json"),
+        })
+    except (OSError, ValueError, RuntimeError) as exc:
+        db.rollback()
+        log.exception("%s | Stage 03 output could not be stored", assessment_id)
+        mark(db, j3, "failed", f"Stage 03 output could not be stored: {describe(exc)}")
+        return False
+    mark(db, j3, "complete", run_number=result["run_number"], refused_count=len(result["refused"]))
+    return True
+
+
+async def run_stage_03_only(assessment_id: str) -> None:
+    """Builds Stage 03 again on the current Stage 02 run (the "Rebuild assets" button)."""
+    db = SessionLocal()
+    try:
+        run_dir = upload_dir() / assessment_id / "runs" / utc_now().strftime("%Y%m%dT%H%M%S%fZ")
+        await run_stage_03(db, assessment_id, run_dir)
+    except Exception as exc:  # never leave the job stuck in "running"
+        log.exception("%s | The Stage 03 rebuild stopped unexpectedly", assessment_id)
+        db.rollback()
+        row = job(db, assessment_id, "03")
+        if row.status in {"pending", "running"}:
+            mark(db, row, "failed", f"The run stopped unexpectedly: {describe(exc)}")
+    finally:
+        db.close()
+
+
 async def run_pipeline(assessment_id: str) -> None:
-    """Runs Stage 01, stores it, runs Stage 02 on the stored result, stores it."""
+    """Runs Stage 01, stores it, runs Stage 02 on the stored result, stores it, then Stage 03 the same way."""
     db = SessionLocal()
     started = time.monotonic()
     try:
@@ -205,6 +261,8 @@ async def run_pipeline(assessment_id: str) -> None:
             mark(db, j2, "failed", f"Stage 02 output could not be stored: {describe(exc)}")
             return
         mark(db, j2, "complete", run_number=result["run_number"], refused_count=len(result["refused"]))
+
+        await run_stage_03(db, assessment_id, run_dir)
         log.info("%s | Run complete after %.1f s", assessment_id, time.monotonic() - started)
     except Exception as exc:  # never leave a job stuck in "running"
         log.exception("%s | The run stopped unexpectedly", assessment_id)

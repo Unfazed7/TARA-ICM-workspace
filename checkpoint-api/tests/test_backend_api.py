@@ -328,7 +328,7 @@ def test_stage_catalog_uses_canonical_ten_stage_flow(client):
     assert stages[2]["name"] == "Asset Identification"
     assert stages[2]["outputs"] == ["asset-register.json"]
     assert stages[9]["name"] == "Residual Risk"
-    assert [stage["stage_num"] for stage in stages if not stage["available"]] == [1, 2]
+    assert [stage["stage_num"] for stage in stages if not stage["available"]] == [1, 2, 3]
 
 
 def test_available_stages_have_runners():

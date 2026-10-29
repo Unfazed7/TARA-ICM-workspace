@@ -6,6 +6,8 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
+from .. import stage03_bridge
+from .. import stage_models as stage_m
 from ..asset_register_import import AssetImportError, import_asset_register
 from ..database import get_db
 from ..models import Assessment, PipelineRun
@@ -142,6 +144,7 @@ async def import_manual_asset_register(
     run.started_at = now
     run.completed_at = now
     db.flush()
+    stage03_bridge.note_upload(db, assessment_id, filename)
     update_assessment_completion(db, assessment_id)
     db.commit()
 
@@ -164,6 +167,9 @@ def manual_asset_register_status(
     output_path = Path(get_output_path(3, assessment_id))
     if not output_path.exists():
         return AssetRegisterStatusResponse(uploaded=False)
+    state = db.query(stage_m.AssetRegisterState).filter_by(assessment_id=assessment_id).first()
+    if state is not None and state.source == "stage03":
+        return AssetRegisterStatusResponse(uploaded=False)  # the register is Stage 03's own, not an uploaded list
 
     metadata_path = asset_register_metadata_path(assessment_id)
     if metadata_path.exists():

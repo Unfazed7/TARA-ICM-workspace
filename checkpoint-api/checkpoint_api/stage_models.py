@@ -511,3 +511,108 @@ class StageJob(StageBase):
     output_dir = Column(String, nullable=True)
     started_at = Column(DateTime(timezone=True), nullable=True)
     completed_at = Column(DateTime(timezone=True), nullable=True)
+
+
+# ── Stage 03 (C12, spec 27) ───────────────────────────────────────────────────
+
+
+class Asset(StageBase):
+    """One asset of a Stage 03 run. The analyst's review of it (confirm or remove) sits on the row and carries over to a re-run."""
+
+    __tablename__ = "assets"
+    __table_args__ = (UniqueConstraint("run_id", "asset_id"),)
+
+    id = Column(Integer, primary_key=True)
+    run_id = run_fk()
+    position = Column(Integer, nullable=False)
+    asset_id = Column(String, nullable=False)
+    family = Column(String(4), nullable=False)
+    name = Column(String, nullable=False)
+    type_label = Column(String, nullable=False)
+    description = Column(Text, nullable=False)
+    source_kind = Column(String, nullable=False)
+    source_ids = Column(Json, nullable=False)
+    source_label = Column(String, nullable=False)
+    scope_status = Column(String, nullable=False)
+    interface = Column(Boolean, nullable=False, default=False)
+    would_change = Column(Text, nullable=False)
+    fact_ids = Column(Json, nullable=False)
+    asset_type_row = Column(Boolean, nullable=False, default=True)
+    status = Column(String, nullable=False, default="proposed")  # proposed | confirmed | removed
+    status_note = Column(Text, nullable=True)
+    status_by = Column(String, nullable=True)
+    status_at = Column(DateTime(timezone=True), nullable=True)
+
+    properties = relationship("AssetProperty", order_by="AssetProperty.position", cascade="all, delete-orphan", passive_deletes=True)
+
+
+class AssetProperty(StageBase):
+    __tablename__ = "asset_properties"
+    __table_args__ = (UniqueConstraint("asset_pk", "property"),)
+
+    id = Column(Integer, primary_key=True)
+    asset_pk = Column(Integer, ForeignKey("assets.id", ondelete="CASCADE"), nullable=False, index=True)
+    position = Column(Integer, nullable=False)
+    property = Column(String(2), nullable=False)  # C | I | A | Au | Az | NR
+    applies = Column(Boolean, nullable=False)
+    reason = Column(Text, nullable=False)
+    origin = Column(String, nullable=False)  # default | model | analyst
+    reviewed = Column(Boolean, nullable=False, default=True)
+    reviewed_by = Column(String, nullable=True)
+    reviewed_at = Column(DateTime(timezone=True), nullable=True)
+
+
+class AssetComment(StageBase):
+    """A message in the thread on an asset or one of its properties. Kept outside runs, like reviews."""
+
+    __tablename__ = "asset_comments"
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    run_number = Column(Integer, nullable=False)
+    asset_id = Column(String, nullable=False)
+    property = Column(String(2), nullable=True)  # None: the thread is about the asset
+    author = Column(String, nullable=False)  # analyst | assistant
+    author_id = Column(String, nullable=True)
+    text = Column(Text, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    resolved = Column(Boolean, nullable=False, default=False)
+    proposed_change = Column(Json, nullable=True)  # {property, applies, state: open | applied | kept}
+
+
+class StageReview(StageBase):
+    """The analyst finishing the review of a stage (Stage 03). Records who and when; it gates nothing."""
+
+    __tablename__ = "stage_reviews"
+    __table_args__ = (UniqueConstraint("assessment_id", "stage"),)
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    stage = Column(String(2), nullable=False)
+    finished_by = Column(String, nullable=False)
+    finished_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+
+class AssetRegisterId(StageBase):
+    """The stable AS_nn number the later stages know an asset by, kept across re-runs for the same asset id and source."""
+
+    __tablename__ = "asset_register_ids"
+    __table_args__ = (UniqueConstraint("assessment_id", "asset_id", "source_key"), UniqueConstraint("assessment_id", "number"))
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    asset_id = Column(String, nullable=False)
+    source_key = Column(String, nullable=False)
+    number = Column(Integer, nullable=False)
+
+
+class AssetRegisterState(StageBase):
+    """Where the register the later stages read came from: Stage 03 or an uploaded list. `pending` waits for a running stage."""
+
+    __tablename__ = "asset_register_state"
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, unique=True, index=True)
+    source = Column(String, nullable=False, default="stage03")  # stage03 | upload:<file name>
+    pending = Column(Boolean, nullable=False, default=False)
+    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)

@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from .. import pipeline_runner, stage_store
+from .. import pipeline_runner
 from ..database import get_db
 from ..models import Assessment, PipelineRun, PipelineRunAttempt
 from ..pipeline_runner import (
@@ -120,15 +120,6 @@ def require_dependencies(db: Session, assessment_id: str, stage_num: int) -> Non
     if stage is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stage not found")
     for dep in stage.dependencies:
-        if dep == 2:
-            # Stage 02 lives in the stage store (stage_runs), not in PipelineRun.
-            # No review gate: a stored current run is enough (D-54).
-            if stage_store.current_run(db, assessment_id, "02") is None:
-                raise HTTPException(
-                    status_code=status.HTTP_409_CONFLICT,
-                    detail=f"Stage {stage_num} requires stage 02 (Item Definition) to have a stored result first",
-                )
-            continue
         dep_run = get_run(db, assessment_id, dep)
         if not dep_run or dep_run.status != "complete":
             raise HTTPException(

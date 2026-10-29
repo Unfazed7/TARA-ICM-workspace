@@ -20,6 +20,7 @@ def setup(tmp_path, monkeypatch):
     monkeypatch.setenv("UPLOAD_DIR", str(tmp_path / "uploads"))
     monkeypatch.setenv("STAGE01_AGENT", str(FAKES / "stage01.js"))
     monkeypatch.setenv("STAGE02_AGENT", str(FAKES / "stage02.js"))
+    monkeypatch.setenv("STAGE03_AGENT", str(FAKES / "stage03.js"))
     monkeypatch.delenv("FAKE_FAIL", raising=False)
     yield
 
@@ -120,11 +121,11 @@ def test_run_without_documents_is_refused(client, headers, assessment):
     assert response.status_code == 422
 
 
-def test_one_run_call_completes_both_stages_and_stores_them(client, headers, assessment, tmp_path):
+def test_one_run_call_completes_all_three_stages_and_stores_them(client, headers, assessment, tmp_path):
     ready(client, headers, assessment)
     assert client.post(f"/api/v1/assessments/{assessment}/run", headers=headers).status_code == 202
     body = status(client, headers, assessment)
-    assert [(x["stage"], x["status"], x["run_number"], x["refused_count"]) for x in body["stages"]] == [("01", "complete", 1, 0), ("02", "complete", 1, 0)]
+    assert [(x["stage"], x["status"], x["run_number"], x["refused_count"]) for x in body["stages"]] == [("01", "complete", 1, 0), ("02", "complete", 1, 0), ("03", "complete", 1, 0)]
     assert body["documents"] == 2 and body["boundary_set"] is True
 
     out01 = client.get(f"/api/v1/assessments/{assessment}/stages/01/runs/current/output", headers=headers).json()
@@ -135,26 +136,30 @@ def test_one_run_call_completes_both_stages_and_stores_them(client, headers, ass
     run_dir = next((tmp_path / "uploads" / assessment / "runs").iterdir())
     assert (run_dir / "stage-01" / "seen-input.txt").read_text().endswith(f"{assessment}/documents")
     assert (run_dir / "stage-02" / "seen-boundary.txt").read_text().endswith("boundary.txt")
+    # Stage 03 is given the stored Stage 02 result, never the documents.
+    assert (run_dir / "stage-03" / "seen-input.txt").read_text().endswith("stage02.json")
 
 
 def test_failed_stage_01_shows_the_error_and_leaves_stage_02_not_started(client, headers, assessment, monkeypatch):
     ready(client, headers, assessment)
     monkeypatch.setenv("FAKE_FAIL", "missing")
     client.post(f"/api/v1/assessments/{assessment}/run", headers=headers)
-    stage01, stage02 = status(client, headers, assessment)["stages"]
+    stage01, stage02, stage03 = status(client, headers, assessment)["stages"]
     assert stage01["status"] == "failed"
     assert "Missing input" in stage01["error"]
     assert stage02["status"] == "not_started"
+    assert stage03["status"] == "not_started"
 
 
 def test_a_crashing_stage_is_reported_not_left_running(client, headers, assessment, monkeypatch):
     ready(client, headers, assessment)
     monkeypatch.setenv("STAGE02_AGENT", str(FAKES / "does-not-exist.js"))
     client.post(f"/api/v1/assessments/{assessment}/run", headers=headers)
-    stage01, stage02 = status(client, headers, assessment)["stages"]
+    stage01, stage02, stage03 = status(client, headers, assessment)["stages"]
     assert stage01["status"] == "complete"
     assert stage02["status"] == "failed"
     assert stage02["error"]
+    assert stage03["status"] == "not_started"  # Stage 02 has no partial runs, so Stage 03 waits
 
 
 def test_two_assessments_do_not_share_outputs(client, headers, tmp_path):
@@ -184,4 +189,4 @@ def test_rerun_creates_new_stored_runs(client, headers, assessment):
     ready(client, headers, assessment)
     client.post(f"/api/v1/assessments/{assessment}/run", headers=headers)
     client.post(f"/api/v1/assessments/{assessment}/run", headers=headers)
-    assert [x["run_number"] for x in status(client, headers, assessment)["stages"]] == [2, 2]
+    assert [x["run_number"] for x in status(client, headers, assessment)["stages"]] == [2, 2, 2]

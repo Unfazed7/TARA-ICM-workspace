@@ -24,7 +24,7 @@ ATTENTION_ORDER = {"needs_attention": 0, "information": 1}
 
 def check_stage(stage: str) -> str:
     if stage not in stage_store.STAGES:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown stage. Use 01 or 02.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown stage. Use 01, 02 or 03.")
     return stage
 
 
@@ -70,6 +70,8 @@ def create_run(
         return stage_store.store_run(db, assessment_id, stage, payload, created_by=current_user_id(claims))
     except stage_store.NoStage01:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Stage 01 has no stored output yet.")
+    except stage_store.NoStage02:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Stage 02 has no stored result yet.")
     except stage_store.NothingAccepted as exc:
         return JSONResponse(status_code=422, content={"accepted_total": 0, "refused": exc.refused})
 
