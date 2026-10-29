@@ -62,7 +62,7 @@ export function StageRunnerPanel({ assessmentId, stageNums, onStageStart, status
   const assetRegisterStatusQuery = useQuery({
     queryKey: ['asset-register-upload', assessmentId],
     queryFn: () => api.uploads.assetRegisterStatus(assessmentId),
-    enabled: !!assessmentId && stageNums.includes(3),
+    enabled: !!assessmentId && (stageNums.includes(3) || stageNums.includes(4)),
   });
   const stageRunQueries = useQueries({
     queries: stageNums.map((stageNum) => ({
@@ -89,6 +89,7 @@ export function StageRunnerPanel({ assessmentId, stageNums, onStageStart, status
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['assessment', assessmentId] }),
         queryClient.invalidateQueries({ queryKey: ['stage-output', assessmentId, 3] }),
+        queryClient.invalidateQueries({ queryKey: ['stage03', assessmentId] }),
       ]);
       toast.success(`${result.asset_count} Assets imported; Stage 03 marked complete`);
     } catch (err) {
@@ -130,7 +131,7 @@ export function StageRunnerPanel({ assessmentId, stageNums, onStageStart, status
   return (
     <div className="space-y-3">
 
-      {stageNums.includes(3) && <div
+      {(stageNums.includes(3) || stageNums.includes(4)) && <div
         className={assetStatusError
           ? 'space-y-3 rounded-xl border border-state-red-border bg-state-red p-3'
           : hasAssetUpload
@@ -162,7 +163,7 @@ export function StageRunnerPanel({ assessmentId, stageNums, onStageStart, status
               </div>
             ) : (
               <p className="mt-1 text-xs text-muted-foreground">
-                Upload a CSV or XLSX asset list to replace the one generated from the item definition. Stage 03 can no longer be replaced once a later stage has started.
+                Upload a CSV or XLSX asset list to replace the one built on 03 Assets. It can no longer be replaced once Stage 04 or later has started. Rebuild the assets on 03 to use that list again.
               </p>
             )}
             {assetStatusError && hasAssetUpload && (

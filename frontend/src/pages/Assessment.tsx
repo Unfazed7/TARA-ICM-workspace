@@ -1,7 +1,7 @@
 /**
- * Stage screens (D-46, D-51, spec 24): 01 Documents, 02 Item Definition, and the four pipeline pages
- * 03 Assets & Damage, 04 Threat Analysis, 05 Risk & Treatment, 06 Review & Publish (D-54). The
- * Assumptions of the current stage open from the top bar, and Settings has "What I read".
+ * Stage screens (D-46, D-51, spec 24): 01 Documents, 02 Item Definition, 03 Assets (D-56), and the pipeline
+ * pages 04 Impacts, 05 Threat Analysis, 06 Risk & Treatment, 07 Review & Publish (D-59). The Assumptions of
+ * the current stage open from the top bar, and Settings has "What I read".
  */
 
 import { useMemo, useState } from 'react';
@@ -14,6 +14,8 @@ import { Badge } from '@/components/ui/badge';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { TaraProvider } from '@/contexts/TaraContext';
 import { PhasePage } from '@/components/stages/PhasePage';
+import { AssetsStage } from '@/components/stages/AssetsStage';
+import { useAssetsData } from '@/components/stages/assets/useAssetsData';
 import { workflowStages, type WorkflowPhase } from '@/lib/workflow';
 import { useMotionPreset } from '@/lib/motion';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
@@ -27,27 +29,28 @@ import { SideSheet } from '@/components/layout/SideSheet';
 import { WhatIRead } from '@/components/stages/WhatIRead';
 import { affectedIds, buildCards, type Card, needsYou } from '@/components/stages/assumptions';
 
-/** The pill keys. 01 and 02 are API stage ids; 03 to 06 are pages that group the pipeline stages 03 to 10. */
-type PhaseKey = StageKey | '03' | '04' | '05' | '06';
+/** The pill keys. 01 to 03 are stage screens; 04 to 07 are pages that group the pipeline stages 04 to 10. */
+type PhaseKey = StageKey | '04' | '05' | '06' | '07';
 
 const TABS: { key: PhaseKey; label: string; ready: boolean; note?: string }[] = [
   { key: '01', label: 'Documents', ready: true },
   { key: '02', label: 'Item Definition', ready: true },
-  { key: '03', label: 'Assets & Damage', ready: true },
-  { key: '04', label: 'Threat Analysis', ready: true },
-  { key: '05', label: 'Risk & Treatment', ready: true },
-  { key: '06', label: 'Review & Publish', ready: true },
+  { key: '03', label: 'Assets', ready: true },
+  { key: '04', label: 'Impacts', ready: true },
+  { key: '05', label: 'Threat Analysis', ready: true },
+  { key: '06', label: 'Risk & Treatment', ready: true },
+  { key: '07', label: 'Review & Publish', ready: true },
 ];
 
 const PHASE_OF: Partial<Record<PhaseKey, WorkflowPhase>> = {
-  '03': 'assets-damage',
-  '04': 'threat-analysis',
-  '05': 'risk-treatment',
-  '06': 'review-publish',
+  '04': 'impacts',
+  '05': 'threat-analysis',
+  '06': 'risk-treatment',
+  '07': 'review-publish',
 };
 
-/** The pipeline stage whose Assumptions a page shows (D-54). Pages 04 and 06 have none yet. */
-const ASSUMPTION_STAGE: Partial<Record<PhaseKey, number>> = { '03': 3, '05': 10 };
+/** The pipeline stage whose Assumptions a page shows, written next to its output (read-only for now). */
+const ASSUMPTION_STAGE: Partial<Record<PhaseKey, number>> = { '06': 10 };
 
 /** The kinds of area the diagram shows, as coloured tags for the workspace header. */
 function zoneTags(def: { zones: { kind: string }[]; containers: { kind: string; zone_id?: string }[] }) {
@@ -71,6 +74,9 @@ export default function Assessment() {
   const [tab, setTab] = useState<PhaseKey>('01');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+  // 03 Assets keeps its own panel; the top bar's Assumptions button only tells it to open or close.
+  const [assetsRail, setAssetsRail] = useState(false);
+  const [assetsToggle, setAssetsToggle] = useState(0);
   const [openCard, setOpenCard] = useState<Card | null>(null);
   const [filterId, setFilterId] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -84,8 +90,8 @@ export default function Assessment() {
   const rat01 = useQuery({ queryKey: ['rationale', assessmentId, '01'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '01')) });
   const rat02 = useQuery({ queryKey: ['rationale', assessmentId, '02'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '02')) });
   const boundary = useQuery({ queryKey: ['boundary', assessmentId], queryFn: () => stagesApi.boundary(assessmentId) });
-  // Stages 03 and 10 write their Assumptions next to their output (read-only for now).
-  const rat03 = useQuery({ queryKey: ['pipeline-rationale', assessmentId, 3], queryFn: () => orNothing(stagesApi.pipelineRationale(assessmentId, 3)) });
+  const assets = useAssetsData(assessmentId);
+  // Stage 10 writes its Assumptions next to its output (read-only for now).
   const rat10 = useQuery({ queryKey: ['pipeline-rationale', assessmentId, 10], queryFn: () => orNothing(stagesApi.pipelineRationale(assessmentId, 10)) });
 
   const items01 = useMemo<RationaleItem[]>(() => rat01.data?.items ?? [], [rat01.data]);
@@ -101,22 +107,19 @@ export default function Assessment() {
   const scope = useMemo(() => new Map<string, ScopeStatus>([...decisions].map(([k, d]) => [k, d.status])), [decisions]);
 
   const phase = PHASE_OF[tab];
-  const items03 = useMemo<RationaleItem[]>(() => rat03.data?.items ?? [], [rat03.data]);
   const items10 = useMemo<RationaleItem[]>(() => rat10.data?.items ?? [], [rat10.data]);
-  const pipelineCards = (items: RationaleItem[]): Card[] => items.map((item) => ({ id: item.rationale_id, item, found: [] }));
-  const cards03 = useMemo(() => pipelineCards(items03), [items03]);
-  const cards10 = useMemo(() => pipelineCards(items10), [items10]);
+  const cards10 = useMemo<Card[]>(() => items10.map((item) => ({ id: item.rationale_id, item, found: [] })), [items10]);
 
   // Each stage shows only its own Assumptions (D-51).
   const stageCards = useMemo(
-    () => (tab === '01' || tab === '02' ? buildCards(items01, items02, tab) : tab === '03' ? cards03 : tab === '05' ? cards10 : []),
-    [items01, items02, tab, cards03, cards10],
+    () => (tab === '01' || tab === '02' ? buildCards(items01, items02, tab) : tab === '06' ? cards10 : []),
+    [items01, items02, tab, cards10],
   );
   const cards02 = useMemo(() => buildCards(items01, items02, '02'), [items01, items02]);
   const needCount = stageCards.filter(needsYou).length;
   const needs01 = useMemo(() => buildCards(items01, items02, '01').filter(needsYou).length, [items01, items02]);
   const needs02 = useMemo(() => cards02.filter(needsYou).length, [cards02]);
-  const needs03 = useMemo(() => cards03.filter(needsYou).length, [cards03]);
+  const needs03 = assets.needCount;
   const needs10 = useMemo(() => cards10.filter(needsYou).length, [cards10]);
 
   // Pages 03 to 06 note a failed stage (yellow) or a running one (blue) in the top bar.
@@ -125,6 +128,11 @@ export default function Assessment() {
     const p = PHASE_OF[key];
     if (!p || p === 'review-publish') return [];
     return workflowStages[p].map((n) => stages[String(n).padStart(2, '0')]);
+  };
+  const toggleAssumptions = () => {
+    if (tab === '03') setAssetsToggle((n) => n + 1);
+    else if (panelOpen && (tab === '01' || phase || sideOpen)) setPanelOpen(false);
+    else openAssumptions();
   };
   const viewCards = useMemo(
     () => (filterId ? stageCards.filter((c) => affectedIds(c, elements, links).has(filterId)) : stageCards),
@@ -161,7 +169,7 @@ export default function Assessment() {
       <div className="aegis-canvas-grid pointer-events-none fixed inset-0" aria-hidden="true" />
       <StageTopBar
         stages={TABS.map((t) => {
-          const open = t.key === '01' ? needs01 : t.key === '02' ? needs02 : t.key === '03' ? needs03 : t.key === '05' ? needs10 : 0;
+          const open = t.key === '01' ? needs01 : t.key === '02' ? needs02 : t.key === '03' ? needs03 : t.key === '06' ? needs10 : 0;
           const statuses = phaseStatus(t.key);
           if (t.key === tab) return { ...t, note: 'You are here', tone: 'blue' as const };
           if (statuses.includes('failed')) return { ...t, note: 'A stage failed', tone: 'yellow' as const };
@@ -172,9 +180,9 @@ export default function Assessment() {
         description={boundary.data?.text ?? undefined}
         current={tab}
         onStage={goTo}
-        needCount={needCount}
-        assumptionsOpen={panelOpen}
-        onAssumptions={() => (panelOpen && (tab === '01' || phase || sideOpen) ? setPanelOpen(false) : openAssumptions())}
+        needCount={tab === '03' ? needs03 : needCount}
+        assumptionsOpen={tab === '03' ? assetsRail : panelOpen}
+        onAssumptions={toggleAssumptions}
         assumptionsDisabled={phase && !ASSUMPTION_STAGE[tab] ? 'Assumptions for these stages come later' : undefined}
         onSettings={() => setSettingsOpen(true)}
       />
@@ -183,6 +191,8 @@ export default function Assessment() {
         <main className="min-w-0 flex-1">
           {tab === '01' ? (
             <DocumentsStage assessmentId={assessmentId} project={project} onOpenItemDefinition={() => goTo('02')} />
+          ) : tab === '03' ? (
+            <AssetsStage assessmentId={assessmentId} project={project} railToggle={assetsToggle} onRailChange={setAssetsRail} onOpenDocuments={() => goTo('01')} />
           ) : phase ? (
             <TaraProvider projectId={assessmentId}>
               <TooltipProvider delayDuration={200}>
@@ -355,7 +365,7 @@ export default function Assessment() {
         onOpenChange={(o) => { setPanelOpen(o); if (!o) setOpenCard(null); }}
         eyebrow={`Stage ${tab === '01' ? '01' : String(ASSUMPTION_STAGE[tab] ?? '').padStart(2, '0')} · ${stageCards.length} items`}
         title="Assumptions"
-        description={tab === '01' ? 'What Stage 01 assumed while reading the documents.' : tab === '03' ? 'What Stage 03 assumed while identifying the assets.' : 'What Stage 10 assumed while working out the risk with the controls.'}
+        description={tab === '01' ? 'What Stage 01 assumed while reading the documents.' : 'What Stage 10 assumed while working out the risk with the controls.'}
         width={520}
         badge={needCount > 0 ? <span className="aegis-signal-pill px-2.5 py-0.5 text-xs">{needCount} need you</span> : undefined}
       >

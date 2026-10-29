@@ -494,13 +494,15 @@ function RunCard({
 }) {
   const s01 = pipeline?.stages.find((s) => s.stage === '01');
   const s02 = pipeline?.stages.find((s) => s.stage === '02');
-  const failed = [s01, s02].find((s) => s?.status === 'failed');
+  const s03 = pipeline?.stages.find((s) => s.stage === '03');
+  const failed = [s01, s02, s03].find((s) => s?.status === 'failed');
   const state = failed ? 'failed' : locked ? 'running' : done ? 'done' : 'idle';
   const tone = TONE[state];
-  const title = failed ? `Stopped while ${failed.stage === '01' ? 'reading documents' : 'building the item definition'}` : tone.title;
+  const title = failed ? `Stopped while ${failed.stage === '01' ? 'reading documents' : failed.stage === '02' ? 'building the item definition' : 'identifying the assets'}` : tone.title;
   const steps = [
     { n: '1', label: 'Reading documents', s: s01 },
     { n: '2', label: 'Building the item definition', s: s02 },
+    { n: '3', label: 'Identifying the assets', s: s03 },
   ];
   const words = (status?: string) =>
     ({ complete: 'Done.', running: 'In progress. This usually takes a few minutes.', pending: 'Waiting to start.', failed: 'Stopped.', not_started: 'Not started.' })[status || 'not_started'];
@@ -514,7 +516,7 @@ function RunCard({
           <h2 id="run-h" className="m-0 text-base font-semibold">{title}</h2>
         </span>
         <span className="aegis-mono text-xs">
-          {starting && !s01?.started_at ? 'starting' : s01?.started_at && state !== 'idle' ? `started ${new Date(s01.started_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '2 steps'}
+          {starting && !s01?.started_at ? 'starting' : s01?.started_at && state !== 'idle' ? `started ${new Date(s01.started_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '3 steps'}
         </span>
       </div>
       <div className="flex flex-col gap-[18px] px-6 pb-6 pt-1.5">

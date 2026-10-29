@@ -1,12 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { calculateSheetProgress, calculateWorkflowProgress, canRunStage } from '../src/lib/workflow.ts';
+import { calculateSheetProgress, calculateWorkflowProgress, canRunStage, phaseTabs, stageDestination, stageForTab } from '../src/lib/workflow.ts';
 
 test('workflow progress is derived from completed backend stages', () => {
   assert.equal(calculateWorkflowProgress('assets-damage', { '03': 'complete', '04': 'not_started' }), 50);
   // Stage 10 (residual risk) is part of the risk phase (D-55).
   assert.equal(calculateWorkflowProgress('risk-treatment', { '07': 'complete', '08': 'complete', '09': 'complete' }), 75);
   assert.equal(calculateWorkflowProgress('risk-treatment', { '07': 'complete', '08': 'complete', '09': 'complete', '10': 'complete' }), 100);
+});
+
+test('the Impacts page runs Stage 04 alone, and the sheets and stages follow the new pills', () => {
+  assert.equal(calculateWorkflowProgress('impacts', { '04': 'complete' }), 100);
+  assert.deepEqual(phaseTabs.impacts, ['damage-analysis']);
+  assert.deepEqual(stageDestination[4], { phase: 'impacts', tab: 'damage-analysis' });
+  assert.equal(stageForTab['residual-risk'], 10);
 });
 
 test('a stage only runs when it is available and dependencies are complete', () => {

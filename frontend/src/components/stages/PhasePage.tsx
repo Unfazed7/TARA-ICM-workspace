@@ -20,6 +20,7 @@ import { phaseDefaultTab, phaseRunnerStages, stageDestination, type WorkflowPhas
 
 export const PHASE_TITLE: Record<WorkflowPhase, string> = {
   'assets-damage': 'Assets & damage',
+  impacts: 'Impacts',
   'threat-analysis': 'Threat analysis',
   'risk-treatment': 'Risk & treatment',
   'review-publish': 'Review & publish',
@@ -27,6 +28,7 @@ export const PHASE_TITLE: Record<WorkflowPhase, string> = {
 
 const PHASE_HINT: Record<WorkflowPhase, string> = {
   'assets-damage': 'Assets are built from the item definition; damage scenarios follow from them.',
+  impacts: 'Damage scenarios follow from the assets and their properties.',
   'threat-analysis': 'Threats and attack paths for each damage scenario.',
   'risk-treatment': 'Impact, risk, treatment and what is left after the controls.',
   'review-publish': 'The whole analysis in one place, and the reports.',

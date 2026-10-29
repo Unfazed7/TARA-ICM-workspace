@@ -1,8 +1,10 @@
-export type WorkflowPhase = 'assets-damage' | 'threat-analysis' | 'risk-treatment' | 'review-publish';
+export type WorkflowPhase = 'assets-damage' | 'impacts' | 'threat-analysis' | 'risk-treatment' | 'review-publish';
 export type StageStatus = 'not_started' | 'pending' | 'running' | 'paused' | 'cancelled' | 'complete' | 'failed';
 
 export const workflowStages: Record<WorkflowPhase, number[]> = {
   'assets-damage': [3, 4],
+  // Pill 04 Impacts: Stage 03 is the 03 Assets screen (D-59), so this page runs Stage 04 alone.
+  impacts: [4],
   'threat-analysis': [5, 6],
   'risk-treatment': [7, 8, 9, 10],
   'review-publish': [9],
@@ -46,6 +48,7 @@ export type TaraTab =
 
 export const phaseTabs: Record<WorkflowPhase, TaraTab[]> = {
   'assets-damage': ['asset-id', 'damage-analysis'],
+  impacts: ['damage-analysis'],
   'threat-analysis': ['threat-analysis', 'attack-trees', 'attack-path'],
   'risk-treatment': ['impact-rating', 'feasibility', 'risk-treatment', 'cybersecurity-goals', 'residual-risk'],
   'review-publish': ['final-tara', 'reports'],
@@ -69,6 +72,7 @@ export const stageForTab: Partial<Record<TaraTab, number>> = {
 /** The sheet a phase opens on. */
 export const phaseDefaultTab: Record<WorkflowPhase, TaraTab> = {
   'assets-damage': 'asset-id',
+  impacts: 'damage-analysis',
   'threat-analysis': 'threat-analysis',
   'risk-treatment': 'impact-rating',
   'review-publish': 'final-tara',
@@ -77,7 +81,7 @@ export const phaseDefaultTab: Record<WorkflowPhase, TaraTab> = {
 /** Where the result of a pipeline stage is shown. */
 export const stageDestination: Record<number, { phase: WorkflowPhase; tab: TaraTab }> = {
   3: { phase: 'assets-damage', tab: 'asset-id' },
-  4: { phase: 'assets-damage', tab: 'damage-analysis' },
+  4: { phase: 'impacts', tab: 'damage-analysis' },
   5: { phase: 'threat-analysis', tab: 'threat-analysis' },
   6: { phase: 'threat-analysis', tab: 'attack-path' },
   7: { phase: 'risk-treatment', tab: 'impact-rating' },
@@ -89,6 +93,7 @@ export const stageDestination: Record<number, { phase: WorkflowPhase; tab: TaraT
 /** The stages shown in the runner of a phase. */
 export const phaseRunnerStages: Record<Exclude<WorkflowPhase, 'review-publish'>, number[]> = {
   'assets-damage': [3, 4],
+  impacts: [4],
   'threat-analysis': [5, 6],
   'risk-treatment': [7, 8, 9, 10],
 };
