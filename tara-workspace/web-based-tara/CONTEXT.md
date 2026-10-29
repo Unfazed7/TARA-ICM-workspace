@@ -19,7 +19,7 @@ Loaded by `run-web-tara.js` at the start of each assessment. The flow and its ru
 | 09 Risk Treatment | `stages/09-risk-treatment/` | AI | `risk-register.json` | `risk-treatment.json` | Optional |
 | 10 Residual Risk | `stages/10-residual-risk/` | Deterministic | `risk-register.json` plus `risk-treatment.json` | `residual-risk.json` | None |
 
-Stages 01 and 02 run automatically one after the other; each stage's output and Rationale appear on its page as soon as it finishes (D-36, D-37). Stages 03 onwards are started by hand until they are rebuilt. Only Stage 01 reads client documents. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
+Stages 01 and 02 run automatically one after the other; each stage's output and Rationale appear on its page as soon as it finishes (D-36, D-37). Stage 03 runs after Stage 02 in the same Execute (D-53); Stages 04 onwards are started by hand until they are rebuilt. Only Stage 01 reads client documents. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
 
 ### Runtime catalogue
 

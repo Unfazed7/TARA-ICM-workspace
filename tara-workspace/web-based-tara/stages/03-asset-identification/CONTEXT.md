@@ -33,3 +33,7 @@ Light review of the asset list; full review of the CIAAAN column, where every pr
 ## What the next stage receives
 
 Stage 04 (Damage Analysis) receives `asset-register.json`.
+
+## How it runs now
+
+`agent.js` derives candidate assets and default properties in code from `_config/asset-rules.md` (`lib/candidates.js`), asks one model call for the words (`lib/model.js`, `prompts/assets.md`), checks the result (`lib/checks.js`) and writes `assets.json` and `assets-rationale.json` to the output folder. The API stores them and rewrites `asset-register.json` for Stage 04 (D-53, D-54). Specs 26 to 28.

@@ -1,6 +1,6 @@
 # Spec 26: Stage 03 Asset Identification (C12, part 1: derivation)
 
-**Status:** draft, waiting for the analyst (2026-10-26). Analyst choices: table first, the AI proposes changes; asset types with no row and optional properties are added only by the model with a reason.
+**Status:** implemented (2026-10-29), with an asset-level `reason` added to the schema. Analyst choices: table first, the AI proposes changes; asset types with no row and optional properties are added only by the model with a reason.
 **Code:** `stages/03-asset-identification/agent.js` and `lib/`, `_engines/asset-rules.js` (new), `_config/asset-rules.md` (new), `src/schemas/stage-03-assets.schema.json` (new).
 **Decisions:** D-36, D-37, D-46, D-52. **Read first:** DR-15, answers G1 to G4.
 

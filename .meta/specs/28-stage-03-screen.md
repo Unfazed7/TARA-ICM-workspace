@@ -1,6 +1,6 @@
 # Spec 28: Stage 03 Assets Screen (C12, part 3)
 
-**Status:** draft, waiting for the analyst (2026-10-26). Layout to be confirmed against the analyst's design (D-51) before building.
+**Status:** implemented (2026-10-29) from the design in `.meta/design/03-assets/`. Differences from the design: the app's own top bar and header replace the design's; seven pills show only from 1360px; a property that applies but is not reviewed is drawn faded; the panel shows "Would change it" under the reason; the composer is focused after a double-click; thread times are real, not "yesterday"; the rail is `min(400px, 100%)` on phones; a third Execute step; Geist is self-hosted. Pixel diff against the design is 3 to 4%, mostly the shell and font metrics (`frontend/tests/visual/03-assets/`, git-ignored).
 **Code:** `frontend/src/components/stages/AssetsStage.tsx` (new), `pages/Assessment.tsx` (enable tab 03), `lib/stagesApi.ts`, `types/stages.ts`.
 **Decisions:** D-46, D-51, D-52. Builds on specs 24 and 27. **Read first:** G3.
 

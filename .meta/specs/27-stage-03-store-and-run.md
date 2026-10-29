@@ -1,6 +1,6 @@
 # Spec 27: Stage 03 Store, Run and Review API (C12, part 2)
 
-**Status:** draft, waiting for the analyst (2026-10-26).
+**Status:** implemented (2026-10-29). Code also in `stage03.py`, `stage03_bridge.py`, `routers/stage03.py`, `asset_rules.py`.
 **Code:** `checkpoint-api/checkpoint_api/stage_models.py` (migration `0004`), `stage_store.py`, `stage_pipeline.py`, `routers/stages.py`, `routers/pipeline_v2.py`.
 **Decisions:** D-36, D-42, D-52. Builds on specs 18, 22 and 26.
 
