@@ -1,12 +1,16 @@
 /** Calls for the Stage 01 and 02 screens (specs 22, 23, 24). */
 
 import type {
+  AssetComment,
+  AssetStatus,
   DocGroup,
+  PropertyCode,
   PipelineStatus,
   RationaleList,
   ReviewStatus,
   Stage01Output,
   Stage02Output,
+  Stage03Output,
   StageKey,
   UploadedDocument,
 } from '@/types/stages';
@@ -61,6 +65,19 @@ export const stagesApi = {
 
   stage01: (id: string) => call<Stage01Output>(`/${id}/stages/01/runs/current/output`),
   stage02: (id: string) => call<Stage02Output>(`/${id}/stages/02/runs/current/output`),
+  stage03: (id: string) => call<Stage03Output>(`/${id}/stages/03/runs/current/output`),
+  rebuild03: (id: string) => call<{ stage: '03'; status: string }>(`/${id}/stages/03/rebuild`, { method: 'POST' }),
+  assetStatus: (id: string, assetId: string, status: AssetStatus, note?: string) =>
+    call<unknown>(`/${id}/stages/03/assets/${assetId}`, { method: 'PATCH', body: JSON.stringify({ status, note }) }),
+  /** `{confirm: true}` keeps the value and marks it reviewed; `{applies, reason}` changes it. */
+  assetProperty: (id: string, assetId: string, property: PropertyCode, body: { confirm: true } | { applies: boolean; reason: string }) =>
+    call<unknown>(`/${id}/stages/03/assets/${assetId}/properties/${property}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  comments: (id: string) => call<AssetComment[]>(`/${id}/stages/03/comments`),
+  addComment: (id: string, assetId: string, property: PropertyCode | null, text: string) =>
+    call<AssetComment>(`/${id}/stages/03/comments`, { method: 'POST', body: JSON.stringify({ asset_id: assetId, property, text }) }),
+  updateComment: (id: string, commentId: number, body: { resolved: boolean } | { proposed_change: { state: 'applied' | 'kept' } }) =>
+    call<AssetComment>(`/${id}/stages/03/comments/${commentId}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  finish03: (id: string) => call<{ finished: { by: string; at: string } }>(`/${id}/stages/03/finish`, { method: 'POST' }),
   rationale: (id: string, stage: StageKey) => call<RationaleList>(`/${id}/stages/${stage}/rationale`),
   /** The Assumptions a pipeline stage (03, 10) wrote next to its output. Read-only. */
   pipelineRationale: (id: string, stageNum: number) => call<RationaleList>(`/${id}/stages/${stageNum}/rationale-file`),

@@ -69,7 +69,7 @@ export function assetWords(assetType: string, label?: string): string {
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
-export const TOPIC_ORDER: Topic[] = ['exposure', 'sign_in', 'scope', 'environment', 'data', 'naming', 'reading'];
+export const TOPIC_ORDER: Topic[] = ['exposure', 'sign_in', 'scope', 'environment', 'data', 'naming', 'reading', 'assets'];
 export const TOPIC_WORDS: Record<Topic, string> = {
   exposure: 'Exposure',
   sign_in: 'Sign-in',
@@ -78,6 +78,7 @@ export const TOPIC_WORDS: Record<Topic, string> = {
   data: 'Data',
   naming: 'Naming',
   reading: 'Reading notes',
+  assets: 'Assets',
 };
 
 export const SCOPE_WORDS: Record<ScopeStatus, string> = {

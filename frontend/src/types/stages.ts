@@ -1,6 +1,6 @@
-/** Stage 01 and 02 data as the stage store returns it (specs 18, 22, 23). */
+/** Stage 01, 02 and 03 data as the stage store returns it (specs 18, 22, 23, 27). */
 
-export type StageKey = '01' | '02';
+export type StageKey = '01' | '02' | '03';
 export type JobStatus = 'not_started' | 'pending' | 'running' | 'complete' | 'failed';
 export type DocGroup = 'components' | 'behaviour';
 
@@ -154,7 +154,7 @@ export interface Stage02Output {
   questions: Question[];
 }
 
-export type Topic = 'exposure' | 'sign_in' | 'scope' | 'environment' | 'data' | 'naming' | 'reading';
+export type Topic = 'exposure' | 'sign_in' | 'scope' | 'environment' | 'data' | 'naming' | 'reading' | 'assets';
 export type ReviewStatus = 'unreviewed' | 'confirmed' | 'disputed';
 
 export interface RationaleItem {
@@ -177,4 +177,59 @@ export interface RationaleList {
   stage: StageKey;
   run_number: number;
   items: RationaleItem[];
+}
+
+// ── Stage 03 Assets (spec 27) ─────────────────────────────────────────────────
+
+export type PropertyCode = 'C' | 'I' | 'A' | 'Au' | 'Az' | 'NR';
+export type AssetStatus = 'proposed' | 'confirmed' | 'removed';
+
+export interface AssetProperty {
+  applies: boolean;
+  reason: string;
+  origin: 'default' | 'model' | 'analyst';
+  reviewed: boolean;
+}
+
+export interface Asset {
+  asset_id: string;
+  family: string;
+  name: string;
+  type_label: string;
+  description: string;
+  source: { kind: 'element' | 'function' | 'item' | 'link'; ids: string[]; label: string; scope: ScopeStatus };
+  interface: boolean;
+  reason: string;
+  would_change: string;
+  quotes: { text: string; where: string }[];
+  asset_type_row: boolean;
+  status: AssetStatus;
+  status_note: string | null;
+  properties: Record<PropertyCode, AssetProperty>;
+}
+
+export interface Stage03Output {
+  stage: '03';
+  run_number: number;
+  created_at: string;
+  built_from_02_run: number | null;
+  stale: boolean;
+  /** `stage03`, or `upload:<file name>` while the later stages read an uploaded list. */
+  register_source: string;
+  assets: Asset[];
+  families: { code: string; name: string; count: number }[];
+  finished: { by: string; at: string } | null;
+  rationale: RationaleItem[];
+}
+
+export interface AssetComment {
+  id: number;
+  run_number: number;
+  asset_id: string;
+  property: PropertyCode | null;
+  author: 'analyst' | 'assistant';
+  text: string;
+  created_at: string;
+  resolved: boolean;
+  proposed_change: { property: PropertyCode; applies: boolean; state: 'open' | 'applied' | 'kept' } | null;
 }
