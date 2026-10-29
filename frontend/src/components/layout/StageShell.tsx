@@ -59,7 +59,7 @@ export function StageTopBar({ stages, current, onStage, needCount, assumptionsOp
             </span>
             Aegis
           </Link>
-          <div className="hidden gap-0.5 rounded-full bg-foreground/5 p-[3px] sm:flex" role="tablist" aria-label="Stages">
+          <div className="hidden gap-0.5 rounded-full bg-foreground/5 p-[3px] min-[1360px]:flex" role="tablist" aria-label="Stages">
             {ready.map((s) => {
               const on = s.key === current;
               return (
@@ -98,7 +98,7 @@ export function StageTopBar({ stages, current, onStage, needCount, assumptionsOp
             {needCount > 0 && (
               <span className="aegis-signal-pill flex items-center gap-1.5 px-2 py-0.5 text-xs">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-state-yellow-foreground motion-reduce:animate-none" aria-hidden="true" />
-                {needCount} need you
+                {needCount}<span className="hidden sm:inline"> need you</span>
               </span>
             )}
           </button>
