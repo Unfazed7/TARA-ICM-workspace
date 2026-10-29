@@ -96,7 +96,7 @@ def write_stage_03(db: Session, run: m.StageRun, stage02: m.StageRun, previous: 
         row = w.accept("asset", m.Asset(
             run_id=run.id, position=pos, asset_id=item["asset_id"], family=item["family"], name=item["name"], type_label=item["type_label"],
             description=item["description"], source_kind=item["source"]["kind"], source_ids=item["source"]["ids"], source_label=item["source"]["label"],
-            scope_status=item["source"]["scope"], interface=item["interface"], would_change=item["would_change"], fact_ids=item["fact_ids"],
+            scope_status=item["source"]["scope"], interface=item["interface"], reason=item["reason"], would_change=item["would_change"], fact_ids=item["fact_ids"],
             asset_type_row=item["asset_type_row"],
         ))
         old = before.get((item["asset_id"], source_key(item["source"]["ids"])))
@@ -120,8 +120,16 @@ def write_stage_03(db: Session, run: m.StageRun, stage02: m.StageRun, previous: 
         | {f"{asset_id}.{code}" for asset_id in accepted for code in PROPERTIES}
         | {f"{element}" for element in elements}
     )
-    store.write_rationale(w, "03", payload.get("rationale") or [], docs, {}, {}, {}, known, checked_prefixes=None)
+    store.write_rationale(w, "03", [_with_note(item) for item in payload.get("rationale") or []], docs, {}, {}, {}, known, checked_prefixes=None)
     return w
+
+
+def _with_note(item):
+    """An item worked out from stored ids (no document to quote) keeps those ids as its note, which is what the store keeps."""
+    why = item.get("why") if isinstance(item, dict) else None
+    if isinstance(why, dict) and why.get("from_ids") and not why.get("note"):
+        return {**item, "why": {**why, "note": f"Worked out from {', '.join(why['from_ids'])}."}}
+    return item
 
 
 # ── Reading ───────────────────────────────────────────────────────────────────
@@ -157,6 +165,7 @@ def read_asset(db: Session, row: m.Asset, stage01_run_id: int | None) -> dict:
         "description": row.description,
         "source": {"kind": row.source_kind, "ids": row.source_ids, "label": row.source_label, "scope": row.scope_status},
         "interface": row.interface,
+        "reason": row.reason,
         "would_change": row.would_change,
         "quotes": _quotes(db, stage01_run_id, row.fact_ids) if stage01_run_id else [],
         "asset_type_row": row.asset_type_row,

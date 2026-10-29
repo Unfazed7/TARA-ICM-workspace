@@ -29,6 +29,7 @@ def upgrade():
     sa.Column('source_label', sa.String(), nullable=False),
     sa.Column('scope_status', sa.String(), nullable=False),
     sa.Column('interface', sa.Boolean(), nullable=False),
+    sa.Column('reason', sa.Text(), nullable=False),
     sa.Column('would_change', sa.Text(), nullable=False),
     sa.Column('fact_ids', sa.JSON(none_as_null=True), nullable=False),
     sa.Column('asset_type_row', sa.Boolean(), nullable=False),

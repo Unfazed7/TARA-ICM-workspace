@@ -28,3 +28,4 @@ artifacts/*/logs/
 # Pipeline run outputs and OS noise (client-derived, DR-10)
 artifacts/
 .DS_Store
+frontend/tests/visual/

@@ -10,6 +10,7 @@ You are given the candidate assets, one per line. Send one JSON object:
 - `id`: the candidate's id, exactly as given.
 - `name`: a short plain name for the asset, three to six words ("Certificate service logic", "Network exposure settings").
 - `description`: one or two plain sentences on what it is. No ids.
+- `reason`: one plain sentence on why this is an asset worth protecting. No ids.
 - `would_change`: one plain sentence naming what document or answer would change this asset decision. No ids.
 - `reasons`: all six properties (`C`, `I`, `A`, `Au`, `Az`, `NR`), a plain sentence for each saying why it applies or why it does not, matching the current setting. No ids.
 - `changes`: only when the Item Definition shows a reason to turn a property on or off: `property`, `applies` (the new value) and `reason`. Leave the list empty when the starting properties are right.

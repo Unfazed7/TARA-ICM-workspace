@@ -1,0 +1,1493 @@
+{
+  "note": "Generated from the sample data of the 03 Assets design by build-03-assets.js. Quotes are given separately because the store takes them from Stage 01 facts.",
+  "assets": [
+    {
+      "asset_id": "WL-01",
+      "family": "WL",
+      "name": "Certificate service logic",
+      "type_label": "Service logic",
+      "description": "Handles every certificate request: checks it, stores it and passes approved ones to the key service.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-015"
+        ],
+        "label": "EL-015 Certificate service",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It is the portal’s own service and every certificate request passes through it.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-027",
+        "FCT-054",
+        "FCT-058"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "Certificate service logic holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to certificate service logic would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If certificate service logic stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where certificate service logic comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": true,
+          "reason": "Certificate service logic decides or depends on who may do what; a missing check here is an Authorization problem (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through certificate service logic needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "WL-02",
+      "family": "WL",
+      "name": "Key service signing logic",
+      "type_label": "Service logic",
+      "description": "Signs approved certificates with the CA signing key.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-016"
+        ],
+        "label": "EL-016 Key service",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It is the only service that uses the CA signing key.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-028",
+        "FCT-060"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Key service signing logic keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to key service signing logic would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If key service signing logic stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where key service signing logic comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": true,
+          "reason": "Key service signing logic decides or depends on who may do what; a missing check here is an Authorization problem (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through key service signing logic needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "WL-03",
+      "family": "WL",
+      "name": "Token check",
+      "type_label": "Service logic",
+      "description": "Checks the sign-in token on every request that reaches the API gateway.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-010"
+        ],
+        "label": "EL-010 Token authorizer",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "Every request to the portal depends on this check.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-008",
+        "FCT-049"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Token check keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to token check would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If token check stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on token check being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": true,
+          "reason": "Token check decides or depends on who may do what; a missing check here is an Authorization problem (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through token check needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "WL-04",
+      "family": "WL",
+      "name": "Revocation list builder",
+      "type_label": "Service logic",
+      "description": "Builds the certificate revocation list and writes it to storage.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-008"
+        ],
+        "label": "EL-008 CRL publisher",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "Relying services trust the list it produces.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-031",
+        "FCT-063"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Revocation list builder keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to revocation list builder would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If revocation list builder stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where revocation list builder comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Revocation list builder grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through revocation list builder needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "DS-01",
+      "family": "DS",
+      "name": "Certificate records",
+      "type_label": "Data store",
+      "description": "Certificate requests, issued certificates and the audit history.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-018"
+        ],
+        "label": "EL-018 Certificate database",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It holds every request and issued certificate, the record the portal relies on.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-033",
+        "FCT-034",
+        "FCT-035"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "Certificate records holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to certificate records would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If certificate records stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where certificate records comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Certificate records grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": true,
+          "reason": "Actions recorded in or done through certificate records must be provable later.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "DS-02",
+      "family": "DS",
+      "name": "Cached certificate data",
+      "type_label": "Data store",
+      "description": "Recently used certificate and session data kept close to the certificate service.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-017"
+        ],
+        "label": "EL-017 Cache",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It sits next to the certificate service; no document says what it holds, so it is assumed to hold certificate data.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-030"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "Cached certificate data holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to cached certificate data would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If cached certificate data stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on cached certificate data being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Cached certificate data grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through cached certificate data needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "DS-03",
+      "family": "DS",
+      "name": "Revocation list",
+      "type_label": "Data store",
+      "description": "The published list of revoked certificates that relying services download.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-007"
+        ],
+        "label": "EL-007 Revocation list bucket",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "Relying services decide whether to trust a certificate from it.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-032"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Revocation list keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to revocation list would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If revocation list stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on revocation list being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Revocation list grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through revocation list needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "DS-04",
+      "family": "DS",
+      "name": "Portal web pages",
+      "type_label": "Data store",
+      "description": "The portal’s web pages served to operators and security admins.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-006"
+        ],
+        "label": "EL-006 Portal UI bucket",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "Changed pages could trick operators into acting on false information.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-016",
+        "FCT-055"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Portal web pages keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to portal web pages would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": false,
+          "reason": "Losing portal web pages for a while does not stop the portal’s functions.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on portal web pages being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Portal web pages grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through portal web pages needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "DS-05",
+      "family": "DS",
+      "name": "Application logs and metrics",
+      "type_label": "Data store",
+      "description": "Logs and metrics written by the certificate and key services.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-023"
+        ],
+        "label": "EL-023 Logs and metrics",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "Investigations rely on these records.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-043"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Application logs and metrics keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to application logs and metrics would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If application logs and metrics stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where application logs and metrics comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Application logs and metrics grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": true,
+          "reason": "Actions recorded in or done through application logs and metrics must be provable later.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "DS-06",
+      "family": "DS",
+      "name": "Audit trail records",
+      "type_label": "Data store",
+      "description": "Records of every API call made in the portal’s cloud account.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-022"
+        ],
+        "label": "EL-022 Audit trail",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It is the only record of changes to the account itself.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-042"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Audit trail records keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to audit trail records would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If audit trail records stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where audit trail records comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Audit trail records grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": true,
+          "reason": "Actions recorded in or done through audit trail records must be provable later.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "INF-01",
+      "family": "INF",
+      "name": "Network exposure settings",
+      "type_label": "Configuration",
+      "description": "Which parts of the portal’s network can be reached and from where.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-014"
+        ],
+        "label": "EL-014 Network boundary configuration",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "A wrong setting exposes internal services.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-021",
+        "FCT-022",
+        "FCT-023"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Network exposure settings keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to network exposure settings would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If network exposure settings stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where network exposure settings comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Network exposure settings grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through network exposure settings needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "INF-02",
+      "family": "INF",
+      "name": "Load balancer routing",
+      "type_label": "Configuration",
+      "description": "How the internet-facing and internal load balancers route requests to the services.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-011",
+          "EL-026"
+        ],
+        "label": "EL-011 and EL-026 Load balancers",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "The internet-facing load balancer is a second way in (assumed, see Assumptions).",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-012",
+        "FCT-013",
+        "FCT-068",
+        "FCT-069"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Load balancer routing keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to load balancer routing would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If load balancer routing stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where load balancer routing comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Load balancer routing grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through load balancer routing needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "INF-03",
+      "family": "INF",
+      "name": "API gateway and its sign-in settings",
+      "type_label": "Configuration",
+      "description": "The public entry point for operators, security admins and internal services. Its settings decide which requests reach the portal: the sign-in token check, request size and rate limits, which paths are routed to the certificate service and which to the key service, and the logging of every call to the audit trail.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-009"
+        ],
+        "label": "EL-009 API gateway",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It is the documented public entry point.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-009",
+        "FCT-010"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "API gateway and its sign-in settings keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to api gateway and its sign-in settings would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If api gateway and its sign-in settings stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on api gateway and its sign-in settings being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": true,
+          "reason": "API gateway and its sign-in settings decides or depends on who may do what; a missing check here is an Authorization problem (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through api gateway and its sign-in settings needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "INF-04",
+      "family": "INF",
+      "name": "CDN delivery settings",
+      "type_label": "Configuration",
+      "description": "How the CDN serves the portal pages and the revocation list.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-005"
+        ],
+        "label": "EL-005 CDN",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "Both the pages and the revocation list reach users through it.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-014",
+        "FCT-015"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "CDN delivery settings keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to cdn delivery settings would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If cdn delivery settings stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where cdn delivery settings comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "CDN delivery settings grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through cdn delivery settings needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "API-01",
+      "family": "API",
+      "name": "Certificate issuance",
+      "type_label": "Business function",
+      "description": "Requesting, approving and issuing a certificate.",
+      "source": {
+        "kind": "function",
+        "ids": [
+          "FN-004"
+        ],
+        "label": "FN-004 Issue a certificate",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It is the portal’s main purpose.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-060"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Certificate issuance keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to certificate issuance would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If certificate issuance stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on certificate issuance being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": true,
+          "reason": "Certificate issuance decides or depends on who may do what; a missing check here is an Authorization problem (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": true,
+          "reason": "Actions recorded in or done through certificate issuance must be provable later.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "API-02",
+      "family": "API",
+      "name": "Certificate revocation",
+      "type_label": "Business function",
+      "description": "Revoking a certificate and publishing it on the revocation list.",
+      "source": {
+        "kind": "function",
+        "ids": [
+          "FN-006"
+        ],
+        "label": "FN-006 Revoke a certificate",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "A wrong or missed revocation leaves a bad certificate trusted.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-062"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Certificate revocation keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to certificate revocation would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": true,
+          "reason": "If certificate revocation stops, issuing, checking or revoking certificates stops with it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on certificate revocation being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": true,
+          "reason": "Certificate revocation decides or depends on who may do what; a missing check here is an Authorization problem (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": true,
+          "reason": "Actions recorded in or done through certificate revocation must be provable later.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "IAM-01",
+      "family": "IAM",
+      "name": "CA signing key",
+      "type_label": "Key material",
+      "description": "The private key that signs every certificate the portal issues.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-019"
+        ],
+        "label": "EL-019 CA signing key",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "Whoever holds it can issue trusted certificates.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-037",
+        "FCT-038"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "CA signing key holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to ca signing key would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": false,
+          "reason": "Losing ca signing key for a while does not stop the portal’s functions.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on ca signing key being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "CA signing key grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through ca signing key needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "IAM-02",
+      "family": "IAM",
+      "name": "Database password",
+      "type_label": "Credential",
+      "description": "The password the certificate service uses for the certificate database.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-020"
+        ],
+        "label": "EL-020 Secrets store",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "It is stored in the secrets store and opens the certificate records.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-039",
+        "FCT-040"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "Database password holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": false,
+          "reason": "Nothing in database password can be changed in a way that matters on its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": false,
+          "reason": "Losing database password for a while does not stop the portal’s functions.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on database password being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Database password grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through database password needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "IAM-03",
+      "family": "IAM",
+      "name": "Notification API key",
+      "type_label": "Credential",
+      "description": "The key the portal holds for the outside notification service.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-024"
+        ],
+        "label": "EL-024 Notification service",
+        "scope": "interface"
+      },
+      "interface": true,
+      "reason": "The portal holds this key for an outside party, so only the portal’s side is assessed.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-044",
+        "FCT-045"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "Notification API key holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": false,
+          "reason": "Nothing in notification api key can be changed in a way that matters on its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": false,
+          "reason": "Losing notification api key for a while does not stop the portal’s functions.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on notification api key being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Notification API key grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through notification api key needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "IAM-04",
+      "family": "IAM",
+      "name": "Deploy identity",
+      "type_label": "Identity",
+      "description": "The identity the CI/CD pipeline uses to deploy into the portal.",
+      "source": {
+        "kind": "element",
+        "ids": [
+          "EL-025"
+        ],
+        "label": "EL-025 CI/CD pipeline",
+        "scope": "interface"
+      },
+      "interface": true,
+      "reason": "The portal relies on this identity when code is deployed.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-046",
+        "FCT-047",
+        "FCT-056"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": false,
+          "reason": "Deploy identity keeps no data of its own; what it handles is covered by other rows (D-22).",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": false,
+          "reason": "Nothing in deploy identity can be changed in a way that matters on its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": false,
+          "reason": "Losing deploy identity for a while does not stop the portal’s functions.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on deploy identity being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Deploy identity grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": true,
+          "reason": "Actions recorded in or done through deploy identity must be provable later.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "COMM-01",
+      "family": "COMM",
+      "name": "Certificate requests in transit",
+      "type_label": "Data in transit",
+      "description": "Requests from operators, security admins and internal services to the API gateway.",
+      "source": {
+        "kind": "link",
+        "ids": [
+          "IF-01",
+          "IF-02",
+          "IF-06"
+        ],
+        "label": "IF-01, IF-02, IF-06",
+        "scope": "in_scope"
+      },
+      "interface": false,
+      "reason": "They carry sign-in tokens and request data across the internet boundary.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-004",
+        "FCT-010",
+        "FCT-057",
+        "FCT-059",
+        "FCT-003",
+        "FCT-048"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "Certificate requests in transit holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to certificate requests in transit would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": false,
+          "reason": "Losing certificate requests in transit for a while does not stop the portal’s functions.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": true,
+          "reason": "Others rely on certificate requests in transit being genuine: who sent it, signed it or served it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Certificate requests in transit grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through certificate requests in transit needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    },
+    {
+      "asset_id": "COMM-02",
+      "family": "COMM",
+      "name": "Notifications in transit",
+      "type_label": "Data in transit",
+      "description": "Messages the certificate service sends to the outside notification service.",
+      "source": {
+        "kind": "link",
+        "ids": [
+          "IF-15"
+        ],
+        "label": "IF-15",
+        "scope": "interface"
+      },
+      "interface": true,
+      "reason": "They leave the portal for an outside party over HTTPS.",
+      "would_change": "A document that says this component is handled differently.",
+      "fact_ids": [
+        "FCT-045",
+        "FCT-064"
+      ],
+      "asset_type_row": true,
+      "properties": {
+        "C": {
+          "applies": true,
+          "reason": "Notifications in transit holds data that only the right people may read, and no other row covers it.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "I": {
+          "applies": true,
+          "reason": "An unauthorised change to notifications in transit would change what the portal issues, stores or shows.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "A": {
+          "applies": false,
+          "reason": "Losing notifications in transit for a while does not stop the portal’s functions.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Au": {
+          "applies": false,
+          "reason": "No one relies on proving where notifications in transit comes from.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "Az": {
+          "applies": false,
+          "reason": "Notifications in transit grants no rights of its own.",
+          "origin": "default",
+          "reviewed": true
+        },
+        "NR": {
+          "applies": false,
+          "reason": "Nothing done through notifications in transit needs to be proven afterwards.",
+          "origin": "default",
+          "reviewed": true
+        }
+      }
+    }
+  ],
+  "rationale": [
+    {
+      "rationale_id": "RAT-90001",
+      "stage": "03",
+      "kind": "assumption",
+      "topic": "assets",
+      "attention": "needs_attention",
+      "title": "The cache holds certificate data. No document says what it holds",
+      "concluded": "The cache holds certificate data. No document says what it holds.",
+      "why": {
+        "from_ids": [
+          "EL-017"
+        ]
+      },
+      "assumed": "It is used until you decide.",
+      "would_change": "A document or an answer from the client.",
+      "affects": [
+        "DS-02.C"
+      ],
+      "review": {
+        "status": "unreviewed"
+      },
+      "design_id": "AS-03-01"
+    },
+    {
+      "rationale_id": "RAT-90002",
+      "stage": "03",
+      "kind": "assumption",
+      "topic": "assets",
+      "attention": "needs_attention",
+      "title": "The internet-facing load balancer is a second way in, next to the API gateway",
+      "concluded": "The internet-facing load balancer is a second way in, next to the API gateway.",
+      "why": {
+        "from_ids": [
+          "EL-011"
+        ]
+      },
+      "assumed": "It is used until you decide.",
+      "would_change": "A document or an answer from the client.",
+      "affects": [
+        "INF-02.Au"
+      ],
+      "review": {
+        "status": "unreviewed"
+      },
+      "design_id": "AS-03-02"
+    },
+    {
+      "rationale_id": "RAT-90003",
+      "stage": "03",
+      "kind": "assumption",
+      "topic": "assets",
+      "attention": "needs_attention",
+      "title": "The deploy identity can change the running services, so only the portal side of it is assessed",
+      "concluded": "The deploy identity can change the running services, so only the portal side of it is assessed.",
+      "why": {
+        "from_ids": [
+          "EL-025"
+        ]
+      },
+      "assumed": "It is used until you decide.",
+      "would_change": "A document or an answer from the client.",
+      "affects": [
+        "IAM-04.Az"
+      ],
+      "review": {
+        "status": "unreviewed"
+      },
+      "design_id": "AS-03-03"
+    }
+  ],
+  "confirmed_design_ids": [
+    "AS-03-03"
+  ],
+  "quotes": {
+    "WL-01": [
+      {
+        "text": "Requests are handled by the certificate service",
+        "where": "functional.md, section 1"
+      }
+    ],
+    "WL-02": [
+      {
+        "text": "After approval, the signing service signs the certificate with the CA signing key",
+        "where": "functional.md, section 3.4"
+      }
+    ],
+    "DS-01": [
+      {
+        "text": "The certificate service stores the request",
+        "where": "functional.md, section 3.2"
+      }
+    ],
+    "DS-03": [
+      {
+        "text": "Relying services download the list through the CDN",
+        "where": "functional.md, section 3.7"
+      }
+    ],
+    "INF-03": [
+      {
+        "text": "The API gateway is the only public entry point",
+        "where": "client-answers.md, answer 3"
+      }
+    ],
+    "IAM-01": [
+      {
+        "text": "The CA signing key is held in the cloud key management service",
+        "where": "client-answers.md, answer 6"
+      }
+    ]
+  },
+  "comments": [
+    {
+      "asset_id": "DS-02",
+      "property": "C",
+      "author": "analyst",
+      "text": "Ask the client what the cache holds before we confirm this."
+    }
+  ],
+  "change_proposed": [
+    {
+      "asset_id": "WL-01",
+      "property": "C",
+      "author": "analyst",
+      "text": "Confidentiality should not apply here. The service passes requests on and keeps nothing itself."
+    },
+    {
+      "asset_id": "WL-01",
+      "property": "C",
+      "author": "assistant",
+      "text": "Agreed. The certificate service stores nothing of its own; the requests it handles are covered by DS-01 Certificate records. Under the D-22 rule this cell should be off.",
+      "proposed_change": {
+        "property": "C",
+        "applies": false,
+        "state": "open"
+      }
+    }
+  ]
+}

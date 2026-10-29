@@ -74,7 +74,7 @@ def build_register(db: Session, assessment_id: str, run: m.StageRun) -> list[dic
             "input_mode": "manual",
             "created_timestamp": stamp,
             "asset_ref": row.asset_id,
-            "reason": f"{row.name} is an asset of this item.",
+            "reason": row.reason,
             "ciaaan_reasons": {asset_rules.FULL_NAMES[code]: props[code].reason for code in asset_rules.PROPERTIES},
         }
         if len(row.source_ids) == 1:

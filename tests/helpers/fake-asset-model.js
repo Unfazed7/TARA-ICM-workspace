@@ -21,6 +21,7 @@ function replyFor(userText) {
       id: c.id,
       name: c.name.replace(/ identity$/, ' identity'),
       description: `${c.name} as the item definition describes it, kept for the item's own use.`,
+      reason: `${c.name} is part of the item and worth protecting.`,
       would_change: 'A document that says this component is handled differently.',
       reasons: Object.fromEntries(PROPS.map((p) => [p, c.starts_with.includes(p) ? `${c.name} needs this property protected.` : `${c.name} does not need this property protected on its own.`])),
       changes: [],

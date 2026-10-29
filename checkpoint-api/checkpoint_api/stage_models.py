@@ -535,6 +535,7 @@ class Asset(StageBase):
     source_label = Column(String, nullable=False)
     scope_status = Column(String, nullable=False)
     interface = Column(Boolean, nullable=False, default=False)
+    reason = Column(Text, nullable=False)
     would_change = Column(Text, nullable=False)
     fact_ids = Column(Json, nullable=False)
     asset_type_row = Column(Boolean, nullable=False, default=True)

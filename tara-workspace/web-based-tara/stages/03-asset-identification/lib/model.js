@@ -19,7 +19,7 @@ const REPLY_SCHEMA = obj({
   assets: {
     type: 'array',
     items: obj({
-      id: str, name: str, description: str, would_change: str, reasons: REASONS,
+      id: str, name: str, description: str, reason: str, would_change: str, reasons: REASONS,
       changes: { type: 'array', items: PROPERTY_ROW },
       duplicate_of: str,
     }),

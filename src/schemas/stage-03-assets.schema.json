@@ -8,7 +8,7 @@
   "items": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["asset_id", "family", "name", "type_label", "description", "source", "interface", "would_change", "fact_ids", "asset_type_row", "properties"],
+    "required": ["asset_id", "family", "name", "type_label", "description", "source", "interface", "reason", "would_change", "fact_ids", "asset_type_row", "properties"],
     "properties": {
       "asset_id": { "type": "string", "pattern": "^(EXT|NET|INF|WL|DS|IAM|API|COMM)-\\d{2,}$" },
       "family": { "type": "string", "enum": ["EXT", "NET", "INF", "WL", "DS", "IAM", "API", "COMM"] },
@@ -27,6 +27,7 @@
         }
       },
       "interface": { "type": "boolean" },
+      "reason": { "type": "string", "minLength": 10, "description": "Plain reason this is an asset worth protecting." },
       "would_change": { "type": "string", "minLength": 10 },
       "fact_ids": { "type": "array", "items": { "type": "string", "pattern": "^FCT-\\d{3,}$" } },
       "asset_type_row": { "type": "boolean", "description": "False when the component's type has no row in the rules table: the model proposed this asset and the analyst must look at it." },
