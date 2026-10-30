@@ -13,6 +13,7 @@ const {
 } = require('../agent-utils');
 
 const { callLLM } = require('../llm-client');
+const assumptions = require('../assumptions');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_treatment';
 const TREATMENT_OPTIONS = ['reduce', 'accept', 'share', 'avoid'];
@@ -44,6 +45,7 @@ function buildTreatmentTool() {
         'residual_risk_expected'
       ],
       properties: {
+        assumptions: assumptions.property(assumptions.FIELDS.treatment),
         treatment_option: { type: 'string', enum: TREATMENT_OPTIONS },
         treatment_rationale: { type: 'string' },
         goal_statement: { type: ['string', 'null'] },
@@ -93,6 +95,7 @@ function buildSystemPrompt(controlsCatalogue, webTaraConstraints) {
     'Prefer combining preventive + detective controls over 2 preventive controls for the same mechanism.',
     'Controls sourced from the catalogue only (CTR_01 to CTR_89). Do not invent new control IDs.',
     'For share treatments: at least one assigned control must be a third-party or cloud provider control (Family F or G).',
+    assumptions.REQUEST,
     `Return only via the ${TOOL_NAME} tool.`
   ].join('\n\n');
 }
@@ -218,7 +221,7 @@ function parseTextTreatment(response) {
 }
 
 async function callClaudeForRiskChain(chain, systemPrompt, fetchImpl = fetch) {
-  return callLLM({
+  const response = await callLLM({
     model: MODEL,
     max_tokens: 2048,
     system: systemPrompt,
@@ -226,6 +229,8 @@ async function callClaudeForRiskChain(chain, systemPrompt, fetchImpl = fetch) {
     tools: [buildTreatmentTool()],
     tool_choice: { type: 'tool', name: TOOL_NAME },
   }, fetchImpl);
+  assumptions.note(response, TOOL_NAME, { risk_id: chain.risk.risk_id }, assumptions.FIELDS.treatment);
+  return response;
 }
 
 function formatRequestError(error) {
@@ -559,6 +564,7 @@ async function buildRiskTreatments(inputs, options = {}) {
 }
 
 async function run(options) {
+  assumptions.reset();
   const inputs = {
     riskRegister: readJson(options.riskRegister),
     threats: readJson(options.threats),
@@ -572,6 +578,7 @@ async function run(options) {
     allowFallback: true
   });
   writeJson(options.out, treatments);
+  assumptions.write(options.out, (about) => (treatments.find((t) => t.risk_id === about.risk_id) || {}).treatment_id);
   await submitCheckpoint(options.assessmentId, {
     stage_num: 9,
     stage_name: 'risk-treatment',

@@ -245,6 +245,21 @@ async function runStage10({ attacks, treatments, impacts, riskRegister, fetchImp
   return { residual, rationale, log, errors };
 }
 
+/**
+ * The assumptions of this stage are the changes it already records: each control that makes a metric harder rests on
+ * the control being in place. Nothing is asked of the model for them.
+ */
+function residualAssumptions(residual) {
+  const list = [];
+  for (const r of residual) {
+    for (const c of r.metric_changes) {
+      const title = (r.controls.find((x) => x.control_id === c.control_id) || {}).control_title || 'The control';
+      list.push({ about_id: r.residual_id, field: c.metric, text: `${title} is assumed to be in place, so ${METRIC_LABEL[c.metric]} is rated harder for this threat: ${c.reason}`.replace(/\s+/g, ' ').slice(0, 400), needs_attention: true });
+    }
+  }
+  return list;
+}
+
 function validate(data, schemaFile) {
   const Ajv = require('ajv');
   const addFormats = require('ajv-formats');
@@ -290,6 +305,7 @@ async function main() {
   }
   writeJson(path.join(dir, 'rationale.json'), result.rationale);
   writeJson(out, result.residual);
+  writeJson(path.join(dir, 'assumptions.json'), residualAssumptions(result.residual));
   const changed = result.residual.filter((r) => r.metric_changes.length).length;
   process.stdout.write(`Stage 10 computed residual risk for ${result.residual.length} threats; ${changed} changed by controls.\n`);
 }
@@ -303,4 +319,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { runStage10, applyProposal, stateOf, buildSystemPrompt, buildUserMessage, REPLY_SCHEMA, CVSS_ENUMS };
+module.exports = { runStage10, applyProposal, stateOf, residualAssumptions, buildSystemPrompt, buildUserMessage, REPLY_SCHEMA, CVSS_ENUMS };

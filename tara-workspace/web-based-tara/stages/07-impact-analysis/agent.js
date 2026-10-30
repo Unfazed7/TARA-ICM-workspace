@@ -13,6 +13,7 @@ const {
 } = require('../agent-utils');
 
 const { callLLM } = require('../llm-client');
+const assumptions = require('../assumptions');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_impact_analysis';
 const FIXED_SAFETY_RATIONALE = 'Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.';
@@ -31,6 +32,7 @@ function buildImpactTool() {
       additionalProperties: false,
       required: ['impact_narrative', 'tool_user', 'other_stakeholders'],
       properties: {
+        assumptions: assumptions.property(assumptions.FIELDS.impact),
         impact_narrative: { type: 'string', minLength: 1 },
         tool_user: {
           type: 'object',
@@ -81,6 +83,7 @@ function buildSystemPrompt() {
     '2. Privacy gate: if the damage scenario contains no explicit exposure language ("is disclosed", "is exposed", "is extracted", "accessed without authorization"), privacy must be Negligible.',
     '3. Financial inference guard: rate Other Stakeholders Financial only if the damage scenario explicitly describes financial loss or revenue impact — do not infer it from data disclosure alone.',
     '4. Party attribution: apply a consequence only to the stakeholder party the damage scenario explicitly attributes it to — do not cross-apply consequences between parties.',
+    assumptions.REQUEST,
     `Return only via the ${TOOL_NAME} tool.`
   ].join('\n\n');
 }
@@ -290,7 +293,7 @@ function isNonRecoverableRequestError(error) {
 }
 
 async function callClaudeForThreat(threat, damageScenario, fetchImpl = fetch) {
-  return callLLM({
+  const response = await callLLM({
     model: MODEL,
     max_tokens: 1024,
     system: buildSystemPrompt(),
@@ -298,6 +301,8 @@ async function callClaudeForThreat(threat, damageScenario, fetchImpl = fetch) {
     tools: [buildImpactTool()],
     tool_choice: { type: 'tool', name: TOOL_NAME },
   }, fetchImpl);
+  assumptions.note(response, TOOL_NAME, { threat_id: threat.threat_id }, assumptions.FIELDS.impact);
+  return response;
 }
 
 async function generateImpactForThreat(threat, damageScenario, fetchImpl) {
@@ -410,10 +415,12 @@ function validateImpactAnalysis(impacts, threats, damageScenarios) {
 }
 
 async function run(options) {
+  assumptions.reset();
   const threats = readJson(options.threats);
   const damageScenarios = readJson(options.damageScenarios);
   const impacts = await buildImpactAnalysisWithClaude(threats, damageScenarios, { fetchImpl: options.fetchImpl });
   writeJson(options.out, impacts);
+  assumptions.write(options.out, (about) => (impacts.find((i) => i.threat_id === about.threat_id) || {}).impact_id);
   return impacts;
 }
 

@@ -14,6 +14,7 @@ const {
 } = require('../agent-utils');
 
 const { callLLM } = require('../llm-client');
+const assumptions = require('../assumptions');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_threat';
 const OWASP_REFERENCES = [
@@ -94,6 +95,7 @@ function buildThreatTool() {
       additionalProperties: false,
       required: ['stride_category', 'threat_statement', 'derivation_note', 'owasp_reference'],
       properties: {
+        assumptions: assumptions.property(assumptions.FIELDS.stride),
         stride_category: { type: 'string', enum: STRIDE_CATEGORIES },
         threat_statement: { type: 'string', minLength: 1 },
         derivation_note: { type: 'string', minLength: 1 },
@@ -117,6 +119,7 @@ function buildSystemPrompt() {
     'Write the threat as one flowing sentence with three parts: (1) what the attacker first does or gains access to, (2) what they do next and what specific gap or missing control allows it, (3) the outcome — stated as what actually results, not as a declared intention.',
     'Use plain language. Do not end with "with the goal of" — state the outcome as the natural consequence of the action.',
     'The threat must be specific to this asset. Self-test: could this statement apply unchanged to a different asset? If yes, rederive it around the mechanism unique to this asset.',
+    assumptions.REQUEST,
     'Return only via the submit_threat tool.'
   ].join('\n\n');
 }
@@ -195,7 +198,7 @@ function ensureAssetTitleInStatement(statement, assetTitle) {
 }
 
 async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
-  return callLLM({
+  const response = await callLLM({
     model: MODEL,
     max_tokens: 1024,
     system: buildSystemPrompt(),
@@ -203,6 +206,8 @@ async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
     tools: [buildThreatTool()],
     tool_choice: { type: 'tool', name: TOOL_NAME },
   }, fetchImpl);
+  assumptions.note(response, TOOL_NAME, { damage_id: damageScenario.damage_id }, assumptions.FIELDS.stride);
+  return response;
 }
 
 async function generateThreatForDamageScenario(damageScenario, fetchImpl) {
@@ -258,9 +263,11 @@ async function buildThreatsWithClaude(damageScenarios, options = {}) {
 }
 
 async function run(options) {
+  assumptions.reset();
   const damageScenarios = readJson(options.damageScenarios);
   const threats = await buildThreatsWithClaude(damageScenarios, { fetchImpl: options.fetchImpl });
   writeJson(options.out, threats);
+  assumptions.write(options.out, (about) => (threats.find((t) => t.damage_scenario_id === about.damage_id) || {}).threat_id);
   await submitCheckpoint(options.assessmentId, {
     stage_num: 5,
     stage_name: 'threat-identification',

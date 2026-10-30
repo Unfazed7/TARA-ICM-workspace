@@ -164,6 +164,14 @@ def resolve_record(ui_stage: str, about_id: str, ctx: dict) -> str | None:
     return ctx["to_threat"].get(about_id)
 
 
+# The cells of each screen an assumption can point at; any other field shows on the row.
+ASSUMPTION_FIELDS = {
+    "04": {f"{g}.{k}" for g, k, fixed in IMPACT_CATEGORIES if not fixed},
+    "05": {"stride_category", *FACTORS},
+    "06": {"treatment_option", "cybersecurity_goal"},
+}
+
+
 def build_assumptions(db: Session, assessment_id: str, ui_stage: str, ctx: dict) -> list[dict]:
     items = []
     for number in UI_FOLDERS[ui_stage]:
@@ -185,7 +193,7 @@ def build_assumptions(db: Session, assessment_id: str, ui_stage: str, ctx: dict)
             "key": key,
             "folder": item["folder"],
             "record_id": resolve_record(ui_stage, item["about_id"], ctx),
-            "field": item["field"],
+            "field": item["field"] if item["field"] in ASSUMPTION_FIELDS[ui_stage] else None,
             "text": item["text"],
             "status": review.status if review else "open",
             "note": review.note if review else None,
@@ -368,6 +376,7 @@ def context(assessment_id: str) -> dict:
     to_threat.update({r["risk_id"]: r["threat_id"] for r in risks})
     to_threat.update({t["treatment_id"]: t["threat_id"] for t in treatments})
     to_threat.update({i["impact_id"]: i["threat_id"] for i in impacts})
+    to_threat.update({r["residual_id"]: r["threat_id"] for r in read_folder(10, assessment_id) or []})
     return {
         "impact_ds": {i["impact_id"]: i["damage_scenario_id"] for i in impacts},
         "threat_ds": {t["threat_id"]: t["damage_scenario_id"] for t in threats},

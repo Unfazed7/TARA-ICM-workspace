@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage-assumptions.schema.json",
+  "title": "Assumptions an agent returns next to its output (specs 29 to 31)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["about_id", "field", "text", "needs_attention"],
+    "properties": {
+      "about_id": { "type": "string", "pattern": "^(DS|TH|AT|IM|RSK|TRT|RES)_\\d{2,}$" },
+      "field": {
+        "anyOf": [
+          { "type": "string", "enum": [
+            "tool_user.operational", "tool_user.privacy", "other_stakeholders.legal", "other_stakeholders.financial", "other_stakeholders.business",
+            "stride_category", "attack_vector", "attack_complexity", "privileges_required", "user_interaction",
+            "treatment_option", "cybersecurity_goal"
+          ] },
+          { "type": "null" }
+        ]
+      },
+      "text": { "type": "string", "minLength": 8, "maxLength": 400 },
+      "needs_attention": { "type": "boolean" }
+    }
+  }
+}

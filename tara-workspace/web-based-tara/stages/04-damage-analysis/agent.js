@@ -16,6 +16,7 @@ const {
 } = require('../agent-utils');
 
 const { callLLM } = require('../llm-client');
+const assumptions = require('../assumptions');
 const MODEL = 'claude-opus-4-8';
 
 const STAKEHOLDER_BY_PROPERTY = {
@@ -100,6 +101,7 @@ function buildDamageScenarioTool() {
       type: 'object',
       additionalProperties: false,
       properties: {
+        assumptions: assumptions.property(assumptions.FIELDS.impact, true),
         damage_scenarios: {
           type: 'array',
           items: {
@@ -128,7 +130,8 @@ function buildSystemPrompt() {
     'Damage scenarios describe consequences to stakeholders — not attacks. Do not use attacker, hacker, or malicious actor language.',
     'Write two sentences. The first sentence briefly states what this asset does or what role it plays in the system. The second sentence states: if its [CIAAAN property] is compromised, what concretely breaks — describing the real-world harm in plain language that a non-technical manager can understand.',
     'Be moderately descriptive: name what specifically fails, who is affected, and why that matters. Avoid vague outcomes like "loss of confidentiality" or "reputational damage" — these describe properties, not consequences.',
-    'Self-test: could this damage scenario apply word-for-word to a different asset? If yes, rewrite it around what makes this asset and its function unique.'
+    'Self-test: could this damage scenario apply word-for-word to a different asset? If yes, rewrite it around what makes this asset and its function unique.',
+    assumptions.REQUEST
   ].join('\n\n');
 }
 
@@ -187,7 +190,7 @@ function isNonRecoverableRequestError(error) {
 }
 
 async function callModelForAsset(asset, properties, fetchImpl = fetch) {
-  return callLLM({
+  const response = await callLLM({
     model: MODEL,
     max_tokens: 2048,
     system: buildSystemPrompt(),
@@ -195,6 +198,8 @@ async function callModelForAsset(asset, properties, fetchImpl = fetch) {
     tools: [buildDamageScenarioTool()],
     tool_choice: { type: 'tool', name: TOOL_NAME },
   }, fetchImpl);
+  assumptions.note(response, TOOL_NAME, { asset_id: asset.asset_id }, assumptions.FIELDS.impact);
+  return response;
 }
 
 async function generateDamageScenariosForAsset(asset, properties, fetchImpl) {
@@ -258,11 +263,13 @@ async function buildDamageScenariosWithModel(assets, options = {}) {
 }
 
 async function run(options) {
+  assumptions.reset();
   const assets = readJson(options.assets);
   const scenarios = options.useDeterministic
     ? buildDamageScenarios(assets)
     : await buildDamageScenariosWithModel(assets, { fetchImpl: options.fetchImpl });
   writeJson(options.out, scenarios);
+  assumptions.write(options.out, (about, note) => (scenarios.find((s) => s.asset_id === about.asset_id && s.property === note.property) || {}).damage_id);
   await submitCheckpoint(options.assessmentId, {
     stage_num: 4,
     stage_name: 'damage-analysis',

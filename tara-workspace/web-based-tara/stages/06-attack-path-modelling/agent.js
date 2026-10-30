@@ -11,6 +11,7 @@ const {
 } = require('../agent-utils');
 
 const { callLLM, getConfig } = require('../llm-client');
+const assumptions = require('../assumptions');
 const { calculateCVSSAFR } = require('../../_engines/cvss-afr-calc');
 const MODEL = 'claude-opus-4-8';
 const TOOL_NAME = 'submit_attack_path';
@@ -81,6 +82,7 @@ function buildAttackPathTool() {
       additionalProperties: false,
       required: ['attack_description', 'attack_path', 'cvss_metrics', 'justifications'],
       properties: {
+        assumptions: assumptions.property(assumptions.FIELDS.factors),
         attack_description: { type: 'string', minLength: 1 },
         attack_path: {
           type: 'object',
@@ -144,6 +146,7 @@ function buildSystemPrompt() {
     'Do not pad artificially: if the threat\'s causal chain is genuinely complete in fewer steps, compress the remaining steps to confirm closure rather than inventing filler content.',
     'The attack_description must be a single sentence covering the full chain — the TL;DR a reviewer reads first.',
     'Assign CVSS v3.1 exploitability metrics from the attack mechanism. Derive Scope per threat: use Scope=Changed only for SSRF-into-IAM, RCE-to-OS, or cross-tenant BFLA/BOLA patterns.',
+    assumptions.REQUEST,
     'Return only via the submit_attack_path tool.'
   ].join('\n\n');
 }
@@ -312,7 +315,9 @@ async function callClaudeForThreat(threat, fetchImpl = fetch) {
   if (getConfig().provider === 'anthropic') {
     params.thinking = THINKING;
   }
-  return callLLM(params, fetchImpl);
+  const response = await callLLM(params, fetchImpl);
+  assumptions.note(response, TOOL_NAME, { threat_id: threat.threat_id }, assumptions.FIELDS.factors);
+  return response;
 }
 
 async function generateAttackPathForThreat(threat, fetchImpl) {
@@ -373,11 +378,13 @@ async function buildAttackPathsWithClaude(threats, options = {}) {
 }
 
 async function run(options) {
+  assumptions.reset();
   const threats = readJson(options.threats);
   const preEnginePaths = await buildAttackPathsWithClaude(threats, { fetchImpl: options.fetchImpl });
   const attackPaths = enrichAttackPathsWithAFR(preEnginePaths);
   validateEnrichedAttackPaths(attackPaths);
   writeJson(options.out, attackPaths);
+  assumptions.write(options.out, (about) => (attackPaths.find((a) => a.threat_id === about.threat_id) || {}).attack_id);
   return attackPaths;
 }
 
