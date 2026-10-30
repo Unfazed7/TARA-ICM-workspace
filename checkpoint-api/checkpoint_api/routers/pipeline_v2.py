@@ -10,7 +10,8 @@ from .. import run_log
 from .. import stage_models as m
 from ..database import get_db
 from ..document_types import GROUPS, LABELS, missing_input
-from ..stage_pipeline import RESERVED, documents_dir, job, run_pipeline
+from ..models import PipelineRun
+from ..stage_pipeline import CHAIN, RESERVED, documents_dir, job, run_pipeline
 from .assessments import get_assessment_or_404, require_assessment_access
 from .auth import get_current_claims
 
@@ -189,8 +190,17 @@ def status_body(db: Session, assessment_id: str) -> dict:
     documents = document_list(folder)
     boundary = folder / "boundary.txt"
     text = boundary.read_text(encoding="utf-8") if boundary.exists() else None
+    runs = {r.stage_num: r for r in db.query(PipelineRun).filter(PipelineRun.assessment_id == assessment_id, PipelineRun.stage_num.in_(CHAIN))}
+    folders = [{
+        "stage_num": number,
+        "status": runs[number].status if number in runs else "not_started",
+        "error": runs[number].error_message if number in runs else None,
+        "started_at": runs[number].started_at.isoformat() if number in runs and runs[number].started_at else None,
+        "completed_at": runs[number].completed_at.isoformat() if number in runs and runs[number].completed_at else None,
+    } for number in CHAIN]
     return {
         "stages": stages,
+        "folders": folders,
         "documents": len(documents),
         "boundary_set": boundary.exists(),
         "missing": missing_input(text, documents),
@@ -204,6 +214,9 @@ def start_run(assessment_id: str, background_tasks: BackgroundTasks, claims: dic
     if busy:
         log.warning("%s | Execute refused: Stage %s is still %s", assessment_id, busy.stage, busy.status)
         raise HTTPException(status_code=409, detail=f"Stage {busy.stage} is still running. Wait for it to finish.")
+    folder_busy = db.query(PipelineRun).filter(PipelineRun.assessment_id == assessment_id, PipelineRun.stage_num.in_(CHAIN), PipelineRun.status.in_(["pending", "running", "paused"])).first()
+    if folder_busy:
+        raise HTTPException(status_code=409, detail=f"Stage {folder_busy.stage_num:02d} is still running. Wait for it to finish.")
     if not document_list(documents_dir(assessment_id)):
         log.warning("%s | Execute refused: no documents uploaded", assessment_id)
         raise HTTPException(status_code=422, detail="Upload at least one document first.")

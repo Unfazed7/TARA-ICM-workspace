@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 import stage_support as s
 from checkpoint_api import run_log, stage_pipeline
+from checkpoint_api import pipeline_runner
 from checkpoint_api.main import app
 
 
@@ -18,9 +19,12 @@ BOUNDARY = "The key and certificate portal and everything deployed in its cloud 
 def setup(tmp_path, monkeypatch):
     s.reset_database()
     monkeypatch.setenv("UPLOAD_DIR", str(tmp_path / "uploads"))
+    monkeypatch.setattr(pipeline_runner, "WORKSPACE_ROOT", str(tmp_path))
     monkeypatch.setenv("STAGE01_AGENT", str(FAKES / "stage01.js"))
     monkeypatch.setenv("STAGE02_AGENT", str(FAKES / "stage02.js"))
     monkeypatch.setenv("STAGE03_AGENT", str(FAKES / "stage03.js"))
+    for number in range(4, 11):
+        monkeypatch.setenv(f"STAGE{number:02d}_AGENT", str(FAKES / f"stage{number:02d}.js"))
     monkeypatch.delenv("FAKE_FAIL", raising=False)
     monkeypatch.setenv("LOG_FILE", str(tmp_path / "logs" / "aegis.log"))
     run_log.setup()

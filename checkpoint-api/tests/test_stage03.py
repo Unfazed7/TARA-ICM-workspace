@@ -27,6 +27,8 @@ def setup(tmp_path, monkeypatch):
     monkeypatch.setenv("STAGE01_AGENT", str(FAKES / "stage01.js"))
     monkeypatch.setenv("STAGE02_AGENT", str(FAKES / "stage02.js"))
     monkeypatch.setenv("STAGE03_AGENT", str(FAKES / "stage03.js"))
+    for number in range(4, 11):
+        monkeypatch.setenv(f"STAGE{number:02d}_AGENT", str(FAKES / f"stage{number:02d}.js"))
     monkeypatch.delenv("FAKE_FAIL", raising=False)
     yield
 

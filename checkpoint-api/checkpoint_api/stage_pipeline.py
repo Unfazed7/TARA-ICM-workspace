@@ -14,10 +14,13 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from . import pipeline_runner
 from . import run_log
 from . import stage_models as m
 from . import stage_store
 from .database import SessionLocal
+from .models import PipelineRun, PipelineRunAttempt
+from .stage_catalog import STAGES_BY_NUMBER
 
 
 log = run_log.get("pipeline")
@@ -198,8 +201,78 @@ async def run_stage_03_only(assessment_id: str) -> None:
         db.close()
 
 
+# The model folders and the scoring folders that follow Stage 03, in catalog order (spec 29 to 31, D-61).
+CHAIN = (4, 5, 6, 7, 8, 9, 10)
+# The first folder of each screen from pill 04 on: a rebuild starts there and runs every folder after it.
+UI_FIRST_FOLDER = {"04": 4, "05": 5, "06": 8}
+
+
+def _start_folder(db, assessment_id: str, number: int) -> str:
+    """A fresh run row and attempt for one folder, as the single-stage Run button makes them."""
+    stage = STAGES_BY_NUMBER[number]
+    old = db.query(PipelineRun).filter_by(assessment_id=assessment_id, stage_num=number).first()
+    if old is not None:
+        db.delete(old)
+        db.flush()
+    path = Path(pipeline_runner.get_output_path(number, assessment_id))
+    if path.exists():
+        path.unlink()
+    run = PipelineRun(assessment_id=assessment_id, stage_num=number, stage_name=stage.key, status="pending", started_at=utc_now())
+    attempt = PipelineRunAttempt(
+        assessment_id=assessment_id, stage_num=number, stage_name=stage.key, status="pending",
+        provider=pipeline_runner.LLM_PROVIDER, model=pipeline_runner.effective_llm_model() or None, started_at=utc_now(),
+    )
+    db.add_all([run, attempt])
+    db.commit()
+    return attempt.attempt_id
+
+
+def clear_folders(db, assessment_id: str, numbers) -> None:
+    """Forgets the earlier run of these folders (outputs and run rows; attempts stay as history)."""
+    for number in numbers:
+        old = db.query(PipelineRun).filter_by(assessment_id=assessment_id, stage_num=number).first()
+        if old is not None and old.status in {"pending", "running", "paused"}:
+            pipeline_runner.cancel_stage_process(assessment_id, number)
+        if old is not None:
+            db.delete(old)
+        path = Path(pipeline_runner.get_output_path(number, assessment_id))
+        if path.exists():
+            path.unlink()
+    db.commit()
+
+
+async def run_folders(assessment_id: str, numbers) -> bool:
+    """Runs folders in order through the legacy runner, so run rows, attempts and logs are recorded as before.
+
+    Stops at the first folder that does not complete; the folders after it are left not started.
+    """
+    db = SessionLocal()
+    try:
+        numbers = list(numbers)
+        clear_folders(db, assessment_id, numbers)
+        for number in numbers:
+            attempt_id = _start_folder(db, assessment_id, number)
+            await pipeline_runner.run_stage_subprocess(assessment_id, number, None, attempt_id)
+            db.expire_all()
+            run = db.query(PipelineRun).filter_by(assessment_id=assessment_id, stage_num=number).first()
+            if run is None or run.status != "complete":
+                log.error("%s | Folder %02d did not complete (%s); the folders after it were not started", assessment_id, number, run.status if run else "no run")
+                return False
+        return True
+    finally:
+        db.close()
+
+
+async def run_from_folder(assessment_id: str, first: int) -> None:
+    """The Rebuild button of pills 04 to 06: runs folder `first` and every folder after it."""
+    try:
+        await run_folders(assessment_id, [n for n in CHAIN if n >= first])
+    except Exception:  # noqa: BLE001 -- a stuck "running" row would block every later edit
+        log.exception("%s | The rebuild from folder %02d stopped unexpectedly", assessment_id, first)
+
+
 async def run_pipeline(assessment_id: str) -> None:
-    """Runs Stage 01, stores it, runs Stage 02 on the stored result, stores it, then Stage 03 the same way."""
+    """Runs Stage 01, stores it, runs Stage 02 on the stored result, stores it, then Stage 03 the same way, then folders 04 to 10."""
     db = SessionLocal()
     started = time.monotonic()
     try:
@@ -262,8 +335,11 @@ async def run_pipeline(assessment_id: str) -> None:
             return
         mark(db, j2, "complete", run_number=result["run_number"], refused_count=len(result["refused"]))
 
-        await run_stage_03(db, assessment_id, run_dir)
-        log.info("%s | Run complete after %.1f s", assessment_id, time.monotonic() - started)
+        complete = await run_stage_03(db, assessment_id, run_dir) and await run_folders(assessment_id, CHAIN)
+        if complete:
+            log.info("%s | Run complete after %.1f s", assessment_id, time.monotonic() - started)
+        else:
+            log.info("%s | Run stopped after %.1f s", assessment_id, time.monotonic() - started)
     except Exception as exc:  # never leave a job stuck in "running"
         log.exception("%s | The run stopped unexpectedly", assessment_id)
         db.rollback()

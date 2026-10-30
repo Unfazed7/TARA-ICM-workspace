@@ -181,6 +181,9 @@ def get_checkpoint1_output_dir(assessment_id: str) -> str:
 
 
 def get_agent_path(stage_num: int) -> str:
+    override = os.getenv(f"STAGE{stage_num:02d}_AGENT")  # lets tests run a fake program
+    if override:
+        return override
     stage_dir = STAGE_DIRS[stage_num]
     return os.path.join(
         WORKSPACE_ROOT,
