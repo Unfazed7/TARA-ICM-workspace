@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>03 Assets</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwRGFWfOw.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwYGFWfOw.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwTGFWfOw.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwSGFWfOw.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/d0bb04cc.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwRGFWfOw.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwYGFWfOw.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwTGFWfOw.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwSGFWfOw.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/d0bb04cc.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwRGFWfOw.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwYGFWfOw.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwTGFWfOw.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwSGFWfOw.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/d0bb04cc.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrodmgPn.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrMdmgPn.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* symbols2 */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFg08vz7ehw.woff2) format('woff2');
+  unicode-range: U+2000-2001, U+2004-2008, U+200A, U+23B8-23BD, U+2500-259F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrgdmgPn.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrkdmgPn.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/89514853.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrodmgPn.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrMdmgPn.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* symbols2 */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFg08vz7ehw.woff2) format('woff2');
+  unicode-range: U+2000-2001, U+2004-2008, U+200A, U+23B8-23BD, U+2500-259F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrgdmgPn.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrkdmgPn.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/89514853.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrodmgPn.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrMdmgPn.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* symbols2 */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFg08vz7ehw.woff2) format('woff2');
+  unicode-range: U+2000-2001, U+2004-2008, U+200A, U+23B8-23BD, U+2500-259F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrgdmgPn.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrkdmgPn.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/89514853.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+body{margin:0;background:#ECEAE4}
+html,*{scrollbar-width:thin;scrollbar-color:#CBC8C0 transparent}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#CBC8C0;border-radius:99px;border:3px solid transparent;background-clip:padding-box}::-webkit-scrollbar-thumb:hover{background:#A9A7A0;border:3px solid transparent;background-clip:padding-box}
+a{color:#1C1B19}a:hover{color:#1F6C9F}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.panel{background:#FFFFFF;border:1px solid rgba(28,27,25,.09);border-radius:14px;box-shadow:0 0 0 5px #E3E0D8,0 0 0 6px rgba(28,27,25,.05),0 28px 48px -30px rgba(28,27,25,.28);overflow:clip;min-width:0}
+.phead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:12px 24px;background:#F3F1EC;border-bottom:1px solid #DAD8D1}
+.lbl{font-size:12px;font-weight:600;letter-spacing:0;color:#6B6A66}
+.tag{display:inline-flex;align-items:center;gap:6px;border-radius:9999px;padding:2px 9px;font-size:11.5px;font-weight:500;letter-spacing:0;white-space:nowrap}
+.t-red{background:#FDEBEC;color:#9F2F2D}.t-blue{background:#E1F3FE;color:#1F6C9F}.t-green{background:#EDF3EC;color:#346538}.t-yellow{background:#FBF3DB;color:#956400}.t-ink{background:#E6E2D9;color:#1C1B19;font-weight:600}.t-grey{background:#F1F0EC;color:#5F5E5B}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 14px;box-sizing:border-box;border-radius:10px;font:inherit;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;transition:transform .32s cubic-bezier(.32,.72,0,1),background-color .2s cubic-bezier(.32,.72,0,1),border-color .2s cubic-bezier(.32,.72,0,1),color .2s cubic-bezier(.32,.72,0,1),box-shadow .32s cubic-bezier(.32,.72,0,1)}
+.btn:active{transform:translateY(1px) scale(.98)}
+.btn-dark{background:#1C1B19;color:#FFFFFF;border:1px solid #1C1B19}.btn-dark:hover{background:#33322F;color:#FFFFFF}
+.btn-line{background:#FFFFFF;color:#1C1B19;border:1px solid #DAD8D1}.btn-line:hover{background:#F7F6F2;transform:translateY(-1px);box-shadow:0 6px 14px -10px rgba(28,27,25,.35)}
+.btn:disabled{background:#F1F0EC;border-color:#DAD8D1;color:#8E8D89;cursor:not-allowed;transform:none}
+.btn:focus-visible,.navlink:focus-visible,.cell:focus-visible,.fld:focus-visible,.seg:focus-visible,.card:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.navlink{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border:0;border-radius:999px;font:inherit;font-size:13.5px;text-decoration:none;color:#5F5E5B;background:transparent;cursor:pointer;white-space:nowrap}
+.navlink:hover{color:#1C1B19;background:rgba(28,27,25,.05)}
+.fld{box-sizing:border-box;border:1px solid #DAD8D1;border-radius:10px;background:#FAF9F7;font:inherit;font-size:14px;color:#1C1B19;transition:border-color .2s,box-shadow .2s,background-color .2s}
+.fld:focus{outline:none;background:#FFFFFF;border-color:#1F6C9F;box-shadow:0 0 0 3px #E1F3FE}
+.grid-lines{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:repeating-linear-gradient(0deg,rgba(28,27,25,.035) 0 1px,transparent 1px 40px),repeating-linear-gradient(90deg,rgba(28,27,25,.035) 0 1px,transparent 1px 40px);-webkit-mask-image:linear-gradient(#000,rgba(0,0,0,0) 55%);mask-image:linear-gradient(#000,rgba(0,0,0,0) 55%)}
+table.assets{border-collapse:separate;border-spacing:0;width:100%;min-width:960px;font-size:13.5px}
+table.assets th{position:sticky;top:0;z-index:2;background:#E6E2D9;font-weight:600;text-align:left;color:#2F2E2B;border-bottom:1px solid #CFCAC0;box-shadow:0 6px 10px -10px rgba(28,27,25,.25);padding:16px 12px 10px;font-size:12px;line-height:1.3}
+table.assets td{border-bottom:1px solid #EEECE7;padding:0;vertical-align:middle;background:#FFFFFF;transition:background-color .25s cubic-bezier(.32,.72,0,1)}
+table.assets tr.row td{position:relative}
+table.assets tr.row td:first-child{box-shadow:inset 0 0 0 0 rgba(31,108,159,0);transition:background-color .3s cubic-bezier(.32,.72,0,1),box-shadow .32s cubic-bezier(.32,.72,0,1)}
+table.assets tr.row td::after{content:"";position:absolute;inset:0;background:rgba(28,27,25,.035);opacity:0;transition:opacity .28s cubic-bezier(.32,.72,0,1);pointer-events:none}
+table.assets tr.row:hover td::after{opacity:1}
+
+table.assets th.pc::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;border-radius:2px;background:var(--pc);transform:scaleX(0);transition:transform .3s cubic-bezier(.32,.72,0,1);pointer-events:none}
+table.assets th.pc:hover{color:var(--pc)}table.assets th.pc{transition:color .25s cubic-bezier(.32,.72,0,1)}table.assets:has(td.k0:hover) th.k0{color:var(--pc)}table.assets:has(td.k1:hover) th.k1{color:var(--pc)}table.assets:has(td.k2:hover) th.k2{color:var(--pc)}table.assets:has(td.k3:hover) th.k3{color:var(--pc)}table.assets:has(td.k4:hover) th.k4{color:var(--pc)}table.assets:has(td.k5:hover) th.k5{color:var(--pc)}
+table.assets th.pc:hover::after,table.assets:has(td.k0:hover) th.k0::after,table.assets:has(td.k1:hover) th.k1::after,table.assets:has(td.k2:hover) th.k2::after,table.assets:has(td.k3:hover) th.k3::after,table.assets:has(td.k4:hover) th.k4::after,table.assets:has(td.k5:hover) th.k5::after{transform:scaleX(1)}
+table.assets th{vertical-align:bottom}
+
+table.assets th.pc{text-align:center;padding:16px 6px 10px;font-size:12px;vertical-align:bottom;white-space:nowrap;background:#F3F1EC;color:#4A4946}
+.pcell{transition:background-color .25s cubic-bezier(.32,.72,0,1)}
+table.assets tr.band td{background:#F3F1EC;padding:6px 8px;border-bottom:2px solid #D9D4C9;border-top:2px solid #D9D4C9}
+table.assets tbody tr.band:first-child td{border-top:0}
+.bandbtn{display:inline-flex;align-items:center;gap:10px;border:0;background:transparent;font-family:'Geist',ui-sans-serif,system-ui,sans-serif;font-size:13.5px;font-weight:600;letter-spacing:-0.01em;color:#3A3936;cursor:pointer;padding:4px 8px 4px 6px;border-radius:8px;transition:background-color .2s cubic-bezier(.32,.72,0,1)}.bandbtn:hover{background:rgba(255,255,255,.55)}
+.fcode{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:6px;background:#E4E1DA;color:#4A4946;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;font-weight:500;letter-spacing:.04em}
+.fcount{font-size:12.5px;font-weight:400;letter-spacing:0;color:#6B6A66;font-variant-numeric:tabular-nums}.bandbtn:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.bandbtn svg{transition:transform .32s cubic-bezier(.32,.72,0,1)}.bandbtn[aria-expanded="true"] svg{transform:rotate(90deg)}
+.chip{font-size:11px;font-weight:500;color:#5F5E5B;background:#F1F0EC;border-radius:99px;padding:1px 7px}
+table.compact .cell{padding:5px 12px;font-size:12.5px}table.compact .pcell{min-height:32px}table.compact .clamp{-webkit-line-clamp:1}table.compact tr.band td{padding:3px 8px}
+.cell{display:block;width:100%;box-sizing:border-box;border:0;background:transparent;font:inherit;color:inherit;text-align:left;padding:8px 12px;cursor:pointer;position:relative;transition:background-color .25s cubic-bezier(.32,.72,0,1),padding .25s cubic-bezier(.32,.72,0,1)}
+
+.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pcell{position:relative;display:flex;align-items:center;justify-content:center;height:100%;min-height:40px;box-sizing:border-box;padding:0;cursor:pointer;border-radius:6px;box-shadow:inset 0 0 0 0 transparent;transition:box-shadow .28s cubic-bezier(.32,.72,0,1),background-color .25s cubic-bezier(.32,.72,0,1)}
+.pcell.sel{box-shadow:inset 0 0 0 2px var(--pc);animation:selin .32s cubic-bezier(.32,.72,0,1)}@keyframes selin{from{box-shadow:inset 0 0 0 6px transparent}}
+.sec{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 20px 8px;background:#FFFFFF;font-size:12.5px;font-weight:600;color:#3A3936}.sec .n{font-weight:500;color:#6B6A66;font-variant-numeric:tabular-nums}
+.msg-c{padding-left:12px;border-left:2px solid #DAD8D1;font-size:14px;color:#2F2E2B;display:flex;flex-direction:column;gap:6px}.msg-c p{margin:0;line-height:1.5}
+.asm{position:relative;padding:12px 20px;border-top:1px solid #F1EFEA;display:flex;flex-direction:column;gap:8px;transition:background-color .2s cubic-bezier(.32,.72,0,1)}.asm:hover{background:#FAF9F6}.asm.open{box-shadow:inset 3px 0 0 #E8C66A}.asm p{margin:0;font-size:14px;line-height:1.5;color:#2F2E2B}
+.pdot,.ndot{position:absolute;top:7px;right:calc(50% - 19px);width:6px;height:6px;border-radius:99px;background:#E8C66A;box-shadow:0 0 0 2px #FFFFFF;pointer-events:none}.ndot{display:inline-block}
+.bar{height:4px;width:120px;border-radius:99px;background:#E9E7E1;overflow:hidden}
+.mark{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;border-radius:5px;box-sizing:border-box;cursor:pointer;font:inherit;transition:transform .25s cubic-bezier(.32,.72,0,1),background-color .2s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1)}
+.mark:hover{transform:scale(1.08);box-shadow:0 0 0 4px color-mix(in srgb,var(--pc) 16%,transparent)}
+td:hover .mark.on,.pcell.sel .mark.on{background:var(--pc)!important;border-color:var(--pc)!important}
+
+.mark:active{transform:scale(.92)}
+.mark:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.cdot{position:absolute;right:6px;top:50%;margin-top:-3px;width:6px;height:6px;border-radius:99px;background:#E8C66A}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#5F5E5B;cursor:pointer}.ibtn:hover{background:#F1F0EC;color:#1C1B19}
+.dens{width:36px;height:36px;border-radius:10px;box-shadow:inset 0 0 0 1px #DAD8D1;transition:background-color .25s cubic-bezier(.32,.72,0,1),color .25s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1),transform .25s cubic-bezier(.32,.72,0,1)}.dens:active{transform:scale(.94)}.dens[aria-pressed="true"]{background:#1C1B19;color:#FFFFFF;box-shadow:none}.dens[aria-pressed="true"]:hover{background:#33322F;color:#FFFFFF}.dens path{transition:transform .32s cubic-bezier(.32,.72,0,1)}.dens[aria-pressed="true"] .l1{transform:translateY(2px)}.dens[aria-pressed="true"] .l3{transform:translateY(-2px)}.dens:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.helpb{width:30px;height:30px;border-radius:99px;box-shadow:inset 0 0 0 1px #DAD8D1;font:inherit;font-size:13px;font-weight:600;color:#5F5E5B;transition:background-color .2s cubic-bezier(.32,.72,0,1),color .2s cubic-bezier(.32,.72,0,1)}.helpb[aria-expanded="true"]{background:#1C1B19;color:#FFFFFF;box-shadow:none}.helpb:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.legendpop{position:absolute;left:0;bottom:42px;z-index:5;display:flex;flex-direction:column;gap:8px;min-width:280px;padding:14px 16px;background:#FFFFFF;border:1px solid rgba(28,27,25,.09);border-radius:12px;box-shadow:0 18px 36px -18px rgba(28,27,25,.35);font-size:13px;color:#3A3936;animation:pop2 .28s cubic-bezier(.32,.72,0,1) both;transform-origin:bottom left}@keyframes pop2{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+.rchip{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:78px;height:26px;padding:0 9px;box-sizing:border-box;border:0;border-radius:8px;font:inherit;font-size:12px;font-weight:500;cursor:pointer;transition:box-shadow .2s cubic-bezier(.32,.72,0,1),transform .2s cubic-bezier(.32,.72,0,1),background-color .2s cubic-bezier(.32,.72,0,1)}.rchip:hover{box-shadow:0 0 0 3px rgba(28,27,25,.08)}.rchip:active{transform:scale(.96)}.rchip:disabled{cursor:default;box-shadow:none;transform:none}.rchip:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}.rchip.big{min-width:92px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer}
+.rmenu{position:absolute;top:calc(100% - 6px);left:50%;z-index:6;min-width:168px;padding:4px;background:#FFFFFF;border:1px solid rgba(28,27,25,.1);border-radius:12px;box-shadow:0 18px 36px -18px rgba(28,27,25,.38);transform:translateX(-50%);animation:menuin .22s cubic-bezier(.32,.72,0,1) both}@keyframes menuin{from{opacity:0;transform:translate(-50%,-4px)}to{opacity:1;transform:translate(-50%,0)}}
+.ropt{display:flex;align-items:center;gap:10px;width:100%;padding:7px 9px;box-sizing:border-box;border:0;border-radius:8px;background:transparent;font:inherit;font-size:13px;color:#2F2E2B;text-align:left;cursor:pointer;transition:background-color .15s cubic-bezier(.32,.72,0,1)}.ropt:hover{background:#F3F1EC}.ropt[aria-checked="true"]{font-weight:600}.ropt .pts{margin-left:auto;font-size:11.5px;color:#8E8D89}
+table.assets th .grp{position:absolute;left:0;top:9px;width:var(--gw);display:flex;justify-content:center;pointer-events:none}.gpill{display:inline-flex;align-items:center;height:20px;padding:0 10px;border-radius:99px;background:#FFFFFF;box-shadow:inset 0 0 0 1px #DAD6CC;font-size:11px;font-weight:600;letter-spacing:.01em;color:#4A4946;white-space:nowrap}
+.dist{display:inline-flex;height:6px;width:120px;border-radius:99px;overflow:hidden;background:#E9E7E1}.dist span{display:block;height:100%}
+.btn-sm{min-height:32px;padding:0 12px;font-size:13px;border-radius:8px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:#4A4946;cursor:pointer;white-space:nowrap}.switch input{position:absolute;opacity:0;width:1px;height:1px}.switch .track{position:relative;width:28px;height:16px;border-radius:99px;background:#CFCDC6;transition:background-color .2s}.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:99px;background:#FFFFFF;box-shadow:0 1px 2px rgba(28,27,25,.2);transition:transform .25s cubic-bezier(.16,1,.3,1)}.switch input:checked+.track{background:#1C1B19}.switch input:checked+.track::after{transform:translateX(12px)}.switch input:focus-visible+.track{outline:2px solid #1F6C9F;outline-offset:2px}
+.msg{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px}.msg-body{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:14px;color:#2F2E2B}.msg-body p{margin:0;line-height:1.5}.who{font-size:12.5px;color:#6B6A66}.who b{color:#1C1B19;font-weight:600}
+.av{width:24px;height:24px;border-radius:99px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}.av-c{background:#1C1B19;color:#FFFFFF}
+.quote{margin:2px 0 0;padding:2px 0 2px 12px;border-left:2px solid #DAD8D1}.quote p{font-size:13.5px;color:#3A3936}.quote footer{margin-top:2px;font-size:11.5px;color:#6B6A66}
+.proposal{display:flex;flex-direction:column;gap:10px;margin-top:4px;padding:12px;border-radius:12px;background:#F7F6F2;border:1px solid #E6E2D9}
+.decide{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:12px;background:#FAF9F7;border:1px solid #E6E4DE}
+.trow{transition:background-color .2s cubic-bezier(.32,.72,0,1);display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;color:inherit;cursor:pointer;background:transparent;border:0;border-top:1px solid #F1F0EC;padding:10px 20px}.trow:hover{background:#F7F6F2}.trow:focus-visible{outline:2px solid #1F6C9F;outline-offset:-2px}
+.composer{border:1px solid #DAD8D1;border-radius:12px;background:#FAF9F7;transition:border-color .2s,box-shadow .2s,background-color .2s}.composer:focus-within{background:#FFFFFF;border-color:#1F6C9F;box-shadow:0 0 0 3px #E1F3FE}.composer textarea{display:block;width:100%;box-sizing:border-box;border:0;background:transparent;resize:none;font:inherit;font-size:14px;color:#1C1B19;padding:10px 12px 6px;outline:none}
+.tlink{border:0;background:transparent;font:inherit;font-size:13px;color:#5F5E5B;cursor:pointer;padding:4px 2px;text-decoration:underline;text-underline-offset:3px;text-decoration-color:#CFCDC6}.tlink:hover{color:#1C1B19}
+.card{display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;color:inherit;cursor:pointer;background:#FFFFFF;border:1px solid #E6E4DE;border-radius:10px;padding:10px 12px}
+.card:hover{background:#FAF9F7}
+.seg{min-height:32px;padding:0 12px;border:0;border-radius:8px;font:inherit;font-size:13px;cursor:pointer;background:transparent;color:#5F5E5B;transition:background-color .28s cubic-bezier(.32,.72,0,1),color .2s cubic-bezier(.32,.72,0,1),box-shadow .28s cubic-bezier(.32,.72,0,1)}.seg:hover{color:#1C1B19}
+.fadein{animation:rise .4s cubic-bezier(.32,.72,0,1) both}
+.rise{}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.open{animation:open .45s cubic-bezier(.32,.72,0,1) both}
+.closing{animation:closepanel .3s cubic-bezier(.32,.72,0,1) forwards;pointer-events:none}
+.railwrap{position:absolute;top:0;right:0;bottom:0;width:400px;z-index:8;transition:transform .48s cubic-bezier(.32,.72,0,1),opacity .3s cubic-bezier(.32,.72,0,1);will-change:transform}
+.drawer{box-shadow:0 0 0 5px #E3E0D8,0 0 0 6px rgba(28,27,25,.05),-28px 0 56px -28px rgba(28,27,25,.4)}@keyframes closepanel{to{opacity:0;transform:translateX(16px)}}
+@keyframes open{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@media (max-width:767px){.hidesm{display:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.tickp{stroke-dashoffset:0}.mark:hover,.btn-line:hover{transform:none}}
+.dsec{display:flex;flex-direction:column;gap:7px;margin:0;padding:12px 0 0;border-top:1px solid #EEECE7}
+.dsec.propsec{gap:10px}.dspacer{flex:none;height:0}.dhead+.dsec,.dhead~sc-if>.dsec:first-child,.dhead+sc-if>.dsec:first-child{border-top:0;padding-top:0}
+.dlabel{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;letter-spacing:-0.01em;color:#1C1B19}.dlabel::before{content:"";flex:none;width:4px;height:18px;border-radius:3px;background:#6F6B63}
+.whywrap{display:grid;grid-template-rows:0fr;opacity:0;margin-top:-10px;transition:grid-template-rows .3s cubic-bezier(.32,.72,0,1),opacity .22s ease-out}.whywrap.open{grid-template-rows:1fr;opacity:1}.whyin{min-height:0;overflow:hidden}.whywrap .propwhy{transform:translateY(-4px);transition:transform .3s cubic-bezier(.32,.72,0,1)}.whywrap.open .propwhy{transform:none}
+.propwhy.fa{animation:wfa .28s cubic-bezier(.32,.72,0,1)}.propwhy.fb{animation:wfb .28s cubic-bezier(.32,.72,0,1)}@keyframes wfa{from{opacity:0}}@keyframes wfb{from{opacity:0}}
+.propwhy{margin:10px 0 4px;padding:10px 12px;border-radius:10px;background:#F7F6F2;font-size:13px;line-height:1.5;color:#2F2E2B;display:flex;flex-direction:column;gap:6px}.propwhy p{margin:0}
+.igrp{display:flex;flex-direction:column;gap:6px}.igrp+.igrp{margin-top:4px}.iglbl{font-size:12px;color:#6B6A66}
+.igrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:3px}
+.ibtn2{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;height:46px;border:0;border-radius:10px;font:inherit;cursor:pointer;padding:0 4px;box-sizing:border-box;transition:background-color .25s cubic-bezier(.32,.72,0,1),filter .25s cubic-bezier(.32,.72,0,1)}
+.ibtn2:hover{filter:brightness(.96)}.ibtn2:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.ibtn2 .inm{font-size:12.5px;font-weight:600;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ibtn2 .ilv{display:inline-flex;align-items:center;gap:3px;font-size:11px;opacity:.85}
+.ibtn2 .ilv svg{transition:transform .3s cubic-bezier(.32,.72,0,1)}.ibtn2[aria-expanded="true"] .ilv svg{transform:rotate(180deg)}
+.ibtn2 .ipdot{position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:99px;background:#E8C66A}
+td.cat .rchip{transition:opacity .25s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1),background-color .25s cubic-bezier(.32,.72,0,1)}
+tr.row:has(td.rt:hover) td.cat:not(.drv){filter:saturate(.35) opacity(.55)}
+tr.row:has(td.rt:hover) td.drv{box-shadow:inset 0 0 0 2px var(--oc)!important}
+td.cat .rchip:not(:disabled):hover{background:rgba(255,255,255,.5)!important;box-shadow:none!important}
+table.assets tr.row td.cat,table.assets tr.row td.rt{border-bottom:2px solid #FFFFFF!important;border-right:2px solid #FFFFFF;transition:filter .25s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1),background-color .25s}
+td.cat .rchip,td.rt .rchip{background:transparent;box-shadow:none;min-width:0;width:100%;font-weight:500}td.rt .rchip{font-weight:600}td.rt:hover .rchip{filter:none!important;box-shadow:none!important}
+td.rt .rchip{transition:filter .25s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1)}td.rt:hover .rchip{filter:brightness(.94) saturate(1.08);box-shadow:0 4px 10px -6px rgba(28,27,25,.45)}
+.ibtn2{transition:background-color .25s cubic-bezier(.32,.72,0,1),box-shadow .25s cubic-bezier(.32,.72,0,1),filter .25s cubic-bezier(.32,.72,0,1)}
+td.cat .rchip{position:relative}td.cat .rchip .pdot{top:-3px;right:-3px}
+.pager{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding:10px 24px;border-top:1px solid #E6E4DE;background:#FFFFFF;font-size:12.5px}
+.pselwrap{position:relative;display:inline-flex;align-items:center}.pselwrap svg{position:absolute;right:9px;pointer-events:none;color:#6B6A66}
+.psel{appearance:none;-webkit-appearance:none;height:32px;padding:0 28px 0 12px;border:1px solid #DAD8D1;border-radius:8px;background:#FFFFFF;font:inherit;font-size:13px;color:#1C1B19;cursor:pointer;transition:border-color .2s,box-shadow .2s}.psel:hover{border-color:#BDB7AA}.psel:focus-visible{outline:none;border-color:#1F6C9F;box-shadow:0 0 0 3px #E1F3FE}
+.pbtn{transition:background-color .2s,border-color .2s,opacity .2s}.pbtn:not(:disabled):hover{background:#F7F6F2;border-color:#BDB7AA}.pbtn:disabled{opacity:.45;cursor:default}
+.wback{position:fixed;inset:0;z-index:60;background:rgba(28,27,25,.28);display:flex;align-items:center;justify-content:center;padding:16px;animation:wfade .22s cubic-bezier(.32,.72,0,1) both}
+.wdlg{width:440px;max-width:100%;box-sizing:border-box;background:#FFFFFF;border-radius:14px;padding:20px 20px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 0 0 1px rgba(28,27,25,.08),0 24px 48px -16px rgba(28,27,25,.35);animation:wpop .28s cubic-bezier(.32,.72,0,1) both}
+@keyframes wfade{from{opacity:0}}@keyframes wpop{from{opacity:0;transform:translateY(8px) scale(.98)}}
+table.assets.fixed{table-layout:fixed}table.assets.fixed th.pc{padding-left:5px;padding-right:5px}
+th.acol{overflow:hidden;white-space:nowrap}
+td.acol{overflow:hidden}td.acol .cell{width:128px;min-width:128px;transition:transform .42s cubic-bezier(.32,.72,0,1),opacity .3s cubic-bezier(.32,.72,0,1)}th.acol{transition:width .42s cubic-bezier(.32,.72,0,1),padding .42s cubic-bezier(.32,.72,0,1),color .25s}.acol-off td.acol .cell{transform:translateX(-28px)}.scentx{display:block;max-width:none}td.scencell{overflow:hidden}
+.acol-off th.acol{width:0!important;padding-left:0!important;padding-right:0!important;color:transparent}
+.acol-off td.acol .cell{opacity:0;pointer-events:none}
+.acoltog{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;border:0;border-radius:5px;background:transparent;color:#6B6A66;cursor:pointer;transition:background-color .2s,color .2s}.acoltog:hover{background:#DAD6CC;color:#1C1B19}.acoltog svg{transition:transform .4s cubic-bezier(.32,.72,0,1)}.acoltog[aria-pressed="true"] svg{transform:rotate(180deg)}.acoltog:focus-visible{outline:2px solid #1F6C9F;outline-offset:1px}
+table.assets tr.row td{border-bottom:1px solid #E7E3DB}table.assets tr.row td.acol,table.assets tr.row td[rowspan]{border-bottom:0}
+.psbtn{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 8px 0 10px;border:1px solid #DAD8D1;border-radius:7px;background:#FFFFFF;font:inherit;font-size:12.5px;font-variant-numeric:tabular-nums;color:#1C1B19;cursor:pointer;transition:border-color .2s,background-color .2s,box-shadow .2s}.psbtn:hover{border-color:#BDB7AA;background:#FAF9F7}.psbtn[aria-expanded="true"]{border-color:#BDB7AA;box-shadow:0 0 0 3px #F1EFEA}.psbtn svg{color:#8E8D89;transition:transform .3s cubic-bezier(.32,.72,0,1)}.psbtn[aria-expanded="true"] svg{transform:rotate(180deg)}.psbtn:focus-visible{outline:none;border-color:#1F6C9F;box-shadow:0 0 0 3px #E1F3FE}
+.psmenu{position:absolute;bottom:calc(100% + 6px);left:0;right:0;z-index:20;display:flex;flex-direction:column;gap:1px;padding:3px;background:#FFFFFF;border-radius:8px;box-shadow:0 0 0 1px rgba(28,27,25,.08),0 10px 24px -12px rgba(28,27,25,.35);animation:psin .18s cubic-bezier(.32,.72,0,1) both}@keyframes psin{from{opacity:0;transform:translateY(4px)}}
+.psopt{display:flex;align-items:center;justify-content:center;height:26px;padding:0 6px;border:0;border-radius:5px;background:transparent;font:inherit;font-size:12.5px;font-variant-numeric:tabular-nums;color:#4A4946;cursor:pointer;transition:background-color .15s,color .15s}.psopt:hover{background:#F3F1EC;color:#1C1B19}.psopt[aria-selected="true"]{background:#EFEDE7;color:#1C1B19;font-weight:600}
+.fbtn{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border:1px solid #DAD8D1;border-radius:10px;background:#FFFFFF;font:inherit;font-size:13px;font-weight:500;color:#1C1B19;cursor:pointer;transition:border-color .2s,background-color .2s,box-shadow .2s}.fbtn:hover{border-color:#BDB7AA;background:#FAF9F7}.fbtn[aria-expanded="true"]{border-color:#BDB7AA;box-shadow:0 0 0 3px #F1EFEA}.fbtn svg{color:#6B6A66}.fbtn:focus-visible{outline:none;border-color:#1F6C9F;box-shadow:0 0 0 3px #E1F3FE}
+.fcountb{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:99px;background:#1C1B19;color:#FFFFFF;font-size:11px;font-weight:600}
+.fpop{position:absolute;top:calc(100% + 6px);right:0;z-index:30;width:250px;display:flex;flex-direction:column;gap:1px;padding:6px;background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(28,27,25,.08),0 16px 32px -14px rgba(28,27,25,.35);animation:fpin .2s cubic-bezier(.32,.72,0,1) both}@keyframes fpin{from{opacity:0;transform:translateY(-4px)}}
+.fhd{padding:6px 8px 4px;font-size:11.5px;font-weight:600;color:#6B6A66}.fsep{height:1px;margin:5px 4px;background:#EEECE7}
+.fopt{display:flex;align-items:center;gap:10px;height:32px;padding:0 8px;border:0;border-radius:7px;background:transparent;font:inherit;font-size:13px;color:#2F2E2B;text-align:left;cursor:pointer;transition:background-color .15s}.fopt:hover{background:#F3F1EC}.fopt[aria-checked="true"]{color:#1C1B19;font-weight:500}
+.fradio{flex:none;width:14px;height:14px;border-radius:99px;box-sizing:border-box;box-shadow:inset 0 0 0 1.5px #BDB7AA;transition:box-shadow .2s}.fopt[aria-checked="true"] .fradio{box-shadow:inset 0 0 0 4.5px #1C1B19}
+.ftog{flex:none;position:relative;width:24px;height:14px;border-radius:99px;background:#DAD6CC;transition:background-color .25s cubic-bezier(.32,.72,0,1)}.ftog::after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:99px;background:#FFFFFF;transition:transform .25s cubic-bezier(.32,.72,0,1)}.fopt[aria-checked="true"] .ftog{background:#1C1B19}.fopt[aria-checked="true"] .ftog::after{transform:translateX(10px)}
+.freset{height:30px;border:0;border-radius:7px;background:transparent;font:inherit;font-size:12.5px;color:#6B6A66;cursor:pointer;text-align:left;padding:0 8px}.freset:hover{background:#F3F1EC;color:#1C1B19}
+table.assets thead{position:sticky;top:0;z-index:5}table.assets thead th{position:relative;top:auto;vertical-align:middle;box-shadow:none;border-right:1px solid #DCD7CD;border-bottom:1px solid #DCD7CD}table.assets thead th:last-child{border-right:0}
+table.assets thead tr:last-child th{border-bottom:1px solid #CFCAC0}
+table.assets thead tr.sizer th{height:0;padding:0!important;border:0!important;font-size:0;line-height:0;background:transparent}
+th.hgroup{font-size:12.5px;font-weight:600;color:#1C1B19}
+table.assets th.hband{padding:7px 8px;text-align:center;font-weight:400;font-size:12.5px}th.hband span{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}th.hband b{font-weight:600}
+th.hb-user{background:#EBDFE7!important;color:#6E3F66}th.hb-user b{color:#55304F}
+th.hb-other{background:#DCD4C4!important;color:#4E4434}th.hb-other b{color:#3A3226}
+table.assets thead th.cu{background:#F4EEF2!important;color:#55304F}table.assets thead th.co{background:#ECE7DD!important;color:#3A3226}
+th.hover{font-size:12.5px;color:#1C1B19}.hinfo{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;margin-left:5px;border-radius:99px;box-shadow:inset 0 0 0 1.2px #6B6A66;font-size:9px;font-weight:700;font-style:italic;color:#6B6A66;vertical-align:1px;cursor:help}
+.dsum{display:inline-flex;flex-direction:column;gap:6px}.dsum .dist{width:200px;height:8px;gap:2px;background:transparent}.dsum .dist span{border-radius:99px}
+table.assets thead tr:not(.sizer) th{background:#E6E2D9!important;color:#2F2E2B!important;border-right:1px solid #CFC8BA!important;border-bottom:1px solid #CFC8BA!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)!important}
+table.assets thead tr:not(.sizer) th.hband{background:#DDD7CB!important}table.assets thead th.hband b,table.assets thead th.hband svg{color:#2F2E2B}
+table.assets thead tr:not(.sizer) th.cu,table.assets thead tr:not(.sizer) th.co{background:#EFECE6!important;font-weight:600}
+table.assets thead tr:not(.sizer) th[rowspan],table.assets thead tr:last-child th{border-bottom:2px solid #B3A994!important}
+table.assets thead tr:not(.sizer) th.hgroup,table.assets thead tr:not(.sizer) th.hb-user,table.assets thead tr:last-child th.k0{border-left:2px solid #B3A994!important}
+table.assets thead tr:not(.sizer) th.hb-user,table.assets thead tr:not(.sizer) th.hb-other{border-right:2px solid #B3A994!important}
+table.assets thead tr:last-child th.k3{border-right:2px solid #B3A994!important}table.assets thead tr:last-child th.k6,table.assets thead tr:not(.sizer) th.hgroup{border-right:2px solid #B3A994!important}
+table.assets thead tr:not(.sizer) th.hover{border-right:0!important}
+table.assets{border-radius:10px 10px 0 0;overflow:visible}
+table.assets thead th.acol .acoltog,table.assets thead .acoltog{color:#5C5244}.acoltog:hover{background:#DAD6CC!important}
+.rmenu{min-width:0!important;width:104px;display:flex;flex-direction:column;gap:3px;padding:4px!important}
+.ropt{justify-content:center;gap:0!important;height:26px;padding:0 8px!important;font-size:12px!important;font-weight:500;border-radius:7px!important;box-shadow:inset 0 0 0 1px transparent;transition:box-shadow .15s cubic-bezier(.32,.72,0,1),filter .15s!important}
+.ropt:hover{filter:brightness(.97);box-shadow:inset 0 0 0 1px var(--ob)}
+.ropt[aria-checked="true"]{font-weight:600!important;box-shadow:inset 0 0 0 1.5px var(--ob)}
+table.assets thead tr:not(.sizer) th{text-align:center!important;vertical-align:middle!important}
+table.assets thead tr:not(.sizer) th[rowspan]{padding-top:10px!important;padding-bottom:10px!important}
+table.assets thead tr:not(.sizer) th[rowspan] > span{justify-content:center}
+table.assets tr.row td.cat,table.assets tr.row td.rt{position:relative;padding:0!important}
+td.cat .pcell{position:absolute;inset:0;min-height:0;height:auto;border-radius:0}
+td.cat .rchip{position:absolute;inset:0;width:100%;height:100%;border-radius:0;font-size:12.5px;transition:background-color .2s cubic-bezier(.32,.72,0,1),box-shadow .2s cubic-bezier(.32,.72,0,1)}
+td.cat .rchip:not(:disabled):hover{background:rgba(255,255,255,.38)!important;box-shadow:inset 0 0 0 1.5px var(--oc)!important}
+td.cat .rchip .pdot{top:6px!important;right:6px!important}
+td.cat .rmenu{top:calc(50% + 14px)}
+td.rt .cell{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0!important;border-radius:0;transition:background-color .2s}td.rt .cell:hover{background:rgba(255,255,255,.14)}
+td.cat .pcell.sel{box-shadow:none}
+td.cat .rmenu.up{top:auto;bottom:calc(50% + 14px);transform-origin:bottom center}
+td.cat .rchip .pdot{width:9px!important;height:9px!important;top:5px!important;right:5px!important;background:#E8A317!important;box-shadow:0 0 0 2px #FFFFFF,0 1px 4px rgba(28,27,25,.35)!important}
+table.assets thead tr.sizer + tr th{border-top:2px solid #B3A994!important}
+table.assets thead tr:not(.sizer) th.hb-other,table.assets thead tr:last-child th.k6{border-right:2px solid #B3A994!important}
+table.assets thead tr:not(.sizer) th.hover{border-left:0!important}
+td.cat .rmenu{top:100%!important;bottom:auto!important;left:-1px!important;right:-1px!important;width:auto!important;transform:none!important;border-radius:0 0 9px 9px!important;border:1px solid #CFC8BA!important;border-top:0!important;box-shadow:0 14px 26px -14px rgba(28,27,25,.4)!important;padding:4px!important;animation:ddin .18s cubic-bezier(.32,.72,0,1) both!important;z-index:8}
+td.cat .rmenu.up{top:auto!important;bottom:100%!important;border-radius:9px 9px 0 0!important;border-top:1px solid #CFC8BA!important;border-bottom:0!important;box-shadow:0 -14px 26px -14px rgba(28,27,25,.4)!important;animation-name:ddup!important}
+@keyframes ddin{from{opacity:0;transform:translateY(-4px)}}@keyframes ddup{from{opacity:0;transform:translateY(4px)}}
+td.cat .ropt{width:100%}
+td.cat:has(.rmenu) .rchip{box-shadow:inset 0 0 0 1.5px var(--oc)!important}
+td.cat .rmenu{animation:ddraw .3s cubic-bezier(.32,.72,0,1) both!important;transform-origin:top center}
+td.cat .rmenu.up{animation:ddrawup .3s cubic-bezier(.32,.72,0,1) both!important;transform-origin:bottom center}
+@keyframes ddraw{from{clip-path:inset(0 0 100% 0);opacity:.6}to{clip-path:inset(0 0 0 0);opacity:1}}
+@keyframes ddrawup{from{clip-path:inset(100% 0 0 0);opacity:.6}to{clip-path:inset(0 0 0 0);opacity:1}}
+td.cat .rmenu .ropt{animation:ddopt .3s cubic-bezier(.32,.72,0,1) both}td.cat .rmenu .ropt:nth-child(2){animation-delay:.03s}td.cat .rmenu .ropt:nth-child(3){animation-delay:.06s}td.cat .rmenu .ropt:nth-child(4){animation-delay:.09s}
+td.cat .rmenu.up .ropt{animation-name:ddoptup}
+@keyframes ddopt{from{opacity:0;transform:translateY(-6px)}}@keyframes ddoptup{from{opacity:0;transform:translateY(6px)}}
+@media (prefers-reduced-motion: reduce){td.cat .rmenu,td.cat .rmenu .ropt{animation:none!important}}
+</style>
+</helmet>
+<div sc-camel-on-click="{{clearSel}}" style="position: relative; height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: #ECEAE4; color: #1C1B19; font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased">
+<div class="grid-lines" aria-hidden="true"></div>
+
+<div style="position: sticky; top: 0; z-index: 20; padding: 18px 16px 0; display: flex; justify-content: center; pointer-events: none">
+<nav aria-label="Assessment" style="pointer-events: auto; max-width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(255,255,255,.8); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); box-shadow: 0 0 0 1px rgba(28,27,25,.08), 0 18px 40px -22px rgba(28,27,25,.28), inset 0 1px 1px rgba(255,255,255,.9)">
+<a href="#" aria-label="Aegis, back to the dashboard" style="display: inline-flex; align-items: center; gap: 8px; padding: 0 12px 0 8px; font-size: 14px; font-weight: 600; white-space: nowrap; text-decoration: none; color: #1C1B19"><span style="width: 28px; height: 28px; border-radius: 999px; background: #1C1B19; display: inline-flex; align-items: center; justify-content: center"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.2 2.9 7.8 7 9 4.1-1.2 7-4.8 7-9V6l-7-3Z"></path></svg></span>Aegis</a>
+<div class="hidesm" style="display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgba(28,27,25,.05)">
+<a href="#" class="navlink"><span class="mono" style="font-size: 11px">01</span>Documents</a>
+<a href="#" class="navlink"><span class="mono" style="font-size: 11px">02</span>Item Definition</a>
+<a href="#" class="navlink"><span class="mono" style="font-size: 11px">03</span>Assets</a>
+<a href="#" aria-current="page" class="navlink" style="background: #FFFFFF; color: #1C1B19; font-weight: 500; box-shadow: 0 0 0 1px rgba(28,27,25,.08), 0 6px 12px -8px rgba(28,27,25,.35)"><span class="mono" style="font-size: 11px; color: #1F6C9F">04</span>Impacts</a>
+</div>
+<button type="button" class="navlink" aria-expanded="{{railOpenStr}}" sc-camel-on-click="{{toggleRail}}" style="{{asmNav}}"><span>Assumptions</span><sc-if value="{{hasNeed}}" hint-placeholder-val="{{ true }}"><span class="tag t-yellow" style="letter-spacing: 0; text-transform: none; font-size: 12px; font-weight: 600"><span style="width: 6px; height: 6px; border-radius: 99px; background: #956400"></span>{{needYou}} need you</span></sc-if></button>
+<a href="#" class="navlink" aria-label="Settings" style="width: 40px; padding: 0; justify-content: center"><svg width="17" height="17" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg></a>
+<a href="#" aria-label="Open the menu" style="position: relative; width: 40px; height: 40px; border-radius: 999px; background: rgba(28,27,25,.06); flex: none"><span style="position: absolute; left: 13px; top: 16px; width: 14px; height: 1.5px; border-radius: 2px; background: #1C1B19"></span><span style="position: absolute; left: 13px; top: 22px; width: 14px; height: 1.5px; border-radius: 2px; background: #1C1B19"></span></a>
+</nav>
+</div>
+
+<main style="position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; width: 100%; max-width: 1600px; margin: 0 auto; padding: 24px clamp(16px, 2.5vw, 32px) 24px; box-sizing: border-box">
+
+<div class="rise" style="--i: 0; flex: none; margin-bottom: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-width: 0">
+<nav aria-label="Breadcrumb" style="display: inline-flex; align-items: baseline; gap: 6px; font-size: 14px; color: #6B6A66"><a href="#" style="color: inherit; text-decoration: none">Key and certificate portal</a><span aria-hidden="true">/</span></nav>
+<h1 style="margin: 0; font-size: 22px; line-height: 1.2; letter-spacing: -0.025em; font-weight: 600">Impact Analysis</h1>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 13px; color: #6B6A66"><span style="display: inline-flex; align-items: center; gap: 7px"><span class="mono" style="color: #1C1B19"><br></span></span>
+<span>Built from asset analysis <span class="mono">run: 3</span></span>
+</div>
+</div>
+
+<div style="position: relative; flex: 1 1 auto; min-height: 0; display: flex; gap: 0; align-items: stretch">
+
+<section class="panel rise" aria-label="Damage scenarios" style="--i: 1; flex: 999 1 760px; min-width: 0; display: flex; flex-direction: column">
+<div class="phead">
+<span style="display: inline-flex; align-items: center; gap: 12px">
+<span style="font-size: 15px; font-weight: 600">Damage scenarios</span>
+<span class="hidesm" style="font-size: 12.5px; color: #6B6A66"><br></span>
+<span class="hidesm dsum" title="{{distTitle}}"><span style="display: inline-flex; align-items: center; gap: 12px"><span class="dist" aria-hidden="true"><sc-for list="{{dist}}" as="d" hint-placeholder-count="4"><span style="{{d.style}}"></span></sc-for></span><span style="font-size: 12.5px; font-weight: 600; color: #1C1B19">{{totalText}}</span></span><span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 16px"><sc-for list="{{distLegend}}" as="l" hint-placeholder-count="4"><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #4A4946"><span aria-hidden="true" style="{{l.dot}}"></span><span class="mono" style="color: #1C1B19">{{l.n}}</span> {{l.label}}</span></sc-for></span></span>
+</span>
+<span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<span class="fwrap" style="position: relative; display: inline-flex">
+<button type="button" class="fbtn" aria-haspopup="dialog" aria-expanded="{{fmenuStr}}" sc-camel-on-click="{{toggleFmenu}}"><svg width="15" height="15" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>Filters<sc-if value="{{fActive}}" hint-placeholder-val="{{ false }}"><span class="fcountb">{{fCount}}</span></sc-if></button>
+<sc-if value="{{fmenuOpen}}" hint-placeholder-val="{{ false }}">
+<div class="fpop" role="dialog" aria-label="Filters">
+<span class="fhd">Show</span>
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="3"><button type="button" class="fopt" role="menuitemradio" aria-checked="{{f.pressed}}" sc-camel-on-click="{{f.pick}}"><span class="fradio" aria-hidden="true"></span>{{f.label}}</button></sc-for>
+<span class="fsep" aria-hidden="true"></span>
+<span class="fhd">Display</span>
+<button type="button" class="fopt" role="menuitemcheckbox" aria-checked="{{pointsStr}}" sc-camel-on-click="{{togglePoints}}"><span class="ftog" aria-hidden="true"></span>Show ratings as points (1–4)</button>
+<sc-if value="{{fActive}}" hint-placeholder-val="{{ false }}"><span class="fsep" aria-hidden="true"></span><button type="button" class="freset" sc-camel-on-click="{{resetFilters}}">Reset to default</button></sc-if>
+</div>
+</sc-if>
+</span>
+<label style="display: inline-flex; align-items: center; position: relative">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search scenarios</span>
+<svg width="15" height="15" sc-camel-view-box="0 0 24 24" fill="none" stroke="#6B6A66" stroke-width="1.75" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 10px; pointer-events: none"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+<input class="fld" type="search" placeholder="Search scenarios" value="{{q}}" sc-camel-on-change="{{onSearch}}" style="height: 36px; width: 200px; padding: 0 10px 0 32px">
+</label>
+</span>
+</div>
+
+<div class="tscroll" style="flex: 1 1 auto; min-height: 0; overflow: auto">
+<sc-raw-table class="{{tableCls}}">
+<sc-raw-thead>
+<sc-raw-tr class="sizer" aria-hidden="true"><sc-raw-th style="width: 74px"></sc-raw-th><sc-raw-th class="acol" style="width: 128px"></sc-raw-th><sc-raw-th style="width: 100px"></sc-raw-th><sc-raw-th></sc-raw-th><sc-raw-th style="width: 94px"></sc-raw-th><sc-raw-th style="width: 94px"></sc-raw-th><sc-raw-th style="width: 94px"></sc-raw-th><sc-raw-th style="width: 94px"></sc-raw-th><sc-raw-th style="width: 94px"></sc-raw-th><sc-raw-th style="width: 94px"></sc-raw-th><sc-raw-th style="width: 94px"></sc-raw-th><sc-raw-th style="width: 126px"></sc-raw-th></sc-raw-tr>
+<sc-raw-tr>
+<sc-raw-th rowspan="3" style="text-align: center; padding-left: 4px; padding-right: 4px"><span style="display: inline-flex; align-items: center; gap: 3px; white-space: nowrap">Asset ID<button type="button" class="acoltog" sc-camel-on-click="{{toggleAssetCol}}" aria-pressed="{{assetColOffStr}}" aria-label="{{assetColLabel}}" title="{{assetColLabel}}"><svg width="12" height="12" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></button></span></sc-raw-th>
+<sc-raw-th class="acol" rowspan="3" style="text-align: center; padding-left: 6px; padding-right: 6px">Asset</sc-raw-th>
+<sc-raw-th rowspan="3" style="text-align: center; padding-left: 6px; padding-right: 6px">Property</sc-raw-th>
+<sc-raw-th class="scen" rowspan="3" style="text-align: center; padding-left: 16px">Damage scenario</sc-raw-th>
+<sc-raw-th colspan="7" class="hgroup" style="text-align: center; padding: 9px 8px 7px">Impact rating</sc-raw-th>
+<sc-raw-th rowspan="3" class="hover" style="text-align: center; padding: 10px 8px; line-height: 1.35">Overall<br>impact rating</sc-raw-th>
+</sc-raw-tr>
+<sc-raw-tr>
+<sc-raw-th colspan="4" class="hband hb-user"><span><svg width="15" height="15" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20a7 7 0 0 1 14 0"></path></svg><b>Tool users</b> <span></span></span></sc-raw-th>
+<sc-raw-th colspan="3" class="hband hb-other"><span><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3"></circle><circle cx="16.5" cy="9.5" r="2.4"></circle><path d="M3.5 19a5.5 5.5 0 0 1 11 0M14 19a4.5 4.5 0 0 1 7-3.7"></path></svg><b>Other stakeholders</b> <span><br></span></span></sc-raw-th>
+</sc-raw-tr>
+<sc-raw-tr>
+<sc-for list="{{rheads}}" as="h" hint-placeholder-count="7">
+<sc-raw-th class="{{h.cls}}" style="{{h.style}}" title="{{h.title}}">{{h.name}}</sc-raw-th>
+</sc-for>
+</sc-raw-tr>
+</sc-raw-thead>
+<sc-raw-tbody>
+<sc-for list="{{lines}}" as="r" hint-placeholder-count="12">
+<sc-if value="{{r.isBand}}" hint-placeholder-val="{{ false }}">
+<sc-raw-tr class="band"><sc-raw-td colspan="12"><button type="button" class="bandbtn" aria-expanded="{{r.expanded}}" sc-camel-on-click="{{r.toggle}}"><svg width="12" height="12" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg><span class="fcode">{{r.code}}</span>{{r.name}}<span class="fcount">{{r.countLabel}}</span></button></sc-raw-td></sc-raw-tr>
+</sc-if>
+<sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}" style="border-style: dashed; border-width: 1px; border-color: #141413">
+<sc-raw-tr class="row">
+<sc-if value="{{r.first}}" hint-placeholder-val="{{ true }}"><sc-raw-td rowspan="{{r.span}}" style="{{r.assetTd}}"><button type="button" class="cell mono" sc-camel-on-click="{{r.pickRow}}" sc-camel-on-double-click="{{r.dblRow}}" aria-label="{{r.assetLabel}}" title="{{r.assetLabel}}" style="{{r.idStyle}}">{{r.aid}}</button></sc-raw-td>
+<sc-raw-td class="acol" rowspan="{{r.span}}" style="{{r.assetTd}}; box-shadow: inset -1px 0 0 #E6E2D9"><button type="button" class="cell" sc-camel-on-click="{{r.pickRow}}" sc-camel-on-double-click="{{r.dblRow}}" tabindex="-1" style="{{r.nameStyle}}">{{r.aname}}</button></sc-raw-td></sc-if>
+<sc-raw-td style="{{r.idTd}}"><button type="button" class="cell" sc-camel-on-click="{{r.pickRow}}" sc-camel-on-double-click="{{r.dblRow}}" tabindex="-1" style="font-size: 12.5px; color: #4A4946; text-align: center; padding: 8px 6px">{{r.prop}}</button></sc-raw-td>
+<sc-raw-td class="scencell" style="{{r.plainTd}}"><button type="button" class="cell" sc-camel-on-click="{{r.pickRow}}" sc-camel-on-double-click="{{r.dblRow}}" tabindex="-1" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; padding: 10px 16px 11px"><span style="display: inline-flex; align-items: center; gap: 6px"><span class="mono" style="padding: 1px 6px; border-radius: 5px; box-shadow: inset 0 0 0 1px #CFCAC0; font-size: 11px; font-weight: 500; color: #4A4946">{{r.dmg}}</span><sc-if value="{{r.rowCorner}}" hint-placeholder-val="{{ false }}"><span class="ndot" aria-hidden="true" style="position: static; box-shadow: none"></span></sc-if></span><span style="font-size: 13px; color: #2F2E2B; line-height: 1.5"><span class="scentx">{{r.scen}}</span></span></button></sc-raw-td>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="7">
+<sc-raw-td class="{{c.cls}}" style="{{c.td}}"><div class="{{c.pcls}}" sc-camel-on-click="{{c.pick}}" sc-camel-on-double-click="{{c.comment}}" title="Double-click to comment" style="{{c.btn}}"><button type="button" class="rchip" style="{{c.chip}}" sc-camel-on-click="{{c.openMenu}}" disabled="{{c.locked}}" aria-haspopup="menu" aria-expanded="{{c.menuStr}}" aria-label="{{c.label}}" title="{{c.title}}">{{c.text}}<sc-if value="{{c.corner}}" hint-placeholder-val="{{ false }}"><span class="pdot" aria-hidden="true"></span></sc-if></button><sc-if value="{{c.menu}}" hint-placeholder-val="{{ false }}"><div class="{{c.menuCls}}" role="menu" aria-label="{{c.label}}"><sc-for list="{{c.opts}}" as="o" hint-placeholder-count="4"><button type="button" role="menuitemradio" class="ropt" aria-checked="{{o.on}}" sc-camel-on-click="{{o.pick}}" style="{{o.sw}}" title="{{o.pts}} points">{{o.label}}</button></sc-for></div></sc-if></div></sc-raw-td>
+</sc-for>
+<sc-raw-td class="rt" style="{{r.rtTd}}"><button type="button" class="cell" sc-camel-on-click="{{r.pickRow}}" sc-camel-on-double-click="{{r.dblRow}}" tabindex="-1" style="text-align: center; padding: 8px 6px" title="{{r.rtTitle}}"><span class="rchip big" style="{{r.rtChip}}">{{r.rtText}}</span></button></sc-raw-td>
+</sc-raw-tr>
+</sc-if>
+</sc-for>
+</sc-raw-tbody>
+</sc-raw-table>
+<sc-if value="{{noRows}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 28px 24px; font-size: 14px; color: #6B6A66">No damage scenarios match. Clear the search or show all.</p>
+</sc-if>
+</div>
+
+
+<div style="flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 12px 24px; border-top: 1px solid #E6E4DE; background: #FAF9F7; font-size: 12.5px; color: #4A4946">
+<span style="display: inline-flex; align-items: center; gap: 16px">
+<span style="position: relative; display: inline-flex; align-items: center; gap: 10px">
+<button type="button" class="ibtn helpb" aria-expanded="{{legendStr}}" aria-label="What the marks mean" title="What the marks mean" sc-camel-on-click="{{toggleLegend}}">?</button>
+<sc-if value="{{legendOpen}}" hint-placeholder-val="{{ false }}">
+<div class="legendpop" role="dialog" aria-label="What the marks mean">
+<span style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 600">Impact levels</span>
+<sc-for list="{{legendLevels}}" as="l" hint-placeholder-count="4"><span style="display: flex; align-items: center; gap: 10px"><span class="rchip" style="{{l.chip}}">{{l.label}}</span><span style="color: #6B6A66">{{l.pts}} points</span></span></sc-for></span>
+<span style="display: flex; align-items: center; gap: 10px"><svg width="12" height="12" sc-camel-view-box="0 0 24 24" fill="none" stroke="#6B6A66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Fixed by rule, cannot be changed</span>
+<span style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" class="ndot" style="position: static; box-shadow: none"></span>Has an assumption or comments</span>
+<span style="color: #6B6A66; padding-top: 6px; border-top: 1px solid #F1F0EC">Impact rating is the highest of the seven. Click a level to change it. Double-click a cell to comment.</span>
+</div>
+</sc-if>
+</span>
+<span style="color: #6B6A66"><span class="mono" style="color: #1C1B19">{{pageRange}}</span> of <span class="mono">{{pageMatched}}</span> scenarios</span>
+</span>
+<span style="display: inline-flex; align-items: center; gap: 16px">
+<span style="display: inline-flex; align-items: center; gap: 14px">
+<span class="psize" style="display: inline-flex; align-items: center; gap: 8px; color: #6B6A66">Page size<span style="position: relative; display: inline-flex"><button type="button" class="psbtn" aria-haspopup="listbox" aria-expanded="{{sizeMenuStr}}" aria-label="Rows per page: {{pageSize}}" sc-camel-on-click="{{toggleSizeMenu}}"><span>{{pageSize}}</span><svg width="11" height="11" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button><sc-if value="{{sizeMenuOpen}}" hint-placeholder-val="{{ false }}"><div class="psmenu" role="listbox" aria-label="Rows per page"><sc-for list="{{sizeOpts}}" as="o" hint-placeholder-count="3"><button type="button" role="option" class="psopt" aria-selected="{{o.selStr}}" sc-camel-on-click="{{o.pick}}">{{o.label}}</button></sc-for></div></sc-if></span></span>
+<span style="display: inline-flex; align-items: center; gap: 6px">
+<button type="button" class="btn btn-line btn-sm pbtn" sc-camel-on-click="{{prevPage}}" disabled="{{prevDisabled}}">Previous</button>
+<span class="mono" style="min-width: 48px; text-align: center; color: #3A3936">{{pageLabel}}</span>
+<button type="button" class="btn btn-line btn-sm pbtn" sc-camel-on-click="{{nextPage}}" disabled="{{nextDisabled}}">Next</button>
+</span>
+</span>
+<span aria-hidden="true" style="width: 1px; height: 24px; background: #E6E4DE"></span>
+<button type="button" class="btn btn-dark" sc-camel-on-click="{{finish}}" style="min-height: 38px; font-size: 13.5px">{{finishLabel}}</button>
+</span>
+</div>
+</section>
+
+<sc-if value="{{warnOpen}}" hint-placeholder-val="{{ false }}">
+<div class="wback" sc-camel-on-click="{{closeWarn}}">
+<div class="wdlg" role="alertdialog" aria-modal="true" aria-labelledby="wtitle" sc-camel-on-click="{{stop}}">
+<span style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="flex: none; width: 28px; height: 28px; border-radius: 99px; background: #FBF3DA; display: inline-flex; align-items: center; justify-content: center"><svg width="15" height="15" sc-camel-view-box="0 0 24 24" fill="none" stroke="#956400" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 16.5v.5"></path><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path></svg></span><span id="wtitle" style="font-size: 16px; font-weight: 600; letter-spacing: -0.01em; color: #1C1B19">{{warnTitle}}</span></span>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4946">Confirm or dispute them before you finish the impact review. The ratings they affect may still change.</p>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{warnItems}}" as="w" hint-placeholder-count="2">
+<div style="display: flex; gap: 10px; align-items: baseline; padding: 8px 10px; border-radius: 8px; background: #FBF8EE; border: 1px solid #F1E2B3"><span class="mono" style="flex: none; font-size: 11.5px; color: #956400">{{w.id}}</span><span style="font-size: 13px; line-height: 1.45; color: #2F2E2B">{{w.text}}</span></div>
+</sc-for>
+</div>
+<span style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px">
+<button type="button" class="btn btn-line btn-sm" sc-camel-on-click="{{finishAnyway}}">Finish anyway</button>
+<button type="button" class="btn btn-dark btn-sm" sc-camel-on-click="{{reviewAsm}}">Review assumptions</button>
+</span>
+</div>
+</div>
+</sc-if>
+<div class="railwrap" style="{{railWrap}}">
+<sc-if value="{{railOpen}}" hint-placeholder-val="{{ false }}">
+<aside class="{{asideCls}}" aria-label="Assumptions" style="width: 400px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; min-height: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px 12px 20px; background: #F3F1EC; border-bottom: 1px solid #E6E4DE">
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}"><span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 12px; color: #6B6A66">04 Impact Analysis</span><span style="display: inline-flex; align-items: center; gap: 10px"><span style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em">Assumptions</span><sc-if value="{{hasNeed}}" hint-placeholder-val="{{ true }}"><span class="tag t-yellow">{{needYou}} need you</span></sc-if></span></span></sc-if><sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}"><nav aria-label="Breadcrumb" style="display: inline-flex; align-items: baseline; gap: 6px; min-width: 0"><button type="button" class="tlink" sc-camel-on-click="{{clearPick}}" title="Back to all assumptions" style="padding: 0; font-size: 13px; color: #6B6A66; text-decoration: none">Assumptions</button><span aria-hidden="true" style="font-size: 13px; color: #B5B4AF">/</span><span style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #1C1B19; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{crumb}}</span></nav></sc-if>
+<button type="button" class="ibtn" aria-label="Close assumptions" sc-camel-on-click="{{toggleRail}}"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px 10px 20px; border-bottom: 1px solid #E6E4DE">
+<span role="group" aria-label="Show" style="display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F1F0EC">
+<sc-for list="{{railFilters}}" as="f" hint-placeholder-count="3">
+<button type="button" class="seg" aria-pressed="{{f.pressed}}" sc-camel-on-click="{{f.pick}}" style="{{f.style}}">{{f.label}}</button>
+</sc-for>
+</span>
+</div>
+</sc-if>
+
+<div class="dscroll" style="scrollbar-gutter: stable; overflow-anchor: none; flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column">
+
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+<article aria-label="{{sel.title}}" style="padding: 26px 20px 14px; border-bottom: 1px solid #E6E4DE; display: flex; flex-direction: column; gap: 10px">
+<header class="dhead" style="display: flex; align-items: flex-start; gap: 12px; position: sticky; top: -2px; z-index: 3; margin: -26px -20px 0; padding: 16px 20px 16px; background: #FFFFFF; border-bottom: 1px solid #EEECE7; align-items: center;">
+<span style="display: inline-flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto"><span class="mono" style="flex: none; padding: 2px 7px; border-radius: 6px; box-shadow: inset 0 0 0 1px #CFCAC0; font-size: 12px; font-weight: 500; color: #4A4946">{{sel.code}}</span><span style="font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; color: #1C1B19; overflow: hidden; text-overflow: ellipsis; white-space: nowrap" title="{{sel.sub}}">{{sel.sub}}</span></span>
+<span class="{{sel.stateCls}}">{{sel.state}}</span>
+</header>
+<sc-if value="{{sel.hasDesc}}" hint-placeholder-val="{{ false }}">
+<section class="dsec" aria-label="{{sel.descLabel}}"><span class="dlabel">{{sel.descLabel}}</span>
+<p style="margin: 0; font-size: 14px; line-height: 1.55; color: #2F2E2B">{{sel.desc}}</p>
+</section>
+</sc-if>
+<section class="dsec" aria-label="{{sel.whyLabel}}"><span class="dlabel">{{sel.whyLabel}}</span>
+<div class="msg-c" style="padding-left: 0; border-left: 0">
+<p>{{sel.reason}}</p>
+<sc-for list="{{sel.quotes}}" as="q" hint-placeholder-count="1">
+<blockquote class="quote"><footer style="margin: 0 0 3px; font-size: 11.5px; color: #6B6A66">Evidence from <span class="mono">{{q.w}}</span></footer><p>"{{q.q}}"</p></blockquote>
+</sc-for>
+<sc-if value="{{sel.hasFlip}}" hint-placeholder-val="{{ true }}">
+<p style="font-size: 13px; color: #5F5E5B"><span style="color: #1C1B19; font-weight: 500">Would change it:</span> {{sel.flip}}</p>
+</sc-if>
+</div>
+</section>
+<sc-if value="{{sel.isRow}}" hint-placeholder-val="{{ false }}">
+<section class="dsec propsec" aria-label="Impact ratings"><span class="dlabel">Impact ratings</span>
+<sc-for list="{{sel.groups}}" as="g" hint-placeholder-count="2">
+<div class="igrp"><span class="iglbl">{{g.name}}</span>
+<div class="igrid">
+<sc-for list="{{g.items}}" as="p" hint-placeholder-count="4">
+<button type="button" class="ibtn2" style="{{p.style}}" aria-expanded="{{p.openStr}}" aria-label="{{p.whyLabel}}" title="{{p.whyLabel}}" sc-camel-on-click="{{p.toggleWhy}}"><span class="inm">{{p.name}}</span><span class="ilv">{{p.lv}}<svg width="9" height="9" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span><sc-if value="{{p.dot}}" hint-placeholder-val="{{ false }}"><span class="ipdot" aria-hidden="true"></span></sc-if></button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+<div class="{{sel.whyCls}}" aria-hidden="{{sel.whyHidden}}"><div class="whyin"><div class="{{sel.whyAnim}}"><p style="font-weight: 600">{{sel.whyName}} <span style="font-weight: 500; color: #6B6A66">{{sel.whyState}}</span></p><p>{{sel.whyReason}}</p><sc-if value="{{sel.whyHasFlip}}" hint-placeholder-val="{{ true }}"><p style="color: #5F5E5B"><span style="color: #1C1B19; font-weight: 500">Would change it:</span> {{sel.whyFlip}}</p></sc-if></div></div></div>
+</section>
+</sc-if>
+<sc-for list="{{sel.asms}}" as="x" hint-placeholder-count="1">
+<div class="decide" style="flex-direction: column; align-items: stretch; background: #FBF8EE; border-color: #F1E2B3">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span class="mono" style="font-size: 11.5px; color: #956400">{{x.id}} · assumption</span><span class="{{x.cls}}">{{x.state}}</span></span>
+<p style="margin: 0; font-size: 14px; color: #2F2E2B">{{x.text}}</p>
+<sc-if value="{{x.open}}" hint-placeholder-val="{{ true }}"><span style="display: flex; gap: 8px"><button type="button" class="btn btn-dark btn-sm" sc-camel-on-click="{{x.confirm}}">Confirm</button><button type="button" class="btn btn-line btn-sm" sc-camel-on-click="{{x.dispute}}">Dispute</button></span></sc-if>
+</div>
+</sc-for>
+
+<sc-for list="{{sel.msgs}}" as="m" hint-placeholder-count="2">
+<div style="{{m.wrap}}">
+<div class="msg-body">
+<sc-if value="{{m.mine}}" hint-placeholder-val="{{ true }}"><span class="who"><b>You</b> · {{m.when}}</span></sc-if>
+<p>{{m.text}}</p>
+<sc-if value="{{m.hasChange}}" hint-placeholder-val="{{ false }}">
+<div class="proposal">
+<span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px">
+<span style="font-weight: 500">{{m.changeProp}}</span>
+<span class="{{m.fromCls}}" style="text-decoration: line-through">{{m.fromWord}}</span>
+<svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="#6B6A66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+<span class="{{m.toCls}}">{{m.toWord}}</span>
+</span>
+<sc-if value="{{m.changeOpen}}" hint-placeholder-val="{{ true }}">
+<span style="display: flex; gap: 8px">
+<button type="button" class="btn btn-dark btn-sm" sc-camel-on-click="{{m.apply}}">Apply</button>
+<button type="button" class="btn btn-line btn-sm" sc-camel-on-click="{{m.keep}}">Keep as is</button>
+</span>
+</sc-if>
+<sc-if value="{{m.changeDone}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 12.5px; color: #6B6A66">{{m.changeDoneText}}</span>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-for>
+
+<sc-if value="{{sel.rowLeft}}" hint-placeholder-val="{{ false }}">
+<div class="decide">
+<span style="font-size: 13px; color: #4A4946">{{sel.rowLeftHint}}</span>
+<button type="button" class="btn btn-dark btn-sm" sc-camel-on-click="{{sel.confirmRow}}">{{sel.rowLeftLabel}}</button>
+</div>
+</sc-if>
+<sc-if value="{{sel.isProp}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{sel.canReview}}" hint-placeholder-val="{{ true }}">
+<div class="decide">
+<span style="font-size: 13px; color: #4A4946">Proposed: <b style="font-weight: 600; color: #1C1B19">{{sel.proposedWord}}</b></span>
+<span style="display: flex; gap: 8px">
+<button type="button" class="btn btn-dark btn-sm" sc-camel-on-click="{{sel.confirm}}">Confirm</button>
+<button type="button" class="btn btn-line btn-sm" sc-camel-on-click="{{sel.startChange}}">{{sel.changeLabel}}</button>
+</span>
+</div>
+</sc-if>
+<sc-if value="{{sel.changing}}" hint-placeholder-val="{{ false }}">
+<div class="decide" style="flex-direction: column; align-items: stretch">
+<label for="why" style="font-size: 13px; font-weight: 500">Why? A reason is kept with the change.</label>
+<textarea id="why" class="fld" rows="2" value="{{draft}}" sc-camel-on-change="{{onDraft}}" style="padding: 8px 10px; resize: vertical; background: #FFFFFF"></textarea>
+<span style="display: flex; gap: 8px">
+<button type="button" class="btn btn-dark btn-sm" disabled="{{draftShort}}" sc-camel-on-click="{{sel.saveChange}}">Save change</button>
+<button type="button" class="btn btn-line btn-sm" sc-camel-on-click="{{cancelChange}}">Cancel</button>
+</span>
+</div>
+</sc-if>
+</sc-if>
+</article>
+</sc-if>
+
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 18px 20px; font-size: 13.5px; color: #5F5E5B; border-bottom: 1px solid #E6E4DE">Confirm or dispute the assumptions below. Select a scenario, or double-click a rating, to see the reasoning and comment.</p>
+</sc-if>
+
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}">
+<div class="sec"><span>Assumptions</span><span class="n">{{asmCount}}</span></div>
+<sc-for list="{{asmList}}" as="x" hint-placeholder-count="2">
+<div class="{{x.rowCls}}">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><button type="button" class="tlink" sc-camel-on-click="{{x.pick}}" style="padding: 0; font-size: 12px; color: #6B6A66; text-decoration: none"><span class="mono">{{x.about}}</span> · {{x.aboutName}}</button><span class="{{x.cls}}">{{x.state}}</span></span>
+<p>{{x.text}}</p>
+<sc-if value="{{x.open}}" hint-placeholder-val="{{ true }}"><span style="display: flex; gap: 8px"><button type="button" class="btn btn-dark btn-sm" sc-camel-on-click="{{x.confirm}}">Confirm</button><button type="button" class="btn btn-line btn-sm" sc-camel-on-click="{{x.dispute}}">Dispute</button></span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{asmEmpty}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 4px 20px 12px; font-size: 13px; color: #6B6A66">None here.</p>
+</sc-if>
+</sc-if>
+<sc-if value="{{showList}}" hint-placeholder-val="{{ true }}">
+<div class="sec"><span>{{listTitle}}</span><span class="n">{{threadCount}}</span></div>
+<div role="list">
+<sc-for list="{{threadList}}" as="t" hint-placeholder-count="4">
+<button type="button" role="listitem" class="trow" sc-camel-on-click="{{t.pick}}">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="font-size: 13.5px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"><span class="mono" style="font-size: 11.5px; color: #6B6A66; font-weight: 400; margin-right: 6px">{{t.key}}</span>{{t.title}}</span><span class="{{t.cls}}">{{t.tag}}</span></span>
+<span style="display: block; margin-top: 2px; font-size: 12.5px; color: #6B6A66; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{t.snippet}}</span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 4px 20px 16px; font-size: 13px; color: #6B6A66">Nothing here.</p>
+</sc-if>
+</sc-if>
+<div class="dspacer" aria-hidden="true"></div>
+</div>
+
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+<div style="padding: 12px 16px 14px 20px; border-top: 1px solid #E6E4DE; background: #FFFFFF">
+<label for="reply" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Reply</label>
+<div class="composer">
+<textarea id="reply" rows="2" placeholder="Reply, or ask for a change" value="{{reply}}" sc-camel-on-change="{{onReply}}"></textarea>
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 6px 6px 10px">
+<button type="button" class="tlink" sc-camel-on-click="{{sel.resolve}}">{{sel.resolveLabel}}</button>
+<button type="button" class="btn btn-dark btn-sm" disabled="{{replyShort}}" sc-camel-on-click="{{sel.send}}">Comment</button>
+</span>
+</div>
+</div>
+</sc-if>
+</aside>
+</sc-if>
+</div>
+
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;startWith&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;table&quot;,&quot;comment-open&quot;,&quot;change-proposed&quot;],&quot;default&quot;:&quot;table&quot;},&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1640}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.LEVELS = ['Negligible', 'Moderate', 'Major', 'Severe'];
+    this.CATS = [
+      { k: 'S', name: 'Safety', grp: 'Tool user', fixed: true, rule: 'Negligible by default: a web tool cannot cause physical harm to anyone.' },
+      { k: 'F', name: 'Financial', grp: 'Tool user', fixed: true, rule: 'Negligible by default: the tool does not handle the user’s money.' },
+      { k: 'O', name: 'Operational', grp: 'Tool user' },
+      { k: 'P', name: 'Privacy', grp: 'Tool user' },
+      { k: 'L', name: 'Legal', grp: 'Other stakeholders' },
+      { k: 'F2', name: 'Financial', grp: 'Other stakeholders' },
+      { k: 'B', name: 'Business', grp: 'Other stakeholders' }
+    ];
+    this.PROPNAME = { C: 'Confidentiality', I: 'Integrity', A: 'Availability', Au: 'Authenticity', Az: 'Authorization', NR: 'Non-repudiation' };
+    this.FAMILIES = [['WL', 'Workloads'], ['DS', 'Data stores'], ['API', 'Business functions'], ['IAM', 'Credentials and keys'], ['COMM', 'Data in transit']];
+    this.ASSETNAME = { 'WL-01': 'Certificate service logic', 'WL-02': 'Key service signing logic', 'DS-01': 'Certificate records', 'DS-03': 'Revocation list', 'IAM-01': 'CA signing key', 'COMM-01': 'Certificate requests in transit' };
+    // ratings in order P O L F2 B (S and F are fixed at 1)
+    var D = function (dmg, asset, prop, scen, who, r) {
+      var v = r.split(' ').map(Number);
+      return { dmg: dmg, asset: asset, fam: asset.split('-')[0], prop: prop, scen: scen, who: who, r: { S: 1, P: v[0], F: 1, O: v[1], L: v[2], F2: v[3], B: v[4] } };
+    };
+    this.ROWS = [
+      D('DMG-01', 'WL-01', 'I', 'Requests are checked or stored wrongly, so certificates are issued for the wrong subject or with the wrong lifetime.', 'Operators, customers relying on the certificates', '2 3 3 2 3'),
+      D('DMG-02', 'WL-01', 'A', 'Operators and internal services cannot request or renew certificates for several days. Renewals lapse, services fail as their certificates expire, and on-call teams issue emergency certificates by hand, bypassing the normal approval checks.', 'Operators, internal services, customers', '1 4 2 3 4'),
+      D('DMG-03', 'WL-01', 'Az', 'A requester gets certificates approved that their role does not allow.', 'Security admins, customers', '2 3 3 2 3'),
+      D('DMG-04', 'WL-02', 'I', 'Certificates are signed that were never approved.', 'Customers, auditors', '1 3 4 3 4'),
+      D('DMG-05', 'WL-02', 'A', 'Approved certificates wait unsigned and issuing stops.', 'Operators, customers', '1 2 1 2 2'),
+      D('DMG-06', 'DS-01', 'C', 'Request details and the names, emails and phone numbers of requesters are exposed outside the security team, including the business reason for each certificate, which reveals internal project names.', 'Requesters, the organisation', '3 1 3 2 2'),
+      D('DMG-07', 'DS-01', 'I', 'Records of who requested and approved certificates are changed.', 'Security admins, auditors', '1 2 2 1 2'),
+      D('DMG-08', 'DS-01', 'A', 'Certificate history cannot be read, so audits and renewals stall.', 'Operators, auditors', '1 2 2 1 2'),
+      D('DMG-09', 'DS-01', 'NR', 'Nobody can prove who approved a certificate.', 'Auditors, the organisation', '1 2 4 2 3'),
+      D('DMG-10', 'DS-03', 'I', 'Revoked certificates drop off the published list and are trusted again. A certificate revoked after a key leak can then impersonate an internal service until someone notices and revokes it again.', 'Relying services, customers', '1 3 3 3 4'),
+      D('DMG-11', 'DS-03', 'A', 'Relying services cannot fetch the list and either fail closed or skip the check.', 'Relying services', '1 3 2 2 3'),
+      D('DMG-12', 'DS-03', 'Au', 'Relying services accept a forged revocation list.', 'Relying services, customers', '1 3 3 3 4'),
+      D('DMG-13', 'IAM-01', 'C', 'The signing key leaves the key store, and whoever holds it can issue certificates every relying service trusts. All issued certificates become suspect, the key must be replaced and every service reissued.', 'Every party that trusts the portal', '2 4 4 4 4'),
+      D('DMG-14', 'IAM-01', 'I', 'The key is replaced, so issued certificates no longer chain to the trusted root.', 'Customers, relying services', '1 4 2 3 4'),
+      D('DMG-15', 'IAM-01', 'Au', 'Certificates signed by another key are accepted as the portal’s own.', 'Relying services, customers', '1 3 3 3 4'),
+      D('DMG-16', 'COMM-01', 'C', 'Sign-in tokens and request contents are read on the way in.', 'Operators, security admins', '3 2 3 1 2'),
+      D('DMG-17', 'COMM-01', 'I', 'A request is changed in transit, so the certificate is issued for something else.', 'Operators, customers', '1 3 3 2 3')
+    ];
+    this.WHY = {
+      P: ['No personal data of operators, admins or requesters is exposed or changed.', 'Contact details of a few requesters could be seen.', 'Personal data of many requesters could be exposed.', 'Personal data of all requesters and admins could be exposed.'],
+      O: ['Day-to-day work carries on as normal.', 'Some work slows down, and there is a workaround.', 'Issuing or revoking stops for part of the portal until it is fixed.', 'Issuing or revoking stops for everyone.'],
+      L: ['No contract or regulation is affected.', 'An internal policy is breached.', 'Customer contracts or audit duties are breached.', 'Regulatory duties for certificate authorities are breached.'],
+      F2: ['No noticeable cost.', 'A limited cost to put right.', 'A significant recovery cost.', 'Costs large enough to threaten the service.'],
+      B: ['Customers do not notice.', 'A few customers are affected.', 'Many customers lose trust in issued certificates.', 'Trust in every certificate the portal issued is lost.']
+    };
+    this.PALETTES = {
+      A: { name: 'Warm severity', lv: [['#F3F1EC', '#7A776F', '#E2DFD8', '#B7D3AE'], ['#F6E7B8', '#6E5208', '#E3CB7F', '#E8C66A'], ['#F2C4A0', '#7A3412', '#D9A07A', '#D98E5E'], ['#9E2F23', '#FFFFFF', '#7E2219', '#9E2F23']] },
+      B: { name: 'Muted traffic light', lv: [['#E4EDE1', '#3F5E3B', '#C6D6C1', '#B9CFB3'], ['#F3E6BD', '#6B5410', '#DCC888', '#E2C76E'], ['#EBC3A5', '#7A3A14', '#CF9B76', '#D58C5C'], ['#B23A2A', '#FFFFFF', '#8C2B1E', '#B23A2A']] },
+      C: { name: 'Single-hue ramp', lv: [['#F3F1EC', '#7A776F', '#E2DFD8', '#E2DFD8'], ['#EBD9C6', '#6A4A33', '#D6BBA0', '#DDBFA3'], ['#D49A72', '#FFFFFF', '#B97B53', '#D49A72'], ['#8E3B1F', '#FFFFFF', '#6E2C16', '#8E3B1F']] },
+      Now: { name: 'Current greys', lv: [['transparent', '#7A776F', '#E2DFD8', '#E2DFD8'], ['#EFEDE7', '#4A4946', '#BDB7AA', '#CFCAC0'], ['#DCD7CC', '#2F2E2B', '#9C9587', '#A9A49A'], ['#5F5B54', '#FFFFFF', '#3E3A34', '#5F5B54']] }
+    };
+    this.ASSUMPTIONS = [
+      { id: 'AS-04-01', about: 'DMG-10', cat: 'O', text: 'Relying services check the revocation list on every connection, so a missing entry is used straight away.' },
+      { id: 'AS-04-02', about: 'DMG-06', cat: 'P', text: 'Requesters are company staff, so their contact details count as personal data under the privacy policy.' },
+      { id: 'AS-04-03', about: 'DMG-13', cat: 'B', text: 'There is no second signing key ready, so replacing a leaked key means reissuing every certificate.' }
+    ];
+    var start = props.startWith || 'table';
+    var threads = {};
+    var sel = null;
+    if (start === 'change-proposed') {
+      sel = 'DMG-03.L';
+      threads['DMG-03.L'] = [
+        { who: 'You', text: 'Legal feels high here. An over-approved certificate breaks our own approval policy, not a customer contract.' },
+        { who: 'reply', text: 'Agreed. Nothing in the documents ties role approval to a customer contract; it is an internal policy breach, which is Moderate.', change: { k: 'L', to: 2, state: 'open' } }
+      ];
+    } else if (start === 'comment-open') {
+      sel = 'DMG-13.row';
+    }
+    threads['DMG-02.O'] = [{ who: 'You', text: 'Check with the client whether internal services have a fallback CA before we keep Severe.' }];
+    this.state = { pal: 'A', menu: null, points: false, legend: false, collapsed: {}, density: 'comfortable', asm: { 'AS-04-03': 'confirmed' }, over: {}, threads: threads, resolved: {}, sel: sel, rail: start !== 'table', filter: 'all', q: '', railFilter: 'open', reply: '', draft: '', changing: false };
+  }
+
+  closeRail(clearSel) {
+    var self = this;
+    clearTimeout(this._close);
+    this.setState({ closing: true });
+    this._close = setTimeout(function () { var p = { rail: false, closing: false }; if (clearSel) p.sel = null; self.setState(p); }, 420);
+  }
+
+  morphWhy() {
+    if (typeof document === 'undefined') return;
+    var inn = document.querySelector('.whyin'), sc = document.querySelector('.dscroll'), sp = document.querySelector('.dspacer');
+    if (!inn || !sc || !sp) return;
+    var raf = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : function (f) { return setTimeout(f, 16); };
+    var h0 = inn.offsetHeight, st = sc.scrollTop, base = sc.scrollHeight - sp.offsetHeight;
+    sc._holding = true;
+    sp.style.height = (sp.offsetHeight + h0) + 'px';
+    inn.style.height = h0 + 'px';
+    raf(function () {
+      var box = inn.querySelector('.propwhy');
+      var h1 = box ? box.offsetHeight + parseFloat(getComputedStyle(box).marginTop) + parseFloat(getComputedStyle(box).marginBottom) : h0;
+      void inn.offsetHeight;
+      inn.style.transition = 'height .3s cubic-bezier(.32,.72,0,1)';
+      inn.style.height = h1 + 'px';
+      var to = Math.max(0, Math.min(st, base - h0 + h1 - sc.clientHeight));
+      var t0 = Date.now();
+      var step = function () {
+        var k = Math.min(1, (Date.now() - t0) / 300), e = 1 - Math.pow(1 - k, 3);
+        if (to < st) sc.scrollTop = st + (to - st) * e;
+        if (k < 1) raf(step);
+        else { inn.style.transition = ''; inn.style.height = ''; sc._holding = false; var need = sc.scrollTop + sc.clientHeight - (sc.scrollHeight - sp.offsetHeight); sp.style.height = Math.max(0, Math.ceil(need)) + 'px'; }
+      };
+      raf(step);
+    });
+  }
+
+  holdScroll() {
+    if (typeof document === 'undefined') return;
+    var sc = document.querySelector('.dscroll'), sp = document.querySelector('.dspacer'), w = document.querySelector('.whywrap');
+    if (!sc || !sp) return;
+    var fit = function () { if (sc._holding) return; var h = sp.offsetHeight; var need = sc.scrollTop + sc.clientHeight - (sc.scrollHeight - h); sp.style.height = Math.max(0, Math.ceil(need)) + 'px'; };
+    if (!sc._fitBound) { sc.addEventListener('scroll', fit, { passive: true }); sc._fitBound = true; }
+    var from = sc.scrollTop, wh = w ? w.offsetHeight : 0;
+    var to = Math.max(0, Math.min(from, sc.scrollHeight - sp.offsetHeight - wh - sc.clientHeight, typeof sc._pre === 'number' ? sc._pre : Infinity));
+    sc._pre = null;
+    sc._holding = true;
+    sp.style.height = (sp.offsetHeight + wh) + 'px';
+    var raf = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : function (f) { return setTimeout(f, 16); };
+    var t0 = Date.now(), D = 300;
+    var keep = function () {
+      var k = Math.min(1, (Date.now() - t0) / D), e = 1 - Math.pow(1 - k, 3);
+      sc.scrollTop = from + (to - from) * e;
+      if (k < 1 || Date.now() - t0 < 340) raf(keep); else { sc._holding = false; fit(); }
+    };
+    raf(keep);
+  }
+
+  revealWhy(n) {
+    var self = this;
+    var raf = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : function (f) { return setTimeout(f, 16); };
+    raf(function () {
+      var w = document.querySelector('.whywrap.open');
+      if (!w) { if (n < 20) self.revealWhy(n + 1); return; }
+      var sc = document.querySelector('.dscroll');
+      if (!sc) return;
+      var box = w.querySelector('.propwhy');
+      var t0 = Date.now();
+      var step = function () {
+        var need = w.getBoundingClientRect().top + (box ? box.offsetHeight + 14 : 0) + 16 - sc.getBoundingClientRect().bottom;
+        if (need > 0.5) sc.scrollTop = sc.scrollTop + Math.max(1, need * 0.22);
+        if (Date.now() - t0 < 700 && w.classList.contains('open')) raf(step);
+      };
+      raf(step);
+    });
+  }
+
+  renderVals() {
+    var self = this, s = this.state;
+    if (this._lastSel !== s.sel) {
+      this._lastSel = s.sel;
+      if (typeof document !== 'undefined') setTimeout(function () { var el = document.querySelector('.dscroll'); if (el) el.scrollTop = 0; }, 0);
+    }
+    var _u = 0, CATS = this.CATS, LV = this.LEVELS;
+    var PAL = this.PALETTES[s.pal || 'A'].lv;
+    var OUT = ['#A9CFA0', '#EDC54A', '#EE8F66', '#DD5A63'];
+    var TINT = [['#E5F2E0', '#2F6B2A'], ['#FFF5D3', '#6B4E00'], ['#FFE7DD', '#B4441B'], ['#FDE3E3', '#A61B26']];
+    var SOLID = [['#7FB874', '#FFFFFF'], ['#F2C53D', '#3D2E00'], ['#E8613C', '#FFFFFF'], ['#A3172B', '#FFFFFF']];
+    var CHIP = SOLID.map(function (p) { return 'background: ' + p[0] + '; color: ' + p[1]; });
+    var CATCHIP = function (n, solid) { return solid ? CHIP[n - 1] + '; box-shadow: inset 0 0 0 1.5px ' + OUT[n - 1] : 'background: ' + TINT[n - 1][0] + '; color: ' + TINT[n - 1][1] + '; box-shadow: inset 0 0 0 1px ' + OUT[n - 1]; };
+    var level = function (row, k) { var o = s.over[row.dmg + '.' + k]; return o || row.r[k]; };
+    var overall = function (row) { return Math.max.apply(null, CATS.map(function (c) { return level(row, c.k); })); };
+    var drivers = function (row) { var m = overall(row); return CATS.filter(function (c) { return level(row, c.k) === m; }).map(function (c) { return (c.k === 'F2' ? 'Financial (others)' : c.name); }); };
+    var word = function (n) { return s.points ? String(n) : LV[n - 1]; };
+    var hasThread = function (key) { return !!(s.threads[key] && s.threads[key].length) && !s.resolved[key]; };
+    var rowThreads = function (row) { return Object.keys(s.threads).some(function (t) { return t.indexOf(row.dmg + '.') === 0 && hasThread(t); }); };
+    var openAsmFor = function (row) { return self.ASSUMPTIONS.some(function (x) { return x.about === row.dmg && !s.asm[x.id]; }); };
+    var q = s.q.trim().toLowerCase();
+    var shown = this.ROWS.filter(function (row) {
+      if (s.filter === 'high' && overall(row) < 3) return false;
+      if (s.filter === 'notes' && !rowThreads(row) && !openAsmFor(row)) return false;
+      if (q && (row.dmg + ' ' + row.asset + ' ' + self.ASSETNAME[row.asset] + ' ' + self.PROPNAME[row.prop] + ' ' + row.scen).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    var SIZES = [10, 20, 30, 50, 100], fitIdx = SIZES.findIndex(function (n) { return n >= shown.length; }); var sizeList = fitIdx < 0 ? SIZES : SIZES.slice(0, fitIdx + 1); if (!sizeList.length) sizeList = [10];
+    var matched = shown.length, pageSize = Math.min(s.pageSize || 30, sizeList[sizeList.length - 1]), pages = Math.max(1, Math.ceil(matched / pageSize)), page = Math.min(s.page || 1, pages);
+    var from = matched ? (page - 1) * pageSize + 1 : 0, to = Math.min(page * pageSize, matched);
+    shown = shown.slice((page - 1) * pageSize, page * pageSize);
+    var goPage = function (p) { self.setState({ page: p }); if (typeof document !== 'undefined') setTimeout(function () { var t = document.querySelector('table'); if (t && t.parentElement) t.parentElement.scrollTop = 0; }, 0); };
+    var selId = s.sel ? s.sel.split('.')[0] : null;
+    var selCol = s.sel ? s.sel.split('.')[1] : null;
+    var lines = [];
+    this.FAMILIES.forEach(function (f) {
+      var rows = shown.filter(function (row) { return row.fam === f[0]; });
+      if (!rows.length) return;
+      var closed = !!s.collapsed[f[0]];
+      lines.push({ isBand: true, isRow: false, code: f[0], name: f[1], countLabel: rows.length + (rows.length === 1 ? ' scenario' : ' scenarios'), expanded: closed ? 'false' : 'true',
+        toggle: function () { var c = Object.assign({}, s.collapsed); c[f[0]] = !c[f[0]]; self.setState({ collapsed: c }); } });
+      if (closed) return;
+      var prevAsset = null, assetIdx = -1, span = {};
+      rows.forEach(function (row) { span[row.asset] = (span[row.asset] || 0) + 1; });
+      rows.forEach(function (row) {
+        var first = row.asset !== prevAsset;
+        if (first) assetIdx++;
+        prevAsset = row.asset;
+        var even = assetIdx % 2 === 1;
+        var rowSel = selId === row.dmg && selCol === 'row';
+        var bg = rowSel ? '#F4FAFE' : '#FFFFFF';
+        var top = first && assetIdx > 0 ? '; border-top: 2px solid #D9D4C9' : '';
+        var gbg = '#FFFFFF';
+        var ov = overall(row);
+        lines.push({
+          isBand: false, isRow: true, first: first, span: String(span[row.asset]), assetLabel: row.asset + ' ' + self.ASSETNAME[row.asset], assetTd: 'background: ' + gbg + top + '; border-bottom: 0', dmg: row.dmg, aid: row.asset, aname: self.ASSETNAME[row.asset],
+          prop: self.PROPNAME[row.prop], scen: row.scen,
+          rowLabel: row.dmg + ' ' + self.ASSETNAME[row.asset] + ' ' + self.PROPNAME[row.prop] + ', open comments',
+          rowCorner: hasThread(row.dmg + '.row'),
+          idStyle: 'font-size: 12px; color: #6B6A66; white-space: nowrap; text-align: center; padding: 8px 4px',
+          nameStyle: 'font-size: 13px; font-weight: 500; line-height: 1.35; text-align: center; color: #1C1B19; padding: 8px 8px',
+          idTd: 'background: ' + bg + top + (rowSel ? '; box-shadow: inset 3px 0 0 #1F6C9F' : ''),
+          plainTd: 'background: ' + bg + top,
+          rtTd: 'width: 112px; background: ' + SOLID[ov - 1][0] + top + (rowSel ? '; box-shadow: inset 0 0 0 2px #1F6C9F' : ''),
+          rtChip: 'background: transparent; color: ' + SOLID[ov - 1][1], rtText: word(ov), rtTitle: 'Impact rating ' + LV[ov - 1] + ' (' + ov + ' points), from ' + drivers(row).join(', '),
+          pickRow: function (ev) { if (!ev || !(ev.detail > 1)) self._prevSel = self.state.sel; self.setState({ sel: row.dmg + '.row', reply: '', draft: '', changing: false, menu: null }); },
+          dblRow: function (ev) { if (ev && ev.preventDefault) ev.preventDefault(); var k = row.dmg + '.row'; var was = self._prevSel !== undefined ? self._prevSel : self.state.sel; self._prevSel = undefined; if (self.state.rail && !self.state.closing && was === k) self.closeRail(); else { clearTimeout(self._close); self.setState({ sel: k, rail: true, closing: false, reply: '', draft: '', changing: false, menu: null }); } },
+          cells: CATS.map(function (c, i) {
+            var key = row.dmg + '.' + c.k;
+            var n = level(row, c.k);
+            var on = s.sel === key;
+            var menuOpen = s.menu === key;
+            var ovr = overall(row), isDrv = ovr > 1 && n === ovr, focus = s.rail && s.sel === row.dmg + '.row';
+            return {
+              cls: 'k' + i + ' cat' + (isDrv ? ' drv' : ''),
+              td: '--oc: ' + OUT[n - 1] + '; width: 84px; background: ' + ((focus && isDrv) ? SOLID[n - 1][0] : TINT[n - 1][0]) + top + (on ? '; box-shadow: inset 0 0 0 2px ' + OUT[n - 1] : '') + (focus && !isDrv ? '; filter: saturate(.35) opacity(.55)' : ''),
+              btn: '--pc: #6F6B63',
+              pcls: on ? 'pcell sel' : 'pcell',
+              chip: 'background: transparent; box-shadow: none; color: ' + ((focus && isDrv) ? SOLID[n - 1][1] : TINT[n - 1][1]),
+              text: word(n), locked: false, corner: hasThread(key) || self.ASSUMPTIONS.some(function (x) { return x.about === row.dmg && x.cat === c.k && !s.asm[x.id]; }),
+              label: (c.k === 'F2' ? 'Financial, other stakeholders' : c.name + (c.grp === 'Tool user' ? ', tool user' : '')) + ' for ' + row.dmg + ': ' + LV[n - 1],
+              title: (c.fixed && n === 1 ? c.rule + ' ' : '') + 'Click to change. Double-click to comment.',
+              menu: menuOpen, menuStr: menuOpen ? 'true' : 'false', menuCls: 'rmenu' + (menuOpen && s.menuUp ? ' up' : ''),
+              opts: LV.map(function (l, li) {
+                return { label: l, pts: li + 1, on: n === li + 1 ? 'true' : 'false', sw: 'background: ' + TINT[li][0] + '; color: ' + TINT[li][1] + '; --ob: ' + OUT[li],
+                  pick: function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); var o = Object.assign({}, s.over); o[key] = li + 1; self.setState({ over: o, menu: null }); } };
+              }),
+              openMenu: function (ev) {
+                if (ev && ev.stopPropagation) ev.stopPropagation();
+                if (ev && ev.detail > 1) return;
+                clearTimeout(self._tick);
+                var up = false;
+                if (ev && ev.currentTarget && ev.currentTarget.getBoundingClientRect && typeof document !== 'undefined') {
+                  var r = ev.currentTarget.getBoundingClientRect(), sc = ev.currentTarget.closest('table'); sc = sc && sc.parentElement;
+                  var lim = sc ? sc.getBoundingClientRect().bottom : window.innerHeight;
+                  up = (r.bottom + 132) > lim;
+                }
+                self._tick = setTimeout(function () { self._tick = null; self.setState({ menu: self.state.menu === key ? null : key, menuUp: up }); }, 200);
+              },
+              comment: function (ev) {
+                if (ev && ev.preventDefault) ev.preventDefault();
+                clearTimeout(self._tick); self._tick = null;
+                self.setState({ sel: key, rail: true, reply: '', draft: '', changing: false, menu: null });
+              },
+              pick: function () { if (s.sel === key || !s.rail) { if (s.sel) self.setState({ sel: null, changing: false, draft: '' }); return; } self.setState({ sel: key, reply: '', draft: '', changing: false }); }
+            };
+          })
+        });
+      });
+    });
+
+    var rheads = CATS.map(function (c, i) {
+      return { cls: 'pc k' + i + (c.grp === 'Tool user' ? ' cu' : ' co'), name: c.name, grp: i === 0 || i === 4, grpName: c.grp, title: c.fixed ? c.name + ' (tool user): ' + c.rule : c.name + ' (' + c.grp.toLowerCase() + ')',
+        gstyle: '--gw: ' + (i === 0 ? '400%' : '300%'),
+        style: 'background: #F3F1EC; color: #2F2E2B; font-weight: 600; font-size: 12px; text-align: center; padding: 8px 4px; --pc: #6F6B63' };
+    });
+
+    var counts = [0, 0, 0, 0];
+    this.ROWS.forEach(function (row) { counts[overall(row) - 1]++; });
+    var total = this.ROWS.length;
+    var dist = [3, 2, 1, 0].map(function (i) { return { style: 'width: ' + (counts[i] / total * 100).toFixed(2) + '%; background: ' + SOLID[i][0] }; });
+    var distLegend = [3, 2, 1, 0].map(function (i) { return { n: String(counts[i]), label: LV[i], dot: 'width: 9px; height: 9px; border-radius: 99px; background: ' + SOLID[i][0] }; });
+    var distText = [3, 2, 1, 0].filter(function (i) { return counts[i]; }).map(function (i) { return counts[i] + ' ' + LV[i]; }).join(' · ');
+
+    var segStyle = function (on) { return on ? 'background: #FFFFFF; color: #1C1B19; font-weight: 500; box-shadow: 0 1px 2px rgba(28,27,25,.1)' : ''; };
+    var filters = [['all', 'All'], ['high', 'Major and Severe'], ['notes', 'With notes']].map(function (f) {
+      return { label: f[1], pressed: s.filter === f[0] ? 'true' : 'false', style: segStyle(s.filter === f[0]), pick: function () { self.setState({ filter: f[0], page: 1 }); } };
+    });
+    var railFilters = [['open', 'Open'], ['resolved', 'Done']].map(function (f) {
+      return { label: f[1], pressed: s.railFilter === f[0] ? 'true' : 'false', style: segStyle(s.railFilter === f[0]), pick: function () { self.setState({ railFilter: f[0] }); } };
+    });
+
+    var byId = {}; this.ROWS.forEach(function (row) { byId[row.dmg] = row; });
+    var whyOf = function (c, n) { if (c.fixed && n === 1) return c.rule; if (self.WHY[c.k]) return self.WHY[c.k][n - 1]; return 'Raised to ' + LV[n - 1] + ' by the analyst. This category is Negligible by default.'; };
+    var catOf = {}; CATS.forEach(function (c) { catOf[c.k] = c; });
+    var catName = function (k) { return k === 'F2' ? 'Financial (other stakeholders)' : catOf[k].name + (catOf[k].grp === 'Tool user' ? ' (tool user)' : ''); };
+
+    var asmView = function (arr) {
+      return arr.map(function (x, i) {
+        var st = s.asm[x.id] || 'open';
+        var row = byId[x.about];
+        return {
+          i: i, id: x.id, text: x.text, about: x.about, aboutName: self.ASSETNAME[row.asset] + ', ' + self.PROPNAME[row.prop], open: st === 'open', rowCls: st === 'open' ? 'asm open' : 'asm',
+          state: st === 'open' ? 'Needs you' : (st === 'confirmed' ? 'Confirmed' : 'Disputed'),
+          cls: st === 'open' ? 'tag t-yellow' : (st === 'confirmed' ? 'tag t-grey' : 'tag t-red'),
+          confirm: function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); var m = Object.assign({}, s.asm); m[x.id] = 'confirmed'; self.setState({ asm: m }); },
+          dispute: function (ev) {
+            if (ev && ev.stopPropagation) ev.stopPropagation();
+            var m = Object.assign({}, s.asm); m[x.id] = 'disputed';
+            var key = x.about + '.row';
+            var t = Object.assign({}, s.threads); t[key] = (t[key] || []).concat([{ who: 'You', text: 'Disputed ' + x.id + ': ' + x.text }]);
+            var r = Object.assign({}, s.resolved); delete r[key];
+            self.setState({ asm: m, threads: t, resolved: r, sel: key, reply: '' });
+          },
+          pick: function () { self.setState({ sel: x.about + '.row', reply: '', draft: '', changing: false }); }
+        };
+      });
+    };
+    var openAsm = this.ASSUMPTIONS.filter(function (x) { return !s.asm[x.id]; });
+    var doneAsm = this.ASSUMPTIONS.filter(function (x) { return !!s.asm[x.id]; });
+
+    var selVals = { code: '', sub: '', descLabel: 'Damage scenario', whyLabel: 'Why', isRow: false, groups: [], whyCls: 'whywrap', whyHidden: 'true', whyAnim: 'propwhy', whyName: '', whyState: '', whyReason: '', whyFlip: '', whyHasFlip: false, title: '', eyebrow: '', state: '', stateCls: '', reason: '', quotes: [], hasFlip: false, flip: '', msgs: [], asms: [], hasDesc: false, desc: '', isProp: false, markStyle: '', markApplies: false, proposedWord: '', rowLeftHint: '', rowLeft: false, rowLeftLabel: '', confirmRow: function () {}, canReview: false, changing: false, changeLabel: '', confirm: function () {}, startChange: function () {}, saveChange: function () {}, resolve: function () {}, resolveLabel: 'Resolve', send: function () {} };
+    if (s.sel) {
+      var parts = s.sel.split('.');
+      var row = byId[parts[0]];
+      var k = parts[1];
+      var head = row.dmg + '  ' + self.ASSETNAME[row.asset] + ', ' + self.PROPNAME[row.prop];
+      if (k === 'row') {
+        var ov = overall(row);
+        selVals.eyebrow = row.dmg + '  ' + row.asset;
+        selVals.title = self.ASSETNAME[row.asset] + ' · ' + self.PROPNAME[row.prop];
+        selVals.state = LV[ov - 1]; selVals.stateCls = 'tag t-ink';
+        selVals.hasDesc = true; selVals.desc = row.scen;
+        selVals.code = row.dmg; selVals.sub = self.PROPNAME[row.prop] + ' damage';
+        selVals.whyLabel = 'Why this impact rating'; selVals.isRow = true;
+        var ovr = overall(row);
+        var mk = function (c) {
+          var n = level(row, c.k), wk = row.dmg + '.' + c.k, open = s.propWhy === wk, drv = ovr > 1 && n === ovr;
+          if (open) { selVals.whyCls = 'whywrap open'; selVals.whyHidden = 'false'; selVals.whyAnim = s.whySwap ? 'propwhy ' + (s.whySwap % 2 ? 'fa' : 'fb') : 'propwhy'; }
+          if (open || (!s.propWhy && s.whyLast === wk)) {
+            selVals.whyName = catName(c.k); selVals.whyState = LV[n - 1];
+            selVals.whyReason = whyOf(c, n);
+            selVals.whyHasFlip = true;
+            selVals.whyFlip = (n < 4 ? 'Evidence that the effect reaches further than this would raise it to ' + LV[n] + '.' : 'Evidence that the effect stays contained would lower it to ' + LV[n - 2] + '.');
+          }
+          return {
+            name: c.name, lv: LV[n - 1], openStr: open ? 'true' : 'false',
+            dot: hasThread(wk) || self.ASSUMPTIONS.some(function (x) { return x.about === row.dmg && x.cat === c.k && !s.asm[x.id]; }),
+            whyLabel: (open ? 'Hide' : 'Show') + ' why ' + catName(c.k) + ' is ' + LV[n - 1],
+            style: (drv ? 'background: ' + SOLID[n - 1][0] + '; color: ' + SOLID[n - 1][1] + '; box-shadow: inset 0 0 0 1.5px ' + OUT[n - 1] + ', 0 0 0 3px ' + OUT[n - 1] + '2E' : 'background: ' + TINT[n - 1][0] + '; color: ' + TINT[n - 1][1] + '; box-shadow: inset 0 0 0 1px ' + OUT[n - 1]),
+            toggleWhy: function () {
+              var opening = s.propWhy !== wk, switching = opening && !!s.propWhy;
+              if (!opening) self.holdScroll();
+              else if (switching) self.morphWhy();
+              else if (typeof document !== 'undefined') { var _sc = document.querySelector('.dscroll'); if (_sc) _sc._pre = _sc.scrollTop; }
+              self.setState({ propWhy: opening ? wk : null, whyLast: wk, whySwap: (s.whySwap || 0) + (switching ? 1 : 0) });
+              if (opening && typeof document !== 'undefined') self.revealWhy(0);
+            }
+          };
+        };
+        selVals.groups = [
+          { name: 'Tool user', items: CATS.filter(function (c) { return c.grp === 'Tool user'; }).map(mk) },
+          { name: 'Other stakeholders', items: CATS.filter(function (c) { return c.grp !== 'Tool user'; }).map(mk) }
+        ];
+        selVals.reason = 'Impact rating ' + LV[ov - 1] + ' is the highest of the seven ratings, set by ' + drivers(row).join(' and ') + '. Affected: ' + row.who + '. The scenario comes from the ' + self.PROPNAME[row.prop] + ' mark on ' + row.asset + ' in Asset Analysis.';
+        selVals.asms = asmView(self.ASSUMPTIONS.filter(function (x) { return x.about === row.dmg; }));
+      } else {
+        var c = catOf[k], n = level(row, k);
+        selVals.eyebrow = head;
+        selVals.title = catName(k);
+        selVals.code = row.dmg; selVals.sub = catName(k);
+        selVals.whyLabel = 'Why this rating'; selVals.hasDesc = true; selVals.desc = row.scen;
+        selVals.asms = asmView(self.ASSUMPTIONS.filter(function (x) { return x.about === row.dmg && x.cat === k; }));
+        selVals.state = LV[n - 1]; selVals.stateCls = 'tag t-ink';
+        {
+          selVals.reason = whyOf(c, n);
+          selVals.hasFlip = true;
+          selVals.flip = n < 4 ? 'Evidence that the effect reaches further than this would raise it to ' + LV[n] + '.' : 'Evidence that the effect stays contained would lower it to ' + LV[n - 2] + '.';
+        }
+      }
+      var key = s.sel;
+      selVals.msgs = (s.threads[key] || []).map(function (m, i) {
+        var ch = m.change;
+        var you = m.who === 'You';
+        var cur = ch ? level(row, ch.k) : 0;
+        return {
+          mine: you, when: i === 0 ? 'yesterday' : 'just now', text: m.text,
+          wrap: you ? 'padding: 10px 12px; border-radius: 12px; background: #F7F6F2; border: 1px solid #ECE9E2' : 'padding-left: 12px; border-left: 2px solid #DAD8D1',
+          hasChange: !!ch,
+          changeProp: ch ? catName(ch.k) : '',
+          fromWord: ch ? LV[(ch.state === 'open' ? cur : (ch.from || cur)) - 1] : '', fromCls: 'tag t-grey',
+          toWord: ch ? LV[ch.to - 1] : '', toCls: 'tag t-ink',
+          changeOpen: !!ch && ch.state === 'open', changeDone: !!ch && ch.state !== 'open',
+          changeDoneText: ch && ch.state === 'applied' ? 'Applied by you. The rating and the impact rating are updated.' : 'Kept as it is.',
+          apply: function () {
+            var t = Object.assign({}, s.threads); t[key] = t[key].map(function (x, j) { return j === i ? Object.assign({}, x, { change: Object.assign({}, x.change, { state: 'applied', from: cur }) }) : x; });
+            var o = Object.assign({}, s.over); o[row.dmg + '.' + ch.k] = ch.to;
+            var r = Object.assign({}, s.resolved); r[key] = true;
+            self.setState({ threads: t, over: o, resolved: r });
+          },
+          keep: function () {
+            var t = Object.assign({}, s.threads); t[key] = t[key].map(function (x, j) { return j === i ? Object.assign({}, x, { change: Object.assign({}, x.change, { state: 'kept' }) }) : x; });
+            self.setState({ threads: t });
+          }
+        };
+      });
+      selVals.resolveLabel = s.resolved[key] ? 'Reopen' : 'Resolve';
+      selVals.resolve = function () { var r = Object.assign({}, s.resolved); r[key] = !r[key]; self.setState({ resolved: r }); };
+      selVals.send = function () {
+        var t = Object.assign({}, s.threads);
+        t[key] = (t[key] || []).concat([{ who: 'You', text: s.reply.trim() }, { who: 'reply', text: 'Noted. This will be checked against the asset analysis and the documents, and a proposed change will appear here if one is needed.' }]);
+        var r = Object.assign({}, s.resolved); delete r[key];
+        self.setState({ threads: t, reply: '', resolved: r });
+      };
+    }
+
+    var titleOf = function (key) { var p = key.split('.'); var row = byId[p[0]]; return row.dmg + ' ' + self.ASSETNAME[row.asset] + (p[1] === 'row' ? '' : ' · ' + catName(p[1])); };
+    var list = [];
+    if (s.railFilter === 'open') {
+      list = Object.keys(s.threads).filter(hasThread).map(function (t) { var m = s.threads[t]; var last = m[m.length - 1]; return { key: t, tag: 'Comment', cls: 'tag t-grey', title: titleOf(t), snippet: (last.who === 'You' ? 'You: ' : '') + last.text }; });
+    } else {
+      list = Object.keys(s.resolved).filter(function (t) { return s.resolved[t]; }).map(function (t) { return { key: t, tag: 'Resolved', cls: 'tag t-grey', title: titleOf(t), snippet: 'Resolved' }; });
+    }
+    list = list.filter(function (t) { return t.key !== s.sel && (!s.sel || t.key.indexOf(s.sel.split('.')[0] + '.') === 0); }).map(function (t, i) { return Object.assign({}, t, { i: i, pick: function () { self.setState({ sel: t.key, reply: '', draft: '', changing: false }); } }); });
+
+    var openThreads = Object.keys(s.threads).filter(hasThread).length;
+    var needYou = openAsm.length + openThreads;
+    return {
+      lines: lines, rheads: rheads, dist: dist, distText: distText, distLegend: distLegend, totalText: total + ' total scenarios', distTitle: 'Impact ratings across all scenarios: ' + distText,
+      asmCount: (s.railFilter === 'open' ? openAsm : doneAsm).length, threadCount: list.length,
+      legendOpen: s.legend, legendStr: s.legend ? 'true' : 'false', toggleLegend: function () { self.setState({ legend: !s.legend }); },
+      legendLevels: LV.map(function (l, i) { return { label: l, pts: i + 1, chip: CHIP[i] + '; cursor: default' }; }),
+      clearSel: function (ev) {
+        var t = ev && ev.target;
+        if (!t || !t.closest) return;
+        var patch = {};
+        if (s.legend && !t.closest('.legendpop, .helpb')) patch.legend = false;
+        if (s.menu && !t.closest('.rmenu, .rchip')) patch.menu = null;
+        if (s.sizeMenu && !t.closest('.psize')) patch.sizeMenu = false;
+        if (s.fmenu && !t.closest('.fwrap')) patch.fmenu = false;
+        if (s.sel && !t.closest('.pcell, .cell, .tlink, aside, nav, button, input, textarea, label, a, .legendpop')) { patch.sel = null; patch.changing = false; patch.draft = ''; }
+        if ('sel' in patch && s.rail && !s.closing) {
+          delete patch.sel;
+          if (Object.keys(patch).length) self.setState(patch);
+          self.closeRail(true);
+          return;
+        }
+        if (Object.keys(patch).length) self.setState(patch);
+      },
+      tableCls: 'assets fixed' + (s.density === 'compact' ? ' compact' : '') + (s.assetColOff ? ' acol-off' : ''),
+      assetColOffStr: s.assetColOff ? 'true' : 'false',
+      assetColLabel: s.assetColOff ? 'Show asset names' : 'Hide asset names',
+      toggleAssetCol: function (ev) {
+        if (ev && ev.stopPropagation) ev.stopPropagation();
+        if (self._acolBusy) return;
+        var off = !s.assetColOff;
+        if (typeof document === 'undefined') { self.setState({ assetColOff: off }); return; }
+        self._acolBusy = true;
+        var spans = [].slice.call(document.querySelectorAll('.scentx'));
+        var nameW = (document.querySelector('th.acol') || {}).offsetWidth || 128;
+        var full = (document.querySelector('th.scen') || {}).offsetWidth;
+        var td0 = spans.length ? spans[0].closest('td') : null;
+        var cw = td0 ? td0.clientWidth - 32 : 260;
+        var target = Math.max(120, off ? cw + nameW : cw - 128);
+        spans.forEach(function (sp) { sp.style.width = target + 'px'; });
+        self.setState({ assetColOff: off });
+        setTimeout(function () { spans.forEach(function (sp) { sp.style.width = ''; }); self._acolBusy = false; }, 460);
+      },
+      compactStr: s.density === 'compact' ? 'true' : 'false',
+      densTitle: s.density === 'compact' ? 'Compact rows: on' : 'Compact rows: off',
+      toggleDensity: function () { self.setState({ density: s.density === 'compact' ? 'comfortable' : 'compact' }); },
+      pointsStr: s.points ? 'true' : 'false', pointsTitle: s.points ? 'Showing points (1 to 4)' : 'Show points instead of words',
+      togglePoints: function () { self.setState({ points: !s.points }); },
+      fmenuOpen: !!s.fmenu, fmenuStr: s.fmenu ? 'true' : 'false',
+      toggleFmenu: function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); self.setState({ fmenu: !s.fmenu }); },
+      fActive: (s.filter && s.filter !== 'all') || s.density === 'compact' || !!s.points,
+      fCount: String(((s.filter && s.filter !== 'all') ? 1 : 0) + (s.density === 'compact' ? 1 : 0) + (s.points ? 1 : 0)),
+      resetFilters: function () { self.setState({ filter: 'all', density: 'comfortable', points: false, page: 1 }); },
+      asmList: asmView(s.railFilter === 'open' ? openAsm : doneAsm), asmEmpty: (s.railFilter === 'open' ? openAsm : doneAsm).length === 0,
+      needYou: needYou, hasNeed: needYou > 0,
+      needSplit: needYou ? ': ' + openAsm.length + (openAsm.length === 1 ? ' assumption, ' : ' assumptions, ') + openThreads + (openThreads === 1 ? ' comment' : ' comments') : '',
+      asmNav: 'font-weight: 500; gap: 8px; transition: background-color .25s cubic-bezier(.32,.72,0,1), color .25s cubic-bezier(.32,.72,0,1); ' + (s.rail ? 'background: #1C1B19; color: #FFFFFF' : 'color: #1C1B19'), filters: filters, railFilters: railFilters,
+      assetCount: total, shownCount: matched, noRows: shown.length === 0,
+      pageRange: from + '–' + to, pageMatched: matched, pageLabel: page + ' / ' + pages,
+      prevDisabled: page <= 1, nextDisabled: page >= pages,
+      prevPage: function () { if (page > 1) goPage(page - 1); }, nextPage: function () { if (page < pages) goPage(page + 1); },
+      pageSize: pageSize, sizeMenuOpen: !!s.sizeMenu, sizeMenuStr: s.sizeMenu ? 'true' : 'false',
+      toggleSizeMenu: function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); self.setState({ sizeMenu: !s.sizeMenu }); },
+      sizeOpts: sizeList.map(function (n) { return { label: String(n), selStr: n === pageSize ? 'true' : 'false', pick: function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); self.setState({ pageSize: n, page: 1, sizeMenu: false }); } }; }),
+      openAsmCount: openAsm.length,
+      needDot: 'width: 7px; height: 7px; border-radius: 99px; background: ' + (needYou ? '#E8C66A' : '#346538'),
+      cannotFinish: false,
+      finishLabel: s.finished ? (openAsm.length ? 'Finished · ' + openAsm.length + ' open' : 'Review finished') : 'Finish review',
+      finish: function () { if (openAsm.length) self.setState({ warn: true }); else self.setState({ finished: true }); },
+      warnOpen: !!s.warn && openAsm.length > 0,
+      warnTitle: openAsm.length === 1 ? '1 assumption is still open' : openAsm.length + ' assumptions are still open',
+      warnItems: openAsm.map(function (x) { return { id: x.id, text: x.text }; }),
+      closeWarn: function () { self.setState({ warn: false }); },
+      finishAnyway: function () { self.setState({ warn: false, finished: true }); },
+      stop: function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); },
+      reviewAsm: function () { self.setState({ warn: false, rail: true, closing: false, sel: null, railFilter: 'open', propWhy: null }); },
+      q: s.q, onSearch: function (ev) { self.setState({ q: ev.target.value, page: 1 }); },
+      railOpen: s.rail, railOpenStr: s.rail ? 'true' : 'false',
+      toggleRail: function () { if (s.rail && !s.closing) self.closeRail(); else self.setState({ rail: true, closing: false }); },
+      asideCls: 'panel drawer',
+      railWrap: (s.rail && !s.closing) ? 'transform: translateX(0); opacity: 1' : 'transform: translateX(calc(100% + 32px)); opacity: 0; pointer-events: none',
+      openThreads: openThreads,
+      hasSel: !!s.sel, noSel: !s.sel, sel: selVals,
+      reply: s.reply, onReply: function (ev) { self.setState({ reply: ev.target.value }); }, replyShort: s.reply.trim().length < 2,
+      draft: s.draft, onDraft: function (ev) { self.setState({ draft: ev.target.value }); }, draftShort: s.draft.trim().length < 3,
+      cancelChange: function () { self.setState({ changing: false, draft: '' }); },
+      listTitle: s.sel ? (s.railFilter === 'open' ? 'Other comments on this item' : 'Resolved on this item') : (s.railFilter === 'open' ? 'Open comments' : 'Resolved comments'),
+      showList: !s.sel || list.length > 0,
+      crumb: s.sel ? self.ASSETNAME[byId[s.sel.split('.')[0]].asset] : '',
+      clearPick: function () { self.setState({ sel: null, changing: false, draft: '', reply: '' }); },
+      threadList: list, listEmpty: list.length === 0
+    };
+  }
+}
+
+</script>
+
+
+</body></html>
