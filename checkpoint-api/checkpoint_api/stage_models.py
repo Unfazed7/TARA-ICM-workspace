@@ -617,3 +617,60 @@ class AssetRegisterState(StageBase):
     source = Column(String, nullable=False, default="stage03")  # stage03 | upload:<file name>
     pending = Column(Boolean, nullable=False, default=False)
     updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+
+# ── Screens 04 Impacts, 05 Threats, 06 TARA (specs 29 to 31) ──────────────────
+
+
+class StageEdit(StageBase):
+    """One change the analyst made to a value in a folder's output, with the reason kept beside it (D-62)."""
+
+    __tablename__ = "stage_edits"
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    ui_stage = Column(String(2), nullable=False)  # 04 | 05 | 06
+    folder = Column(Integer, nullable=False)  # the folder (04 to 10) whose output was changed
+    record_id = Column(String, nullable=False)
+    field = Column(String, nullable=False)
+    old = Column(Json, nullable=True)
+    new = Column(Json, nullable=True)
+    reason = Column(Text, nullable=False)
+    stale_folders = Column(Json, nullable=False, default=list)  # the model folders this change put out of date
+    by = Column(String, nullable=False)
+    at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+
+class StageComment(StageBase):
+    """A message in the thread on a row or one of its cells (04 to 06). Kept outside runs, like reviews."""
+
+    __tablename__ = "stage_comments"
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    ui_stage = Column(String(2), nullable=False)
+    record_id = Column(String, nullable=False)
+    field = Column(String, nullable=True)  # None: the thread is about the whole row
+    author = Column(String, nullable=False)  # analyst | assistant
+    author_id = Column(String, nullable=True)
+    text = Column(Text, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    resolved = Column(Boolean, nullable=False, default=False)
+    proposed_change = Column(Json, nullable=True)  # {field, value, state: open | applied | kept}
+
+
+class StageAssumptionReview(StageBase):
+    """The analyst confirming or disputing an assumption an agent returned. Keyed by what it says, so it survives a re-run."""
+
+    __tablename__ = "stage_assumption_reviews"
+    __table_args__ = (UniqueConstraint("assessment_id", "ui_stage", "key"),)
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, index=True)
+    ui_stage = Column(String(2), nullable=False)
+    key = Column(String, nullable=False)
+    assumption_id = Column(String, nullable=False)  # AS-04-01 as it was numbered when reviewed
+    status = Column(String, nullable=False)  # confirmed | disputed
+    note = Column(Text, nullable=True)
+    reviewed_by = Column(String, nullable=False)
+    reviewed_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)

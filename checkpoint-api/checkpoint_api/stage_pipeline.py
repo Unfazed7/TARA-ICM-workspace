@@ -207,22 +207,20 @@ CHAIN = (4, 5, 6, 7, 8, 9, 10)
 UI_FIRST_FOLDER = {"04": 4, "05": 5, "06": 8}
 
 
+def _new_run(assessment_id: str, number: int) -> PipelineRun:
+    return PipelineRun(assessment_id=assessment_id, stage_num=number, stage_name=STAGES_BY_NUMBER[number].key, status="pending", started_at=utc_now())
+
+
 def _start_folder(db, assessment_id: str, number: int) -> str:
-    """A fresh run row and attempt for one folder, as the single-stage Run button makes them."""
+    """The attempt for one folder about to run, as the single-stage Run button makes it. Its run row was made by `prepare_folders`."""
     stage = STAGES_BY_NUMBER[number]
-    old = db.query(PipelineRun).filter_by(assessment_id=assessment_id, stage_num=number).first()
-    if old is not None:
-        db.delete(old)
-        db.flush()
-    path = Path(pipeline_runner.get_output_path(number, assessment_id))
-    if path.exists():
-        path.unlink()
-    run = PipelineRun(assessment_id=assessment_id, stage_num=number, stage_name=stage.key, status="pending", started_at=utc_now())
+    if db.query(PipelineRun).filter_by(assessment_id=assessment_id, stage_num=number).first() is None:
+        db.add(_new_run(assessment_id, number))
     attempt = PipelineRunAttempt(
         assessment_id=assessment_id, stage_num=number, stage_name=stage.key, status="pending",
         provider=pipeline_runner.LLM_PROVIDER, model=pipeline_runner.effective_llm_model() or None, started_at=utc_now(),
     )
-    db.add_all([run, attempt])
+    db.add(attempt)
     db.commit()
     return attempt.attempt_id
 
@@ -238,35 +236,51 @@ def clear_folders(db, assessment_id: str, numbers) -> None:
         path = Path(pipeline_runner.get_output_path(number, assessment_id))
         if path.exists():
             path.unlink()
+        path.with_name("assumptions.json").unlink(missing_ok=True)
     db.commit()
 
 
-async def run_folders(assessment_id: str, numbers) -> bool:
+def prepare_folders(db, assessment_id: str, numbers) -> None:
+    """Clears these folders and marks them pending, so every screen shows the build before the first one starts."""
+    numbers = list(numbers)
+    clear_folders(db, assessment_id, numbers)
+    for number in numbers:
+        db.add(_new_run(assessment_id, number))
+    db.commit()
+
+
+async def run_folders(assessment_id: str, numbers, prepared: bool = False) -> bool:
     """Runs folders in order through the legacy runner, so run rows, attempts and logs are recorded as before.
 
     Stops at the first folder that does not complete; the folders after it are left not started.
     """
     db = SessionLocal()
+    numbers = list(numbers)
     try:
-        numbers = list(numbers)
-        clear_folders(db, assessment_id, numbers)
-        for number in numbers:
+        if not prepared:
+            prepare_folders(db, assessment_id, numbers)
+        for position, number in enumerate(numbers):
             attempt_id = _start_folder(db, assessment_id, number)
             await pipeline_runner.run_stage_subprocess(assessment_id, number, None, attempt_id)
             db.expire_all()
             run = db.query(PipelineRun).filter_by(assessment_id=assessment_id, stage_num=number).first()
             if run is None or run.status != "complete":
                 log.error("%s | Folder %02d did not complete (%s); the folders after it were not started", assessment_id, number, run.status if run else "no run")
+                clear_folders(db, assessment_id, numbers[position + 1:])
                 return False
         return True
+    except Exception:
+        db.rollback()
+        clear_folders(db, assessment_id, numbers)  # never leave a folder pending for ever
+        raise
     finally:
         db.close()
 
 
 async def run_from_folder(assessment_id: str, first: int) -> None:
-    """The Rebuild button of pills 04 to 06: runs folder `first` and every folder after it."""
+    """The Rebuild button of pills 04 to 06: runs folder `first` and every folder after it (already marked pending)."""
     try:
-        await run_folders(assessment_id, [n for n in CHAIN if n >= first])
+        await run_folders(assessment_id, [n for n in CHAIN if n >= first], prepared=True)
     except Exception:  # noqa: BLE001 -- a stuck "running" row would block every later edit
         log.exception("%s | The rebuild from folder %02d stopped unexpectedly", assessment_id, first)
 
