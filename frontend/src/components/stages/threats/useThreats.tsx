@@ -168,8 +168,8 @@ export function useThreats(p: ThreatsProps) {
   p.rows.forEach((r) => { const l = feasIdx(r); if (l) counts[l - 1] += 1; });
   const total = p.rows.length;
   const order = [4, 3, 2, 1, 0];
-  const dist = order.map((i) => ({ style: `width: ${total ? ((counts[i] / total) * 100).toFixed(2) : 0}%; background: ${RISK[i][0]}` }));
-  const distLegend = order.map((i) => ({ n: String(counts[i]), label: FEAS[i], dot: `width: 9px; height: 9px; border-radius: 99px; background: ${RISK[i][0]}` }));
+  const dist = order.filter((i) => counts[i]).map((i) => ({ style: `flex: ${counts[i]} 1 0; background: ${RISK[i][0]}` }));
+  const distLegend = order.map((i) => ({ zero: !counts[i], n: String(counts[i]), label: FEAS[i], dot: `background: ${RISK[i][0]}` }));
   const distText = order.filter((i) => counts[i]).map((i) => `${counts[i]} ${FEAS[i].toLowerCase()}`).join(' · ');
 
   // ── the attack path sheet ───────────────────────────────────────────────────

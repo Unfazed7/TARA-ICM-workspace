@@ -341,6 +341,20 @@
 @keyframes im-ddoptup{from{opacity:0;transform:translateY(6px)}}
 @media (prefers-reduced-motion: reduce){.impacts-stage td.cat .rmenu, .impacts-stage td.cat .rmenu .ropt{animation:none!important}}
 
+/* The header strip: the bar, its total and its legend sit on one grid. Only the levels that have rows are drawn, sized by their share. */
+.impacts-stage .hsum{display:inline-flex;align-items:center;gap:28px;min-width:0}
+.impacts-stage .htitle{font-size:15px;font-weight:600;white-space:nowrap}
+.impacts-stage .dsum{display:inline-flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0}
+.impacts-stage .dsum .dsrow{display:flex;align-items:center;gap:14px}
+.impacts-stage .dsum .dist{display:flex;flex:1 1 auto;width:auto;min-width:160px;height:8px;gap:2px;background:#E9E7E1;border-radius:99px;overflow:hidden}
+.impacts-stage .dsum .dist span{display:block;flex-basis:0;min-width:6px;height:100%;border-radius:99px}
+.impacts-stage .dsum .dtotal{flex:none;font-size:12.5px;font-weight:600;color:#1C1B19;white-space:nowrap}
+.impacts-stage .dsum .dleg{display:flex;flex-wrap:nowrap;align-items:center;gap:0 18px;font-size:12.5px;line-height:1;color:#4A4946;white-space:nowrap}
+.impacts-stage .dsum .dli{display:inline-flex;align-items:center;gap:6px}
+.impacts-stage .dsum .dli.zero{opacity:.55}
+.impacts-stage .dsum .ddot{flex:none;width:9px;height:9px;border-radius:99px}
+.impacts-stage .dsum .dn{min-width:1.2ch;text-align:right;font-weight:600;color:#1C1B19;font-variant-numeric:tabular-nums}
+
 /* The design is drawn on plain browser defaults; the app's reset is not. These put back the two defaults its sizes rely on. */
 .impacts-stage *,.impacts-stage *::before,.impacts-stage *::after{box-sizing:content-box}
 .impacts-stage svg{display:inline;vertical-align:baseline}

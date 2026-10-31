@@ -163,8 +163,8 @@ export function useImpacts(p: ImpactsProps) {
   const counts = [0, 0, 0, 0];
   p.rows.forEach((r) => { const o = overall(r); if (o) counts[o - 1] += 1; });
   const total = p.rows.length;
-  const dist = [3, 2, 1, 0].map((i) => ({ style: `width: ${total ? ((counts[i] / total) * 100).toFixed(2) : 0}%; background: ${SOLID[i][0]}` }));
-  const distLegend = [3, 2, 1, 0].map((i) => ({ n: String(counts[i]), label: LEVELS[i], dot: `width: 9px; height: 9px; border-radius: 99px; background: ${SOLID[i][0]}` }));
+  const dist = [3, 2, 1, 0].filter((i) => counts[i]).map((i) => ({ style: `flex: ${counts[i]} 1 0; background: ${SOLID[i][0]}`, label: `${counts[i]} ${LEVELS[i]}` }));
+  const distLegend = [3, 2, 1, 0].map((i) => ({ zero: !counts[i], n: String(counts[i]), label: LEVELS[i], dot: `background: ${SOLID[i][0]}` }));
   const distText = [3, 2, 1, 0].filter((i) => counts[i]).map((i) => `${counts[i]} ${LEVELS[i]}`).join(' · ');
 
   // ── the side panel ──────────────────────────────────────────────────────────

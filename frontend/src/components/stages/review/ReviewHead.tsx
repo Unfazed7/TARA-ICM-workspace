@@ -12,31 +12,24 @@ export function ReviewHead({ v }: { v: Vals }) {
   return (
     <>
       <div className="phead">
-        <span style={st("display: inline-flex; align-items: center; gap: 12px")}>
-          <span style={st("font-size: 15px; font-weight: 600")}>{headTitle}</span>
-          <span className="hidesm" style={st("font-size: 12.5px; color: #6B6A66")}>
-            <br />
-          </span>
+        <span className="hsum">
+          <span className="htitle">{headTitle}</span>
           <span className="hidesm dsum" title={distTitle}>
-            <span style={st("display: inline-flex; align-items: center; gap: 12px")}>
+            <span className="dsrow">
               <span className="dist" aria-hidden="true">
                 {(dist as Vals[]).map((d: Vals, __i: number) => (
-                  <Fragment key={__i}>
-                    <span style={st(d.style)} />
-                  </Fragment>
+                  <span key={__i} style={st(d.style)} />
                 ))}
               </span>
-              <span style={st("font-size: 12.5px; font-weight: 600; color: #1C1B19")}>{totalText}</span>
+              <span className="dtotal">{totalText}</span>
             </span>
-            <span style={st("display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 16px")}>
+            <span className="dleg">
               {(distLegend as Vals[]).map((l: Vals, __i: number) => (
-                <Fragment key={__i}>
-                  <span style={st("display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #4A4946")}>
-                    <span aria-hidden="true" style={st(l.dot)} />
-                    <span className="mono" style={st("color: #1C1B19")}>{l.n}</span>
-                    {' '}{l.label}
-                  </span>
-                </Fragment>
+                <span key={__i} className={l.zero ? 'dli zero' : 'dli'}>
+                  <span className="ddot" aria-hidden="true" style={st(l.dot)} />
+                  <span className="dn">{l.n}</span>
+                  {l.label}
+                </span>
               ))}
             </span>
           </span>
