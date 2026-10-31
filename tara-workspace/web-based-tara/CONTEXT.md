@@ -19,7 +19,7 @@ Loaded by `run-web-tara.js` at the start of each assessment. The flow and its ru
 | 09 Risk Treatment | `stages/09-risk-treatment/` | AI | `risk-register.json` | `risk-treatment.json` | Optional |
 | 10 Residual Risk | `stages/10-residual-risk/` | Deterministic | `risk-register.json` plus `risk-treatment.json` | `residual-risk.json` | None |
 
-Stages 01 and 02 run automatically one after the other; each stage's output and Rationale appear on its page as soon as it finishes (D-36, D-37). Stage 03 runs after Stage 02 in the same Execute (D-53); Stages 04 onwards are started by hand until they are rebuilt. Only Stage 01 reads client documents. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
+Stages 01 and 02 run automatically one after the other; each stage's output and Rationale appear on its page as soon as it finishes (D-36, D-37). Stage 03 runs after Stage 02 in the same Execute (D-53), and folders 04 to 10 follow it, in order, stopping at the first failure (D-61). Only Stage 01 reads client documents. Stage 03 onwards reads only the stored Item Definition and later stage outputs.
 
 ### Runtime catalogue
 
@@ -139,3 +139,15 @@ Written to: `outputs/json/assessment-state.json`
 | `audit-trail.json` | Ongoing | Audit logger (model, provider and prompt version per call) |
 
 Outputs of stages 01 to 03 are raw machine output for debugging and audit. The stored state, including the analyst's review of Rationale items, lives in `checkpoint-api`.
+
+## Screens and folders (D-61)
+
+| Pill | Screen | Folders | One row per |
+|---|---|---|---|
+| 04 Impacts | Impact Analysis | 04 damage scenarios, 07 impact ratings | damage scenario |
+| 05 Threats | Threat Analysis | 05 threats, 06 attack paths | threat |
+| 06 TARA | TARA | 08 risk scoring, 09 treatment, 10 residual risk | risk record |
+| 07 Review & Publish | sheets | Final TARA, Reports, Attack trees, Cybersecurity goals, Residual risk | |
+
+Each agent of 04, 05, 06, 07 and 09 also writes `assumptions.json` next to its output; folder 10 writes it from its control changes (D-64).
+
