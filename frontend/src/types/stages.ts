@@ -23,6 +23,8 @@ export interface PipelineStatus {
     started_at: string | null;
     completed_at: string | null;
   }[];
+  /** Folders 04 to 10, built after Stage 03 in the same Execute. */
+  folders?: { stage_num: number; status: string; error: string | null; started_at: string | null; completed_at: string | null }[];
   documents: number;
   boundary_set: boolean;
   missing: string[];
@@ -232,4 +234,152 @@ export interface AssetComment {
   created_at: string;
   resolved: boolean;
   proposed_change: { property: PropertyCode; applies: boolean; state: 'open' | 'applied' | 'kept' } | null;
+}
+
+// ── Screens 04 Impacts, 05 Threats, 06 TARA (specs 29 to 31) ──────────────────
+
+export type UiStage = '04' | '05' | '06';
+export type ImpactLevel = 'Negligible' | 'Moderate' | 'Major' | 'Severe';
+export type RiskLevel = 'informational' | 'low' | 'medium' | 'high' | 'critical';
+export type Treatment = 'reduce' | 'accept' | 'share' | 'avoid';
+
+export interface EditInfo {
+  kind: 'confirmed' | 'changed';
+  reason: string;
+  by: string;
+  at: string;
+  from: unknown;
+}
+
+export interface RowNotes {
+  comment_fields: string[];
+  assumption_fields: string[];
+  assumptions_open: number;
+}
+
+export interface UiRowBase {
+  record_id: string;
+  asset_id: string;
+  asset_ref: string;
+  asset_name: string;
+  family: string;
+  family_name: string;
+  property: string | null;
+  notes: RowNotes;
+}
+
+export interface ImpactCell {
+  level: ImpactLevel | null;
+  mixed: boolean;
+  locked: boolean;
+  rule: string | null;
+  why: { threat_id: string; level: ImpactLevel; reason: string }[];
+  edit: EditInfo | null;
+}
+
+export interface ImpactRow extends UiRowBase {
+  damage: string;
+  stakeholder: string;
+  impact_ids: string[];
+  rated: boolean;
+  cells: Record<string, ImpactCell>;
+  overall: { value: number; label: ImpactLevel } | null;
+}
+
+export interface ThreatFactor {
+  code: string;
+  label: string;
+  why: string;
+  edit: EditInfo | null;
+}
+
+export interface ThreatRow extends UiRowBase {
+  threat: string;
+  derivation_note: string;
+  damage_id: string;
+  damage: string | null;
+  stride: { value: string; edit: EditInfo | null };
+  attack_id: string | null;
+  factors: Record<string, ThreatFactor> | null;
+  cvss: number | null;
+  feasibility: { value: number; label: string } | null;
+  attack_path: { description: string; steps: string[] } | null;
+}
+
+export interface TaraRow extends UiRowBase {
+  risk_id: string;
+  damage_id: string;
+  damage: string | null;
+  impact: { value: number; label: ImpactLevel };
+  threat_id: string;
+  threat: string | null;
+  feasibility: { value: number; label: string };
+  risk: { score: number; level: RiskLevel; rank: number };
+  cvss: number | null;
+  treatment: {
+    option: Treatment;
+    rationale: string;
+    goal: { id: string; statement: string; cal: number } | null;
+    claim: { id: string; statement: string; basis: string } | null;
+    avoidance_action: string | null;
+    controls: { id: string; title: string; type: string }[];
+    cal: number;
+    edit: EditInfo | null;
+  } | null;
+  residual: {
+    pre: { metrics: Record<string, string>; afr_value: number; afr_label: string; risk_score: number; risk_level: RiskLevel };
+    post: { metrics: Record<string, string>; afr_value: number; afr_label: string; risk_score: number; risk_level: RiskLevel };
+    changes: { metric: string; from: string; to: string; control_id: string; reason: string }[];
+  } | null;
+}
+
+export interface UiAssumption {
+  id: string; // AS-04-01
+  key: string;
+  folder: number;
+  record_id: string | null;
+  field: string | null;
+  text: string;
+  status: 'open' | 'confirmed' | 'disputed';
+  note: string | null;
+}
+
+export interface UiScales {
+  weights: Record<string, Record<string, number>>;
+  afr_labels: Record<string, string>;
+  exploitability: { min: number; max: number; factor: number };
+  risk_levels: { level: RiskLevel; from: number; to: number }[];
+}
+
+export interface UiStageOutput<Row> {
+  ui_stage: UiStage;
+  built_from: { label: string; run: number | null };
+  building: boolean;
+  folders: { stage_num: number; status: string; error: string | null }[];
+  stale: { is: boolean; folders: number[]; reason: string | null };
+  finished: { by: string; at: string } | null;
+  has_data: boolean;
+  families: { code: string; name: string }[];
+  rows: Row[];
+  assumptions: UiAssumption[];
+  scales: UiScales;
+}
+
+export interface UiComment {
+  id: number;
+  record_id: string;
+  field: string | null;
+  author: 'analyst' | 'assistant';
+  text: string;
+  created_at: string;
+  resolved: boolean;
+  proposed_change: { field: string; value: string; state: 'open' | 'applied' | 'kept'; from?: string | null } | null;
+}
+
+export interface UiEditBody {
+  value?: string;
+  reason?: string;
+  confirm?: true;
+  goal_statement?: string;
+  avoidance_action?: string;
 }

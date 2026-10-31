@@ -51,7 +51,8 @@ export const phaseTabs: Record<WorkflowPhase, TaraTab[]> = {
   impacts: ['damage-analysis'],
   'threat-analysis': ['threat-analysis', 'attack-trees', 'attack-path'],
   'risk-treatment': ['impact-rating', 'feasibility', 'risk-treatment', 'cybersecurity-goals', 'residual-risk'],
-  'review-publish': ['final-tara', 'reports'],
+  // Pills 04 to 06 are screens of their own (specs 29 to 31). The sheets that have no screen moved here, so every one stays reachable.
+  'review-publish': ['final-tara', 'reports', 'attack-trees', 'cybersecurity-goals', 'residual-risk'],
 };
 
 /** The pipeline stage each sheet shows. Residual risk is Stage 10 (D-55). */
@@ -83,11 +84,18 @@ export const stageDestination: Record<number, { phase: WorkflowPhase; tab: TaraT
   3: { phase: 'assets-damage', tab: 'asset-id' },
   4: { phase: 'impacts', tab: 'damage-analysis' },
   5: { phase: 'threat-analysis', tab: 'threat-analysis' },
-  6: { phase: 'threat-analysis', tab: 'attack-path' },
+  6: { phase: 'review-publish', tab: 'attack-trees' },
   7: { phase: 'risk-treatment', tab: 'impact-rating' },
   8: { phase: 'risk-treatment', tab: 'feasibility' },
-  9: { phase: 'risk-treatment', tab: 'risk-treatment' },
-  10: { phase: 'risk-treatment', tab: 'residual-risk' },
+  9: { phase: 'review-publish', tab: 'cybersecurity-goals' },
+  10: { phase: 'review-publish', tab: 'residual-risk' },
+};
+
+/** The pipeline folders each of pills 04 to 06 shows (D-61), and the folder it starts a rebuild from. */
+export const screenFolders: Record<'04' | '05' | '06', number[]> = {
+  '04': [4, 7],
+  '05': [5, 6],
+  '06': [8, 9, 10],
 };
 
 /** The stages shown in the runner of a phase. */

@@ -12,6 +12,10 @@ import type {
   Stage02Output,
   Stage03Output,
   StageKey,
+  UiComment,
+  UiEditBody,
+  UiStage,
+  UiStageOutput,
   UploadedDocument,
 } from '@/types/stages';
 
@@ -91,4 +95,18 @@ export const stagesApi = {
       method: 'PUT',
       body: JSON.stringify({ answer }),
     }),
+
+  // Screens 04 Impacts, 05 Threats, 06 TARA
+  uiStage: <Row,>(id: string, ui: UiStage) => call<UiStageOutput<Row>>(`/${id}/ui-stages/${ui}`),
+  uiEdit: (id: string, ui: UiStage, record: string, field: string, body: UiEditBody) =>
+    call<{ record_id: string; field: string; value: string; stale_folders: number[] }>(`/${id}/ui-stages/${ui}/records/${record}/fields/${field}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  uiComments: (id: string, ui: UiStage) => call<UiComment[]>(`/${id}/ui-stages/${ui}/comments`),
+  uiAddComment: (id: string, ui: UiStage, recordId: string, field: string | null, text: string) =>
+    call<UiComment>(`/${id}/ui-stages/${ui}/comments`, { method: 'POST', body: JSON.stringify({ record_id: recordId, field, text }) }),
+  uiUpdateComment: (id: string, ui: UiStage, commentId: number, body: { resolved: boolean } | { proposed_change: { state: 'applied' | 'kept' } }) =>
+    call<UiComment>(`/${id}/ui-stages/${ui}/comments/${commentId}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  uiAssumption: (id: string, ui: UiStage, assumptionId: string, status: 'confirmed' | 'disputed' | 'open', note?: string) =>
+    call<unknown>(`/${id}/ui-stages/${ui}/assumptions/${assumptionId}`, { method: 'PATCH', body: JSON.stringify({ status, note }) }),
+  uiFinish: (id: string, ui: UiStage) => call<{ finished: { by: string; at: string } }>(`/${id}/ui-stages/${ui}/finish`, { method: 'POST' }),
+  uiRebuild: (id: string, ui: UiStage) => call<{ ui_stage: UiStage; status: string }>(`/${id}/ui-stages/${ui}/rebuild`, { method: 'POST' }),
 };

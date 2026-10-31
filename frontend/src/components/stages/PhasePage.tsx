@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PageHeader, StatusDot } from '@/components/layout/StageShell';
 import { StageRunnerPanel } from '@/components/stages/StageRunnerPanel';
-import { RunHistoryDialog } from '@/components/workspace/RunHistoryDialog';
 import { WorkspaceTabs } from '@/components/workspace/WorkspaceTabs';
 import { useTara } from '@/contexts/TaraContext';
 import { useProjects } from '@/contexts/ProjectContext';
@@ -105,7 +104,6 @@ export function PhasePage({ assessmentId, project, phase, stage02Done }: { asses
                 <StatusDot tone="blue" /> Running
               </span>
             )}
-            <RunHistoryDialog assessmentId={assessmentId} />
             <SaveDraft assessmentId={assessmentId} project={project} />
           </>
         }

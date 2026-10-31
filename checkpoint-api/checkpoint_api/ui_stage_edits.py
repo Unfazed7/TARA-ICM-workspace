@@ -158,7 +158,7 @@ def edit_impact(db: Session, assessment_id: str, record_id: str, field: str, bod
     current = max((p[group][key] for p in pairs), key=u._level_index)
     if body.get("confirm") is True:
         log_edit(db, assessment_id, "04", 7, record_id, field, current, current, "Confirmed", [], by)
-        return {"record_id": record_id, "field": field, "value": current, "stale_folders": []}
+        return {"record_id": record_id, "field": field, "value": current, "stale_folders": [], "from": current}
     if field not in IMPACT_EDITABLE:
         raise Refused(422, "This rating is fixed by rule and cannot be changed.")
     value, reason = body.get("value"), reason_of(body)
@@ -175,7 +175,7 @@ def edit_impact(db: Session, assessment_id: str, record_id: str, field: str, bod
         backup.restore()
         raise
     log_edit(db, assessment_id, "04", 7, record_id, field, current, value, reason, STALE["scoring"], by)
-    return {"record_id": record_id, "field": field, "value": value, "stale_folders": STALE["scoring"]}
+    return {"record_id": record_id, "field": field, "value": value, "stale_folders": STALE["scoring"], "from": current}
 
 
 def edit_threat(db: Session, assessment_id: str, record_id: str, field: str, body: dict, by: str) -> dict:
@@ -187,7 +187,7 @@ def edit_threat(db: Session, assessment_id: str, record_id: str, field: str, bod
         current = threat["stride_category"]
         if body.get("confirm") is True:
             log_edit(db, assessment_id, "05", 5, record_id, field, current, current, "Confirmed", [], by)
-            return {"record_id": record_id, "field": field, "value": current, "stale_folders": []}
+            return {"record_id": record_id, "field": field, "value": current, "stale_folders": [], "from": current}
         value, reason = body.get("value"), reason_of(body)
         if value not in STRIDE:
             raise Refused(422, "Choose one of the six STRIDE categories.")
@@ -200,7 +200,7 @@ def edit_threat(db: Session, assessment_id: str, record_id: str, field: str, bod
             backup.restore()
             raise
         log_edit(db, assessment_id, "05", 5, record_id, field, current, value, reason, STALE["stride"], by)
-        return {"record_id": record_id, "field": field, "value": value, "stale_folders": STALE["stride"]}
+        return {"record_id": record_id, "field": field, "value": value, "stale_folders": STALE["stride"], "from": current}
     if field in u.FACTORS:
         attacks = read(6, assessment_id)
         attack = next((a for a in attacks if a["threat_id"] == record_id), None)
@@ -209,7 +209,7 @@ def edit_threat(db: Session, assessment_id: str, record_id: str, field: str, bod
         current = attack["cvss_metrics"][field]
         if body.get("confirm") is True:
             log_edit(db, assessment_id, "05", 6, record_id, field, current, current, "Confirmed", [], by)
-            return {"record_id": record_id, "field": field, "value": current, "stale_folders": []}
+            return {"record_id": record_id, "field": field, "value": current, "stale_folders": [], "from": current}
         value, reason = body.get("value"), reason_of(body)
         if value not in u.FACTOR_WORDS[field]:
             raise Refused(422, f"Choose one of {', '.join(u.FACTOR_WORDS[field])} for this factor.")
@@ -224,7 +224,7 @@ def edit_threat(db: Session, assessment_id: str, record_id: str, field: str, bod
             backup.restore()
             raise
         log_edit(db, assessment_id, "05", 6, record_id, field, current, value, reason, STALE["scoring"], by)
-        return {"record_id": record_id, "field": field, "value": value, "stale_folders": STALE["scoring"]}
+        return {"record_id": record_id, "field": field, "value": value, "stale_folders": STALE["scoring"], "from": current}
     raise Refused(404, f"Unknown field {field}.")
 
 
@@ -245,7 +245,7 @@ def edit_treatment(db: Session, assessment_id: str, record_id: str, field: str, 
     current = record["treatment_option"]
     if body.get("confirm") is True:
         log_edit(db, assessment_id, "06", 9, record_id, field, current, current, "Confirmed", [], by)
-        return {"record_id": record_id, "field": field, "value": current, "stale_folders": []}
+        return {"record_id": record_id, "field": field, "value": current, "stale_folders": [], "from": current}
     option, reason = body.get("value"), reason_of(body)
     if option not in OPTIONS:
         raise Refused(422, "Choose Reduce, Accept, Share or Avoid.")
@@ -306,7 +306,7 @@ def edit_treatment(db: Session, assessment_id: str, record_id: str, field: str, 
         backup.restore()
         raise
     log_edit(db, assessment_id, "06", 9, record_id, field, current, option, reason, STALE["treatment"], by)
-    return {"record_id": record_id, "field": field, "value": option, "stale_folders": STALE["treatment"]}
+    return {"record_id": record_id, "field": field, "value": option, "stale_folders": STALE["treatment"], "from": current}
 
 
 def expected_residual(level: str) -> str:
@@ -384,8 +384,9 @@ def update_comment(db: Session, assessment_id: str, ui_stage: str, comment_id: i
             raise Refused(409, "This proposal has already been answered.")
         if state == "applied":
             proposal = comment.proposed_change
-            apply_edit(db, assessment_id, ui_stage, comment.record_id, proposal["field"], {"value": proposal["value"], "reason": comment.text[:500]}, by)
+            done = apply_edit(db, assessment_id, ui_stage, comment.record_id, proposal["field"], {"value": proposal["value"], "reason": comment.text[:500]}, by)
             _thread(db, assessment_id, ui_stage, comment.record_id, comment.field).update({"resolved": True})
+            comment.proposed_change = {**comment.proposed_change, "from": done.get("from")}
         comment.proposed_change = {**comment.proposed_change, "state": state}
     if "resolved" in body:
         _thread(db, assessment_id, ui_stage, comment.record_id, comment.field).update({"resolved": bool(body["resolved"])})

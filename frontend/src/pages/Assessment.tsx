@@ -1,7 +1,7 @@
 /**
- * Stage screens (D-46, D-51, spec 24): 01 Documents, 02 Item Definition, 03 Assets (D-56), and the pipeline
- * pages 04 Impacts, 05 Threat Analysis, 06 Risk & Treatment, 07 Review & Publish (D-59). The Assumptions of
- * the current stage open from the top bar, and Settings has "What I read".
+ * Stage screens (D-46, D-51, spec 24): 01 Documents, 02 Item Definition, 03 Assets (D-56), 04 Impacts, 05 Threats and
+ * 06 TARA (D-61), and the page 07 Review & Publish. The Assumptions of the current stage open from the top bar, and
+ * Settings has "What I read" and the pipeline runs.
  */
 
 import { useMemo, useState } from 'react';
@@ -15,11 +15,16 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { TaraProvider } from '@/contexts/TaraContext';
 import { PhasePage } from '@/components/stages/PhasePage';
 import { AssetsStage } from '@/components/stages/AssetsStage';
+import { ImpactsStage } from '@/components/stages/ImpactsStage';
+import { ThreatsStage } from '@/components/stages/ThreatsStage';
+import { TaraStage } from '@/components/stages/TaraStage';
+import { RunsSettings } from '@/components/stages/RunsSettings';
 import { useAssetsData } from '@/components/stages/assets/useAssetsData';
-import { workflowStages, type WorkflowPhase } from '@/lib/workflow';
+import { useUiStageData } from '@/components/stages/review/useUiStageData';
+import { screenFolders, type WorkflowPhase } from '@/lib/workflow';
 import { useMotionPreset } from '@/lib/motion';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
-import type { RationaleItem, ScopeStatus, StageKey } from '@/types/stages';
+import type { ImpactRow, RationaleItem, ScopeStatus, StageKey, TaraRow, ThreatRow } from '@/types/stages';
 import { DocumentsStage } from '@/components/stages/DocumentsStage';
 import { Diagram, Legend } from '@/components/stages/Diagram';
 import { DetailsDrawer, DetailsEmpty } from '@/components/stages/DetailsDrawer';
@@ -29,7 +34,7 @@ import { SideSheet } from '@/components/layout/SideSheet';
 import { WhatIRead } from '@/components/stages/WhatIRead';
 import { affectedIds, buildCards, type Card, needsYou } from '@/components/stages/assumptions';
 
-/** The pill keys. 01 to 03 are stage screens; 04 to 07 are pages that group the pipeline stages 04 to 10. */
+/** The pill keys. 01 to 06 are screens; 07 is the page of sheets (Final TARA, Reports and the sheets that have no screen). */
 type PhaseKey = StageKey | '04' | '05' | '06' | '07';
 
 const TABS: { key: PhaseKey; label: string; ready: boolean; note?: string }[] = [
@@ -37,20 +42,17 @@ const TABS: { key: PhaseKey; label: string; ready: boolean; note?: string }[] = 
   { key: '02', label: 'Item Definition', ready: true },
   { key: '03', label: 'Assets', ready: true },
   { key: '04', label: 'Impacts', ready: true },
-  { key: '05', label: 'Threat Analysis', ready: true },
-  { key: '06', label: 'Risk & Treatment', ready: true },
+  { key: '05', label: 'Threats', ready: true },
+  { key: '06', label: 'TARA', ready: true },
   { key: '07', label: 'Review & Publish', ready: true },
 ];
 
 const PHASE_OF: Partial<Record<PhaseKey, WorkflowPhase>> = {
-  '04': 'impacts',
-  '05': 'threat-analysis',
-  '06': 'risk-treatment',
   '07': 'review-publish',
 };
 
-/** The pipeline stage whose Assumptions a page shows, written next to its output (read-only for now). */
-const ASSUMPTION_STAGE: Partial<Record<PhaseKey, number>> = { '06': 10 };
+/** The screens that keep their own Assumptions panel; the top bar's button only tells them to open or close it. */
+const SCREENS: PhaseKey[] = ['03', '04', '05', '06'];
 
 /** The kinds of area the diagram shows, as coloured tags for the workspace header. */
 function zoneTags(def: { zones: { kind: string }[]; containers: { kind: string; zone_id?: string }[] }) {
@@ -74,9 +76,9 @@ export default function Assessment() {
   const [tab, setTab] = useState<PhaseKey>('01');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
-  // 03 Assets keeps its own panel; the top bar's Assumptions button only tells it to open or close.
-  const [assetsRail, setAssetsRail] = useState(false);
-  const [assetsToggle, setAssetsToggle] = useState(0);
+  // Screens 03 to 06 keep their own panel; the top bar's Assumptions button only tells the open one to open or close it.
+  const [screenRail, setScreenRail] = useState(false);
+  const [screenToggle, setScreenToggle] = useState(0);
   const [openCard, setOpenCard] = useState<Card | null>(null);
   const [filterId, setFilterId] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -91,8 +93,9 @@ export default function Assessment() {
   const rat02 = useQuery({ queryKey: ['rationale', assessmentId, '02'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '02')) });
   const boundary = useQuery({ queryKey: ['boundary', assessmentId], queryFn: () => stagesApi.boundary(assessmentId) });
   const assets = useAssetsData(assessmentId);
-  // Stage 10 writes its Assumptions next to its output (read-only for now).
-  const rat10 = useQuery({ queryKey: ['pipeline-rationale', assessmentId, 10], queryFn: () => orNothing(stagesApi.pipelineRationale(assessmentId, 10)) });
+  const ui04 = useUiStageData<ImpactRow>(assessmentId, '04');
+  const ui05 = useUiStageData<ThreatRow>(assessmentId, '05');
+  const ui06 = useUiStageData<TaraRow>(assessmentId, '06');
 
   const items01 = useMemo<RationaleItem[]>(() => rat01.data?.items ?? [], [rat01.data]);
   const items02 = useMemo<RationaleItem[]>(() => rat02.data?.items ?? [], [rat02.data]);
@@ -107,30 +110,27 @@ export default function Assessment() {
   const scope = useMemo(() => new Map<string, ScopeStatus>([...decisions].map(([k, d]) => [k, d.status])), [decisions]);
 
   const phase = PHASE_OF[tab];
-  const items10 = useMemo<RationaleItem[]>(() => rat10.data?.items ?? [], [rat10.data]);
-  const cards10 = useMemo<Card[]>(() => items10.map((item) => ({ id: item.rationale_id, item, found: [] })), [items10]);
 
   // Each stage shows only its own Assumptions (D-51).
   const stageCards = useMemo(
-    () => (tab === '01' || tab === '02' ? buildCards(items01, items02, tab) : tab === '06' ? cards10 : []),
-    [items01, items02, tab, cards10],
+    () => (tab === '01' || tab === '02' ? buildCards(items01, items02, tab) : []),
+    [items01, items02, tab],
   );
   const cards02 = useMemo(() => buildCards(items01, items02, '02'), [items01, items02]);
   const needCount = stageCards.filter(needsYou).length;
   const needs01 = useMemo(() => buildCards(items01, items02, '01').filter(needsYou).length, [items01, items02]);
   const needs02 = useMemo(() => cards02.filter(needsYou).length, [cards02]);
   const needs03 = assets.needCount;
-  const needs10 = useMemo(() => cards10.filter(needsYou).length, [cards10]);
+  const screenNeeds: Partial<Record<PhaseKey, number>> = { '03': needs03, '04': ui04.needCount, '05': ui05.needCount, '06': ui06.needCount };
 
-  // Pages 03 to 06 note a failed stage (yellow) or a running one (blue) in the top bar.
+  // Pages 04 to 06 note a failed stage (yellow) or a running one (blue) in the top bar.
   const stages = assessment.data?.stages ?? {};
   const phaseStatus = (key: PhaseKey) => {
-    const p = PHASE_OF[key];
-    if (!p || p === 'review-publish') return [];
-    return workflowStages[p].map((n) => stages[String(n).padStart(2, '0')]);
+    if (key !== '04' && key !== '05' && key !== '06') return [];
+    return screenFolders[key].map((n) => stages[String(n).padStart(2, '0')]);
   };
   const toggleAssumptions = () => {
-    if (tab === '03') setAssetsToggle((n) => n + 1);
+    if (SCREENS.includes(tab)) setScreenToggle((n) => n + 1);
     else if (panelOpen && (tab === '01' || phase || sideOpen)) setPanelOpen(false);
     else openAssumptions();
   };
@@ -169,7 +169,7 @@ export default function Assessment() {
       <div className="aegis-canvas-grid pointer-events-none fixed inset-0" aria-hidden="true" />
       <StageTopBar
         stages={TABS.map((t) => {
-          const open = t.key === '01' ? needs01 : t.key === '02' ? needs02 : t.key === '03' ? needs03 : t.key === '06' ? needs10 : 0;
+          const open = t.key === '01' ? needs01 : t.key === '02' ? needs02 : screenNeeds[t.key] ?? 0;
           const statuses = phaseStatus(t.key);
           if (t.key === tab) return { ...t, note: 'You are here', tone: 'blue' as const };
           if (statuses.includes('failed')) return { ...t, note: 'A stage failed', tone: 'yellow' as const };
@@ -180,10 +180,10 @@ export default function Assessment() {
         description={boundary.data?.text ?? undefined}
         current={tab}
         onStage={goTo}
-        needCount={tab === '03' ? needs03 : needCount}
-        assumptionsOpen={tab === '03' ? assetsRail : panelOpen}
+        needCount={screenNeeds[tab] ?? needCount}
+        assumptionsOpen={SCREENS.includes(tab) ? screenRail : panelOpen}
         onAssumptions={toggleAssumptions}
-        assumptionsDisabled={phase && !ASSUMPTION_STAGE[tab] ? 'Assumptions for these stages come later' : undefined}
+        assumptionsDisabled={phase ? 'Assumptions for these sheets come later' : undefined}
         onSettings={() => setSettingsOpen(true)}
       />
 
@@ -192,7 +192,13 @@ export default function Assessment() {
           {tab === '01' ? (
             <DocumentsStage assessmentId={assessmentId} project={project} onOpenItemDefinition={() => goTo('02')} />
           ) : tab === '03' ? (
-            <AssetsStage assessmentId={assessmentId} project={project} railToggle={assetsToggle} onRailChange={setAssetsRail} onOpenDocuments={() => goTo('01')} />
+            <AssetsStage assessmentId={assessmentId} project={project} railToggle={screenToggle} onRailChange={setScreenRail} onOpenDocuments={() => goTo('01')} />
+          ) : tab === '04' ? (
+            <ImpactsStage assessmentId={assessmentId} project={project} railToggle={screenToggle} onRailChange={setScreenRail} onOpenDocuments={() => goTo('01')} />
+          ) : tab === '05' ? (
+            <ThreatsStage assessmentId={assessmentId} project={project} railToggle={screenToggle} onRailChange={setScreenRail} onOpenDocuments={() => goTo('01')} />
+          ) : tab === '06' ? (
+            <TaraStage assessmentId={assessmentId} project={project} railToggle={screenToggle} onRailChange={setScreenRail} onOpenDocuments={() => goTo('01')} />
           ) : phase ? (
             <TaraProvider projectId={assessmentId}>
               <TooltipProvider delayDuration={200}>
@@ -361,18 +367,20 @@ export default function Assessment() {
       </div>
 
       <SideSheet
-        open={(tab === '01' || Boolean(phase && ASSUMPTION_STAGE[tab])) && panelOpen}
+        open={tab === '01' && panelOpen}
         onOpenChange={(o) => { setPanelOpen(o); if (!o) setOpenCard(null); }}
-        eyebrow={`Stage ${tab === '01' ? '01' : String(ASSUMPTION_STAGE[tab] ?? '').padStart(2, '0')} · ${stageCards.length} items`}
+        eyebrow={`Stage 01 · ${stageCards.length} items`}
         title="Assumptions"
-        description={tab === '01' ? 'What Stage 01 assumed while reading the documents.' : 'What Stage 10 assumed while working out the risk with the controls.'}
+        description="What Stage 01 assumed while reading the documents."
         width={520}
         badge={needCount > 0 ? <span className="aegis-signal-pill px-2.5 py-0.5 text-xs">{needCount} need you</span> : undefined}
       >
         <AssumptionsList assessmentId={assessmentId} cards={stageCards} questions={questions} docs={docs} openId={openCard?.id ?? null} onOpen={setOpenCard} readOnly={tab !== '01'} />
       </SideSheet>
 
-      <WhatIRead open={settingsOpen} onOpenChange={setSettingsOpen} stage01={stage01.data ?? undefined} boundary={boundary.data?.text} />
+      <WhatIRead open={settingsOpen} onOpenChange={setSettingsOpen} stage01={stage01.data ?? undefined} boundary={boundary.data?.text}>
+        <RunsSettings assessmentId={assessmentId} />
+      </WhatIRead>
     </div>
   );
 }

@@ -3,7 +3,7 @@
  * Settings shows only what was read; the Stage 01 Assumptions have their own panel.
  */
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SideSheet } from '@/components/layout/SideSheet';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,7 @@ const dateWords = (iso: string) => {
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString([], { day: 'numeric', month: 'short' });
 };
 
-export function WhatIRead({ open, onOpenChange, stage01, boundary }: { open: boolean; onOpenChange: (open: boolean) => void; stage01?: Stage01Output; boundary?: string | null }) {
+export function WhatIRead({ open, onOpenChange, stage01, boundary, children }: { open: boolean; onOpenChange: (open: boolean) => void; stage01?: Stage01Output; boundary?: string | null; children?: ReactNode }) {
   const [openDoc, setOpenDoc] = useState<string | null>(null);
   const { easeOut } = useMotionPreset();
   const facts = stage01?.facts.filter((f) => f.status !== 'rejected') ?? [];
@@ -113,6 +113,7 @@ export function WhatIRead({ open, onOpenChange, stage01, boundary }: { open: boo
           </p>
         </div>
       )}
+      {children}
     </SideSheet>
   );
 }
