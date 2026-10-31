@@ -9,7 +9,7 @@ import { damageCode, goalCode, riskCode, threatCode } from '@/lib/displayIds';
 import type { RiskLevel, TaraRow, Treatment, UiAssumption, UiStageOutput } from '@/types/stages';
 import { PROPNAME } from '../impacts/useImpacts';
 import { animCols } from '../review/colAnim';
-import { NEUTRAL, OUT, RISK, ROUT, TINT, TINT5 } from '../review/palette';
+import { NEUTRAL, OUT, RISK, ROUT, SOLID, TINT, TINT5 } from '../review/palette';
 import { useReviewCore, type ReviewCfg } from '../review/useReviewCore';
 import { threadKey, type UiThread } from '../review/useUiStageData';
 import type { Vals } from '../review/types';
@@ -117,8 +117,8 @@ export function useTara(p: TaraProps) {
         prop: PROPNAME[r.property ?? ''], dmg: damageCode(r.damage_id), dscen: r.damage, tscen: r.threat,
         dmgTd: `background: #FFFFFF${top}${dmgBottom}`,
         rowCorner: c.hasThread(threadKey(id, null)), plainTd: `background: ${bg}${top}`,
-        impTd: `--oc: ${OUT[r.impact.value]}; background: ${dmgFocus ? '#FFFFFF' : TINT[r.impact.value][0]}${top}`.replace('#FFFFFF', dmgFocus ? OUT[r.impact.value] : '#FFFFFF'),
-        impStyle: `font-size: 12.5px; font-weight: 500; color: ${dmgFocus ? '#FFFFFF' : TINT[r.impact.value][1]}`,
+        impTd: `--oc: ${OUT[r.impact.value]}; background: ${dmgFocus ? SOLID[r.impact.value][0] : TINT[r.impact.value][0]}${top}`,
+        impStyle: `font-size: 12.5px; font-weight: 500; color: ${dmgFocus ? SOLID[r.impact.value][1] : TINT[r.impact.value][1]}`,
         impText: LEVELS[r.impact.value], impTitle: `${LEVELS[r.impact.value]} impact for ${damageCode(r.damage_id)}, from Impact Analysis`,
         afTd: `--oc: ${ROUT[lv - 1]}; background: ${focus ? RISK[lv - 1][0] : TINT5[lv - 1][0]}${top}`,
         afStyle: `font-size: 12.5px; font-weight: 500; color: ${focus ? RISK[lv - 1][1] : TINT5[lv - 1][1]}`,

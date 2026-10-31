@@ -9,7 +9,7 @@ import { attackCode, damageCode, threatCode } from '@/lib/displayIds';
 import type { ThreatRow, UiAssumption, UiStageOutput } from '@/types/stages';
 import { PROPNAME } from '../impacts/useImpacts';
 import { animAssetCol } from '../review/colAnim';
-import { NEUTRAL, OUT, RISK, TINT, TINT5 } from '../review/palette';
+import { NEUTRAL, OUT, RISK, SOLID, TINT, TINT5 } from '../review/palette';
 import { useReviewCore, type ReviewCfg } from '../review/useReviewCore';
 import { threadKey, type UiThread } from '../review/useUiStageData';
 import type { Vals } from '../review/types';
@@ -140,9 +140,9 @@ export function useThreats(p: ThreatsProps) {
           const menuOpen = h.menuOpen && Boolean(fac);
           return {
             cls: `cat k${i}${isDrv ? ' drv' : ''}`,
-            td: !fac ? `background: #F7F6F2${top}` : `--oc: ${OUT[n - 1]}; background: ${focus && isDrv ? RISK[n - 1][0] : TINT[n - 1][0]}${top}${s.sel === key ? `; box-shadow: inset 0 0 0 2px ${OUT[n - 1]}` : ''}${focus && !isDrv ? '; filter: saturate(.35) opacity(.55)' : ''}`,
+            td: !fac ? `background: #F7F6F2${top}` : `--oc: ${OUT[n - 1]}; background: ${focus && isDrv ? SOLID[n - 1][0] : TINT[n - 1][0]}${top}${s.sel === key ? `; box-shadow: inset 0 0 0 2px ${OUT[n - 1]}` : ''}${focus && !isDrv ? '; filter: saturate(.35) opacity(.55)' : ''}`,
             btn: '--pc: #6F6B63', pcls: h.on ? 'pcell sel' : 'pcell',
-            chip: !fac ? 'background: #F7F6F2; color: #8E8D89; box-shadow: none' : `background: transparent; box-shadow: none; color: ${focus && isDrv ? '#FFFFFF' : TINT[n - 1][1]}`,
+            chip: !fac ? 'background: #F7F6F2; color: #8E8D89; box-shadow: none' : `background: transparent; box-shadow: none; color: ${focus && isDrv ? SOLID[n - 1][1] : TINT[n - 1][1]}`,
             text: !fac ? '–' : s.points ? String(weightOf(fa, cur)) : fac.label, locked: !fac, corner: c.cellDot(id, fa.field),
             label: fac ? `${fa.name} for ${threatCode(id)}: ${fac.label}` : `${fa.name}: no attack path yet`,
             title: fac ? `${fa.name}: ${fac.why} Click to change. Double-click to comment.` : 'No attack path yet.',
@@ -235,7 +235,7 @@ export function useThreats(p: ThreatsProps) {
         return {
           name: fa.short, lv: fac?.label ?? '–', openStr: open ? 'true' : 'false', dot: c.cellDot(r.record_id, fa.field),
           whyLabel: `${open ? 'Hide' : 'Show'} why ${fa.name} is ${fac?.label ?? 'not set'}`,
-          style: !n ? 'background: #F7F6F2; color: #8E8D89; box-shadow: inset 0 0 0 1px #E2DFD8' : drv ? `background: ${RISK[n - 1][0]}; color: ${RISK[n - 1][1]}; box-shadow: inset 0 0 0 1.5px ${OUT[n - 1]}, 0 0 0 3px ${OUT[n - 1]}2E` : `background: ${TINT[n - 1][0]}; color: ${TINT[n - 1][1]}; box-shadow: inset 0 0 0 1px ${OUT[n - 1]}`,
+          style: !n ? 'background: #F7F6F2; color: #8E8D89; box-shadow: inset 0 0 0 1px #E2DFD8' : drv ? `background: ${SOLID[n - 1][0]}; color: ${SOLID[n - 1][1]}; box-shadow: inset 0 0 0 1.5px ${OUT[n - 1]}, 0 0 0 3px ${OUT[n - 1]}2E` : `background: ${TINT[n - 1][0]}; color: ${TINT[n - 1][1]}; box-shadow: inset 0 0 0 1px ${OUT[n - 1]}`,
           toggleWhy: () => c.toggleWhy(wk),
         };
       };
