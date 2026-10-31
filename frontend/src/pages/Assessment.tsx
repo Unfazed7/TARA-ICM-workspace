@@ -4,9 +4,9 @@
  * Settings has "What I read" and the pipeline runs.
  */
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Info, PanelLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -23,6 +23,7 @@ import { useAssetsData } from '@/components/stages/assets/useAssetsData';
 import { useUiStageData } from '@/components/stages/review/useUiStageData';
 import { screenFolders, type WorkflowPhase } from '@/lib/workflow';
 import { useMotionPreset } from '@/lib/motion';
+import { isPipelineActive } from '@/lib/pipelineActive';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
 import type { ImpactRow, RationaleItem, ScopeStatus, StageKey, TaraRow, ThreatRow } from '@/types/stages';
 import { DocumentsStage } from '@/components/stages/DocumentsStage';
@@ -85,12 +86,25 @@ export default function Assessment() {
   const [sideOpen, setSideOpen] = useState(true);
   const [boundaryOpen, setBoundaryOpen] = useState(false);
   const { easeOut } = useMotionPreset();
+  const queryClient = useQueryClient();
 
   const assessment = useQuery({ queryKey: ['assessment', assessmentId], queryFn: () => stagesApi.assessment(assessmentId) });
   const stage01 = useQuery({ queryKey: ['stage01', assessmentId], queryFn: () => orNothing(stagesApi.stage01(assessmentId)) });
   const stage02 = useQuery({ queryKey: ['stage02', assessmentId], queryFn: () => orNothing(stagesApi.stage02(assessmentId)) });
   const rat01 = useQuery({ queryKey: ['rationale', assessmentId, '01'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '01')) });
   const rat02 = useQuery({ queryKey: ['rationale', assessmentId, '02'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '02')) });
+  // Execute can be left running (the Documents page says so): when it ends, every screen shows what it stored.
+  const pipeline = useQuery({
+    queryKey: ['pipeline', assessmentId],
+    queryFn: () => stagesApi.pipeline(assessmentId),
+    refetchInterval: (q) => (isPipelineActive(q.state.data) ? 3000 : false),
+  });
+  const wasRunning = useRef(false);
+  useEffect(() => {
+    const running = isPipelineActive(pipeline.data);
+    if (wasRunning.current && !running) queryClient.invalidateQueries({ predicate: (q) => q.queryKey[1] === assessmentId && q.queryKey[0] !== 'pipeline' });
+    wasRunning.current = running;
+  }, [pipeline.data, assessmentId, queryClient]);
   const boundary = useQuery({ queryKey: ['boundary', assessmentId], queryFn: () => stagesApi.boundary(assessmentId) });
   const assets = useAssetsData(assessmentId);
   const ui04 = useUiStageData<ImpactRow>(assessmentId, '04');

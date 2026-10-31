@@ -63,7 +63,7 @@ export function ReviewFrame(p: Props) {
           <p role="alert" style={st('margin: 0; padding: 20px 4px; color: #9F2F2D')}>{p.error.message}</p>
         ) : !d || !d.has_data ? (
           <div className="panel" style={st('padding: 22px 24px')}>
-            <p style={st('margin: 0')}>{building ? p.buildingText : p.emptyText}</p>
+            <p style={st('margin: 0')}>{building ? 'The results appear here as each part is built.' : p.emptyText}</p>
             {!building && <button type="button" className="tlink" onClick={p.onOpenDocuments} style={st('margin-top: 10px; font-size: 14px')}>Add the documents and execute on 01 Documents</button>}
           </div>
         ) : (

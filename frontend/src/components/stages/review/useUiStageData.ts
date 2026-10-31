@@ -39,8 +39,11 @@ export function useUiStageData<Row>(assessmentId: string, ui: UiStage) {
     queryKey: ['ui-stage', assessmentId, ui],
     queryFn: () => orNothing(stagesApi.uiStage<Row>(assessmentId, ui)),
     refetchInterval: (q) => (q.state.data?.building ? 2000 : false),
+    // The folders are built from other pages (Execute, Settings); what is shown must be what is stored when a screen opens.
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
-  const comments = useQuery({ queryKey: ['ui-comments', assessmentId, ui], queryFn: () => stagesApi.uiComments(assessmentId, ui) });
+  const comments = useQuery({ queryKey: ['ui-comments', assessmentId, ui], queryFn: () => stagesApi.uiComments(assessmentId, ui), staleTime: 0, refetchOnMount: 'always' });
   const data = output.data as UiStageOutput<Row> | null | undefined;
   const rows = useMemo<Row[]>(() => data?.rows ?? [], [data]);
   const threads = useMemo(() => threadsOf(comments.data ?? []), [comments.data]);
