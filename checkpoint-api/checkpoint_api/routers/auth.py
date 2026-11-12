@@ -76,6 +76,13 @@ async def get_current_claims(
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(body: RegisterRequest, db: Session = Depends(get_db)):
+    # When REGISTRATION_INVITE_CODE is set, only people who know it can register.
+    # Read at request time so the value can change without code changes.
+    required_code = os.getenv("REGISTRATION_INVITE_CODE")
+    if required_code and not hmac.compare_digest(
+        (body.invite_code or "").encode("utf-8"), required_code.encode("utf-8")
+    ):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid invite code")
     existing = db.query(User).filter(User.email == body.email).first()
     if existing:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists")

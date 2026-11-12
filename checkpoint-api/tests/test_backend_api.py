@@ -693,3 +693,12 @@ def test_delete_assessment_removes_related_data_and_files(client, monkeypatch, t
         assert session.query(BoundaryEdit).filter_by(assessment_id=assessment_id).count() == 0
     finally:
         session.close()
+
+
+def test_register_requires_invite_code_when_configured(client, monkeypatch):
+    monkeypatch.setenv("REGISTRATION_INVITE_CODE", "open-sesame")
+    body = {"email": "invitee@example.com", "password": "Test1234!", "name": "Invitee"}
+
+    assert client.post("/api/v1/auth/register", json=body).status_code == 403
+    assert client.post("/api/v1/auth/register", json={**body, "invite_code": "wrong"}).status_code == 403
+    assert client.post("/api/v1/auth/register", json={**body, "invite_code": "open-sesame"}).status_code == 201

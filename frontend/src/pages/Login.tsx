@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
@@ -173,6 +173,13 @@ export default function Login() {
                     </span>
                   )}
                 </Button>
+
+                <p className="text-xs text-muted-foreground text-center">
+                  Have an invite code?{' '}
+                  <Link to="/register" className="text-primary underline underline-offset-2">
+                    Create an account
+                  </Link>
+                </p>
               </form>
             )}
 

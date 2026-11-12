@@ -64,8 +64,8 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-      - name: Copy compose file to server
-        run: scp -i ~/.ssh/deploy_key deploy/docker-compose.yml "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/tara/docker-compose.yml"
+      - name: Copy compose file and scripts to server
+        run: scp -i ~/.ssh/deploy_key deploy/docker-compose.yml deploy/backup.sh deploy/make-admin.sh "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/tara/"
       - name: Pull new images and restart
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | ssh -i ~/.ssh/deploy_key "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \

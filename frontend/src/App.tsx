@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProjectProvider } from "@/contexts/ProjectContext";
 import { ProtectedRoute, AdminRoute } from "@/components/layout/ProtectedRoute";
 const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NewProject = lazy(() => import("./pages/NewProject"));
 const Assessment = lazy(() => import("./pages/Assessment"));
@@ -45,6 +46,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/projects/new" element={<ProtectedRoute><NewProject /></ProtectedRoute>} />
               <Route path="/project/:projectId" element={<ProtectedRoute><ProjectRedirect /></ProtectedRoute>} />

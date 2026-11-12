@@ -86,10 +86,10 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       }),
-    register: (email: string, password: string, name: string) =>
+    register: (email: string, password: string, name: string, inviteCode?: string) =>
       apiFetch<{ email: string }>('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, name, invite_code: inviteCode || undefined }),
       }),
     me: () => apiFetch<{ email: string; name: string; role: string }>('/auth/me'),
   },

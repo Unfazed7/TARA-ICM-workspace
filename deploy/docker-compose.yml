@@ -6,6 +6,8 @@ services:
     env_file: .env
     environment:
       ALLOWED_ORIGINS: https://aegis0212.duckdns.org
+      # Compose refuses to start the API if the invite code is missing from /opt/tara/.env
+      REGISTRATION_INVITE_CODE: ${REGISTRATION_INVITE_CODE:?set REGISTRATION_INVITE_CODE in /opt/tara/.env}
     volumes:
       - tara_data:/data              # SQLite DB
       - tara_uploads:/app/uploads    # uploaded files
