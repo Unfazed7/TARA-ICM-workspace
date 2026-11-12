@@ -1,0 +1,11 @@
+.git
+**/node_modules
+frontend/dist
+artifacts
+uploads
+*.db
+.env
+**/.env
+audit
+.tmp
+tests

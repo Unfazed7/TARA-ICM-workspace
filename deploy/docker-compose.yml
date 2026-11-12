@@ -1,7 +1,7 @@
 # Lives in /opt/tara on the server, next to .env (never committed).
 services:
   api:
-    image: ghcr.io/OWNER/tara-api:latest
+    image: ghcr.io/unfazed7/tara-api:latest
     restart: unless-stopped
     env_file: .env
     environment:
@@ -12,7 +12,7 @@ services:
       - tara_artifacts:/app/artifacts  # stage outputs
     mem_limit: 600m
   web:
-    image: ghcr.io/OWNER/tara-web:latest
+    image: ghcr.io/unfazed7/tara-web:latest
     restart: unless-stopped
     depends_on: [api]
     ports: ["80:80", "443:443"]

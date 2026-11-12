@@ -1,7 +1,7 @@
-# Place at the ROOT of the app branch (next to checkpoint-api/, frontend/, tara-workspace/).
-# Build in CI (GitHub Actions), NOT on the 1 GB server:
-#   docker buildx build --platform linux/amd64 --target api -t ghcr.io/<owner>/tara-api:latest --push .
-#   docker buildx build --platform linux/amd64 --target web -t ghcr.io/<owner>/tara-web:latest --push .
+# Build context is the REPO ROOT; this file lives in deploy/.
+# CI (GitHub Actions) does this for you; do not build on the 1 GB server.
+#   docker buildx build -f deploy/Dockerfile --platform linux/amd64 --target api -t tara-api .
+#   docker buildx build -f deploy/Dockerfile --platform linux/amd64 --target web -t tara-web .
 
 # ---- frontend build ----
 FROM node:20-slim AS fe
