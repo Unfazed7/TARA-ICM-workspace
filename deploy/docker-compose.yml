@@ -1,0 +1,27 @@
+# Lives in /opt/tara on the server, next to .env (never committed).
+services:
+  api:
+    image: ghcr.io/OWNER/tara-api:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      ALLOWED_ORIGINS: https://aegis0212.duckdns.org
+    volumes:
+      - tara_data:/data              # SQLite DB
+      - tara_uploads:/app/uploads    # uploaded files
+      - tara_artifacts:/app/artifacts  # stage outputs
+    mem_limit: 600m
+  web:
+    image: ghcr.io/OWNER/tara-web:latest
+    restart: unless-stopped
+    depends_on: [api]
+    ports: ["80:80", "443:443"]
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+volumes:
+  tara_data:
+  tara_uploads:
+  tara_artifacts:
+  caddy_data:
+  caddy_config:

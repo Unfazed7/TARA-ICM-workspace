@@ -1,0 +1,35 @@
+# Place at the ROOT of the app branch (next to checkpoint-api/, frontend/, tara-workspace/).
+# Build in CI (GitHub Actions), NOT on the 1 GB server:
+#   docker buildx build --platform linux/amd64 --target api -t ghcr.io/<owner>/tara-api:latest --push .
+#   docker buildx build --platform linux/amd64 --target web -t ghcr.io/<owner>/tara-web:latest --push .
+
+# ---- frontend build ----
+FROM node:20-slim AS fe
+WORKDIR /fe
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# ---- web: Caddy serves the SPA, proxies /api to the API, handles HTTPS ----
+FROM caddy:2 AS web
+COPY --from=fe /fe/dist /srv
+COPY deploy/Caddyfile /etc/caddy/Caddyfile
+
+# ---- api: FastAPI + Node (stage agents are run as `node agent.js`) ----
+FROM python:3.12-slim AS api
+COPY --from=node:20-slim /usr/local/bin/node /usr/local/bin/node
+WORKDIR /app
+COPY checkpoint-api/requirements.txt checkpoint-api/requirements.txt
+RUN pip install --no-cache-dir -r checkpoint-api/requirements.txt
+COPY package.json package-lock.json ./
+COPY --from=node:20-slim /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+ && npm ci --omit=dev && rm -f /usr/local/bin/npm
+COPY checkpoint-api/ checkpoint-api/
+COPY tara-workspace/ tara-workspace/
+COPY src/ src/
+ENV WORKSPACE_ROOT=/app DATABASE_URL=sqlite:////data/tara.db UPLOAD_DIR=/app/uploads
+WORKDIR /app/checkpoint-api
+EXPOSE 8000
+CMD ["python", "-m", "uvicorn", "checkpoint_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
