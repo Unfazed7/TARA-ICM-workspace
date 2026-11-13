@@ -19,6 +19,7 @@ from .routers.assessments import router as assessments_router
 from .routers.auth import router as auth_router
 from .routers.boundary import router as boundary_router
 from .routers.checkpoints import router as checkpoints_router
+from .routers.demo import router as demo_router
 from .routers.pipeline import router as pipeline_router
 from .routers.pipeline_v2 import router as pipeline_v2_router
 from .routers.stage03 import router as stage03_router
@@ -61,6 +62,7 @@ def create_app() -> FastAPI:
     app.include_router(checkpoints_router)
     app.include_router(boundary_router, tags=["boundary"])
     app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
+    app.include_router(demo_router, prefix="/api/v1", tags=["demo"])
     app.include_router(assessments_router, prefix="/api/v1/assessments", tags=["assessments"])
     app.include_router(pipeline_router, prefix="/api/v1/assessments", tags=["pipeline"])
     app.include_router(uploads_router, prefix="/api/v1/assessments", tags=["uploads"])
@@ -77,4 +79,21 @@ run_log.get("startup").info("API starting; run log at %s", LOG_PATH)
 run_log.get("startup").info("Uploads and run folders at %s", upload_dir())
 Base.metadata.create_all(bind=engine)
 upgrade_stage_tables(engine)
+
+
+def _clean_demo_copies() -> None:
+    """Copies left by sessions that ended without a logout are removed when the server starts."""
+    from . import demo
+    from .database import SessionLocal
+
+    db = SessionLocal()
+    try:
+        demo.cleanup_expired(db)
+    except Exception:  # noqa: BLE001 -- a failed clean-up must never stop the server from starting
+        run_log.get("startup").exception("Old demo copies could not be removed")
+    finally:
+        db.close()
+
+
+_clean_demo_copies()
 app = create_app()

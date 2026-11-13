@@ -1,0 +1,30 @@
+[
+  {
+    "file": "architecture.drawio",
+    "doc_type": "diagram",
+    "date_received": "2026-09-18",
+    "category": "components",
+    "type_label": "Architecture diagram"
+  },
+  {
+    "file": "architecture.png",
+    "doc_type": "diagram",
+    "date_received": "2026-09-18",
+    "category": "components",
+    "type_label": "Architecture diagram"
+  },
+  {
+    "file": "client-answers.md",
+    "doc_type": "qa",
+    "date_received": "2026-09-18",
+    "category": "behaviour",
+    "type_label": "Client answers (Q&A)"
+  },
+  {
+    "file": "functional.md",
+    "doc_type": "functional",
+    "date_received": "2026-09-18",
+    "category": "behaviour",
+    "type_label": "Functional description"
+  }
+]

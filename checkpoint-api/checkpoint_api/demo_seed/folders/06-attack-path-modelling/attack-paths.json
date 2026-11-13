@@ -1,0 +1,1916 @@
+[
+ {
+  "attack_id": "AT_01",
+  "threat_id": "TH_01",
+  "damage_scenario_id": "DS_01",
+  "asset_id": "AS_01",
+  "attack_description": "Certificate service logic: the information disclosure mechanism described in TH_01 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate service logic.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_01: An attacker could gain unauthorized access to data or responses exposed by Certificate service logic after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_01: If the Confidentiality of Certificate service logic is compromised, sensitive key or certificate data is exp\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate service logic and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_01 and compromising Certificate service logic confidentiality, producing the linked DS_01 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_01 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_02",
+  "threat_id": "TH_02",
+  "damage_scenario_id": "DS_02",
+  "asset_id": "AS_01",
+  "attack_description": "Certificate service logic: the tampering mechanism described in TH_02 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate service logic.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_02: An attacker could alter data, configuration, or processing performed by Certificate service logic after integrity validation or change controls are bypassed, resulting in the damage described by DS_02: If the Integrity of Certificate service logic is compromised, certificate decisions are based on untrusted or\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate service logic and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_02 and compromising Certificate service logic integrity, producing the linked DS_02 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_02 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_03",
+  "threat_id": "TH_03",
+  "damage_scenario_id": "DS_03",
+  "asset_id": "AS_01",
+  "attack_description": "Certificate service logic: the denial of service mechanism described in TH_03 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate service logic.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_03: An attacker could exhaust, block, or disable Certificate service logic after availability and resource-protection controls are insufficient, resulting in the damage described by DS_03: If the Availability of Certificate service logic is compromised, required certificate services are interrupted or unavailable when ser\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate service logic and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_03 and compromising Certificate service logic availability, producing the linked DS_03 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_03 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_04",
+  "threat_id": "TH_04",
+  "damage_scenario_id": "DS_04",
+  "asset_id": "AS_01",
+  "attack_description": "Certificate service logic: the elevation of privilege mechanism described in TH_04 is exercised until authorization is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate service logic.",
+   "step_2_abuse_technique": "Using this position, the actor applies the elevation of privilege technique captured by TH_04: An attacker could invoke privileged operations through Certificate service logic after authorization enforcement is bypassed, resulting in the damage described by DS_04: If the Authorization of Certificate service logic is compromised, privileged portal functionality is used outside the permitted access boundary a\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate service logic and advance from initial access to a direct compromise of its authorization property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_04 and compromising Certificate service logic authorization, producing the linked DS_04 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_04 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_05",
+  "threat_id": "TH_05",
+  "damage_scenario_id": "DS_05",
+  "asset_id": "AS_02",
+  "attack_description": "Key service signing logic: the tampering mechanism described in TH_05 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Key service signing logic.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_05: An attacker could alter data, configuration, or processing performed by Key service signing logic after integrity validation or change controls are bypassed, resulting in the damage described by DS_05: If the Integrity of Key service signing logic is compromised, certificate decisions are based on untrusted or\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Key service signing logic and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_05 and compromising Key service signing logic integrity, producing the linked DS_05 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_05 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_06",
+  "threat_id": "TH_06",
+  "damage_scenario_id": "DS_06",
+  "asset_id": "AS_02",
+  "attack_description": "Key service signing logic: the denial of service mechanism described in TH_06 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Key service signing logic.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_06: An attacker could exhaust, block, or disable Key service signing logic after availability and resource-protection controls are insufficient, resulting in the damage described by DS_06: If the Availability of Key service signing logic is compromised, required certificate services are interrupted or unavailable when ser\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Key service signing logic and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_06 and compromising Key service signing logic availability, producing the linked DS_06 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_06 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_07",
+  "threat_id": "TH_07",
+  "damage_scenario_id": "DS_07",
+  "asset_id": "AS_02",
+  "attack_description": "Key service signing logic: the elevation of privilege mechanism described in TH_07 is exercised until authorization is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Key service signing logic.",
+   "step_2_abuse_technique": "Using this position, the actor applies the elevation of privilege technique captured by TH_07: An attacker could invoke privileged operations through Key service signing logic after authorization enforcement is bypassed, resulting in the damage described by DS_07: If the Authorization of Key service signing logic is compromised, privileged portal functionality is used outside the permitted access boundary a\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Key service signing logic and advance from initial access to a direct compromise of its authorization property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_07 and compromising Key service signing logic authorization, producing the linked DS_07 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_07 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_08",
+  "threat_id": "TH_08",
+  "damage_scenario_id": "DS_08",
+  "asset_id": "AS_03",
+  "attack_description": "Token check: the tampering mechanism described in TH_08 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Token check.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_08: An attacker could alter data, configuration, or processing performed by Token check after integrity validation or change controls are bypassed, resulting in the damage described by DS_08: If the Integrity of Token check is compromised, certificate decisions are based on untrusted or altered application behavio\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Token check and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_08 and compromising Token check integrity, producing the linked DS_08 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_08 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_09",
+  "threat_id": "TH_09",
+  "damage_scenario_id": "DS_09",
+  "asset_id": "AS_03",
+  "attack_description": "Token check: the denial of service mechanism described in TH_09 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Token check.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_09: An attacker could exhaust, block, or disable Token check after availability and resource-protection controls are insufficient, resulting in the damage described by DS_09: If the Availability of Token check is compromised, required certificate services are interrupted or unavailable when production teams need them affecti\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Token check and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_09 and compromising Token check availability, producing the linked DS_09 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_09 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_10",
+  "threat_id": "TH_10",
+  "damage_scenario_id": "DS_10",
+  "asset_id": "AS_03",
+  "attack_description": "Token check: the spoofing mechanism described in TH_10 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Token check.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_10: An attacker could impersonate a trusted identity or source accepted by Token check after identity verification controls are bypassed, resulting in the damage described by DS_10: If the Authenticity of Token check is compromised, the platform cannot reliably verify the identity of the actor or system using the function\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Token check and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_10 and compromising Token check authenticity, producing the linked DS_10 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_10 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_11",
+  "threat_id": "TH_11",
+  "damage_scenario_id": "DS_11",
+  "asset_id": "AS_03",
+  "attack_description": "Token check: the elevation of privilege mechanism described in TH_11 is exercised until authorization is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Token check.",
+   "step_2_abuse_technique": "Using this position, the actor applies the elevation of privilege technique captured by TH_11: An attacker could invoke privileged operations through Token check after authorization enforcement is bypassed, resulting in the damage described by DS_11: If the Authorization of Token check is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Token check and advance from initial access to a direct compromise of its authorization property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_11 and compromising Token check authorization, producing the linked DS_11 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_11 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_12",
+  "threat_id": "TH_12",
+  "damage_scenario_id": "DS_12",
+  "asset_id": "AS_04",
+  "attack_description": "Revocation list builder: the tampering mechanism described in TH_12 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Revocation list builder.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_12: An attacker could alter data, configuration, or processing performed by Revocation list builder after integrity validation or change controls are bypassed, resulting in the damage described by DS_12: If the Integrity of Revocation list builder is compromised, certificate decisions are based on untrusted or alt\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Revocation list builder and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_12 and compromising Revocation list builder integrity, producing the linked DS_12 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_12 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_13",
+  "threat_id": "TH_13",
+  "damage_scenario_id": "DS_13",
+  "asset_id": "AS_04",
+  "attack_description": "Revocation list builder: the denial of service mechanism described in TH_13 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Revocation list builder.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_13: An attacker could exhaust, block, or disable Revocation list builder after availability and resource-protection controls are insufficient, resulting in the damage described by DS_13: If the Availability of Revocation list builder is compromised, required certificate services are interrupted or unavailable when service\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Revocation list builder and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_13 and compromising Revocation list builder availability, producing the linked DS_13 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_13 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_14",
+  "threat_id": "TH_14",
+  "damage_scenario_id": "DS_14",
+  "asset_id": "AS_05",
+  "attack_description": "Certificate records: the information disclosure mechanism described in TH_14 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate records.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_14: An attacker could gain unauthorized access to data or responses exposed by Certificate records after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_14: If the Confidentiality of Certificate records is compromised, sensitive key or certificate data is exposed beyond\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate records and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_14 and compromising Certificate records confidentiality, producing the linked DS_14 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_14 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_15",
+  "threat_id": "TH_15",
+  "damage_scenario_id": "DS_15",
+  "asset_id": "AS_05",
+  "attack_description": "Certificate records: the tampering mechanism described in TH_15 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate records.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_15: An attacker could alter data, configuration, or processing performed by Certificate records after integrity validation or change controls are bypassed, resulting in the damage described by DS_15: If the Integrity of Certificate records is compromised, certificate decisions are based on untrusted or altered app\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate records and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_15 and compromising Certificate records integrity, producing the linked DS_15 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_15 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_16",
+  "threat_id": "TH_16",
+  "damage_scenario_id": "DS_16",
+  "asset_id": "AS_05",
+  "attack_description": "Certificate records: the denial of service mechanism described in TH_16 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate records.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_16: An attacker could exhaust, block, or disable Certificate records after availability and resource-protection controls are insufficient, resulting in the damage described by DS_16: If the Availability of Certificate records is compromised, required certificate services are interrupted or unavailable when production teams n\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate records and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_16 and compromising Certificate records availability, producing the linked DS_16 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_16 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_17",
+  "threat_id": "TH_17",
+  "damage_scenario_id": "DS_17",
+  "asset_id": "AS_05",
+  "attack_description": "Certificate records: the repudiation mechanism described in TH_17 is exercised until non_repudiation is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate records.",
+   "step_2_abuse_technique": "Using this position, the actor applies the repudiation technique captured by TH_17: An attacker could remove or falsify activity evidence recorded by Certificate records after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_17: If the Non Repudiation of Certificate records is compromised, the platform cannot prove which actor performed a certificate\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate records and advance from initial access to a direct compromise of its non_repudiation property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. non_repudiation maps to repudiation under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_17 and compromising Certificate records non_repudiation, producing the linked DS_17 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_17 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_18",
+  "threat_id": "TH_18",
+  "damage_scenario_id": "DS_18",
+  "asset_id": "AS_06",
+  "attack_description": "Cached certificate data: the information disclosure mechanism described in TH_18 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Cached certificate data.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_18: An attacker could gain unauthorized access to data or responses exposed by Cached certificate data after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_18: If the Confidentiality of Cached certificate data is compromised, sensitive key or certificate data is exposed\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Cached certificate data and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_18 and compromising Cached certificate data confidentiality, producing the linked DS_18 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_18 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_19",
+  "threat_id": "TH_19",
+  "damage_scenario_id": "DS_19",
+  "asset_id": "AS_06",
+  "attack_description": "Cached certificate data: the tampering mechanism described in TH_19 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Cached certificate data.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_19: An attacker could alter data, configuration, or processing performed by Cached certificate data after integrity validation or change controls are bypassed, resulting in the damage described by DS_19: If the Integrity of Cached certificate data is compromised, certificate decisions are based on untrusted or alt\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Cached certificate data and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_19 and compromising Cached certificate data integrity, producing the linked DS_19 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_19 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_20",
+  "threat_id": "TH_20",
+  "damage_scenario_id": "DS_20",
+  "asset_id": "AS_06",
+  "attack_description": "Cached certificate data: the denial of service mechanism described in TH_20 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Cached certificate data.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_20: An attacker could exhaust, block, or disable Cached certificate data after availability and resource-protection controls are insufficient, resulting in the damage described by DS_20: If the Availability of Cached certificate data is compromised, required certificate services are interrupted or unavailable when service\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Cached certificate data and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_20 and compromising Cached certificate data availability, producing the linked DS_20 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_20 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_21",
+  "threat_id": "TH_21",
+  "damage_scenario_id": "DS_21",
+  "asset_id": "AS_06",
+  "attack_description": "Cached certificate data: the spoofing mechanism described in TH_21 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Cached certificate data.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_21: An attacker could impersonate a trusted identity or source accepted by Cached certificate data after identity verification controls are bypassed, resulting in the damage described by DS_21: If the Authenticity of Cached certificate data is compromised, the platform cannot reliably verify the identity of the actor or s\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Cached certificate data and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_21 and compromising Cached certificate data authenticity, producing the linked DS_21 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_21 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_22",
+  "threat_id": "TH_22",
+  "damage_scenario_id": "DS_22",
+  "asset_id": "AS_07",
+  "attack_description": "Revocation list: the tampering mechanism described in TH_22 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Revocation list.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_22: An attacker could alter data, configuration, or processing performed by Revocation list after integrity validation or change controls are bypassed, resulting in the damage described by DS_22: If the Integrity of Revocation list is compromised, certificate decisions are based on untrusted or altered application\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Revocation list and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_22 and compromising Revocation list integrity, producing the linked DS_22 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_22 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_23",
+  "threat_id": "TH_23",
+  "damage_scenario_id": "DS_23",
+  "asset_id": "AS_07",
+  "attack_description": "Revocation list: the denial of service mechanism described in TH_23 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Revocation list.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_23: An attacker could exhaust, block, or disable Revocation list after availability and resource-protection controls are insufficient, resulting in the damage described by DS_23: If the Availability of Revocation list is compromised, required certificate services are interrupted or unavailable when production teams need them\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Revocation list and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_23 and compromising Revocation list availability, producing the linked DS_23 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_23 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_24",
+  "threat_id": "TH_24",
+  "damage_scenario_id": "DS_24",
+  "asset_id": "AS_07",
+  "attack_description": "Revocation list: the spoofing mechanism described in TH_24 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Revocation list.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_24: An attacker could impersonate a trusted identity or source accepted by Revocation list after identity verification controls are bypassed, resulting in the damage described by DS_24: If the Authenticity of Revocation list is compromised, the platform cannot reliably verify the identity of the actor or system using the\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Revocation list and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_24 and compromising Revocation list authenticity, producing the linked DS_24 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_24 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_25",
+  "threat_id": "TH_25",
+  "damage_scenario_id": "DS_25",
+  "asset_id": "AS_08",
+  "attack_description": "Portal web pages: the tampering mechanism described in TH_25 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Portal web pages.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_25: An attacker could alter data, configuration, or processing performed by Portal web pages after integrity validation or change controls are bypassed, resulting in the damage described by DS_25: If the Integrity of Portal web pages is compromised, certificate decisions are based on untrusted or altered applicati\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Portal web pages and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_25 and compromising Portal web pages integrity, producing the linked DS_25 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_25 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_26",
+  "threat_id": "TH_26",
+  "damage_scenario_id": "DS_26",
+  "asset_id": "AS_08",
+  "attack_description": "Portal web pages: the spoofing mechanism described in TH_26 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Portal web pages.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_26: An attacker could impersonate a trusted identity or source accepted by Portal web pages after identity verification controls are bypassed, resulting in the damage described by DS_26: If the Authenticity of Portal web pages is compromised, the platform cannot reliably verify the identity of the actor or system using th\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Portal web pages and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_26 and compromising Portal web pages authenticity, producing the linked DS_26 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_26 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_27",
+  "threat_id": "TH_27",
+  "damage_scenario_id": "DS_27",
+  "asset_id": "AS_09",
+  "attack_description": "Application logs and metrics: the tampering mechanism described in TH_27 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Application logs and metrics.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_27: An attacker could alter data, configuration, or processing performed by Application logs and metrics after integrity validation or change controls are bypassed, resulting in the damage described by DS_27: If the Integrity of Application logs and metrics is compromised, certificate decisions are based on untrus\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Application logs and metrics and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_27 and compromising Application logs and metrics integrity, producing the linked DS_27 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_27 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_28",
+  "threat_id": "TH_28",
+  "damage_scenario_id": "DS_28",
+  "asset_id": "AS_09",
+  "attack_description": "Application logs and metrics: the denial of service mechanism described in TH_28 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Application logs and metrics.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_28: An attacker could exhaust, block, or disable Application logs and metrics after availability and resource-protection controls are insufficient, resulting in the damage described by DS_28: If the Availability of Application logs and metrics is compromised, required certificate services are interrupted or unavailable wh\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Application logs and metrics and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_28 and compromising Application logs and metrics availability, producing the linked DS_28 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_28 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_29",
+  "threat_id": "TH_29",
+  "damage_scenario_id": "DS_29",
+  "asset_id": "AS_09",
+  "attack_description": "Application logs and metrics: the repudiation mechanism described in TH_29 is exercised until non_repudiation is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Application logs and metrics.",
+   "step_2_abuse_technique": "Using this position, the actor applies the repudiation technique captured by TH_29: An attacker could remove or falsify activity evidence recorded by Application logs and metrics after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_29: If the Non Repudiation of Application logs and metrics is compromised, the platform cannot prove which actor p\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Application logs and metrics and advance from initial access to a direct compromise of its non_repudiation property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. non_repudiation maps to repudiation under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_29 and compromising Application logs and metrics non_repudiation, producing the linked DS_29 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_29 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_30",
+  "threat_id": "TH_30",
+  "damage_scenario_id": "DS_30",
+  "asset_id": "AS_10",
+  "attack_description": "Audit trail records: the tampering mechanism described in TH_30 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Audit trail records.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_30: An attacker could alter data, configuration, or processing performed by Audit trail records after integrity validation or change controls are bypassed, resulting in the damage described by DS_30: If the Integrity of Audit trail records is compromised, certificate decisions are based on untrusted or altered app\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Audit trail records and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_30 and compromising Audit trail records integrity, producing the linked DS_30 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_30 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_31",
+  "threat_id": "TH_31",
+  "damage_scenario_id": "DS_31",
+  "asset_id": "AS_10",
+  "attack_description": "Audit trail records: the denial of service mechanism described in TH_31 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Audit trail records.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_31: An attacker could exhaust, block, or disable Audit trail records after availability and resource-protection controls are insufficient, resulting in the damage described by DS_31: If the Availability of Audit trail records is compromised, required certificate services are interrupted or unavailable when production teams n\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Audit trail records and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_31 and compromising Audit trail records availability, producing the linked DS_31 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_31 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_32",
+  "threat_id": "TH_32",
+  "damage_scenario_id": "DS_32",
+  "asset_id": "AS_10",
+  "attack_description": "Audit trail records: the repudiation mechanism described in TH_32 is exercised until non_repudiation is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Audit trail records.",
+   "step_2_abuse_technique": "Using this position, the actor applies the repudiation technique captured by TH_32: An attacker could remove or falsify activity evidence recorded by Audit trail records after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_32: If the Non Repudiation of Audit trail records is compromised, the platform cannot prove which actor performed a certificate\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Audit trail records and advance from initial access to a direct compromise of its non_repudiation property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. non_repudiation maps to repudiation under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_32 and compromising Audit trail records non_repudiation, producing the linked DS_32 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_32 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_33",
+  "threat_id": "TH_33",
+  "damage_scenario_id": "DS_33",
+  "asset_id": "AS_11",
+  "attack_description": "Network exposure settings: the tampering mechanism described in TH_33 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Network exposure settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_33: An attacker could alter data, configuration, or processing performed by Network exposure settings after integrity validation or change controls are bypassed, resulting in the damage described by DS_33: If the Integrity of Network exposure settings is compromised, certificate decisions are based on untrusted or\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Network exposure settings and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_33 and compromising Network exposure settings integrity, producing the linked DS_33 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_33 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_34",
+  "threat_id": "TH_34",
+  "damage_scenario_id": "DS_34",
+  "asset_id": "AS_11",
+  "attack_description": "Network exposure settings: the denial of service mechanism described in TH_34 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Network exposure settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_34: An attacker could exhaust, block, or disable Network exposure settings after availability and resource-protection controls are insufficient, resulting in the damage described by DS_34: If the Availability of Network exposure settings is compromised, required certificate services are interrupted or unavailable when ser\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Network exposure settings and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_34 and compromising Network exposure settings availability, producing the linked DS_34 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_34 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_35",
+  "threat_id": "TH_35",
+  "damage_scenario_id": "DS_35",
+  "asset_id": "AS_12",
+  "attack_description": "Load balancer routing: the tampering mechanism described in TH_35 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Load balancer routing.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_35: An attacker could alter data, configuration, or processing performed by Load balancer routing after integrity validation or change controls are bypassed, resulting in the damage described by DS_35: If the Integrity of Load balancer routing is compromised, certificate decisions are based on untrusted or altered\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Load balancer routing and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_35 and compromising Load balancer routing integrity, producing the linked DS_35 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_35 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_36",
+  "threat_id": "TH_36",
+  "damage_scenario_id": "DS_36",
+  "asset_id": "AS_12",
+  "attack_description": "Load balancer routing: the denial of service mechanism described in TH_36 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Load balancer routing.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_36: An attacker could exhaust, block, or disable Load balancer routing after availability and resource-protection controls are insufficient, resulting in the damage described by DS_36: If the Availability of Load balancer routing is compromised, required certificate services are interrupted or unavailable when service tea\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Load balancer routing and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_36 and compromising Load balancer routing availability, producing the linked DS_36 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_36 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_37",
+  "threat_id": "TH_37",
+  "damage_scenario_id": "DS_37",
+  "asset_id": "AS_13",
+  "attack_description": "API gateway and its sign-in settings: the tampering mechanism described in TH_37 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach API gateway and its sign-in settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_37: An attacker could alter data, configuration, or processing performed by API gateway and its sign-in settings after integrity validation or change controls are bypassed, resulting in the damage described by DS_37: If the Integrity of API gateway and its sign-in settings is compromised, certificate decisions are\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with API gateway and its sign-in settings and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_37 and compromising API gateway and its sign-in settings integrity, producing the linked DS_37 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_37 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_38",
+  "threat_id": "TH_38",
+  "damage_scenario_id": "DS_38",
+  "asset_id": "AS_13",
+  "attack_description": "API gateway and its sign-in settings: the denial of service mechanism described in TH_38 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach API gateway and its sign-in settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_38: An attacker could exhaust, block, or disable API gateway and its sign-in settings after availability and resource-protection controls are insufficient, resulting in the damage described by DS_38: If the Availability of API gateway and its sign-in settings is compromised, required certificate services are interrupted o\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with API gateway and its sign-in settings and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_38 and compromising API gateway and its sign-in settings availability, producing the linked DS_38 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_38 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_39",
+  "threat_id": "TH_39",
+  "damage_scenario_id": "DS_39",
+  "asset_id": "AS_13",
+  "attack_description": "API gateway and its sign-in settings: the spoofing mechanism described in TH_39 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach API gateway and its sign-in settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_39: An attacker could impersonate a trusted identity or source accepted by API gateway and its sign-in settings after identity verification controls are bypassed, resulting in the damage described by DS_39: If the Authenticity of API gateway and its sign-in settings is compromised, the platform cannot reliably verify the\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with API gateway and its sign-in settings and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_39 and compromising API gateway and its sign-in settings authenticity, producing the linked DS_39 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_39 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_40",
+  "threat_id": "TH_40",
+  "damage_scenario_id": "DS_40",
+  "asset_id": "AS_13",
+  "attack_description": "API gateway and its sign-in settings: the elevation of privilege mechanism described in TH_40 is exercised until authorization is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach API gateway and its sign-in settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the elevation of privilege technique captured by TH_40: An attacker could invoke privileged operations through API gateway and its sign-in settings after authorization enforcement is bypassed, resulting in the damage described by DS_40: If the Authorization of API gateway and its sign-in settings is compromised, privileged portal functionality is used outside the permi\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with API gateway and its sign-in settings and advance from initial access to a direct compromise of its authorization property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_40 and compromising API gateway and its sign-in settings authorization, producing the linked DS_40 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_40 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_41",
+  "threat_id": "TH_41",
+  "damage_scenario_id": "DS_41",
+  "asset_id": "AS_14",
+  "attack_description": "CDN delivery settings: the tampering mechanism described in TH_41 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach CDN delivery settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_41: An attacker could alter data, configuration, or processing performed by CDN delivery settings after integrity validation or change controls are bypassed, resulting in the damage described by DS_41: If the Integrity of CDN delivery settings is compromised, certificate decisions are based on untrusted or altered\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with CDN delivery settings and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_41 and compromising CDN delivery settings integrity, producing the linked DS_41 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_41 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_42",
+  "threat_id": "TH_42",
+  "damage_scenario_id": "DS_42",
+  "asset_id": "AS_14",
+  "attack_description": "CDN delivery settings: the denial of service mechanism described in TH_42 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach CDN delivery settings.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_42: An attacker could exhaust, block, or disable CDN delivery settings after availability and resource-protection controls are insufficient, resulting in the damage described by DS_42: If the Availability of CDN delivery settings is compromised, required certificate services are interrupted or unavailable when service tea\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with CDN delivery settings and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_42 and compromising CDN delivery settings availability, producing the linked DS_42 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_42 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_43",
+  "threat_id": "TH_43",
+  "damage_scenario_id": "DS_43",
+  "asset_id": "AS_15",
+  "attack_description": "Certificate issuance: the tampering mechanism described in TH_43 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate issuance.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_43: An attacker could alter data, configuration, or processing performed by Certificate issuance after integrity validation or change controls are bypassed, resulting in the damage described by DS_43: If the Integrity of Certificate issuance is compromised, certificate decisions are based on untrusted or altered a\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate issuance and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_43 and compromising Certificate issuance integrity, producing the linked DS_43 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_43 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_44",
+  "threat_id": "TH_44",
+  "damage_scenario_id": "DS_44",
+  "asset_id": "AS_15",
+  "attack_description": "Certificate issuance: the denial of service mechanism described in TH_44 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate issuance.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_44: An attacker could exhaust, block, or disable Certificate issuance after availability and resource-protection controls are insufficient, resulting in the damage described by DS_44: If the Availability of Certificate issuance is compromised, required certificate services are interrupted or unavailable when production teams\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate issuance and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_44 and compromising Certificate issuance availability, producing the linked DS_44 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_44 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_45",
+  "threat_id": "TH_45",
+  "damage_scenario_id": "DS_45",
+  "asset_id": "AS_15",
+  "attack_description": "Certificate issuance: the spoofing mechanism described in TH_45 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate issuance.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_45: An attacker could impersonate a trusted identity or source accepted by Certificate issuance after identity verification controls are bypassed, resulting in the damage described by DS_45: If the Authenticity of Certificate issuance is compromised, the platform cannot reliably verify the identity of the actor or system\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate issuance and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_45 and compromising Certificate issuance authenticity, producing the linked DS_45 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_45 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_46",
+  "threat_id": "TH_46",
+  "damage_scenario_id": "DS_46",
+  "asset_id": "AS_15",
+  "attack_description": "Certificate issuance: the elevation of privilege mechanism described in TH_46 is exercised until authorization is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate issuance.",
+   "step_2_abuse_technique": "Using this position, the actor applies the elevation of privilege technique captured by TH_46: An attacker could invoke privileged operations through Certificate issuance after authorization enforcement is bypassed, resulting in the damage described by DS_46: If the Authorization of Certificate issuance is compromised, privileged portal functionality is used outside the permitted access boundary affecting o\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate issuance and advance from initial access to a direct compromise of its authorization property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_46 and compromising Certificate issuance authorization, producing the linked DS_46 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_46 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_47",
+  "threat_id": "TH_47",
+  "damage_scenario_id": "DS_47",
+  "asset_id": "AS_15",
+  "attack_description": "Certificate issuance: the repudiation mechanism described in TH_47 is exercised until non_repudiation is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate issuance.",
+   "step_2_abuse_technique": "Using this position, the actor applies the repudiation technique captured by TH_47: An attacker could remove or falsify activity evidence recorded by Certificate issuance after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_47: If the Non Repudiation of Certificate issuance is compromised, the platform cannot prove which actor performed a certificate\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate issuance and advance from initial access to a direct compromise of its non_repudiation property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. non_repudiation maps to repudiation under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_47 and compromising Certificate issuance non_repudiation, producing the linked DS_47 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_47 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_48",
+  "threat_id": "TH_48",
+  "damage_scenario_id": "DS_48",
+  "asset_id": "AS_16",
+  "attack_description": "Certificate revocation: the tampering mechanism described in TH_48 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate revocation.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_48: An attacker could alter data, configuration, or processing performed by Certificate revocation after integrity validation or change controls are bypassed, resulting in the damage described by DS_48: If the Integrity of Certificate revocation is compromised, certificate decisions are based on untrusted or alter\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate revocation and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_48 and compromising Certificate revocation integrity, producing the linked DS_48 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_48 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_49",
+  "threat_id": "TH_49",
+  "damage_scenario_id": "DS_49",
+  "asset_id": "AS_16",
+  "attack_description": "Certificate revocation: the denial of service mechanism described in TH_49 is exercised until availability is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate revocation.",
+   "step_2_abuse_technique": "Using this position, the actor applies the denial of service technique captured by TH_49: An attacker could exhaust, block, or disable Certificate revocation after availability and resource-protection controls are insufficient, resulting in the damage described by DS_49: If the Availability of Certificate revocation is compromised, required certificate services are interrupted or unavailable when service t\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate revocation and advance from initial access to a direct compromise of its availability property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. availability maps to denial_of_service under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_49 and compromising Certificate revocation availability, producing the linked DS_49 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_49 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_50",
+  "threat_id": "TH_50",
+  "damage_scenario_id": "DS_50",
+  "asset_id": "AS_16",
+  "attack_description": "Certificate revocation: the spoofing mechanism described in TH_50 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate revocation.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_50: An attacker could impersonate a trusted identity or source accepted by Certificate revocation after identity verification controls are bypassed, resulting in the damage described by DS_50: If the Authenticity of Certificate revocation is compromised, the platform cannot reliably verify the identity of the actor or sys\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate revocation and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_50 and compromising Certificate revocation authenticity, producing the linked DS_50 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_50 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_51",
+  "threat_id": "TH_51",
+  "damage_scenario_id": "DS_51",
+  "asset_id": "AS_16",
+  "attack_description": "Certificate revocation: the elevation of privilege mechanism described in TH_51 is exercised until authorization is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate revocation.",
+   "step_2_abuse_technique": "Using this position, the actor applies the elevation of privilege technique captured by TH_51: An attacker could invoke privileged operations through Certificate revocation after authorization enforcement is bypassed, resulting in the damage described by DS_51: If the Authorization of Certificate revocation is compromised, privileged portal functionality is used outside the permitted access boundary affecti\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate revocation and advance from initial access to a direct compromise of its authorization property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_51 and compromising Certificate revocation authorization, producing the linked DS_51 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_51 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_52",
+  "threat_id": "TH_52",
+  "damage_scenario_id": "DS_52",
+  "asset_id": "AS_16",
+  "attack_description": "Certificate revocation: the repudiation mechanism described in TH_52 is exercised until non_repudiation is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate revocation.",
+   "step_2_abuse_technique": "Using this position, the actor applies the repudiation technique captured by TH_52: An attacker could remove or falsify activity evidence recorded by Certificate revocation after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_52: If the Non Repudiation of Certificate revocation is compromised, the platform cannot prove which actor performed a d\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate revocation and advance from initial access to a direct compromise of its non_repudiation property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. non_repudiation maps to repudiation under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_52 and compromising Certificate revocation non_repudiation, producing the linked DS_52 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_52 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_53",
+  "threat_id": "TH_53",
+  "damage_scenario_id": "DS_53",
+  "asset_id": "AS_17",
+  "attack_description": "CA signing key: the information disclosure mechanism described in TH_53 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach CA signing key.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_53: An attacker could gain unauthorized access to data or responses exposed by CA signing key after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_53: If the Confidentiality of CA signing key is compromised, sensitive key or certificate data is exposed beyond its intend\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with CA signing key and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_53 and compromising CA signing key confidentiality, producing the linked DS_53 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_53 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_54",
+  "threat_id": "TH_54",
+  "damage_scenario_id": "DS_54",
+  "asset_id": "AS_17",
+  "attack_description": "CA signing key: the tampering mechanism described in TH_54 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach CA signing key.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_54: An attacker could alter data, configuration, or processing performed by CA signing key after integrity validation or change controls are bypassed, resulting in the damage described by DS_54: If the Integrity of CA signing key is compromised, certificate decisions are based on untrusted or altered application b\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with CA signing key and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_54 and compromising CA signing key integrity, producing the linked DS_54 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_54 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_55",
+  "threat_id": "TH_55",
+  "damage_scenario_id": "DS_55",
+  "asset_id": "AS_17",
+  "attack_description": "CA signing key: the spoofing mechanism described in TH_55 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach CA signing key.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_55: An attacker could impersonate a trusted identity or source accepted by CA signing key after identity verification controls are bypassed, resulting in the damage described by DS_55: If the Authenticity of CA signing key is compromised, the platform cannot reliably verify the identity of the actor or system using the fu\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with CA signing key and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_55 and compromising CA signing key authenticity, producing the linked DS_55 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_55 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_56",
+  "threat_id": "TH_56",
+  "damage_scenario_id": "DS_56",
+  "asset_id": "AS_18",
+  "attack_description": "Database password: the information disclosure mechanism described in TH_56 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Database password.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_56: An attacker could gain unauthorized access to data or responses exposed by Database password after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_56: If the Confidentiality of Database password is compromised, sensitive key or certificate data is exposed beyond its\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Database password and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_56 and compromising Database password confidentiality, producing the linked DS_56 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_56 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_57",
+  "threat_id": "TH_57",
+  "damage_scenario_id": "DS_57",
+  "asset_id": "AS_18",
+  "attack_description": "Database password: the spoofing mechanism described in TH_57 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Database password.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_57: An attacker could impersonate a trusted identity or source accepted by Database password after identity verification controls are bypassed, resulting in the damage described by DS_57: If the Authenticity of Database password is compromised, the platform cannot reliably verify the identity of the actor or system using\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Database password and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_57 and compromising Database password authenticity, producing the linked DS_57 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_57 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_58",
+  "threat_id": "TH_58",
+  "damage_scenario_id": "DS_58",
+  "asset_id": "AS_19",
+  "attack_description": "Notification API key: the information disclosure mechanism described in TH_58 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Notification API key.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_58: An attacker could gain unauthorized access to data or responses exposed by Notification API key after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_58: If the Confidentiality of Notification API key is compromised, sensitive key or certificate data is exposed beyon\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Notification API key and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_58 and compromising Notification API key confidentiality, producing the linked DS_58 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_58 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_59",
+  "threat_id": "TH_59",
+  "damage_scenario_id": "DS_59",
+  "asset_id": "AS_19",
+  "attack_description": "Notification API key: the spoofing mechanism described in TH_59 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Notification API key.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_59: An attacker could impersonate a trusted identity or source accepted by Notification API key after identity verification controls are bypassed, resulting in the damage described by DS_59: If the Authenticity of Notification API key is compromised, the platform cannot reliably verify the identity of the actor or system\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Notification API key and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_59 and compromising Notification API key authenticity, producing the linked DS_59 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_59 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_60",
+  "threat_id": "TH_60",
+  "damage_scenario_id": "DS_60",
+  "asset_id": "AS_20",
+  "attack_description": "Deploy identity: the spoofing mechanism described in TH_60 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Deploy identity.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_60: An attacker could impersonate a trusted identity or source accepted by Deploy identity after identity verification controls are bypassed, resulting in the damage described by DS_60: If the Authenticity of Deploy identity is compromised, the platform cannot reliably verify the identity of the actor or system using the\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Deploy identity and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_60 and compromising Deploy identity authenticity, producing the linked DS_60 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_60 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_61",
+  "threat_id": "TH_61",
+  "damage_scenario_id": "DS_61",
+  "asset_id": "AS_20",
+  "attack_description": "Deploy identity: the repudiation mechanism described in TH_61 is exercised until non_repudiation is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Deploy identity.",
+   "step_2_abuse_technique": "Using this position, the actor applies the repudiation technique captured by TH_61: An attacker could remove or falsify activity evidence recorded by Deploy identity after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_61: If the Non Repudiation of Deploy identity is compromised, the platform cannot prove which actor performed a certificate acti\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Deploy identity and advance from initial access to a direct compromise of its non_repudiation property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. non_repudiation maps to repudiation under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_61 and compromising Deploy identity non_repudiation, producing the linked DS_61 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_61 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_62",
+  "threat_id": "TH_62",
+  "damage_scenario_id": "DS_62",
+  "asset_id": "AS_21",
+  "attack_description": "Certificate requests in transit: the information disclosure mechanism described in TH_62 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate requests in transit.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_62: An attacker could gain unauthorized access to data or responses exposed by Certificate requests in transit after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_62: If the Confidentiality of Certificate requests in transit is compromised, sensitive key or certificate\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate requests in transit and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_62 and compromising Certificate requests in transit confidentiality, producing the linked DS_62 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_62 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_63",
+  "threat_id": "TH_63",
+  "damage_scenario_id": "DS_63",
+  "asset_id": "AS_21",
+  "attack_description": "Certificate requests in transit: the tampering mechanism described in TH_63 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate requests in transit.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_63: An attacker could alter data, configuration, or processing performed by Certificate requests in transit after integrity validation or change controls are bypassed, resulting in the damage described by DS_63: If the Integrity of Certificate requests in transit is compromised, certificate decisions are based on\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate requests in transit and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_63 and compromising Certificate requests in transit integrity, producing the linked DS_63 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_63 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_64",
+  "threat_id": "TH_64",
+  "damage_scenario_id": "DS_64",
+  "asset_id": "AS_21",
+  "attack_description": "Certificate requests in transit: the spoofing mechanism described in TH_64 is exercised until authenticity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Certificate requests in transit.",
+   "step_2_abuse_technique": "Using this position, the actor applies the spoofing technique captured by TH_64: An attacker could impersonate a trusted identity or source accepted by Certificate requests in transit after identity verification controls are bypassed, resulting in the damage described by DS_64: If the Authenticity of Certificate requests in transit is compromised, the platform cannot reliably verify the identity o\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Certificate requests in transit and advance from initial access to a direct compromise of its authenticity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. authenticity maps to spoofing under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_64 and compromising Certificate requests in transit authenticity, producing the linked DS_64 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_64 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_65",
+  "threat_id": "TH_65",
+  "damage_scenario_id": "DS_65",
+  "asset_id": "AS_22",
+  "attack_description": "Notifications in transit: the information disclosure mechanism described in TH_65 is exercised until confidentiality is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Notifications in transit.",
+   "step_2_abuse_technique": "Using this position, the actor applies the information disclosure technique captured by TH_65: An attacker could gain unauthorized access to data or responses exposed by Notifications in transit after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_65: If the Confidentiality of Notifications in transit is compromised, sensitive key or certificate data is expos\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Notifications in transit and advance from initial access to a direct compromise of its confidentiality property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. confidentiality maps to information_disclosure under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_65 and compromising Notifications in transit confidentiality, producing the linked DS_65 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_65 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ },
+ {
+  "attack_id": "AT_66",
+  "threat_id": "TH_66",
+  "damage_scenario_id": "DS_66",
+  "asset_id": "AS_22",
+  "attack_description": "Notifications in transit: the tampering mechanism described in TH_66 is exercised until integrity is compromised.",
+  "attack_path": {
+   "step_1_initial_precondition": "The threat actor has the network reachability and holds a limited authenticated or execution context needed to reach Notifications in transit.",
+   "step_2_abuse_technique": "Using this position, the actor applies the tampering technique captured by TH_66: An attacker could alter data, configuration, or processing performed by Notifications in transit after integrity validation or change controls are bypassed, resulting in the damage described by DS_66: If the Integrity of Notifications in transit is compromised, certificate decisions are based on untrusted or a\u2026",
+   "step_3_exploit_effect": "This action gives the actor the capability to interfere with Notifications in transit and advance from initial access to a direct compromise of its integrity property.",
+   "step_4_control_gap": "Because the documented control weakness remains unmitigated, the preceding capability is not prevented or detected. integrity maps to tampering under the STRIDE taxonomy.",
+   "step_5_threat_realization": "This completes the path by realizing TH_66 and compromising Notifications in transit integrity, producing the linked DS_66 consequence."
+  },
+  "cvss_metrics": {
+   "attack_vector": "N",
+   "attack_complexity": "L",
+   "privileges_required": "L",
+   "user_interaction": "N"
+  },
+  "afr_value": 4,
+  "afr_label": "high",
+  "justifications": {
+   "attack_vector": "Attack Vector is N because the initial position described for TH_66 is remotely network reachable.",
+   "attack_complexity": "Attack Complexity is L because the documented chain uses a repeatable sequence without a separate race or unpredictable prerequisite.",
+   "privileges_required": "Privileges Required is L because the initial precondition starts from limited access rather than administration.",
+   "user_interaction": "User Interaction is N because the path can be completed by the actor without a separate user action."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.432Z"
+ }
+]

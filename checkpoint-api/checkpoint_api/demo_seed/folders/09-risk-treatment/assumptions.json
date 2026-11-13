@@ -1,0 +1,17 @@
+[
+ {
+  "about_id": "TH_53",
+  "field": "treatment_option",
+  "text": "The client is taken to accept only risks that are rated low."
+ },
+ {
+  "about_id": "TH_46",
+  "field": "cybersecurity_goal",
+  "text": "The goal is taken to cover the test environment as well as production."
+ },
+ {
+  "about_id": "TH_56",
+  "field": null,
+  "text": "The database password is taken to be changed at least once a year."
+ }
+]

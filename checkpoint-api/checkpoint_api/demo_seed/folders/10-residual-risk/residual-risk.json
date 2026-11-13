@@ -1,0 +1,3038 @@
+[
+ {
+  "residual_id": "RES_01",
+  "threat_id": "TH_01",
+  "risk_id": "RSK_01",
+  "attack_id": "AT_01",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_02",
+  "threat_id": "TH_03",
+  "risk_id": "RSK_02",
+  "attack_id": "AT_03",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_03",
+  "threat_id": "TH_06",
+  "risk_id": "RSK_03",
+  "attack_id": "AT_06",
+  "asset_id": "AS_02",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_04",
+  "threat_id": "TH_09",
+  "risk_id": "RSK_04",
+  "attack_id": "AT_09",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_55",
+    "control_title": "Vault Dynamic Secrets Management",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_63",
+    "control_title": "Compromised Cloud Credential Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_05",
+  "threat_id": "TH_13",
+  "risk_id": "RSK_05",
+  "attack_id": "AT_13",
+  "asset_id": "AS_04",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_06",
+  "threat_id": "TH_14",
+  "risk_id": "RSK_06",
+  "attack_id": "AT_14",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_07",
+  "threat_id": "TH_16",
+  "risk_id": "RSK_07",
+  "attack_id": "AT_16",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_08",
+  "threat_id": "TH_18",
+  "risk_id": "RSK_08",
+  "attack_id": "AT_18",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_09",
+  "threat_id": "TH_20",
+  "risk_id": "RSK_09",
+  "attack_id": "AT_20",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_10",
+  "threat_id": "TH_23",
+  "risk_id": "RSK_10",
+  "attack_id": "AT_23",
+  "asset_id": "AS_07",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_11",
+  "threat_id": "TH_28",
+  "risk_id": "RSK_11",
+  "attack_id": "AT_28",
+  "asset_id": "AS_09",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_12",
+  "threat_id": "TH_31",
+  "risk_id": "RSK_12",
+  "attack_id": "AT_31",
+  "asset_id": "AS_10",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_13",
+  "threat_id": "TH_33",
+  "risk_id": "RSK_13",
+  "attack_id": "AT_33",
+  "asset_id": "AS_11",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_14",
+  "threat_id": "TH_34",
+  "risk_id": "RSK_14",
+  "attack_id": "AT_34",
+  "asset_id": "AS_11",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_15",
+  "threat_id": "TH_36",
+  "risk_id": "RSK_15",
+  "attack_id": "AT_36",
+  "asset_id": "AS_12",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_16",
+  "threat_id": "TH_38",
+  "risk_id": "RSK_16",
+  "attack_id": "AT_38",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_17",
+  "threat_id": "TH_42",
+  "risk_id": "RSK_17",
+  "attack_id": "AT_42",
+  "asset_id": "AS_14",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_18",
+  "threat_id": "TH_44",
+  "risk_id": "RSK_18",
+  "attack_id": "AT_44",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_19",
+  "threat_id": "TH_49",
+  "risk_id": "RSK_19",
+  "attack_id": "AT_49",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_20",
+  "threat_id": "TH_53",
+  "risk_id": "RSK_20",
+  "attack_id": "AT_53",
+  "asset_id": "AS_17",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_21",
+  "threat_id": "TH_56",
+  "risk_id": "RSK_21",
+  "attack_id": "AT_56",
+  "asset_id": "AS_18",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_22",
+  "threat_id": "TH_58",
+  "risk_id": "RSK_22",
+  "attack_id": "AT_58",
+  "asset_id": "AS_19",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_23",
+  "threat_id": "TH_62",
+  "risk_id": "RSK_23",
+  "attack_id": "AT_62",
+  "asset_id": "AS_21",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_24",
+  "threat_id": "TH_65",
+  "risk_id": "RSK_24",
+  "attack_id": "AT_65",
+  "asset_id": "AS_22",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 8,
+   "risk_level": "high"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_25",
+  "threat_id": "TH_02",
+  "risk_id": "RSK_25",
+  "attack_id": "AT_02",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_26",
+  "threat_id": "TH_04",
+  "risk_id": "RSK_26",
+  "attack_id": "AT_04",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_27",
+  "threat_id": "TH_05",
+  "risk_id": "RSK_27",
+  "attack_id": "AT_05",
+  "asset_id": "AS_02",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_28",
+  "threat_id": "TH_07",
+  "risk_id": "RSK_28",
+  "attack_id": "AT_07",
+  "asset_id": "AS_02",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_29",
+  "threat_id": "TH_08",
+  "risk_id": "RSK_29",
+  "attack_id": "AT_08",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_55",
+    "control_title": "Vault Dynamic Secrets Management",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_63",
+    "control_title": "Compromised Cloud Credential Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_30",
+  "threat_id": "TH_10",
+  "risk_id": "RSK_30",
+  "attack_id": "AT_10",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_55",
+    "control_title": "Vault Dynamic Secrets Management",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_63",
+    "control_title": "Compromised Cloud Credential Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_31",
+  "threat_id": "TH_11",
+  "risk_id": "RSK_31",
+  "attack_id": "AT_11",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_32",
+  "threat_id": "TH_12",
+  "risk_id": "RSK_32",
+  "attack_id": "AT_12",
+  "asset_id": "AS_04",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_33",
+  "threat_id": "TH_15",
+  "risk_id": "RSK_33",
+  "attack_id": "AT_15",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_34",
+  "threat_id": "TH_17",
+  "risk_id": "RSK_34",
+  "attack_id": "AT_17",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_35",
+  "threat_id": "TH_19",
+  "risk_id": "RSK_35",
+  "attack_id": "AT_19",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_36",
+  "threat_id": "TH_21",
+  "risk_id": "RSK_36",
+  "attack_id": "AT_21",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_37",
+  "threat_id": "TH_22",
+  "risk_id": "RSK_37",
+  "attack_id": "AT_22",
+  "asset_id": "AS_07",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_38",
+  "threat_id": "TH_24",
+  "risk_id": "RSK_38",
+  "attack_id": "AT_24",
+  "asset_id": "AS_07",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_39",
+  "threat_id": "TH_25",
+  "risk_id": "RSK_39",
+  "attack_id": "AT_25",
+  "asset_id": "AS_08",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_40",
+  "threat_id": "TH_26",
+  "risk_id": "RSK_40",
+  "attack_id": "AT_26",
+  "asset_id": "AS_08",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_41",
+  "threat_id": "TH_27",
+  "risk_id": "RSK_41",
+  "attack_id": "AT_27",
+  "asset_id": "AS_09",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_42",
+  "threat_id": "TH_29",
+  "risk_id": "RSK_42",
+  "attack_id": "AT_29",
+  "asset_id": "AS_09",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_43",
+  "threat_id": "TH_30",
+  "risk_id": "RSK_43",
+  "attack_id": "AT_30",
+  "asset_id": "AS_10",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_44",
+  "threat_id": "TH_32",
+  "risk_id": "RSK_44",
+  "attack_id": "AT_32",
+  "asset_id": "AS_10",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_45",
+  "threat_id": "TH_35",
+  "risk_id": "RSK_45",
+  "attack_id": "AT_35",
+  "asset_id": "AS_12",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_46",
+  "threat_id": "TH_37",
+  "risk_id": "RSK_46",
+  "attack_id": "AT_37",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_47",
+  "threat_id": "TH_39",
+  "risk_id": "RSK_47",
+  "attack_id": "AT_39",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_48",
+  "threat_id": "TH_40",
+  "risk_id": "RSK_48",
+  "attack_id": "AT_40",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_49",
+  "threat_id": "TH_41",
+  "risk_id": "RSK_49",
+  "attack_id": "AT_41",
+  "asset_id": "AS_14",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_50",
+  "threat_id": "TH_43",
+  "risk_id": "RSK_50",
+  "attack_id": "AT_43",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_51",
+  "threat_id": "TH_45",
+  "risk_id": "RSK_51",
+  "attack_id": "AT_45",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_52",
+  "threat_id": "TH_46",
+  "risk_id": "RSK_52",
+  "attack_id": "AT_46",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_53",
+  "threat_id": "TH_47",
+  "risk_id": "RSK_53",
+  "attack_id": "AT_47",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_54",
+  "threat_id": "TH_48",
+  "risk_id": "RSK_54",
+  "attack_id": "AT_48",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_55",
+  "threat_id": "TH_50",
+  "risk_id": "RSK_55",
+  "attack_id": "AT_50",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_56",
+  "threat_id": "TH_51",
+  "risk_id": "RSK_56",
+  "attack_id": "AT_51",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_57",
+  "threat_id": "TH_52",
+  "risk_id": "RSK_57",
+  "attack_id": "AT_52",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_58",
+  "threat_id": "TH_54",
+  "risk_id": "RSK_58",
+  "attack_id": "AT_54",
+  "asset_id": "AS_17",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_59",
+  "threat_id": "TH_55",
+  "risk_id": "RSK_59",
+  "attack_id": "AT_55",
+  "asset_id": "AS_17",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_60",
+  "threat_id": "TH_57",
+  "risk_id": "RSK_60",
+  "attack_id": "AT_57",
+  "asset_id": "AS_18",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_61",
+  "threat_id": "TH_59",
+  "risk_id": "RSK_61",
+  "attack_id": "AT_59",
+  "asset_id": "AS_19",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_62",
+  "threat_id": "TH_60",
+  "risk_id": "RSK_62",
+  "attack_id": "AT_60",
+  "asset_id": "AS_20",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_63",
+  "threat_id": "TH_61",
+  "risk_id": "RSK_63",
+  "attack_id": "AT_61",
+  "asset_id": "AS_20",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_64",
+  "threat_id": "TH_63",
+  "risk_id": "RSK_64",
+  "attack_id": "AT_63",
+  "asset_id": "AS_21",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_65",
+  "threat_id": "TH_64",
+  "risk_id": "RSK_65",
+  "attack_id": "AT_64",
+  "asset_id": "AS_21",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive"
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ },
+ {
+  "residual_id": "RES_66",
+  "threat_id": "TH_66",
+  "risk_id": "RSK_66",
+  "attack_id": "AT_66",
+  "asset_id": "AS_22",
+  "treatment_option": "reduce",
+  "controls": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective"
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive"
+   }
+  ],
+  "pre": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "post": {
+   "metrics": {
+    "attack_vector": "N",
+    "attack_complexity": "L",
+    "privileges_required": "L",
+    "user_interaction": "N"
+   },
+   "afr_value": 4,
+   "afr_label": "high",
+   "risk_score": 4,
+   "risk_level": "medium"
+  },
+  "metric_changes": [],
+  "created_timestamp": "2026-11-13T22:00:27.941Z"
+ }
+]

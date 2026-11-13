@@ -113,6 +113,7 @@ class AssessmentResponse(BaseModel):
     completion_percentage: int
     stages: dict[str, RunStatus]
     stage_outputs_available: list[int] = Field(default_factory=list)
+    is_demo: bool = False
     created_at: datetime
     updated_at: datetime
 

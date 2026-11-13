@@ -1,0 +1,66 @@
+{
+ "comments_03": [
+  {
+   "asset_id": "DS-02",
+   "property": "C",
+   "author": "analyst",
+   "text": "Ask the client what the cache holds before we confirm this."
+  },
+  {
+   "asset_id": "WL-01",
+   "property": "C",
+   "author": "analyst",
+   "text": "Confidentiality should not apply here. The service passes requests on and keeps nothing itself."
+  },
+  {
+   "asset_id": "WL-01",
+   "property": "C",
+   "author": "assistant",
+   "text": "Agreed. The certificate service stores nothing of its own; the requests it handles are covered by DS-01 Certificate records. Under the D-22 rule this cell should be off.",
+   "proposed_change": {
+    "property": "C",
+    "applies": false,
+    "state": "open"
+   }
+  }
+ ],
+ "confirmed_03": [
+  "RAT-90003"
+ ],
+ "screens": {
+  "04": {
+   "comments": [
+    {
+     "record_id": "DS_44",
+     "text": "Check this rating with the client. Ask how long production can run when no certificate can be issued.",
+     "field": "other_stakeholders.financial"
+    }
+   ],
+   "confirmed": [
+    "AS-04-01"
+   ]
+  },
+  "05": {
+   "comments": [
+    {
+     "record_id": "TH_10",
+     "text": "The attack path looks right. Ask the client if the token check can be reached from the office network only."
+    }
+   ],
+   "confirmed": [
+    "AS-05-01"
+   ]
+  },
+  "06": {
+   "comments": [
+    {
+     "record_id": "TH_53",
+     "text": "Agree with the treatment. The controls must be in place before the first release."
+    }
+   ],
+   "confirmed": [
+    "AS-06-01"
+   ]
+  }
+ }
+}

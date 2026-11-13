@@ -1,0 +1,1784 @@
+[
+ {
+  "impact_id": "IM_01",
+  "threat_id": "TH_01",
+  "damage_scenario_id": "DS_01",
+  "asset_id": "AS_01",
+  "property": "confidentiality",
+  "impact_narrative": "Certificate service logic is compromised through information disclosure, causing this consequence: If the Confidentiality of Certificate service logic is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate service logic operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_02",
+  "threat_id": "TH_02",
+  "damage_scenario_id": "DS_02",
+  "asset_id": "AS_01",
+  "property": "integrity",
+  "impact_narrative": "Certificate service logic is compromised through tampering, causing this consequence: If the Integrity of Certificate service logic is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate service logic operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_03",
+  "threat_id": "TH_03",
+  "damage_scenario_id": "DS_03",
+  "asset_id": "AS_01",
+  "property": "availability",
+  "impact_narrative": "Certificate service logic is compromised through denial of service, causing this consequence: If the Availability of Certificate service logic is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate service logic operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_04",
+  "threat_id": "TH_04",
+  "damage_scenario_id": "DS_04",
+  "asset_id": "AS_01",
+  "property": "authorization",
+  "impact_narrative": "Certificate service logic is compromised through elevation of privilege, causing this consequence: If the Authorization of Certificate service logic is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate service logic operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_05",
+  "threat_id": "TH_05",
+  "damage_scenario_id": "DS_05",
+  "asset_id": "AS_02",
+  "property": "integrity",
+  "impact_narrative": "Key service signing logic is compromised through tampering, causing this consequence: If the Integrity of Key service signing logic is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Key service signing logic operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_06",
+  "threat_id": "TH_06",
+  "damage_scenario_id": "DS_06",
+  "asset_id": "AS_02",
+  "property": "availability",
+  "impact_narrative": "Key service signing logic is compromised through denial of service, causing this consequence: If the Availability of Key service signing logic is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Key service signing logic operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_07",
+  "threat_id": "TH_07",
+  "damage_scenario_id": "DS_07",
+  "asset_id": "AS_02",
+  "property": "authorization",
+  "impact_narrative": "Key service signing logic is compromised through elevation of privilege, causing this consequence: If the Authorization of Key service signing logic is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Key service signing logic operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_08",
+  "threat_id": "TH_08",
+  "damage_scenario_id": "DS_08",
+  "asset_id": "AS_03",
+  "property": "integrity",
+  "impact_narrative": "Token check is compromised through tampering, causing this consequence: If the Integrity of Token check is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Token check operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_09",
+  "threat_id": "TH_09",
+  "damage_scenario_id": "DS_09",
+  "asset_id": "AS_03",
+  "property": "availability",
+  "impact_narrative": "Token check is compromised through denial of service, causing this consequence: If the Availability of Token check is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Token check operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_10",
+  "threat_id": "TH_10",
+  "damage_scenario_id": "DS_10",
+  "asset_id": "AS_03",
+  "property": "authenticity",
+  "impact_narrative": "Token check is compromised through spoofing, causing this consequence: If the Authenticity of Token check is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Token check operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_11",
+  "threat_id": "TH_11",
+  "damage_scenario_id": "DS_11",
+  "asset_id": "AS_03",
+  "property": "authorization",
+  "impact_narrative": "Token check is compromised through elevation of privilege, causing this consequence: If the Authorization of Token check is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Token check operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_12",
+  "threat_id": "TH_12",
+  "damage_scenario_id": "DS_12",
+  "asset_id": "AS_04",
+  "property": "integrity",
+  "impact_narrative": "Revocation list builder is compromised through tampering, causing this consequence: If the Integrity of Revocation list builder is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Revocation list builder operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_13",
+  "threat_id": "TH_13",
+  "damage_scenario_id": "DS_13",
+  "asset_id": "AS_04",
+  "property": "availability",
+  "impact_narrative": "Revocation list builder is compromised through denial of service, causing this consequence: If the Availability of Revocation list builder is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Revocation list builder operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_14",
+  "threat_id": "TH_14",
+  "damage_scenario_id": "DS_14",
+  "asset_id": "AS_05",
+  "property": "confidentiality",
+  "impact_narrative": "Certificate records is compromised through information disclosure, causing this consequence: If the Confidentiality of Certificate records is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate records operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_15",
+  "threat_id": "TH_15",
+  "damage_scenario_id": "DS_15",
+  "asset_id": "AS_05",
+  "property": "integrity",
+  "impact_narrative": "Certificate records is compromised through tampering, causing this consequence: If the Integrity of Certificate records is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate records operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_16",
+  "threat_id": "TH_16",
+  "damage_scenario_id": "DS_16",
+  "asset_id": "AS_05",
+  "property": "availability",
+  "impact_narrative": "Certificate records is compromised through denial of service, causing this consequence: If the Availability of Certificate records is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate records operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_17",
+  "threat_id": "TH_17",
+  "damage_scenario_id": "DS_17",
+  "asset_id": "AS_05",
+  "property": "non_repudiation",
+  "impact_narrative": "Certificate records is compromised through repudiation, causing this consequence: If the Non Repudiation of Certificate records is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate records operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_18",
+  "threat_id": "TH_18",
+  "damage_scenario_id": "DS_18",
+  "asset_id": "AS_06",
+  "property": "confidentiality",
+  "impact_narrative": "Cached certificate data is compromised through information disclosure, causing this consequence: If the Confidentiality of Cached certificate data is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Cached certificate data operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_19",
+  "threat_id": "TH_19",
+  "damage_scenario_id": "DS_19",
+  "asset_id": "AS_06",
+  "property": "integrity",
+  "impact_narrative": "Cached certificate data is compromised through tampering, causing this consequence: If the Integrity of Cached certificate data is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Cached certificate data operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_20",
+  "threat_id": "TH_20",
+  "damage_scenario_id": "DS_20",
+  "asset_id": "AS_06",
+  "property": "availability",
+  "impact_narrative": "Cached certificate data is compromised through denial of service, causing this consequence: If the Availability of Cached certificate data is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Cached certificate data operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_21",
+  "threat_id": "TH_21",
+  "damage_scenario_id": "DS_21",
+  "asset_id": "AS_06",
+  "property": "authenticity",
+  "impact_narrative": "Cached certificate data is compromised through spoofing, causing this consequence: If the Authenticity of Cached certificate data is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Cached certificate data operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_22",
+  "threat_id": "TH_22",
+  "damage_scenario_id": "DS_22",
+  "asset_id": "AS_07",
+  "property": "integrity",
+  "impact_narrative": "Revocation list is compromised through tampering, causing this consequence: If the Integrity of Revocation list is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Revocation list operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_23",
+  "threat_id": "TH_23",
+  "damage_scenario_id": "DS_23",
+  "asset_id": "AS_07",
+  "property": "availability",
+  "impact_narrative": "Revocation list is compromised through denial of service, causing this consequence: If the Availability of Revocation list is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Revocation list operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_24",
+  "threat_id": "TH_24",
+  "damage_scenario_id": "DS_24",
+  "asset_id": "AS_07",
+  "property": "authenticity",
+  "impact_narrative": "Revocation list is compromised through spoofing, causing this consequence: If the Authenticity of Revocation list is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Revocation list operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_25",
+  "threat_id": "TH_25",
+  "damage_scenario_id": "DS_25",
+  "asset_id": "AS_08",
+  "property": "integrity",
+  "impact_narrative": "Portal web pages is compromised through tampering, causing this consequence: If the Integrity of Portal web pages is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Portal web pages operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_26",
+  "threat_id": "TH_26",
+  "damage_scenario_id": "DS_26",
+  "asset_id": "AS_08",
+  "property": "authenticity",
+  "impact_narrative": "Portal web pages is compromised through spoofing, causing this consequence: If the Authenticity of Portal web pages is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Portal web pages operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_27",
+  "threat_id": "TH_27",
+  "damage_scenario_id": "DS_27",
+  "asset_id": "AS_09",
+  "property": "integrity",
+  "impact_narrative": "Application logs and metrics is compromised through tampering, causing this consequence: If the Integrity of Application logs and metrics is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Application logs and metrics operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_28",
+  "threat_id": "TH_28",
+  "damage_scenario_id": "DS_28",
+  "asset_id": "AS_09",
+  "property": "availability",
+  "impact_narrative": "Application logs and metrics is compromised through denial of service, causing this consequence: If the Availability of Application logs and metrics is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Application logs and metrics operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_29",
+  "threat_id": "TH_29",
+  "damage_scenario_id": "DS_29",
+  "asset_id": "AS_09",
+  "property": "non_repudiation",
+  "impact_narrative": "Application logs and metrics is compromised through repudiation, causing this consequence: If the Non Repudiation of Application logs and metrics is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Application logs and metrics operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_30",
+  "threat_id": "TH_30",
+  "damage_scenario_id": "DS_30",
+  "asset_id": "AS_10",
+  "property": "integrity",
+  "impact_narrative": "Audit trail records is compromised through tampering, causing this consequence: If the Integrity of Audit trail records is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Audit trail records operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_31",
+  "threat_id": "TH_31",
+  "damage_scenario_id": "DS_31",
+  "asset_id": "AS_10",
+  "property": "availability",
+  "impact_narrative": "Audit trail records is compromised through denial of service, causing this consequence: If the Availability of Audit trail records is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Audit trail records operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_32",
+  "threat_id": "TH_32",
+  "damage_scenario_id": "DS_32",
+  "asset_id": "AS_10",
+  "property": "non_repudiation",
+  "impact_narrative": "Audit trail records is compromised through repudiation, causing this consequence: If the Non Repudiation of Audit trail records is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Audit trail records operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_33",
+  "threat_id": "TH_33",
+  "damage_scenario_id": "DS_33",
+  "asset_id": "AS_11",
+  "property": "integrity",
+  "impact_narrative": "Network exposure settings is compromised through tampering, causing this consequence: If the Integrity of Network exposure settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Network exposure settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_34",
+  "threat_id": "TH_34",
+  "damage_scenario_id": "DS_34",
+  "asset_id": "AS_11",
+  "property": "availability",
+  "impact_narrative": "Network exposure settings is compromised through denial of service, causing this consequence: If the Availability of Network exposure settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Network exposure settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Moderate",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes limited data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_35",
+  "threat_id": "TH_35",
+  "damage_scenario_id": "DS_35",
+  "asset_id": "AS_12",
+  "property": "integrity",
+  "impact_narrative": "Load balancer routing is compromised through tampering, causing this consequence: If the Integrity of Load balancer routing is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Load balancer routing operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_36",
+  "threat_id": "TH_36",
+  "damage_scenario_id": "DS_36",
+  "asset_id": "AS_12",
+  "property": "availability",
+  "impact_narrative": "Load balancer routing is compromised through denial of service, causing this consequence: If the Availability of Load balancer routing is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Load balancer routing operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_37",
+  "threat_id": "TH_37",
+  "damage_scenario_id": "DS_37",
+  "asset_id": "AS_13",
+  "property": "integrity",
+  "impact_narrative": "API gateway and its sign-in settings is compromised through tampering, causing this consequence: If the Integrity of API gateway and its sign-in settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_38",
+  "threat_id": "TH_38",
+  "damage_scenario_id": "DS_38",
+  "asset_id": "AS_13",
+  "property": "availability",
+  "impact_narrative": "API gateway and its sign-in settings is compromised through denial of service, causing this consequence: If the Availability of API gateway and its sign-in settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_39",
+  "threat_id": "TH_39",
+  "damage_scenario_id": "DS_39",
+  "asset_id": "AS_13",
+  "property": "authenticity",
+  "impact_narrative": "API gateway and its sign-in settings is compromised through spoofing, causing this consequence: If the Authenticity of API gateway and its sign-in settings is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_40",
+  "threat_id": "TH_40",
+  "damage_scenario_id": "DS_40",
+  "asset_id": "AS_13",
+  "property": "authorization",
+  "impact_narrative": "API gateway and its sign-in settings is compromised through elevation of privilege, causing this consequence: If the Authorization of API gateway and its sign-in settings is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_41",
+  "threat_id": "TH_41",
+  "damage_scenario_id": "DS_41",
+  "asset_id": "AS_14",
+  "property": "integrity",
+  "impact_narrative": "CDN delivery settings is compromised through tampering, causing this consequence: If the Integrity of CDN delivery settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of CDN delivery settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_42",
+  "threat_id": "TH_42",
+  "damage_scenario_id": "DS_42",
+  "asset_id": "AS_14",
+  "property": "availability",
+  "impact_narrative": "CDN delivery settings is compromised through denial of service, causing this consequence: If the Availability of CDN delivery settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of CDN delivery settings operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_43",
+  "threat_id": "TH_43",
+  "damage_scenario_id": "DS_43",
+  "asset_id": "AS_15",
+  "property": "integrity",
+  "impact_narrative": "Certificate issuance is compromised through tampering, causing this consequence: If the Integrity of Certificate issuance is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate issuance operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_44",
+  "threat_id": "TH_44",
+  "damage_scenario_id": "DS_44",
+  "asset_id": "AS_15",
+  "property": "availability",
+  "impact_narrative": "Certificate issuance is compromised through denial of service, causing this consequence: If the Availability of Certificate issuance is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate issuance operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_45",
+  "threat_id": "TH_45",
+  "damage_scenario_id": "DS_45",
+  "asset_id": "AS_15",
+  "property": "authenticity",
+  "impact_narrative": "Certificate issuance is compromised through spoofing, causing this consequence: If the Authenticity of Certificate issuance is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate issuance operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_46",
+  "threat_id": "TH_46",
+  "damage_scenario_id": "DS_46",
+  "asset_id": "AS_15",
+  "property": "authorization",
+  "impact_narrative": "Certificate issuance is compromised through elevation of privilege, causing this consequence: If the Authorization of Certificate issuance is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate issuance operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_47",
+  "threat_id": "TH_47",
+  "damage_scenario_id": "DS_47",
+  "asset_id": "AS_15",
+  "property": "non_repudiation",
+  "impact_narrative": "Certificate issuance is compromised through repudiation, causing this consequence: If the Non Repudiation of Certificate issuance is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate issuance operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_48",
+  "threat_id": "TH_48",
+  "damage_scenario_id": "DS_48",
+  "asset_id": "AS_16",
+  "property": "integrity",
+  "impact_narrative": "Certificate revocation is compromised through tampering, causing this consequence: If the Integrity of Certificate revocation is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate revocation operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_49",
+  "threat_id": "TH_49",
+  "damage_scenario_id": "DS_49",
+  "asset_id": "AS_16",
+  "property": "availability",
+  "impact_narrative": "Certificate revocation is compromised through denial of service, causing this consequence: If the Availability of Certificate revocation is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate revocation operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Major",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a major effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_50",
+  "threat_id": "TH_50",
+  "damage_scenario_id": "DS_50",
+  "asset_id": "AS_16",
+  "property": "authenticity",
+  "impact_narrative": "Certificate revocation is compromised through spoofing, causing this consequence: If the Authenticity of Certificate revocation is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate revocation operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_51",
+  "threat_id": "TH_51",
+  "damage_scenario_id": "DS_51",
+  "asset_id": "AS_16",
+  "property": "authorization",
+  "impact_narrative": "Certificate revocation is compromised through elevation of privilege, causing this consequence: If the Authorization of Certificate revocation is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate revocation operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_52",
+  "threat_id": "TH_52",
+  "damage_scenario_id": "DS_52",
+  "asset_id": "AS_16",
+  "property": "non_repudiation",
+  "impact_narrative": "Certificate revocation is compromised through repudiation, causing this consequence: If the Non Repudiation of Certificate revocation is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate revocation operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_53",
+  "threat_id": "TH_53",
+  "damage_scenario_id": "DS_53",
+  "asset_id": "AS_17",
+  "property": "confidentiality",
+  "impact_narrative": "CA signing key is compromised through information disclosure, causing this consequence: If the Confidentiality of CA signing key is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of CA signing key operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_54",
+  "threat_id": "TH_54",
+  "damage_scenario_id": "DS_54",
+  "asset_id": "AS_17",
+  "property": "integrity",
+  "impact_narrative": "CA signing key is compromised through tampering, causing this consequence: If the Integrity of CA signing key is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of CA signing key operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_55",
+  "threat_id": "TH_55",
+  "damage_scenario_id": "DS_55",
+  "asset_id": "AS_17",
+  "property": "authenticity",
+  "impact_narrative": "CA signing key is compromised through spoofing, causing this consequence: If the Authenticity of CA signing key is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of CA signing key operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_56",
+  "threat_id": "TH_56",
+  "damage_scenario_id": "DS_56",
+  "asset_id": "AS_18",
+  "property": "confidentiality",
+  "impact_narrative": "Database password is compromised through information disclosure, causing this consequence: If the Confidentiality of Database password is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Database password operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_57",
+  "threat_id": "TH_57",
+  "damage_scenario_id": "DS_57",
+  "asset_id": "AS_18",
+  "property": "authenticity",
+  "impact_narrative": "Database password is compromised through spoofing, causing this consequence: If the Authenticity of Database password is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Database password operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_58",
+  "threat_id": "TH_58",
+  "damage_scenario_id": "DS_58",
+  "asset_id": "AS_19",
+  "property": "confidentiality",
+  "impact_narrative": "Notification API key is compromised through information disclosure, causing this consequence: If the Confidentiality of Notification API key is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Notification API key operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_59",
+  "threat_id": "TH_59",
+  "damage_scenario_id": "DS_59",
+  "asset_id": "AS_19",
+  "property": "authenticity",
+  "impact_narrative": "Notification API key is compromised through spoofing, causing this consequence: If the Authenticity of Notification API key is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Notification API key operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_60",
+  "threat_id": "TH_60",
+  "damage_scenario_id": "DS_60",
+  "asset_id": "AS_20",
+  "property": "authenticity",
+  "impact_narrative": "Deploy identity is compromised through spoofing, causing this consequence: If the Authenticity of Deploy identity is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Deploy identity operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_61",
+  "threat_id": "TH_61",
+  "damage_scenario_id": "DS_61",
+  "asset_id": "AS_20",
+  "property": "non_repudiation",
+  "impact_narrative": "Deploy identity is compromised through repudiation, causing this consequence: If the Non Repudiation of Deploy identity is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Deploy identity operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Moderate",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "The organizational consequence contains legal, compliance, or unauthorized-action indicators rated moderate.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_62",
+  "threat_id": "TH_62",
+  "damage_scenario_id": "DS_62",
+  "asset_id": "AS_21",
+  "property": "confidentiality",
+  "impact_narrative": "Certificate requests in transit is compromised through information disclosure, causing this consequence: If the Confidentiality of Certificate requests in transit is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate requests in transit operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_63",
+  "threat_id": "TH_63",
+  "damage_scenario_id": "DS_63",
+  "asset_id": "AS_21",
+  "property": "integrity",
+  "impact_narrative": "Certificate requests in transit is compromised through tampering, causing this consequence: If the Integrity of Certificate requests in transit is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate requests in transit operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_64",
+  "threat_id": "TH_64",
+  "damage_scenario_id": "DS_64",
+  "asset_id": "AS_21",
+  "property": "authenticity",
+  "impact_narrative": "Certificate requests in transit is compromised through spoofing, causing this consequence: If the Authenticity of Certificate requests in transit is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate requests in transit operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Negligible",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The damage scenario contains no explicit loss or degradation of a user-facing workflow, service, update, or operation."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_65",
+  "threat_id": "TH_65",
+  "damage_scenario_id": "DS_65",
+  "asset_id": "AS_22",
+  "property": "confidentiality",
+  "impact_narrative": "Notifications in transit is compromised through information disclosure, causing this consequence: If the Confidentiality of Notifications in transit is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Notifications in transit operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Major",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario explicitly describes sensitive data exposure affecting users or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Negligible",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "No explicit organizational business, customer, or service consequence is described."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ },
+ {
+  "impact_id": "IM_66",
+  "threat_id": "TH_66",
+  "damage_scenario_id": "DS_66",
+  "asset_id": "AS_22",
+  "property": "integrity",
+  "impact_narrative": "Notifications in transit is compromised through tampering, causing this consequence: If the Integrity of Notifications in transit is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Notifications in transit operations.",
+  "tool_user": {
+   "safety": "Negligible",
+   "privacy": "Negligible",
+   "financial": "Negligible",
+   "operational": "Moderate",
+   "rationale_safety": "Not applicable - web-based tools operate in software only and cannot directly cause physical harm to the tool user. Safety impacts from downstream vehicle effects are out of scope for web-based TARA.",
+   "rationale_privacy": "The damage scenario contains no explicit exposure of personal, work-related, session, identity, certificate, or tenant data.",
+   "rationale_financial": "Not applicable - web-based automotive tools do not handle the tool user personal financial transactions. Direct financial loss to the tool user is not a credible damage scenario for this system type.",
+   "rationale_operational": "The described loss or degradation of service and operational capability has a moderate effect."
+  },
+  "other_stakeholders": {
+   "legal": "Negligible",
+   "financial": "Negligible",
+   "business": "Moderate",
+   "rationale_legal": "No explicit organizational legal or regulatory consequence is described.",
+   "rationale_financial": "No explicit financial loss, revenue impact, or direct monetary cost is described.",
+   "rationale_business": "The described service or business disruption has a moderate organizational impact."
+  },
+  "created_timestamp": "2026-11-13T22:00:27.576Z"
+ }
+]

@@ -1,0 +1,2444 @@
+[
+ {
+  "treatment_id": "TRT_01",
+  "risk_id": "RSK_01",
+  "threat_id": "TH_01",
+  "damage_scenario_id": "DS_01",
+  "attack_id": "AT_01",
+  "impact_id": "IM_01",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_01 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_01",
+   "goal_statement": "The Certificate service logic SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_01.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate service logic and prevent or detect the AT_01 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_01."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_01."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_02",
+  "risk_id": "RSK_02",
+  "threat_id": "TH_03",
+  "damage_scenario_id": "DS_03",
+  "attack_id": "AT_03",
+  "impact_id": "IM_03",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_02 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_02",
+   "goal_statement": "The Certificate service logic SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_02.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate service logic and prevent or detect the AT_03 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_03."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_03."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_03",
+  "risk_id": "RSK_03",
+  "threat_id": "TH_06",
+  "damage_scenario_id": "DS_06",
+  "attack_id": "AT_06",
+  "impact_id": "IM_06",
+  "asset_id": "AS_02",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_03 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_03",
+   "goal_statement": "The Key service signing logic SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_03.",
+   "self_test_note": "Verify that the controls are enforced specifically on Key service signing logic and prevent or detect the AT_06 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_06."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_06."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_04",
+  "risk_id": "RSK_04",
+  "threat_id": "TH_09",
+  "damage_scenario_id": "DS_09",
+  "attack_id": "AT_09",
+  "impact_id": "IM_09",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_04 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_04",
+   "goal_statement": "The Token check SHALL enforce Vault Dynamic Secrets Management and Compromised Cloud Credential Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_04.",
+   "self_test_note": "Verify that the controls are enforced specifically on Token check and prevent or detect the AT_09 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_55",
+    "control_title": "Vault Dynamic Secrets Management",
+    "control_type": "preventive",
+    "assignment_rationale": "Vault Dynamic Secrets Management directly reduces or detects resource-exhaustion requests and connection floods in AT_09."
+   },
+   {
+    "control_id": "CTR_63",
+    "control_title": "Compromised Cloud Credential Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Compromised Cloud Credential Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_09."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_05",
+  "risk_id": "RSK_05",
+  "threat_id": "TH_13",
+  "damage_scenario_id": "DS_13",
+  "attack_id": "AT_13",
+  "impact_id": "IM_13",
+  "asset_id": "AS_04",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_05 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_05",
+   "goal_statement": "The Revocation list builder SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_05.",
+   "self_test_note": "Verify that the controls are enforced specifically on Revocation list builder and prevent or detect the AT_13 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_13."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_13."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_06",
+  "risk_id": "RSK_06",
+  "threat_id": "TH_14",
+  "damage_scenario_id": "DS_14",
+  "attack_id": "AT_14",
+  "impact_id": "IM_14",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_06 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_06",
+   "goal_statement": "The Certificate records SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_06.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate records and prevent or detect the AT_14 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_14."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_14."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_07",
+  "risk_id": "RSK_07",
+  "threat_id": "TH_16",
+  "damage_scenario_id": "DS_16",
+  "attack_id": "AT_16",
+  "impact_id": "IM_16",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_07 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_07",
+   "goal_statement": "The Certificate records SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_07.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate records and prevent or detect the AT_16 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_16."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_16."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_08",
+  "risk_id": "RSK_08",
+  "threat_id": "TH_18",
+  "damage_scenario_id": "DS_18",
+  "attack_id": "AT_18",
+  "impact_id": "IM_18",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_08 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_08",
+   "goal_statement": "The Cached certificate data SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_08.",
+   "self_test_note": "Verify that the controls are enforced specifically on Cached certificate data and prevent or detect the AT_18 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_18."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_18."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_09",
+  "risk_id": "RSK_09",
+  "threat_id": "TH_20",
+  "damage_scenario_id": "DS_20",
+  "attack_id": "AT_20",
+  "impact_id": "IM_20",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_09 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_09",
+   "goal_statement": "The Cached certificate data SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_09.",
+   "self_test_note": "Verify that the controls are enforced specifically on Cached certificate data and prevent or detect the AT_20 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_20."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_20."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_10",
+  "risk_id": "RSK_10",
+  "threat_id": "TH_23",
+  "damage_scenario_id": "DS_23",
+  "attack_id": "AT_23",
+  "impact_id": "IM_23",
+  "asset_id": "AS_07",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_10 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_10",
+   "goal_statement": "The Revocation list SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_10.",
+   "self_test_note": "Verify that the controls are enforced specifically on Revocation list and prevent or detect the AT_23 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_23."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_23."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_11",
+  "risk_id": "RSK_11",
+  "threat_id": "TH_28",
+  "damage_scenario_id": "DS_28",
+  "attack_id": "AT_28",
+  "impact_id": "IM_28",
+  "asset_id": "AS_09",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_11 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_11",
+   "goal_statement": "The Application logs and metrics SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_11.",
+   "self_test_note": "Verify that the controls are enforced specifically on Application logs and metrics and prevent or detect the AT_28 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_28."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_28."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_12",
+  "risk_id": "RSK_12",
+  "threat_id": "TH_31",
+  "damage_scenario_id": "DS_31",
+  "attack_id": "AT_31",
+  "impact_id": "IM_31",
+  "asset_id": "AS_10",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_12 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_12",
+   "goal_statement": "The Audit trail records SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_12.",
+   "self_test_note": "Verify that the controls are enforced specifically on Audit trail records and prevent or detect the AT_31 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_31."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_31."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_13",
+  "risk_id": "RSK_13",
+  "threat_id": "TH_33",
+  "damage_scenario_id": "DS_33",
+  "attack_id": "AT_33",
+  "impact_id": "IM_33",
+  "asset_id": "AS_11",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_13 is high with score 8; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_13",
+   "goal_statement": "The Network exposure settings SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_13.",
+   "self_test_note": "Verify that the controls are enforced specifically on Network exposure settings and prevent or detect the AT_33 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_33."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_33."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_14",
+  "risk_id": "RSK_14",
+  "threat_id": "TH_34",
+  "damage_scenario_id": "DS_34",
+  "attack_id": "AT_34",
+  "impact_id": "IM_34",
+  "asset_id": "AS_11",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_14 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_14",
+   "goal_statement": "The Network exposure settings SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_14.",
+   "self_test_note": "Verify that the controls are enforced specifically on Network exposure settings and prevent or detect the AT_34 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_34."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_34."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_15",
+  "risk_id": "RSK_15",
+  "threat_id": "TH_36",
+  "damage_scenario_id": "DS_36",
+  "attack_id": "AT_36",
+  "impact_id": "IM_36",
+  "asset_id": "AS_12",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_15 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_15",
+   "goal_statement": "The Load balancer routing SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_15.",
+   "self_test_note": "Verify that the controls are enforced specifically on Load balancer routing and prevent or detect the AT_36 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_36."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_36."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_16",
+  "risk_id": "RSK_16",
+  "threat_id": "TH_38",
+  "damage_scenario_id": "DS_38",
+  "attack_id": "AT_38",
+  "impact_id": "IM_38",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_16 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_16",
+   "goal_statement": "The API gateway and its sign-in settings SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_16.",
+   "self_test_note": "Verify that the controls are enforced specifically on API gateway and its sign-in settings and prevent or detect the AT_38 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_38."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_38."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_17",
+  "risk_id": "RSK_17",
+  "threat_id": "TH_42",
+  "damage_scenario_id": "DS_42",
+  "attack_id": "AT_42",
+  "impact_id": "IM_42",
+  "asset_id": "AS_14",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_17 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_17",
+   "goal_statement": "The CDN delivery settings SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_17.",
+   "self_test_note": "Verify that the controls are enforced specifically on CDN delivery settings and prevent or detect the AT_42 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_42."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_42."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_18",
+  "risk_id": "RSK_18",
+  "threat_id": "TH_44",
+  "damage_scenario_id": "DS_44",
+  "attack_id": "AT_44",
+  "impact_id": "IM_44",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_18 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_18",
+   "goal_statement": "The Certificate issuance SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_18.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate issuance and prevent or detect the AT_44 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_44."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_44."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_19",
+  "risk_id": "RSK_19",
+  "threat_id": "TH_49",
+  "damage_scenario_id": "DS_49",
+  "attack_id": "AT_49",
+  "impact_id": "IM_49",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_19 is high with score 8; reducing the likelihood of resource-exhaustion requests and connection floods is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_19",
+   "goal_statement": "The Certificate revocation SHALL enforce API Rate Limiting and Throttling and API Abuse Detection to protect availability against resource-exhaustion requests and connection floods.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_19.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate revocation and prevent or detect the AT_49 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_32",
+    "control_title": "API Rate Limiting and Throttling",
+    "control_type": "preventive",
+    "assignment_rationale": "API Rate Limiting and Throttling directly reduces or detects resource-exhaustion requests and connection floods in AT_49."
+   },
+   {
+    "control_id": "CTR_33",
+    "control_title": "API Abuse Detection",
+    "control_type": "detective",
+    "assignment_rationale": "API Abuse Detection directly reduces or detects resource-exhaustion requests and connection floods in AT_49."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_20",
+  "risk_id": "RSK_20",
+  "threat_id": "TH_53",
+  "damage_scenario_id": "DS_53",
+  "attack_id": "AT_53",
+  "impact_id": "IM_53",
+  "asset_id": "AS_17",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_20 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_20",
+   "goal_statement": "The CA signing key SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_20.",
+   "self_test_note": "Verify that the controls are enforced specifically on CA signing key and prevent or detect the AT_53 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_53."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_53."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_21",
+  "risk_id": "RSK_21",
+  "threat_id": "TH_56",
+  "damage_scenario_id": "DS_56",
+  "attack_id": "AT_56",
+  "impact_id": "IM_56",
+  "asset_id": "AS_18",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_21 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_21",
+   "goal_statement": "The Database password SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_21.",
+   "self_test_note": "Verify that the controls are enforced specifically on Database password and prevent or detect the AT_56 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_56."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_56."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_22",
+  "risk_id": "RSK_22",
+  "threat_id": "TH_58",
+  "damage_scenario_id": "DS_58",
+  "attack_id": "AT_58",
+  "impact_id": "IM_58",
+  "asset_id": "AS_19",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_22 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_22",
+   "goal_statement": "The Notification API key SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_22.",
+   "self_test_note": "Verify that the controls are enforced specifically on Notification API key and prevent or detect the AT_58 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_58."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_58."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_23",
+  "risk_id": "RSK_23",
+  "threat_id": "TH_62",
+  "damage_scenario_id": "DS_62",
+  "attack_id": "AT_62",
+  "impact_id": "IM_62",
+  "asset_id": "AS_21",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_23 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_23",
+   "goal_statement": "The Certificate requests in transit SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_23.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate requests in transit and prevent or detect the AT_62 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_62."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_62."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_24",
+  "risk_id": "RSK_24",
+  "threat_id": "TH_65",
+  "damage_scenario_id": "DS_65",
+  "attack_id": "AT_65",
+  "impact_id": "IM_65",
+  "asset_id": "AS_22",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_24 is high with score 8; reducing the likelihood of unauthorized retrieval of sensitive data and credentials is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_24",
+   "goal_statement": "The Notifications in transit SHALL enforce End-to-End Encryption for Sensitive Data Flows and AWS Macie for PII Data Classification to protect confidentiality against unauthorized retrieval of sensitive data and credentials.",
+   "cal": 3,
+   "cal_rationale": "CAL 3 derived from high risk level for RSK_24.",
+   "self_test_note": "Verify that the controls are enforced specifically on Notifications in transit and prevent or detect the AT_65 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_50",
+    "control_title": "End-to-End Encryption for Sensitive Data Flows",
+    "control_type": "preventive",
+    "assignment_rationale": "End-to-End Encryption for Sensitive Data Flows directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_65."
+   },
+   {
+    "control_id": "CTR_54",
+    "control_title": "AWS Macie for PII Data Classification",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Macie for PII Data Classification directly reduces or detects unauthorized retrieval of sensitive data and credentials in AT_65."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 3,
+  "residual_risk_expected": "medium",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_25",
+  "risk_id": "RSK_25",
+  "threat_id": "TH_02",
+  "damage_scenario_id": "DS_02",
+  "attack_id": "AT_02",
+  "impact_id": "IM_02",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_25 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_25",
+   "goal_statement": "The Certificate service logic SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_25.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate service logic and prevent or detect the AT_02 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_02."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_02."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_26",
+  "risk_id": "RSK_26",
+  "threat_id": "TH_04",
+  "damage_scenario_id": "DS_04",
+  "attack_id": "AT_04",
+  "impact_id": "IM_04",
+  "asset_id": "AS_01",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_26 is medium with score 4; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_26",
+   "goal_statement": "The Certificate service logic SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_26.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate service logic and prevent or detect the AT_04 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive",
+    "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_04."
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective",
+    "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_04."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_27",
+  "risk_id": "RSK_27",
+  "threat_id": "TH_05",
+  "damage_scenario_id": "DS_05",
+  "attack_id": "AT_05",
+  "impact_id": "IM_05",
+  "asset_id": "AS_02",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_27 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_27",
+   "goal_statement": "The Key service signing logic SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_27.",
+   "self_test_note": "Verify that the controls are enforced specifically on Key service signing logic and prevent or detect the AT_05 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_05."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_05."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_28",
+  "risk_id": "RSK_28",
+  "threat_id": "TH_07",
+  "damage_scenario_id": "DS_07",
+  "attack_id": "AT_07",
+  "impact_id": "IM_07",
+  "asset_id": "AS_02",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_28 is medium with score 4; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_28",
+   "goal_statement": "The Key service signing logic SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_28.",
+   "self_test_note": "Verify that the controls are enforced specifically on Key service signing logic and prevent or detect the AT_07 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive",
+    "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_07."
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective",
+    "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_07."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_29",
+  "risk_id": "RSK_29",
+  "threat_id": "TH_08",
+  "damage_scenario_id": "DS_08",
+  "attack_id": "AT_08",
+  "impact_id": "IM_08",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_29 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_29",
+   "goal_statement": "The Token check SHALL enforce Vault Dynamic Secrets Management and Compromised Cloud Credential Detection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_29.",
+   "self_test_note": "Verify that the controls are enforced specifically on Token check and prevent or detect the AT_08 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_55",
+    "control_title": "Vault Dynamic Secrets Management",
+    "control_type": "preventive",
+    "assignment_rationale": "Vault Dynamic Secrets Management directly reduces or detects unauthorized configuration or data modifications in AT_08."
+   },
+   {
+    "control_id": "CTR_63",
+    "control_title": "Compromised Cloud Credential Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Compromised Cloud Credential Detection directly reduces or detects unauthorized configuration or data modifications in AT_08."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_30",
+  "risk_id": "RSK_30",
+  "threat_id": "TH_10",
+  "damage_scenario_id": "DS_10",
+  "attack_id": "AT_10",
+  "impact_id": "IM_10",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_30 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_30",
+   "goal_statement": "The Token check SHALL enforce Vault Dynamic Secrets Management and Compromised Cloud Credential Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_30.",
+   "self_test_note": "Verify that the controls are enforced specifically on Token check and prevent or detect the AT_10 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_55",
+    "control_title": "Vault Dynamic Secrets Management",
+    "control_type": "preventive",
+    "assignment_rationale": "Vault Dynamic Secrets Management directly reduces or detects unverified identities and credential replay in AT_10."
+   },
+   {
+    "control_id": "CTR_63",
+    "control_title": "Compromised Cloud Credential Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Compromised Cloud Credential Detection directly reduces or detects unverified identities and credential replay in AT_10."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_31",
+  "risk_id": "RSK_31",
+  "threat_id": "TH_11",
+  "damage_scenario_id": "DS_11",
+  "attack_id": "AT_11",
+  "impact_id": "IM_11",
+  "asset_id": "AS_03",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_31 is medium with score 4; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_31",
+   "goal_statement": "The Token check SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_31.",
+   "self_test_note": "Verify that the controls are enforced specifically on Token check and prevent or detect the AT_11 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive",
+    "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_11."
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective",
+    "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_11."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_32",
+  "risk_id": "RSK_32",
+  "threat_id": "TH_12",
+  "damage_scenario_id": "DS_12",
+  "attack_id": "AT_12",
+  "impact_id": "IM_12",
+  "asset_id": "AS_04",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_32 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_32",
+   "goal_statement": "The Revocation list builder SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_32.",
+   "self_test_note": "Verify that the controls are enforced specifically on Revocation list builder and prevent or detect the AT_12 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_12."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_12."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_33",
+  "risk_id": "RSK_33",
+  "threat_id": "TH_15",
+  "damage_scenario_id": "DS_15",
+  "attack_id": "AT_15",
+  "impact_id": "IM_15",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_33 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_33",
+   "goal_statement": "The Certificate records SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_33.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate records and prevent or detect the AT_15 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_15."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_15."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_34",
+  "risk_id": "RSK_34",
+  "threat_id": "TH_17",
+  "damage_scenario_id": "DS_17",
+  "attack_id": "AT_17",
+  "impact_id": "IM_17",
+  "asset_id": "AS_05",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_34 is medium with score 4; reducing the likelihood of security-relevant actions without tamper-evident attribution is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_34",
+   "goal_statement": "The Certificate records SHALL enforce Audit Log Integrity and Tamper-Proofing and AWS CloudTrail Log Analysis to protect non_repudiation against security-relevant actions without tamper-evident attribution.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_34.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate records and prevent or detect the AT_17 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive",
+    "assignment_rationale": "Audit Log Integrity and Tamper-Proofing directly reduces or detects security-relevant actions without tamper-evident attribution in AT_17."
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective",
+    "assignment_rationale": "AWS CloudTrail Log Analysis directly reduces or detects security-relevant actions without tamper-evident attribution in AT_17."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_35",
+  "risk_id": "RSK_35",
+  "threat_id": "TH_19",
+  "damage_scenario_id": "DS_19",
+  "attack_id": "AT_19",
+  "impact_id": "IM_19",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_35 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_35",
+   "goal_statement": "The Cached certificate data SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_35.",
+   "self_test_note": "Verify that the controls are enforced specifically on Cached certificate data and prevent or detect the AT_19 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_19."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_19."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_36",
+  "risk_id": "RSK_36",
+  "threat_id": "TH_21",
+  "damage_scenario_id": "DS_21",
+  "attack_id": "AT_21",
+  "impact_id": "IM_21",
+  "asset_id": "AS_06",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_36 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_36",
+   "goal_statement": "The Cached certificate data SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_36.",
+   "self_test_note": "Verify that the controls are enforced specifically on Cached certificate data and prevent or detect the AT_21 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_21."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_21."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_37",
+  "risk_id": "RSK_37",
+  "threat_id": "TH_22",
+  "damage_scenario_id": "DS_22",
+  "attack_id": "AT_22",
+  "impact_id": "IM_22",
+  "asset_id": "AS_07",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_37 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_37",
+   "goal_statement": "The Revocation list SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_37.",
+   "self_test_note": "Verify that the controls are enforced specifically on Revocation list and prevent or detect the AT_22 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_22."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_22."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_38",
+  "risk_id": "RSK_38",
+  "threat_id": "TH_24",
+  "damage_scenario_id": "DS_24",
+  "attack_id": "AT_24",
+  "impact_id": "IM_24",
+  "asset_id": "AS_07",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_38 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_38",
+   "goal_statement": "The Revocation list SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_38.",
+   "self_test_note": "Verify that the controls are enforced specifically on Revocation list and prevent or detect the AT_24 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_24."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_24."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_39",
+  "risk_id": "RSK_39",
+  "threat_id": "TH_25",
+  "damage_scenario_id": "DS_25",
+  "attack_id": "AT_25",
+  "impact_id": "IM_25",
+  "asset_id": "AS_08",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_39 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_39",
+   "goal_statement": "The Portal web pages SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_39.",
+   "self_test_note": "Verify that the controls are enforced specifically on Portal web pages and prevent or detect the AT_25 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_25."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_25."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_40",
+  "risk_id": "RSK_40",
+  "threat_id": "TH_26",
+  "damage_scenario_id": "DS_26",
+  "attack_id": "AT_26",
+  "impact_id": "IM_26",
+  "asset_id": "AS_08",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_40 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_40",
+   "goal_statement": "The Portal web pages SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_40.",
+   "self_test_note": "Verify that the controls are enforced specifically on Portal web pages and prevent or detect the AT_26 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_26."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_26."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_41",
+  "risk_id": "RSK_41",
+  "threat_id": "TH_27",
+  "damage_scenario_id": "DS_27",
+  "attack_id": "AT_27",
+  "impact_id": "IM_27",
+  "asset_id": "AS_09",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_41 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_41",
+   "goal_statement": "The Application logs and metrics SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_41.",
+   "self_test_note": "Verify that the controls are enforced specifically on Application logs and metrics and prevent or detect the AT_27 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_27."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_27."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_42",
+  "risk_id": "RSK_42",
+  "threat_id": "TH_29",
+  "damage_scenario_id": "DS_29",
+  "attack_id": "AT_29",
+  "impact_id": "IM_29",
+  "asset_id": "AS_09",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_42 is medium with score 4; reducing the likelihood of security-relevant actions without tamper-evident attribution is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_42",
+   "goal_statement": "The Application logs and metrics SHALL enforce Audit Log Integrity and Tamper-Proofing and AWS CloudTrail Log Analysis to protect non_repudiation against security-relevant actions without tamper-evident attribution.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_42.",
+   "self_test_note": "Verify that the controls are enforced specifically on Application logs and metrics and prevent or detect the AT_29 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive",
+    "assignment_rationale": "Audit Log Integrity and Tamper-Proofing directly reduces or detects security-relevant actions without tamper-evident attribution in AT_29."
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective",
+    "assignment_rationale": "AWS CloudTrail Log Analysis directly reduces or detects security-relevant actions without tamper-evident attribution in AT_29."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_43",
+  "risk_id": "RSK_43",
+  "threat_id": "TH_30",
+  "damage_scenario_id": "DS_30",
+  "attack_id": "AT_30",
+  "impact_id": "IM_30",
+  "asset_id": "AS_10",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_43 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_43",
+   "goal_statement": "The Audit trail records SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_43.",
+   "self_test_note": "Verify that the controls are enforced specifically on Audit trail records and prevent or detect the AT_30 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_30."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_30."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_44",
+  "risk_id": "RSK_44",
+  "threat_id": "TH_32",
+  "damage_scenario_id": "DS_32",
+  "attack_id": "AT_32",
+  "impact_id": "IM_32",
+  "asset_id": "AS_10",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_44 is medium with score 4; reducing the likelihood of security-relevant actions without tamper-evident attribution is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_44",
+   "goal_statement": "The Audit trail records SHALL enforce Audit Log Integrity and Tamper-Proofing and AWS CloudTrail Log Analysis to protect non_repudiation against security-relevant actions without tamper-evident attribution.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_44.",
+   "self_test_note": "Verify that the controls are enforced specifically on Audit trail records and prevent or detect the AT_32 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive",
+    "assignment_rationale": "Audit Log Integrity and Tamper-Proofing directly reduces or detects security-relevant actions without tamper-evident attribution in AT_32."
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective",
+    "assignment_rationale": "AWS CloudTrail Log Analysis directly reduces or detects security-relevant actions without tamper-evident attribution in AT_32."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_45",
+  "risk_id": "RSK_45",
+  "threat_id": "TH_35",
+  "damage_scenario_id": "DS_35",
+  "attack_id": "AT_35",
+  "impact_id": "IM_35",
+  "asset_id": "AS_12",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_45 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_45",
+   "goal_statement": "The Load balancer routing SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_45.",
+   "self_test_note": "Verify that the controls are enforced specifically on Load balancer routing and prevent or detect the AT_35 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_35."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_35."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_46",
+  "risk_id": "RSK_46",
+  "threat_id": "TH_37",
+  "damage_scenario_id": "DS_37",
+  "attack_id": "AT_37",
+  "impact_id": "IM_37",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_46 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_46",
+   "goal_statement": "The API gateway and its sign-in settings SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_46.",
+   "self_test_note": "Verify that the controls are enforced specifically on API gateway and its sign-in settings and prevent or detect the AT_37 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_37."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_37."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_47",
+  "risk_id": "RSK_47",
+  "threat_id": "TH_39",
+  "damage_scenario_id": "DS_39",
+  "attack_id": "AT_39",
+  "impact_id": "IM_39",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_47 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_47",
+   "goal_statement": "The API gateway and its sign-in settings SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_47.",
+   "self_test_note": "Verify that the controls are enforced specifically on API gateway and its sign-in settings and prevent or detect the AT_39 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_39."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_39."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_48",
+  "risk_id": "RSK_48",
+  "threat_id": "TH_40",
+  "damage_scenario_id": "DS_40",
+  "attack_id": "AT_40",
+  "impact_id": "IM_40",
+  "asset_id": "AS_13",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_48 is medium with score 4; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_48",
+   "goal_statement": "The API gateway and its sign-in settings SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_48.",
+   "self_test_note": "Verify that the controls are enforced specifically on API gateway and its sign-in settings and prevent or detect the AT_40 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive",
+    "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_40."
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective",
+    "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_40."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_49",
+  "risk_id": "RSK_49",
+  "threat_id": "TH_41",
+  "damage_scenario_id": "DS_41",
+  "attack_id": "AT_41",
+  "impact_id": "IM_41",
+  "asset_id": "AS_14",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_49 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_49",
+   "goal_statement": "The CDN delivery settings SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_49.",
+   "self_test_note": "Verify that the controls are enforced specifically on CDN delivery settings and prevent or detect the AT_41 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_41."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_41."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_50",
+  "risk_id": "RSK_50",
+  "threat_id": "TH_43",
+  "damage_scenario_id": "DS_43",
+  "attack_id": "AT_43",
+  "impact_id": "IM_43",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_50 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_50",
+   "goal_statement": "The Certificate issuance SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_50.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate issuance and prevent or detect the AT_43 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_43."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_43."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_51",
+  "risk_id": "RSK_51",
+  "threat_id": "TH_45",
+  "damage_scenario_id": "DS_45",
+  "attack_id": "AT_45",
+  "impact_id": "IM_45",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_51 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_51",
+   "goal_statement": "The Certificate issuance SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_51.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate issuance and prevent or detect the AT_45 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_45."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_45."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_52",
+  "risk_id": "RSK_52",
+  "threat_id": "TH_46",
+  "damage_scenario_id": "DS_46",
+  "attack_id": "AT_46",
+  "impact_id": "IM_46",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_52 is medium with score 4; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_52",
+   "goal_statement": "The Certificate issuance SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_52.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate issuance and prevent or detect the AT_46 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive",
+    "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_46."
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective",
+    "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_46."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_53",
+  "risk_id": "RSK_53",
+  "threat_id": "TH_47",
+  "damage_scenario_id": "DS_47",
+  "attack_id": "AT_47",
+  "impact_id": "IM_47",
+  "asset_id": "AS_15",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_53 is medium with score 4; reducing the likelihood of security-relevant actions without tamper-evident attribution is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_53",
+   "goal_statement": "The Certificate issuance SHALL enforce Audit Log Integrity and Tamper-Proofing and AWS CloudTrail Log Analysis to protect non_repudiation against security-relevant actions without tamper-evident attribution.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_53.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate issuance and prevent or detect the AT_47 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive",
+    "assignment_rationale": "Audit Log Integrity and Tamper-Proofing directly reduces or detects security-relevant actions without tamper-evident attribution in AT_47."
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective",
+    "assignment_rationale": "AWS CloudTrail Log Analysis directly reduces or detects security-relevant actions without tamper-evident attribution in AT_47."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_54",
+  "risk_id": "RSK_54",
+  "threat_id": "TH_48",
+  "damage_scenario_id": "DS_48",
+  "attack_id": "AT_48",
+  "impact_id": "IM_48",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_54 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_54",
+   "goal_statement": "The Certificate revocation SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_54.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate revocation and prevent or detect the AT_48 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_48."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_48."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_55",
+  "risk_id": "RSK_55",
+  "threat_id": "TH_50",
+  "damage_scenario_id": "DS_50",
+  "attack_id": "AT_50",
+  "impact_id": "IM_50",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_55 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_55",
+   "goal_statement": "The Certificate revocation SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_55.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate revocation and prevent or detect the AT_50 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_50."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_50."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_56",
+  "risk_id": "RSK_56",
+  "threat_id": "TH_51",
+  "damage_scenario_id": "DS_51",
+  "attack_id": "AT_51",
+  "impact_id": "IM_51",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_56 is medium with score 4; reducing the likelihood of requests that exceed the authenticated identity and authorization scope is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_56",
+   "goal_statement": "The Certificate revocation SHALL enforce Role-Based Access Control (RBAC) Design and Enforcement and Privileged Session Monitoring to protect authorization against requests that exceed the authenticated identity and authorization scope.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_56.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate revocation and prevent or detect the AT_51 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_16",
+    "control_title": "Role-Based Access Control (RBAC) Design and Enforcement",
+    "control_type": "preventive",
+    "assignment_rationale": "Role-Based Access Control (RBAC) Design and Enforcement directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_51."
+   },
+   {
+    "control_id": "CTR_22",
+    "control_title": "Privileged Session Monitoring",
+    "control_type": "detective",
+    "assignment_rationale": "Privileged Session Monitoring directly reduces or detects requests that exceed the authenticated identity and authorization scope in AT_51."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_57",
+  "risk_id": "RSK_57",
+  "threat_id": "TH_52",
+  "damage_scenario_id": "DS_52",
+  "attack_id": "AT_52",
+  "impact_id": "IM_52",
+  "asset_id": "AS_16",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_57 is medium with score 4; reducing the likelihood of security-relevant actions without tamper-evident attribution is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_57",
+   "goal_statement": "The Certificate revocation SHALL enforce Audit Log Integrity and Tamper-Proofing and AWS CloudTrail Log Analysis to protect non_repudiation against security-relevant actions without tamper-evident attribution.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_57.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate revocation and prevent or detect the AT_52 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive",
+    "assignment_rationale": "Audit Log Integrity and Tamper-Proofing directly reduces or detects security-relevant actions without tamper-evident attribution in AT_52."
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective",
+    "assignment_rationale": "AWS CloudTrail Log Analysis directly reduces or detects security-relevant actions without tamper-evident attribution in AT_52."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_58",
+  "risk_id": "RSK_58",
+  "threat_id": "TH_54",
+  "damage_scenario_id": "DS_54",
+  "attack_id": "AT_54",
+  "impact_id": "IM_54",
+  "asset_id": "AS_17",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_58 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_58",
+   "goal_statement": "The CA signing key SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_58.",
+   "self_test_note": "Verify that the controls are enforced specifically on CA signing key and prevent or detect the AT_54 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_54."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_54."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_59",
+  "risk_id": "RSK_59",
+  "threat_id": "TH_55",
+  "damage_scenario_id": "DS_55",
+  "attack_id": "AT_55",
+  "impact_id": "IM_55",
+  "asset_id": "AS_17",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_59 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_59",
+   "goal_statement": "The CA signing key SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_59.",
+   "self_test_note": "Verify that the controls are enforced specifically on CA signing key and prevent or detect the AT_55 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_55."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_55."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_60",
+  "risk_id": "RSK_60",
+  "threat_id": "TH_57",
+  "damage_scenario_id": "DS_57",
+  "attack_id": "AT_57",
+  "impact_id": "IM_57",
+  "asset_id": "AS_18",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_60 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_60",
+   "goal_statement": "The Database password SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_60.",
+   "self_test_note": "Verify that the controls are enforced specifically on Database password and prevent or detect the AT_57 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_57."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_57."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_61",
+  "risk_id": "RSK_61",
+  "threat_id": "TH_59",
+  "damage_scenario_id": "DS_59",
+  "attack_id": "AT_59",
+  "impact_id": "IM_59",
+  "asset_id": "AS_19",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_61 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_61",
+   "goal_statement": "The Notification API key SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_61.",
+   "self_test_note": "Verify that the controls are enforced specifically on Notification API key and prevent or detect the AT_59 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_59."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_59."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_62",
+  "risk_id": "RSK_62",
+  "threat_id": "TH_60",
+  "damage_scenario_id": "DS_60",
+  "attack_id": "AT_60",
+  "impact_id": "IM_60",
+  "asset_id": "AS_20",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_62 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_62",
+   "goal_statement": "The Deploy identity SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_62.",
+   "self_test_note": "Verify that the controls are enforced specifically on Deploy identity and prevent or detect the AT_60 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_60."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_60."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_63",
+  "risk_id": "RSK_63",
+  "threat_id": "TH_61",
+  "damage_scenario_id": "DS_61",
+  "attack_id": "AT_61",
+  "impact_id": "IM_61",
+  "asset_id": "AS_20",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_63 is medium with score 4; reducing the likelihood of security-relevant actions without tamper-evident attribution is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_63",
+   "goal_statement": "The Deploy identity SHALL enforce Audit Log Integrity and Tamper-Proofing and AWS CloudTrail Log Analysis to protect non_repudiation against security-relevant actions without tamper-evident attribution.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_63.",
+   "self_test_note": "Verify that the controls are enforced specifically on Deploy identity and prevent or detect the AT_61 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_57",
+    "control_title": "Audit Log Integrity and Tamper-Proofing",
+    "control_type": "preventive",
+    "assignment_rationale": "Audit Log Integrity and Tamper-Proofing directly reduces or detects security-relevant actions without tamper-evident attribution in AT_61."
+   },
+   {
+    "control_id": "CTR_59",
+    "control_title": "AWS CloudTrail Log Analysis",
+    "control_type": "detective",
+    "assignment_rationale": "AWS CloudTrail Log Analysis directly reduces or detects security-relevant actions without tamper-evident attribution in AT_61."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_64",
+  "risk_id": "RSK_64",
+  "threat_id": "TH_63",
+  "damage_scenario_id": "DS_63",
+  "attack_id": "AT_63",
+  "impact_id": "IM_63",
+  "asset_id": "AS_21",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_64 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_64",
+   "goal_statement": "The Certificate requests in transit SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_64.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate requests in transit and prevent or detect the AT_63 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_63."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_63."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_65",
+  "risk_id": "RSK_65",
+  "threat_id": "TH_64",
+  "damage_scenario_id": "DS_64",
+  "attack_id": "AT_64",
+  "impact_id": "IM_64",
+  "asset_id": "AS_21",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_65 is medium with score 4; reducing the likelihood of unverified identities and credential replay is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_65",
+   "goal_statement": "The Certificate requests in transit SHALL enforce Enforce Multi-Factor Authentication and Anomalous Authentication Pattern Detection to protect authenticity against unverified identities and credential replay.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_65.",
+   "self_test_note": "Verify that the controls are enforced specifically on Certificate requests in transit and prevent or detect the AT_64 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_01",
+    "control_title": "Enforce Multi-Factor Authentication",
+    "control_type": "preventive",
+    "assignment_rationale": "Enforce Multi-Factor Authentication directly reduces or detects unverified identities and credential replay in AT_64."
+   },
+   {
+    "control_id": "CTR_11",
+    "control_title": "Anomalous Authentication Pattern Detection",
+    "control_type": "detective",
+    "assignment_rationale": "Anomalous Authentication Pattern Detection directly reduces or detects unverified identities and credential replay in AT_64."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ },
+ {
+  "treatment_id": "TRT_66",
+  "risk_id": "RSK_66",
+  "threat_id": "TH_66",
+  "damage_scenario_id": "DS_66",
+  "attack_id": "AT_66",
+  "impact_id": "IM_66",
+  "asset_id": "AS_22",
+  "treatment_option": "reduce",
+  "treatment_rationale": "RSK_66 is medium with score 4; reducing the likelihood of unauthorized configuration or data modifications is required before residual-risk acceptance.",
+  "cybersecurity_goal": {
+   "goal_id": "CG_66",
+   "goal_statement": "The Notifications in transit SHALL enforce AWS Config Compliance Rules and Cloud Workload Protection to protect integrity against unauthorized configuration or data modifications.",
+   "cal": 2,
+   "cal_rationale": "CAL 2 derived from medium risk level for RSK_66.",
+   "self_test_note": "Verify that the controls are enforced specifically on Notifications in transit and prevent or detect the AT_66 mechanism; a generic control applied only to another asset does not satisfy this goal."
+  },
+  "cybersecurity_claim": null,
+  "controls_assigned": [
+   {
+    "control_id": "CTR_72",
+    "control_title": "AWS Config Compliance Rules",
+    "control_type": "detective",
+    "assignment_rationale": "AWS Config Compliance Rules directly reduces or detects unauthorized configuration or data modifications in AT_66."
+   },
+   {
+    "control_id": "CTR_74",
+    "control_title": "Cloud Workload Protection",
+    "control_type": "preventive",
+    "assignment_rationale": "Cloud Workload Protection directly reduces or detects unauthorized configuration or data modifications in AT_66."
+   }
+  ],
+  "avoidance_action": null,
+  "cal": 2,
+  "residual_risk_expected": "low",
+  "created_timestamp": "2026-11-13T22:00:27.765Z"
+ }
+]

@@ -1,0 +1,596 @@
+[
+ {
+  "damage_id": "DS_01",
+  "asset_id": "AS_01",
+  "asset_title": "Certificate service logic",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of Certificate service logic is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate service logic operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_02",
+  "asset_id": "AS_01",
+  "asset_title": "Certificate service logic",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Certificate service logic is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate service logic operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_03",
+  "asset_id": "AS_01",
+  "asset_title": "Certificate service logic",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Certificate service logic is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate service logic operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_04",
+  "asset_id": "AS_01",
+  "asset_title": "Certificate service logic",
+  "property": "authorization",
+  "damage_scenario": "If the Authorization of Certificate service logic is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate service logic operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_05",
+  "asset_id": "AS_02",
+  "asset_title": "Key service signing logic",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Key service signing logic is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Key service signing logic operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_06",
+  "asset_id": "AS_02",
+  "asset_title": "Key service signing logic",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Key service signing logic is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Key service signing logic operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_07",
+  "asset_id": "AS_02",
+  "asset_title": "Key service signing logic",
+  "property": "authorization",
+  "damage_scenario": "If the Authorization of Key service signing logic is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Key service signing logic operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_08",
+  "asset_id": "AS_03",
+  "asset_title": "Token check",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Token check is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Token check operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_09",
+  "asset_id": "AS_03",
+  "asset_title": "Token check",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Token check is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Token check operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_10",
+  "asset_id": "AS_03",
+  "asset_title": "Token check",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Token check is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Token check operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_11",
+  "asset_id": "AS_03",
+  "asset_title": "Token check",
+  "property": "authorization",
+  "damage_scenario": "If the Authorization of Token check is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Token check operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_12",
+  "asset_id": "AS_04",
+  "asset_title": "Revocation list builder",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Revocation list builder is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Revocation list builder operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_13",
+  "asset_id": "AS_04",
+  "asset_title": "Revocation list builder",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Revocation list builder is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Revocation list builder operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_14",
+  "asset_id": "AS_05",
+  "asset_title": "Certificate records",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of Certificate records is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate records operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_15",
+  "asset_id": "AS_05",
+  "asset_title": "Certificate records",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Certificate records is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate records operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_16",
+  "asset_id": "AS_05",
+  "asset_title": "Certificate records",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Certificate records is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate records operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_17",
+  "asset_id": "AS_05",
+  "asset_title": "Certificate records",
+  "property": "non_repudiation",
+  "damage_scenario": "If the Non Repudiation of Certificate records is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate records operations.",
+  "stakeholder_affected": "regulator",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_18",
+  "asset_id": "AS_06",
+  "asset_title": "Cached certificate data",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of Cached certificate data is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Cached certificate data operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_19",
+  "asset_id": "AS_06",
+  "asset_title": "Cached certificate data",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Cached certificate data is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Cached certificate data operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_20",
+  "asset_id": "AS_06",
+  "asset_title": "Cached certificate data",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Cached certificate data is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Cached certificate data operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_21",
+  "asset_id": "AS_06",
+  "asset_title": "Cached certificate data",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Cached certificate data is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Cached certificate data operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_22",
+  "asset_id": "AS_07",
+  "asset_title": "Revocation list",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Revocation list is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Revocation list operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_23",
+  "asset_id": "AS_07",
+  "asset_title": "Revocation list",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Revocation list is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Revocation list operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_24",
+  "asset_id": "AS_07",
+  "asset_title": "Revocation list",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Revocation list is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Revocation list operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_25",
+  "asset_id": "AS_08",
+  "asset_title": "Portal web pages",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Portal web pages is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Portal web pages operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_26",
+  "asset_id": "AS_08",
+  "asset_title": "Portal web pages",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Portal web pages is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Portal web pages operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_27",
+  "asset_id": "AS_09",
+  "asset_title": "Application logs and metrics",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Application logs and metrics is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Application logs and metrics operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_28",
+  "asset_id": "AS_09",
+  "asset_title": "Application logs and metrics",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Application logs and metrics is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Application logs and metrics operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_29",
+  "asset_id": "AS_09",
+  "asset_title": "Application logs and metrics",
+  "property": "non_repudiation",
+  "damage_scenario": "If the Non Repudiation of Application logs and metrics is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Application logs and metrics operations.",
+  "stakeholder_affected": "regulator",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_30",
+  "asset_id": "AS_10",
+  "asset_title": "Audit trail records",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Audit trail records is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Audit trail records operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_31",
+  "asset_id": "AS_10",
+  "asset_title": "Audit trail records",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Audit trail records is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Audit trail records operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_32",
+  "asset_id": "AS_10",
+  "asset_title": "Audit trail records",
+  "property": "non_repudiation",
+  "damage_scenario": "If the Non Repudiation of Audit trail records is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Audit trail records operations.",
+  "stakeholder_affected": "regulator",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_33",
+  "asset_id": "AS_11",
+  "asset_title": "Network exposure settings",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Network exposure settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Network exposure settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_34",
+  "asset_id": "AS_11",
+  "asset_title": "Network exposure settings",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Network exposure settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Network exposure settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_35",
+  "asset_id": "AS_12",
+  "asset_title": "Load balancer routing",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Load balancer routing is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Load balancer routing operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_36",
+  "asset_id": "AS_12",
+  "asset_title": "Load balancer routing",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Load balancer routing is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Load balancer routing operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_37",
+  "asset_id": "AS_13",
+  "asset_title": "API gateway and its sign-in settings",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of API gateway and its sign-in settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_38",
+  "asset_id": "AS_13",
+  "asset_title": "API gateway and its sign-in settings",
+  "property": "availability",
+  "damage_scenario": "If the Availability of API gateway and its sign-in settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_39",
+  "asset_id": "AS_13",
+  "asset_title": "API gateway and its sign-in settings",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of API gateway and its sign-in settings is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_40",
+  "asset_id": "AS_13",
+  "asset_title": "API gateway and its sign-in settings",
+  "property": "authorization",
+  "damage_scenario": "If the Authorization of API gateway and its sign-in settings is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of API gateway and its sign-in settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_41",
+  "asset_id": "AS_14",
+  "asset_title": "CDN delivery settings",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of CDN delivery settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of CDN delivery settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_42",
+  "asset_id": "AS_14",
+  "asset_title": "CDN delivery settings",
+  "property": "availability",
+  "damage_scenario": "If the Availability of CDN delivery settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of CDN delivery settings operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_43",
+  "asset_id": "AS_15",
+  "asset_title": "Certificate issuance",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Certificate issuance is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate issuance operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_44",
+  "asset_id": "AS_15",
+  "asset_title": "Certificate issuance",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Certificate issuance is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate issuance operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_45",
+  "asset_id": "AS_15",
+  "asset_title": "Certificate issuance",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Certificate issuance is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate issuance operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_46",
+  "asset_id": "AS_15",
+  "asset_title": "Certificate issuance",
+  "property": "authorization",
+  "damage_scenario": "If the Authorization of Certificate issuance is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate issuance operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_47",
+  "asset_id": "AS_15",
+  "asset_title": "Certificate issuance",
+  "property": "non_repudiation",
+  "damage_scenario": "If the Non Repudiation of Certificate issuance is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate issuance operations.",
+  "stakeholder_affected": "regulator",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_48",
+  "asset_id": "AS_16",
+  "asset_title": "Certificate revocation",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Certificate revocation is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate revocation operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_49",
+  "asset_id": "AS_16",
+  "asset_title": "Certificate revocation",
+  "property": "availability",
+  "damage_scenario": "If the Availability of Certificate revocation is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate revocation operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_50",
+  "asset_id": "AS_16",
+  "asset_title": "Certificate revocation",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Certificate revocation is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate revocation operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_51",
+  "asset_id": "AS_16",
+  "asset_title": "Certificate revocation",
+  "property": "authorization",
+  "damage_scenario": "If the Authorization of Certificate revocation is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate revocation operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_52",
+  "asset_id": "AS_16",
+  "asset_title": "Certificate revocation",
+  "property": "non_repudiation",
+  "damage_scenario": "If the Non Repudiation of Certificate revocation is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate revocation operations.",
+  "stakeholder_affected": "regulator",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_53",
+  "asset_id": "AS_17",
+  "asset_title": "CA signing key",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of CA signing key is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of CA signing key operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_54",
+  "asset_id": "AS_17",
+  "asset_title": "CA signing key",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of CA signing key is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of CA signing key operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_55",
+  "asset_id": "AS_17",
+  "asset_title": "CA signing key",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of CA signing key is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of CA signing key operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_56",
+  "asset_id": "AS_18",
+  "asset_title": "Database password",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of Database password is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Database password operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_57",
+  "asset_id": "AS_18",
+  "asset_title": "Database password",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Database password is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Database password operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_58",
+  "asset_id": "AS_19",
+  "asset_title": "Notification API key",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of Notification API key is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Notification API key operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_59",
+  "asset_id": "AS_19",
+  "asset_title": "Notification API key",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Notification API key is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Notification API key operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_60",
+  "asset_id": "AS_20",
+  "asset_title": "Deploy identity",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Deploy identity is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Deploy identity operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_61",
+  "asset_id": "AS_20",
+  "asset_title": "Deploy identity",
+  "property": "non_repudiation",
+  "damage_scenario": "If the Non Repudiation of Deploy identity is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Deploy identity operations.",
+  "stakeholder_affected": "regulator",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_62",
+  "asset_id": "AS_21",
+  "asset_title": "Certificate requests in transit",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of Certificate requests in transit is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate requests in transit operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_63",
+  "asset_id": "AS_21",
+  "asset_title": "Certificate requests in transit",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Certificate requests in transit is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate requests in transit operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_64",
+  "asset_id": "AS_21",
+  "asset_title": "Certificate requests in transit",
+  "property": "authenticity",
+  "damage_scenario": "If the Authenticity of Certificate requests in transit is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate requests in transit operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_65",
+  "asset_id": "AS_22",
+  "asset_title": "Notifications in transit",
+  "property": "confidentiality",
+  "damage_scenario": "If the Confidentiality of Notifications in transit is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Notifications in transit operations.",
+  "stakeholder_affected": "tool_user",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ },
+ {
+  "damage_id": "DS_66",
+  "asset_id": "AS_22",
+  "asset_title": "Notifications in transit",
+  "property": "integrity",
+  "damage_scenario": "If the Integrity of Notifications in transit is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Notifications in transit operations.",
+  "stakeholder_affected": "organization",
+  "created_timestamp": "2026-11-13T22:00:27.257Z"
+ }
+]

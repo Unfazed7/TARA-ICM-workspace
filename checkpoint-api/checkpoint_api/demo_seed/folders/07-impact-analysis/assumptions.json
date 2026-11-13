@@ -1,0 +1,12 @@
+[
+ {
+  "about_id": "DS_14",
+  "field": "tool_user.privacy",
+  "text": "Certificate records are taken to hold the names of the people who asked for a certificate."
+ },
+ {
+  "about_id": "DS_44",
+  "field": "other_stakeholders.financial",
+  "text": "A stop of certificate issuance is taken to stop a production line after one working day."
+ }
+]

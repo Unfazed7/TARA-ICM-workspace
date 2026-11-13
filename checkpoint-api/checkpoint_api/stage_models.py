@@ -674,3 +674,23 @@ class StageAssumptionReview(StageBase):
     note = Column(Text, nullable=True)
     reviewed_by = Column(String, nullable=False)
     reviewed_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+
+# ── The demo TARA (D-67) ──────────────────────────────────────────────────────
+
+
+class DemoCopy(StageBase):
+    """Marks an assessment as one tester's working copy of the demo TARA, for one login session.
+
+    Kept in its own table so the `assessments` table of a live database is not altered. The copy is deleted at
+    logout, or when it is older than a login can last.
+    """
+
+    __tablename__ = "demo_copies"
+    __table_args__ = (UniqueConstraint("owner_id", "session_key"),)
+
+    id = Column(Integer, primary_key=True)
+    assessment_id = Column(String, nullable=False, unique=True, index=True)
+    owner_id = Column(String, nullable=False, index=True)
+    session_key = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)

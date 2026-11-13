@@ -1,0 +1,12 @@
+[
+ {
+  "about_id": "TH_10",
+  "field": "attack_vector",
+  "text": "The token check is taken to be reachable from the internet."
+ },
+ {
+  "about_id": "TH_05",
+  "field": "privileges_required",
+  "text": "A change to the signing logic is taken to need an operator account."
+ }
+]

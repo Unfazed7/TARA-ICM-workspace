@@ -258,6 +258,107 @@ def change_property(db: Session, assessment_id: str, asset_id: str, prop: str, b
     return row
 
 
+# ── Adding an asset (D-69) ────────────────────────────────────────────────────
+
+SOURCE_KINDS = {"EL": "element", "IF": "link", "FN": "function"}
+ADDED_REASON = "The analyst added this asset during the review."
+ADDED_WOULD_CHANGE = "A decision by the analyst to remove it."
+
+
+def _sources(db: Session, run: m.StageRun) -> dict[str, dict]:
+    """What an asset can come from: the elements, links and functions of the item definition this run was built on."""
+    stage02 = run.based_on_run_id
+    out = {}
+    for e in db.query(m.Element).filter_by(run_id=stage02).order_by(m.Element.position):
+        out[e.element_id] = {"id": e.element_id, "kind": "element", "label": f"{e.element_id} {e.name}"}
+    for f in db.query(m.Function).filter_by(run_id=stage02).order_by(m.Function.position):
+        out[f.function_id] = {"id": f.function_id, "kind": "function", "label": f"{f.function_id} {f.name}"}
+    names = {e.id: e.name for e in db.query(m.Element).filter_by(run_id=stage02)}
+    for link in db.query(m.Link).filter_by(run_id=stage02).order_by(m.Link.position):
+        out[link.link_id] = {"id": link.link_id, "kind": "link", "label": f"{link.link_id} {names.get(link.source_pk, '?')} to {names.get(link.destination_pk, '?')}"}
+    return out
+
+
+def asset_options(db: Session, run: m.StageRun) -> dict:
+    """What the "Add asset" form offers."""
+    labels = asset_rules.type_labels()
+    return {
+        "families": [{**f, "type_labels": labels.get(f["code"], [])} for f in asset_rules.families()],
+        "sources": list(_sources(db, run).values()),
+    }
+
+
+def _text(value) -> str:
+    return " ".join(str(value or "").split())
+
+
+def add_asset(db: Session, assessment_id: str, by: str, body: dict) -> m.Asset:
+    """An asset the analyst adds by hand. It passes the same checks as an asset a Stage 03 run stores."""
+    run = store.current_run(db, assessment_id, "03")
+    if run is None:
+        raise Refused(404, "Stage 03 has no stored output yet.")
+    family = str(body.get("family") or "")
+    if family not in {f["code"] for f in asset_rules.families()}:
+        raise Refused(422, "Choose a family for the asset.")
+    source_id = str(body.get("source_id") or "")
+    source = _sources(db, run).get(source_id)
+    if source is None:
+        raise Refused(422, "Choose where the asset comes from: an element, a link or a function of the item definition.")
+    given = body.get("properties") if isinstance(body.get("properties"), dict) else {}
+    properties = {}
+    for code in PROPERTIES:
+        cell = given.get(code) if isinstance(given.get(code), dict) else {}
+        reason = _text(cell.get("reason"))
+        if cell.get("applies") is True and not reason:
+            raise Refused(422, f"Give a reason for each property that applies ({asset_rules.FULL_NAMES[code].replace('_', ' ')} has none).")
+        properties[code] = {"applies": cell.get("applies") is True, "reason": reason or "The analyst did not select this property.", "origin": "analyst", "reviewed": True}
+    if not any(p["applies"] for p in properties.values()):
+        raise Refused(422, "At least one property must apply to an asset.")
+
+    rows = db.query(m.Asset).filter_by(run_id=run.id).all()
+    numbers = [int(r.asset_id.split("-")[1]) for r in rows if r.family == family]
+    asset_id = f"{family}-{max(numbers, default=0) + 1:02d}"
+    scopes = {r.scope_status for r in rows if r.source_ids == [source_id]}
+    scope = "interface" if scopes == {"interface"} else "in_scope"
+    item = {
+        "asset_id": asset_id, "family": family, "name": _text(body.get("name")), "type_label": _text(body.get("type_label")),
+        "description": _text(body.get("description")),
+        "source": {"kind": source["kind"], "ids": [source_id], "label": source["label"], "scope": scope},
+        "interface": scope == "interface", "reason": ADDED_REASON, "would_change": ADDED_WOULD_CHANGE, "fact_ids": [],
+        "asset_type_row": True, "properties": properties,
+    }
+    problems = sorted(f"{'/'.join(str(p) for p in e.path) or 'asset'}: {e.message}" for e in validator().iter_errors(item))
+    if problems:
+        field = problems[0].split(":")[0]
+        plain = {
+            "name": "Give the asset a name of 3 to 120 characters.", "type_label": "Give the asset type.",
+            "description": "Describe the asset in at least 10 characters.",
+        }.get(field)
+        if plain is None and field.startswith("properties/") and field.endswith("/reason"):
+            plain = "Give each reason in 10 to 500 characters."
+        raise Refused(422, plain or f"The asset does not fit the rules, so nothing was saved: {problems[0]}")
+    for code, prop in properties.items():
+        if ID_IN_TEXT.search(prop["reason"]):
+            raise Refused(422, "A reason must not contain ids.")
+    if any(r.name.lower() == item["name"].lower() and r.status != "removed" for r in rows):
+        raise Refused(409, "An asset with this name is already in the list.")
+
+    stamp = now()
+    row = m.Asset(
+        run_id=run.id, position=max((r.position for r in rows), default=-1) + 1, asset_id=asset_id, family=family, name=item["name"],
+        type_label=item["type_label"], description=item["description"], source_kind=source["kind"], source_ids=[source_id],
+        source_label=source["label"], scope_status=scope, interface=item["interface"], reason=item["reason"], would_change=item["would_change"],
+        fact_ids=[], asset_type_row=True, status="confirmed", status_by=by, status_at=stamp,
+    )
+    db.add(row)
+    db.flush()
+    for position, code in enumerate(PROPERTIES):
+        db.add(m.AssetProperty(asset_pk=row.id, position=position, property=code, reviewed_by=by, reviewed_at=stamp, **properties[code]))
+    db.commit()
+    db.refresh(row)
+    return row
+
+
 # ── Comments ──────────────────────────────────────────────────────────────────
 
 

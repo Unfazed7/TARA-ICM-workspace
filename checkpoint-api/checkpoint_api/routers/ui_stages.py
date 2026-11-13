@@ -7,6 +7,7 @@ from .. import run_log
 from .. import ui_stage_edits as edits
 from .. import ui_stages as u
 from ..database import get_db
+from ..settings import require_ai
 from ..stage_pipeline import prepare_folders, run_from_folder
 from .assessments import current_user_id
 from .auth import get_current_claims
@@ -110,6 +111,7 @@ def rebuild(assessment_id: str, ui_stage: str, background_tasks: BackgroundTasks
     check_ui(ui_stage)
     analyst(claims)
     assessment_for(db, assessment_id, claims)
+    require_ai()
     if u.anything_running(db, assessment_id):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A build is already running. Wait for it to finish.")
     missing = [n for n in NEEDS[ui_stage] if u.read_folder(n, assessment_id) is None]

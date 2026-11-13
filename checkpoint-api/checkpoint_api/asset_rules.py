@@ -36,3 +36,12 @@ def register_types() -> dict[str, str]:
 
 def families() -> list[dict]:
     return [{"code": prefix, "name": name} for prefix, name, *_ in table_after("## 8.")]
+
+
+def type_labels() -> dict[str, list[str]]:
+    """Family prefix -> the asset type labels of section 6, in table order."""
+    out: dict[str, list[str]] = {}
+    for prefix, _source, label, *_ in table_after("## 6."):
+        if label not in out.setdefault(prefix, []):
+            out[prefix].append(label)
+    return out

@@ -11,7 +11,7 @@ from ..models import Assessment, BoundaryEdit, BoundaryState, Checkpoint, Pipeli
 from ..pipeline_runner import STAGE_OUTPUT_FILES, get_output_path
 from ..schemas import AssessmentCreate, AssessmentResponse, AssessmentUpdate
 from ..stage_catalog import STAGES
-from ..stage_models import StageBase
+from ..stage_models import DemoCopy, StageBase
 from .auth import get_current_claims
 
 
@@ -67,6 +67,7 @@ def to_response(db: Session, assessment: Assessment) -> AssessmentResponse:
         completion_percentage=assessment.completion_percentage,
         stages=stage_statuses(db, assessment.assessment_id),
         stage_outputs_available=stage_outputs_available(assessment.assessment_id),
+        is_demo=db.query(DemoCopy).filter_by(assessment_id=assessment.assessment_id).first() is not None,
         created_at=assessment.created_at,
         updated_at=assessment.updated_at,
     )
@@ -99,6 +100,8 @@ def list_assessments(
     query = db.query(Assessment)
     if not is_admin(claims):
         query = query.filter_by(owner_id=current_user_id(claims))
+    # A tester's working copy of the demo TARA is opened from its own tile, never listed with the projects (D-67).
+    query = query.filter(Assessment.assessment_id.notin_(db.query(DemoCopy.assessment_id)))
     return [to_response(db, assessment) for assessment in query.order_by(Assessment.created_at.desc()).all()]
 
 
@@ -130,14 +133,9 @@ def update_assessment(
     return to_response(db, assessment)
 
 
-@router.delete("/{assessment_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_assessment(
-    assessment_id: str,
-    db: Session = Depends(get_db),
-    claims: dict = Depends(get_current_claims),
-):
-    assessment = get_assessment_or_404(db, assessment_id)
-    require_assessment_access(assessment, claims)
+def purge_assessment(db: Session, assessment: Assessment) -> None:
+    """Removes an assessment and everything kept for it: rows, artifacts and uploads. Used by delete and by the demo copies."""
+    assessment_id = assessment.assessment_id
     pipeline_runner.cancel_assessment_processes(assessment_id)
     db.query(Checkpoint).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
     db.query(BoundaryEdit).filter_by(assessment_id=assessment_id).delete(synchronize_session=False)
@@ -153,4 +151,15 @@ def delete_assessment(
     db.commit()
     shutil.rmtree(Path(pipeline_runner.WORKSPACE_ROOT) / "artifacts" / assessment_id, ignore_errors=True)
     shutil.rmtree(Path(pipeline_runner.UPLOAD_DIR) / assessment_id, ignore_errors=True)
+
+
+@router.delete("/{assessment_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_assessment(
+    assessment_id: str,
+    db: Session = Depends(get_db),
+    claims: dict = Depends(get_current_claims),
+):
+    assessment = get_assessment_or_404(db, assessment_id)
+    require_assessment_access(assessment, claims)
+    purge_assessment(db, assessment)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

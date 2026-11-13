@@ -22,6 +22,7 @@ from ..pipeline_runner import (
     utc_now,
 )
 from ..run_logs import append_attempt_event, resolve_attempt_log_path
+from ..settings import require_ai
 from ..schemas import PipelineRunAttemptResponse, PipelineRunResponse, StageDefinitionResponse
 from ..stage_catalog import STAGES, get_stage
 from .auth import get_current_claims
@@ -160,6 +161,7 @@ def run_stage(
 ):
     validate_stage_num(stage_num)
     get_assessment_for_user(db, assessment_id, claims)
+    require_ai()
     stage = get_stage(stage_num)
     if stage is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stage not found")
