@@ -10,7 +10,7 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'llm-client-'));
 const auditFile = path.join(tmp, 'audit.jsonl');
 const modelsFile = path.join(tmp, 'models.json');
 
-const ENV_KEYS = ['LLM_PROVIDER', 'LLM_API_KEY', 'OPENROUTER_API_KEY', 'ANTHROPIC_API_KEY', 'LLM_MODEL', 'LLM_MODELS_FILE', 'LLM_AUDIT_FILE', 'LLM_BASE_URL'];
+const ENV_KEYS = ['LLM_EXTRA_BODY', 'LLM_MAX_TOKENS', 'LLM_PROVIDER', 'LLM_API_KEY', 'OPENROUTER_API_KEY', 'ANTHROPIC_API_KEY', 'LLM_MODEL', 'LLM_MODELS_FILE', 'LLM_AUDIT_FILE', 'LLM_BASE_URL'];
 const saved = Object.fromEntries(ENV_KEYS.map((k) => [k, process.env[k]]));
 
 const { callLLM, isRefusal } = require('../../tara-workspace/web-based-tara/stages/llm-client');
@@ -376,4 +376,35 @@ test('a stream that ends before the reply is complete is reported', async () => 
   } finally {
     delete process.env.LLM_RETRY_DELAYS_MS;
   }
+});
+
+
+test('a stage extra_body is sent with the request', async () => {
+  writeModels({ '01-extract-text': { max_tokens: 8000, prompt_version: 'extract-v1', extra_body: { reasoning: { effort: 'low' } } } });
+  const capture = {};
+  await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'x' }] }, fakeFetch(okResponse, capture));
+  assert.deepEqual(capture.body.reasoning, { effort: 'low' });
+});
+
+test('LLM_EXTRA_BODY is merged over the stage extra_body and cannot replace owned fields', async () => {
+  writeModels({ '01-extract-text': { max_tokens: 8000, prompt_version: 'extract-v1', extra_body: { reasoning: { effort: 'low' }, foo: 1 } } });
+  process.env.LLM_EXTRA_BODY = JSON.stringify({ reasoning: { enabled: false }, model: 'evil/model', messages: [] });
+  const capture = {};
+  await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'x' }] }, fakeFetch(okResponse, capture));
+  assert.deepEqual(capture.body.reasoning, { enabled: false });
+  assert.equal(capture.body.foo, 1);
+  assert.notEqual(capture.body.model, 'evil/model');
+  assert.equal(capture.body.messages.length, 1);
+});
+
+test('an invalid LLM_EXTRA_BODY fails loudly', async () => {
+  process.env.LLM_EXTRA_BODY = '{not json';
+  await assert.rejects(callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'x' }] }, fakeFetch(okResponse, {})), /LLM_EXTRA_BODY is not valid JSON/);
+});
+
+test('LLM_MAX_TOKENS overrides the stage output limit', async () => {
+  process.env.LLM_MAX_TOKENS = '32000';
+  const capture = {};
+  await callLLM({ stage: '01-extract-text', messages: [{ role: 'user', content: 'x' }] }, fakeFetch(okResponse, capture));
+  assert.equal(capture.body.max_tokens, 32000);
 });

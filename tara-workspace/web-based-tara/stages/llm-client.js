@@ -53,6 +53,31 @@ function isUnset(value) {
  * Resolves the settings for one call. `stage` is a key under `stages` in models.json;
  * without it the `default` entry is used.
  */
+// Request fields the stage code owns. extra_body / LLM_EXTRA_BODY can never replace these.
+const RESERVED_BODY_KEYS = new Set(['model', 'messages', 'stream', 'response_format', 'tools', 'tool_choice', 'max_tokens', 'usage']);
+
+/** LLM_MAX_TOKENS (positive integer) overrides every stage's output limit; unset or invalid is ignored. */
+function envMaxTokens() {
+  const n = Number(process.env.LLM_MAX_TOKENS);
+  return Number.isInteger(n) && n > 0 ? n : null;
+}
+
+/**
+ * Extra request fields for the model host, e.g. {"reasoning":{"effort":"low"}} on OpenRouter.
+ * A stage's `extra_body` in models.json is the base; LLM_EXTRA_BODY (a JSON object) is merged on top.
+ */
+function resolveExtraBody(entry) {
+  let extra = entry.extra_body && typeof entry.extra_body === 'object' && !Array.isArray(entry.extra_body) ? { ...entry.extra_body } : {};
+  if (process.env.LLM_EXTRA_BODY) {
+    let fromEnv;
+    try { fromEnv = JSON.parse(process.env.LLM_EXTRA_BODY); } catch { throw new Error('LLM_EXTRA_BODY is not valid JSON'); }
+    if (!fromEnv || typeof fromEnv !== 'object' || Array.isArray(fromEnv)) throw new Error('LLM_EXTRA_BODY must be a JSON object');
+    extra = { ...extra, ...fromEnv };
+  }
+  for (const key of Object.keys(extra)) if (RESERVED_BODY_KEYS.has(key)) delete extra[key];
+  return extra;
+}
+
 function resolveStageSettings(stage) {
   const config = loadModelsConfig();
   const stageEntry = stage && config.stages && config.stages[stage];
@@ -70,7 +95,8 @@ function resolveStageSettings(stage) {
     routing: entry.routing && typeof entry.routing === 'object' ? entry.routing : null,
     allowFallbacks: config.provider_routing ? config.provider_routing.allow_fallbacks === true : false,
     temperature: typeof entry.temperature === 'number' ? entry.temperature : null,
-    maxTokens: entry.max_tokens,
+    maxTokens: envMaxTokens() || entry.max_tokens,
+    extraBody: resolveExtraBody(entry),
     promptVersion: isUnset(entry.prompt_version) ? null : entry.prompt_version,
   };
 }
@@ -467,6 +493,7 @@ async function callModel(params, fetchImpl) {
       messages,
     };
     if (settings.temperature !== null) body.temperature = settings.temperature;
+    Object.assign(body, settings.extraBody);
     if (config.provider === 'openrouter' && settings.provider) {
       body.provider = { only: [settings.provider], allow_fallbacks: settings.allowFallbacks };
     } else if (config.provider === 'openrouter' && settings.routing) {
