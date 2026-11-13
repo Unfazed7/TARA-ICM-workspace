@@ -3,6 +3,7 @@
  * Quick capability check for one model on one OpenAI-compatible endpoint.
  *
  *   LLM_BASE_URL=https://<provider>/v1 LLM_API_KEY=... node scripts/model-smoke-test.js <model-id> [--no-image]
+ *   OpenRouter: OPENROUTER_API_KEY=... node scripts/model-smoke-test.js <model-id>
  *
  * Checks (what the TARA stages actually need):
  *   1. strict JSON schema output   (response_format json_schema, strict)
@@ -11,8 +12,9 @@
  * Also warns when reasoning text leaks into the reply or the reply is cut off.
  * Costs a few cents at most. Does not touch the TARA code or data.
  */
-const base = (process.env.LLM_BASE_URL || '').replace(/\/$/, '');
-const key = process.env.LLM_API_KEY;
+// OpenRouter shortcut: with only OPENROUTER_API_KEY set, the endpoint defaults to OpenRouter.
+const base = (process.env.LLM_BASE_URL || (process.env.OPENROUTER_API_KEY ? 'https://openrouter.ai/api/v1' : '')).replace(/\/$/, '');
+const key = process.env.LLM_API_KEY || process.env.OPENROUTER_API_KEY;
 const model = process.argv[2];
 const skipImage = process.argv.includes('--no-image');
 if (!base || !key || !model) {
