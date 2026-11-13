@@ -16,8 +16,8 @@ docker compose cp api:/data/backup-tmp.db "backups/tara-$STAMP.db"
 docker compose exec -T api rm -f /data/backup-tmp.db
 gzip -f "backups/tara-$STAMP.db"
 
-# 2. Uploaded files and stage outputs.
-docker compose exec -T api tar czf - -C /app uploads artifacts > "backups/files-$STAMP.tgz" || true
+# 2. Uploaded files, stage outputs, model-call audit log and run logs.
+docker compose exec -T api sh -c 'mkdir -p /app/uploads /app/artifacts /data/audit /data/logs && tar czf - -C /app uploads artifacts -C /data audit logs' > "backups/files-$STAMP.tgz"
 
 # 3. Prune: keep the 14 newest of each kind.
 ls -1t backups/tara-*.db.gz 2>/dev/null | tail -n +15 | xargs -r rm -f

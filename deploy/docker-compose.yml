@@ -6,10 +6,13 @@ services:
     env_file: .env
     environment:
       ALLOWED_ORIGINS: https://aegis0212.duckdns.org
+      # Keep model-call audit log and run log on the persistent /data volume (survive redeploys)
+      LLM_AUDIT_FILE: /data/audit/llm-calls.jsonl
+      LOG_FILE: /data/logs/aegis.log
       # Compose refuses to start the API if the invite code is missing from /opt/tara/.env
       REGISTRATION_INVITE_CODE: ${REGISTRATION_INVITE_CODE:?set REGISTRATION_INVITE_CODE in /opt/tara/.env}
     volumes:
-      - tara_data:/data              # SQLite DB
+      - tara_data:/data              # SQLite DB, audit log, run logs
       - tara_uploads:/app/uploads    # uploaded files
       - tara_artifacts:/app/artifacts  # stage outputs
     mem_limit: 600m

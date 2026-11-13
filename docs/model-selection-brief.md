@@ -17,11 +17,11 @@ reviews each stage.
 | 03 Asset identification | `03-assets` | finalized item definition | assets with CIAAAN properties | domain judgement, consistent rule application |
 | 04 Damage analysis | one call per asset x property | assets | damage scenarios | specific, realistic scenarios; no generic filler |
 | 05 Threat identification | one threat per damage scenario | damage scenarios | threats | causal reasoning, specificity |
-| 06 Attack path modelling | most demanding step (older doc says extended thinking ON) | threats | exactly 5-step attack path + CVSS v3.1 metrics with justification | multi-step reasoning, rule-bound numeric choices |
+| 06 Attack path modelling | most demanding step; workspace rules say deeper reasoning for this stage only | threats | exactly 5-step attack path + CVSS v3.1 metrics with justification | multi-step reasoning, rule-bound numeric choices |
 | 07 Impact analysis | per threat | threats, damage scenarios | 7-dimension impact ratings | calibration and consistency across items |
 | 08 Risk scoring | none | | | deterministic only |
-| 09 Risk treatment | per risk | risk register, controls catalogue | treatment option + control IDs | choosing only from a given list (no invented IDs) |
-| 10 Residual risk | docs say deterministic; models.json has a `10-residual` entry | | | check which is true before choosing |
+| 09 Risk treatment | per risk (review optional) | risk register, controls catalogue | treatment option + control IDs | choosing only from a given list (no invented IDs) |
+| 10 Residual risk | workspace rules say deterministic; models.json still has a `10-residual` entry | | | confirm which is true before choosing |
 | Helpers | `review-assistant` (2000 tokens), `02-explain` (4000), `02-answer-check` | short context | short text | cheap, fast, plain-language |
 
 ## 2. Hard technical requirements (these decide whether a model can run at all)
@@ -29,7 +29,7 @@ reviews each stage.
 The client (`tara-workspace/web-based-tara/stages/llm-client.js`) sends:
 1. `response_format: json_schema` with `strict: true` -> the model/provider must support strict structured outputs. Biggest compatibility risk for open models.
 2. Up to ~16 nullable/union fields per schema (provider schema-compile limit it already works around).
-3. Tool calls (`tools`, `tool_choice`) for some stages.
+3. **Tool calls (`tools`, `tool_choice`) are mandatory for stages 04-10**: the workspace rules say every agent submits through a tool call, never free-text JSON. A model that is weak at tool calling fails these stages regardless of how smart it is.
 4. Image input for Stage 01 image/PDF-page extraction.
 5. Long output: up to 32k tokens in one reply; streaming is used.
 6. One repair retry when the reply does not match the schema, so a model that is right "most of the time" still costs 2x.
@@ -61,7 +61,8 @@ Slot B may split in two (06 reasoning-heavy vs the rest) only if tests show a re
 
 ## 5. Constraints
 
-- Budget: free or near-free for now.
+- Budget: free or near-free for now. Measured today: one end-to-end run costs about $3-5 on the current premium default model; re-measure on each candidate with `deploy/llm-usage.sh`.
+- Fixed rules the model must obey (workspace CLAUDE.md): Safety and Financial impact for the tool user are always NA; never generate numeric scores (engines do that); every fact needs a source reference; say "open question" instead of guessing.
 - Data: client architecture documents can be confidential -> check each provider's data retention/training policy; free tiers often log prompts.
 - Hosting: the Oracle Micro (1 GB) cannot host a model; any model is called over an API.
 - Human review exists at every stage, so a small error rate is tolerable; silent fabrication is not.
