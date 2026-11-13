@@ -199,3 +199,17 @@
 .assets-stage button{font-family:inherit}
 /* Narrow screens (a difference from the design, which has no phone layout): the side panel never exceeds the screen. */
 @media (max-width:767px){.assets-stage .railwrap{width:min(400px,100%)}.assets-stage .railwrap aside{width:100%!important}}
+/* Add asset (D-69): a small form in the same panel look as the list. */
+.assets-stage .addveil{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;background:rgba(28,27,25,.32);animation:addveil .18s ease-out}
+.assets-stage .addform .phead{flex:none}
+.assets-stage .addform{width:min(620px,100%);display:flex;flex-direction:column;max-height:calc(100dvh - 24px);margin:0;animation:addrise .22s cubic-bezier(.2,.7,.2,1)}
+.assets-stage .addbody{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;padding:18px 24px 14px}
+.assets-stage .addrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.assets-stage .addprop{display:flex;align-items:flex-start;gap:12px;padding:8px 10px;border-radius:10px;background:#FAF9F7;border:1px solid #ECE9E2}
+.assets-stage .addtick{flex:none;width:44px;height:34px;border:0;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font:inherit;font-size:12.5px;cursor:pointer;transition:background-color .18s,box-shadow .18s,color .18s}
+.assets-stage .addtick:focus-visible{outline:2px solid #1F6C9F;outline-offset:2px}
+.assets-stage .addfoot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:12px 24px;flex:none;border-top:1px solid #E6E4DE;background:#FAF9F7}
+.assets-stage select.fld{appearance:auto}
+@keyframes addveil{from{opacity:0}to{opacity:1}}
+@keyframes addrise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:560px){.assets-stage .addrow{grid-template-columns:minmax(0,1fr)}.assets-stage .addbody{padding:16px 16px 4px}.assets-stage .addfoot{padding:12px 16px}}

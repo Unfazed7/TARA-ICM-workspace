@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { fetchConfig, openDemo } from '@/lib/preview';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { PageTransition } from '@/components/layout/PageTransition';
@@ -43,7 +44,17 @@ export default function Login() {
     try {
       await login(email.trim(), password);
       setStep('success');
-      setTimeout(() => navigate('/dashboard'), 800);
+      // A preview server (AI off) opens the demo TARA first; any other server opens the dashboard as before.
+      let target = '/dashboard';
+      const config = await fetchConfig();
+      if (config.demo_available) {
+        try {
+          target = `/assessment/${await openDemo()}`;
+        } catch {
+          target = '/dashboard';
+        }
+      }
+      setTimeout(() => navigate(target), 800);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
       triggerShake();

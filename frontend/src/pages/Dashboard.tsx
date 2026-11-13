@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AI_OFF_NOTE, openDemo, useAppConfig } from '@/lib/preview';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProjects } from '@/contexts/ProjectContext';
@@ -64,6 +65,18 @@ export default function Dashboard() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+
+  const config = useAppConfig();
+  const [openingDemo, setOpeningDemo] = useState(false);
+  const handleOpenDemo = async () => {
+    setOpeningDemo(true);
+    try {
+      navigate(`/assessment/${await openDemo()}`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'The demo could not be opened.');
+      setOpeningDemo(false);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -252,6 +265,20 @@ export default function Dashboard() {
                 {roleGreetings[user?.role || 'engineer']}
               </p>
             </div>
+
+            {config.demo_available && (
+              <section aria-label="Demo TARA" className="mb-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-2xl border border-state-blue-border bg-state-blue px-5 py-4 sm:px-6">
+                <div className="min-w-0 max-w-[70ch]">
+                  <h2 className="m-0 text-lg font-semibold text-foreground">Open the demo TARA</h2>
+                  <p className="m-0 mt-1 text-sm text-state-blue-foreground">
+                    A ready-made example: a key and certificate portal, from the documents to the final sheets. You can change everything in it. Your changes last until you log out.{!config.ai_enabled && ` ${AI_OFF_NOTE}.`}
+                  </p>
+                </div>
+                <Button onClick={handleOpenDemo} disabled={openingDemo} className="min-h-11 shrink-0 gap-2">
+                  {openingDemo ? 'Opening…' : 'Open the demo TARA'}
+                </Button>
+              </section>
+            )}
 
             {isLoading && <div className="rounded-md border bg-card p-8 text-sm text-muted-foreground" role="status">Loading assessments…</div>}
             {projectsError && <div className="rounded-md border border-destructive/30 bg-destructive/5 p-5" role="alert"><p className="font-medium">Could not load assessments</p><p className="mt-1 text-sm text-muted-foreground">{projectsError.message}</p></div>}

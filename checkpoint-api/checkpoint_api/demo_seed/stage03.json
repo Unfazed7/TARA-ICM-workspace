@@ -1357,7 +1357,7 @@
    "kind": "assumption",
    "topic": "assets",
    "attention": "needs_attention",
-   "title": "The cache holds certificate data. No document says what it holds",
+   "title": "What the cache holds",
    "concluded": "The cache holds certificate data. No document says what it holds.",
    "why": {
     "from_ids": [
@@ -1379,7 +1379,7 @@
    "kind": "assumption",
    "topic": "assets",
    "attention": "needs_attention",
-   "title": "The internet-facing load balancer is a second way in, next to the API gateway",
+   "title": "A second way in",
    "concluded": "The internet-facing load balancer is a second way in, next to the API gateway.",
    "why": {
     "from_ids": [
@@ -1401,7 +1401,7 @@
    "kind": "assumption",
    "topic": "assets",
    "attention": "needs_attention",
-   "title": "The deploy identity can change the running services, so only the portal side of it is assessed",
+   "title": "Scope of the deploy identity",
    "concluded": "The deploy identity can change the running services, so only the portal side of it is assessed.",
    "why": {
     "from_ids": [

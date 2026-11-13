@@ -3,6 +3,7 @@
  * Uploads go straight to the server (spec 23), so the screen always shows what Stage 01 will read.
  */
 
+import { AI_OFF_NOTE, useAiOff } from '@/lib/preview';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -166,7 +167,8 @@ export function DocumentsStage({ assessmentId, project, onOpenItemDefinition }: 
 
   const missing = useMemo(() => pipeline.data?.missing ?? [], [pipeline.data]);
   const unsavedBoundary = text.trim() !== savedText.trim();
-  const canExecute = !locked && missing.length === 0 && !unsavedBoundary;
+  const aiOff = useAiOff();
+  const canExecute = !aiOff && !locked && missing.length === 0 && !unsavedBoundary;
 
   if (docs.isLoading || boundary.isLoading || !rows) {
     return <p className="p-10 text-muted-foreground">Loading the documents...</p>;
@@ -302,7 +304,9 @@ export function DocumentsStage({ assessmentId, project, onOpenItemDefinition }: 
               { label: 'A document describing what the system does', ok: added('behaviour') > 0 },
             ]}
             footer={
-              locked
+              aiOff
+                ? `${AI_OFF_NOTE}. You can add documents and say what is being assessed, but Execute is not available.`
+                : locked
                 ? 'Documents are locked while the run is going. You can leave this page.'
                 : missing.length
                   ? `Required: ${missing.map((m) => m.replace(/\.$/, '')).join('; ')}.`
@@ -313,6 +317,7 @@ export function DocumentsStage({ assessmentId, project, onOpenItemDefinition }: 
                       : 'Both stages run one after the other. You can leave this page.'
             }
             canExecute={canExecute}
+            executeNote={aiOff ? AI_OFF_NOTE : undefined}
             executeLabel={failed || done ? 'Execute again' : 'Execute'}
             onExecute={execute}
             onOpen={onOpenItemDefinition}
@@ -485,6 +490,7 @@ function RunCard({
   checks,
   footer,
   canExecute,
+  executeNote,
   executeLabel,
   onExecute,
   onOpen,
@@ -497,6 +503,8 @@ function RunCard({
   checks: { label: string; ok: boolean }[];
   footer: string;
   canExecute: boolean;
+  /** Why Execute cannot be used at all (AI off). Shown as the button's tooltip. */
+  executeNote?: string;
   executeLabel: string;
   onExecute: () => void;
   onOpen: () => void;
@@ -587,7 +595,7 @@ function RunCard({
             <ArrowRight aria-hidden="true" />
           </Button>
         )}
-        <Button type="button" variant={done ? 'outline' : 'default'} onClick={onExecute} disabled={!canExecute} className={cn('rounded-xl text-[15px]', done ? 'h-11' : 'h-12 justify-between px-[18px]')}>
+        <Button type="button" variant={done ? 'outline' : 'default'} onClick={onExecute} disabled={!canExecute} title={executeNote} className={cn('rounded-xl text-[15px]', done ? 'h-11' : 'h-12 justify-between px-[18px]')}>
           {locked ? 'Running' : executeLabel}
           {!done && (locked ? <Loader2 className="animate-spin" aria-hidden="true" /> : <ArrowRight aria-hidden="true" />)}
         </Button>

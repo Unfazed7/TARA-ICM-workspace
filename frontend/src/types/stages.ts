@@ -224,6 +224,21 @@ export interface Stage03Output {
   rationale: RationaleItem[];
 }
 
+/** What the "Add asset" form sends (D-69). The server gives the id, the next one in the family. */
+export interface NewAssetBody {
+  family: string;
+  name: string;
+  type_label: string;
+  description: string;
+  source_id: string;
+  properties: Record<PropertyCode, { applies: true; reason: string } | { applies: false }>;
+}
+
+export interface AssetOptions {
+  families: { code: string; name: string; type_labels: string[] }[];
+  sources: { id: string; kind: 'element' | 'link' | 'function'; label: string }[];
+}
+
 export interface AssetComment {
   id: number;
   run_number: number;

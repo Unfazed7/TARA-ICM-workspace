@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, UserRole } from '@/types/tara';
 import { api } from '@/lib/api';
+import { closeDemo, startSession } from '@/lib/preview';
 
 interface AuthContextType {
   user: User | null;
@@ -33,7 +34,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const handleUnauthorized = () => setUser(null);
+    const handleUnauthorized = () => {
+      closeDemo(); // the token is gone, so this only forgets the session key and the copy's id
+      setUser(null);
+    };
     window.addEventListener('autotara:unauthorized', handleUnauthorized);
     return () => window.removeEventListener('autotara:unauthorized', handleUnauthorized);
   }, []);
@@ -41,11 +45,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     const { access_token } = await api.auth.login(email, password);
     sessionStorage.setItem('tara_token', access_token);
+    startSession();
     const u = await api.auth.me();
     setUser({ id: u.email, email: u.email, name: u.name, role: u.role as UserRole });
   };
 
   const logout = () => {
+    closeDemo(); // deletes this session's copy of the demo TARA; needs the token, so it comes first
     sessionStorage.removeItem('tara_token');
     setUser(null);
   };

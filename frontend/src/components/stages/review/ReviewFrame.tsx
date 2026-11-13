@@ -3,6 +3,7 @@
  * state and the panel with its side rail. The panel itself comes from the screen (children).
  */
 
+import { AI_OFF_NOTE, useAiOff } from '@/lib/preview';
 import type { MouseEvent, ReactNode, RefObject } from 'react';
 import { PageHeader } from '@/components/layout/StageShell';
 import type { UiStageOutput } from '@/types/stages';
@@ -35,10 +36,16 @@ export function ReviewFrame(p: Props) {
       {action}
     </div>
   );
-  const rebuild = (label: string) => <button type="button" className="btn btn-line btn-sm" disabled={p.rebuilding || building} onClick={p.onRebuild}>{label}</button>;
+  const aiOff = useAiOff();
+  const rebuild = (label: string) => (
+    <span style={st('display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 10px')}>
+      {aiOff && <span style={st('font-size: 12.5px; font-weight: 400')}>{AI_OFF_NOTE}.</span>}
+      <button type="button" className="btn btn-line btn-sm" disabled={aiOff || p.rebuilding || building} title={aiOff ? AI_OFF_NOTE : undefined} onClick={p.onRebuild}>{label}</button>
+    </span>
+  );
 
   return (
-    <div ref={p.rootRef} className={p.rootClass} style={{ height: 'calc(100dvh - 70px)' }} onClick={p.onRoot}>
+    <div ref={p.rootRef} className={p.rootClass} style={{ height: 'calc(100dvh - 70px - var(--preview-banner, 0px))' }} onClick={p.onRoot}>
       <main style={st('position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; width: 100%; max-width: 1600px; margin: 0 auto; padding: 24px clamp(16px, 2.5vw, 32px) 24px; box-sizing: border-box')}>
         <PageHeader
           project={p.project}
@@ -47,7 +54,7 @@ export function ReviewFrame(p: Props) {
             <>
               <span>Built from {d.built_from.label}{' '}<span className="mono">run: {d.built_from.run ?? '–'}</span></span>
               {d.has_data && !building && (
-                <button type="button" className="tlink" disabled={p.rebuilding} onClick={p.onRebuild} title="Runs this analysis again from the earlier stages. Changes made here are replaced." style={st('padding: 0; font-size: 13px')}>Rebuild</button>
+                <button type="button" className="tlink" disabled={aiOff || p.rebuilding} onClick={p.onRebuild} title={aiOff ? AI_OFF_NOTE : 'Runs this analysis again from the earlier stages. Changes made here are replaced.'} style={st(`padding: 0; font-size: 13px${aiOff ? '; opacity: .5; cursor: not-allowed; text-decoration: none' : ''}`)}>Rebuild</button>
               )}
             </>
           ) : undefined}

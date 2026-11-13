@@ -83,6 +83,7 @@ ASSUMPTIONS = (
     (9, "Certificate issuance", "authorization", "cybersecurity_goal", "The goal is taken to cover the test environment as well as production."),
     (9, "Database password", "confidentiality", None, "The database password is taken to be changed at least once a year."),
 )
+TITLES_03 = {"AS-03-01": "What the cache holds", "AS-03-02": "A second way in", "AS-03-03": "Scope of the deploy identity"}
 COMMENTS = {
     "04": ("Certificate issuance", "availability", "other_stakeholders.financial", "Check this rating with the client. Ask how long production can run when no certificate can be issued."),
     "05": ("Token check", "authenticity", None, "The attack path looks right. Ask the client if the token check can be reached from the office network only."),
@@ -99,7 +100,8 @@ def user(db, email: str) -> str:
 
 def payloads() -> dict:
     design = json.loads(DESIGN_03.read_text(encoding="utf-8"))
-    rationale = [{k: v for k, v in item.items() if k != "design_id"} for item in design["rationale"]]
+    # The screen shows "title. concluded"; the design sample has the same sentence in both, so the demo gets short titles.
+    rationale = [{**{k: v for k, v in item.items() if k != "design_id"}, "title": TITLES_03[item["design_id"]]} for item in design["rationale"]]
     return {"01": s.stage01_payload(), "02": s.stage02_payload(), "03": {"assets": design["assets"], "rationale": rationale}}, design
 
 

@@ -9,7 +9,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by Certificate service logic after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_01: If the Confidentiality of Certificate service logic is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate service logic operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_02",
@@ -21,7 +21,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Certificate service logic after integrity validation or change controls are bypassed, resulting in the damage described by DS_02: If the Integrity of Certificate service logic is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate service logic operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_03",
@@ -33,7 +33,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Certificate service logic after availability and resource-protection controls are insufficient, resulting in the damage described by DS_03: If the Availability of Certificate service logic is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate service logic operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_04",
@@ -45,7 +45,7 @@
   "threat_statement": "An attacker could invoke privileged operations through Certificate service logic after authorization enforcement is bypassed, resulting in the damage described by DS_04: If the Authorization of Certificate service logic is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate service logic operations.",
   "derivation_note": "authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_05",
@@ -57,7 +57,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Key service signing logic after integrity validation or change controls are bypassed, resulting in the damage described by DS_05: If the Integrity of Key service signing logic is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Key service signing logic operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_06",
@@ -69,7 +69,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Key service signing logic after availability and resource-protection controls are insufficient, resulting in the damage described by DS_06: If the Availability of Key service signing logic is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Key service signing logic operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_07",
@@ -81,7 +81,7 @@
   "threat_statement": "An attacker could invoke privileged operations through Key service signing logic after authorization enforcement is bypassed, resulting in the damage described by DS_07: If the Authorization of Key service signing logic is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Key service signing logic operations.",
   "derivation_note": "authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_08",
@@ -93,7 +93,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Token check after integrity validation or change controls are bypassed, resulting in the damage described by DS_08: If the Integrity of Token check is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Token check operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_09",
@@ -105,7 +105,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Token check after availability and resource-protection controls are insufficient, resulting in the damage described by DS_09: If the Availability of Token check is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Token check operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_10",
@@ -117,7 +117,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Token check after identity verification controls are bypassed, resulting in the damage described by DS_10: If the Authenticity of Token check is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Token check operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_11",
@@ -129,7 +129,7 @@
   "threat_statement": "An attacker could invoke privileged operations through Token check after authorization enforcement is bypassed, resulting in the damage described by DS_11: If the Authorization of Token check is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Token check operations.",
   "derivation_note": "authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_12",
@@ -141,7 +141,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Revocation list builder after integrity validation or change controls are bypassed, resulting in the damage described by DS_12: If the Integrity of Revocation list builder is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Revocation list builder operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_13",
@@ -153,7 +153,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Revocation list builder after availability and resource-protection controls are insufficient, resulting in the damage described by DS_13: If the Availability of Revocation list builder is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Revocation list builder operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_14",
@@ -165,7 +165,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by Certificate records after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_14: If the Confidentiality of Certificate records is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate records operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_15",
@@ -177,7 +177,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Certificate records after integrity validation or change controls are bypassed, resulting in the damage described by DS_15: If the Integrity of Certificate records is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate records operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_16",
@@ -189,7 +189,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Certificate records after availability and resource-protection controls are insufficient, resulting in the damage described by DS_16: If the Availability of Certificate records is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate records operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_17",
@@ -201,7 +201,7 @@
   "threat_statement": "An attacker could remove or falsify activity evidence recorded by Certificate records after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_17: If the Non Repudiation of Certificate records is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate records operations.",
   "derivation_note": "non_repudiation maps to repudiation under the STRIDE taxonomy.",
   "owasp_reference": "A09",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_18",
@@ -213,7 +213,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by Cached certificate data after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_18: If the Confidentiality of Cached certificate data is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Cached certificate data operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_19",
@@ -225,7 +225,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Cached certificate data after integrity validation or change controls are bypassed, resulting in the damage described by DS_19: If the Integrity of Cached certificate data is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Cached certificate data operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_20",
@@ -237,7 +237,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Cached certificate data after availability and resource-protection controls are insufficient, resulting in the damage described by DS_20: If the Availability of Cached certificate data is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Cached certificate data operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_21",
@@ -249,7 +249,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Cached certificate data after identity verification controls are bypassed, resulting in the damage described by DS_21: If the Authenticity of Cached certificate data is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Cached certificate data operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_22",
@@ -261,7 +261,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Revocation list after integrity validation or change controls are bypassed, resulting in the damage described by DS_22: If the Integrity of Revocation list is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Revocation list operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_23",
@@ -273,7 +273,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Revocation list after availability and resource-protection controls are insufficient, resulting in the damage described by DS_23: If the Availability of Revocation list is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Revocation list operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_24",
@@ -285,7 +285,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Revocation list after identity verification controls are bypassed, resulting in the damage described by DS_24: If the Authenticity of Revocation list is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Revocation list operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_25",
@@ -297,7 +297,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Portal web pages after integrity validation or change controls are bypassed, resulting in the damage described by DS_25: If the Integrity of Portal web pages is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Portal web pages operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_26",
@@ -309,7 +309,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Portal web pages after identity verification controls are bypassed, resulting in the damage described by DS_26: If the Authenticity of Portal web pages is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Portal web pages operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_27",
@@ -321,7 +321,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Application logs and metrics after integrity validation or change controls are bypassed, resulting in the damage described by DS_27: If the Integrity of Application logs and metrics is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Application logs and metrics operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_28",
@@ -333,7 +333,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Application logs and metrics after availability and resource-protection controls are insufficient, resulting in the damage described by DS_28: If the Availability of Application logs and metrics is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Application logs and metrics operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_29",
@@ -345,7 +345,7 @@
   "threat_statement": "An attacker could remove or falsify activity evidence recorded by Application logs and metrics after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_29: If the Non Repudiation of Application logs and metrics is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Application logs and metrics operations.",
   "derivation_note": "non_repudiation maps to repudiation under the STRIDE taxonomy.",
   "owasp_reference": "A09",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_30",
@@ -357,7 +357,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Audit trail records after integrity validation or change controls are bypassed, resulting in the damage described by DS_30: If the Integrity of Audit trail records is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Audit trail records operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_31",
@@ -369,7 +369,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Audit trail records after availability and resource-protection controls are insufficient, resulting in the damage described by DS_31: If the Availability of Audit trail records is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Audit trail records operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_32",
@@ -381,7 +381,7 @@
   "threat_statement": "An attacker could remove or falsify activity evidence recorded by Audit trail records after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_32: If the Non Repudiation of Audit trail records is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Audit trail records operations.",
   "derivation_note": "non_repudiation maps to repudiation under the STRIDE taxonomy.",
   "owasp_reference": "A09",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_33",
@@ -393,7 +393,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Network exposure settings after integrity validation or change controls are bypassed, resulting in the damage described by DS_33: If the Integrity of Network exposure settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Network exposure settings operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_34",
@@ -405,7 +405,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Network exposure settings after availability and resource-protection controls are insufficient, resulting in the damage described by DS_34: If the Availability of Network exposure settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Network exposure settings operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_35",
@@ -417,7 +417,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Load balancer routing after integrity validation or change controls are bypassed, resulting in the damage described by DS_35: If the Integrity of Load balancer routing is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Load balancer routing operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_36",
@@ -429,7 +429,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Load balancer routing after availability and resource-protection controls are insufficient, resulting in the damage described by DS_36: If the Availability of Load balancer routing is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Load balancer routing operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_37",
@@ -441,7 +441,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by API gateway and its sign-in settings after integrity validation or change controls are bypassed, resulting in the damage described by DS_37: If the Integrity of API gateway and its sign-in settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of API gateway and its sign-in settings operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_38",
@@ -453,7 +453,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable API gateway and its sign-in settings after availability and resource-protection controls are insufficient, resulting in the damage described by DS_38: If the Availability of API gateway and its sign-in settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of API gateway and its sign-in settings operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_39",
@@ -465,7 +465,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by API gateway and its sign-in settings after identity verification controls are bypassed, resulting in the damage described by DS_39: If the Authenticity of API gateway and its sign-in settings is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of API gateway and its sign-in settings operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_40",
@@ -477,7 +477,7 @@
   "threat_statement": "An attacker could invoke privileged operations through API gateway and its sign-in settings after authorization enforcement is bypassed, resulting in the damage described by DS_40: If the Authorization of API gateway and its sign-in settings is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of API gateway and its sign-in settings operations.",
   "derivation_note": "authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_41",
@@ -489,7 +489,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by CDN delivery settings after integrity validation or change controls are bypassed, resulting in the damage described by DS_41: If the Integrity of CDN delivery settings is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of CDN delivery settings operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_42",
@@ -501,7 +501,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable CDN delivery settings after availability and resource-protection controls are insufficient, resulting in the damage described by DS_42: If the Availability of CDN delivery settings is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of CDN delivery settings operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_43",
@@ -513,7 +513,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Certificate issuance after integrity validation or change controls are bypassed, resulting in the damage described by DS_43: If the Integrity of Certificate issuance is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate issuance operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_44",
@@ -525,7 +525,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Certificate issuance after availability and resource-protection controls are insufficient, resulting in the damage described by DS_44: If the Availability of Certificate issuance is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate issuance operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_45",
@@ -537,7 +537,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Certificate issuance after identity verification controls are bypassed, resulting in the damage described by DS_45: If the Authenticity of Certificate issuance is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate issuance operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_46",
@@ -549,7 +549,7 @@
   "threat_statement": "An attacker could invoke privileged operations through Certificate issuance after authorization enforcement is bypassed, resulting in the damage described by DS_46: If the Authorization of Certificate issuance is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate issuance operations.",
   "derivation_note": "authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_47",
@@ -561,7 +561,7 @@
   "threat_statement": "An attacker could remove or falsify activity evidence recorded by Certificate issuance after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_47: If the Non Repudiation of Certificate issuance is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate issuance operations.",
   "derivation_note": "non_repudiation maps to repudiation under the STRIDE taxonomy.",
   "owasp_reference": "A09",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_48",
@@ -573,7 +573,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Certificate revocation after integrity validation or change controls are bypassed, resulting in the damage described by DS_48: If the Integrity of Certificate revocation is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate revocation operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_49",
@@ -585,7 +585,7 @@
   "threat_statement": "An attacker could exhaust, block, or disable Certificate revocation after availability and resource-protection controls are insufficient, resulting in the damage described by DS_49: If the Availability of Certificate revocation is compromised, required certificate services are interrupted or unavailable when production teams need them affecting the organization in the context of Certificate revocation operations.",
   "derivation_note": "availability maps to denial_of_service under the STRIDE taxonomy.",
   "owasp_reference": "API4",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_50",
@@ -597,7 +597,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Certificate revocation after identity verification controls are bypassed, resulting in the damage described by DS_50: If the Authenticity of Certificate revocation is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate revocation operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_51",
@@ -609,7 +609,7 @@
   "threat_statement": "An attacker could invoke privileged operations through Certificate revocation after authorization enforcement is bypassed, resulting in the damage described by DS_51: If the Authorization of Certificate revocation is compromised, privileged portal functionality is used outside the permitted access boundary affecting the organization in the context of Certificate revocation operations.",
   "derivation_note": "authorization maps to elevation_of_privilege under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_52",
@@ -621,7 +621,7 @@
   "threat_statement": "An attacker could remove or falsify activity evidence recorded by Certificate revocation after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_52: If the Non Repudiation of Certificate revocation is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Certificate revocation operations.",
   "derivation_note": "non_repudiation maps to repudiation under the STRIDE taxonomy.",
   "owasp_reference": "A09",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_53",
@@ -633,7 +633,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by CA signing key after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_53: If the Confidentiality of CA signing key is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of CA signing key operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_54",
@@ -645,7 +645,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by CA signing key after integrity validation or change controls are bypassed, resulting in the damage described by DS_54: If the Integrity of CA signing key is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of CA signing key operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_55",
@@ -657,7 +657,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by CA signing key after identity verification controls are bypassed, resulting in the damage described by DS_55: If the Authenticity of CA signing key is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of CA signing key operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_56",
@@ -669,7 +669,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by Database password after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_56: If the Confidentiality of Database password is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Database password operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_57",
@@ -681,7 +681,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Database password after identity verification controls are bypassed, resulting in the damage described by DS_57: If the Authenticity of Database password is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Database password operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_58",
@@ -693,7 +693,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by Notification API key after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_58: If the Confidentiality of Notification API key is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Notification API key operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_59",
@@ -705,7 +705,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Notification API key after identity verification controls are bypassed, resulting in the damage described by DS_59: If the Authenticity of Notification API key is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Notification API key operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_60",
@@ -717,7 +717,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Deploy identity after identity verification controls are bypassed, resulting in the damage described by DS_60: If the Authenticity of Deploy identity is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Deploy identity operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_61",
@@ -729,7 +729,7 @@
   "threat_statement": "An attacker could remove or falsify activity evidence recorded by Deploy identity after audit-trail integrity and accountability controls are bypassed, resulting in the damage described by DS_61: If the Non Repudiation of Deploy identity is compromised, the platform cannot prove which actor performed a certificate action during later review affecting the regulator in the context of Deploy identity operations.",
   "derivation_note": "non_repudiation maps to repudiation under the STRIDE taxonomy.",
   "owasp_reference": "A09",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_62",
@@ -741,7 +741,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by Certificate requests in transit after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_62: If the Confidentiality of Certificate requests in transit is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Certificate requests in transit operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_63",
@@ -753,7 +753,7 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Certificate requests in transit after integrity validation or change controls are bypassed, resulting in the damage described by DS_63: If the Integrity of Certificate requests in transit is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Certificate requests in transit operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_64",
@@ -765,7 +765,7 @@
   "threat_statement": "An attacker could impersonate a trusted identity or source accepted by Certificate requests in transit after identity verification controls are bypassed, resulting in the damage described by DS_64: If the Authenticity of Certificate requests in transit is compromised, the platform cannot reliably verify the identity of the actor or system using the function affecting the organization in the context of Certificate requests in transit operations.",
   "derivation_note": "authenticity maps to spoofing under the STRIDE taxonomy.",
   "owasp_reference": "A07",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_65",
@@ -777,7 +777,7 @@
   "threat_statement": "An attacker could gain unauthorized access to data or responses exposed by Notifications in transit after access-control or data-exposure safeguards are bypassed, resulting in the damage described by DS_65: If the Confidentiality of Notifications in transit is compromised, sensitive key or certificate data is exposed beyond its intended audience affecting the portal user in the context of Notifications in transit operations.",
   "derivation_note": "confidentiality maps to information_disclosure under the STRIDE taxonomy.",
   "owasp_reference": "A01",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  },
  {
   "threat_id": "TH_66",
@@ -789,6 +789,6 @@
   "threat_statement": "An attacker could alter data, configuration, or processing performed by Notifications in transit after integrity validation or change controls are bypassed, resulting in the damage described by DS_66: If the Integrity of Notifications in transit is compromised, certificate decisions are based on untrusted or altered application behavior affecting the organization in the context of Notifications in transit operations.",
   "derivation_note": "integrity maps to tampering under the STRIDE taxonomy.",
   "owasp_reference": "A08",
-  "created_timestamp": "2026-11-13T22:00:27.336Z"
+  "created_timestamp": "2026-11-13T22:15:44.215Z"
  }
 ]

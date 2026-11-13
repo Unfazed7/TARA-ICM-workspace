@@ -24,6 +24,9 @@ export interface PanelProps {
   onComment: (assetId: string, property: PropertyCode | null, text: string) => Promise<void>;
   onResolve: (key: string, resolved: boolean) => void;
   onProposal: (comment: AssetComment, state: 'applied' | 'kept') => void;
+  /** Remove needs a note of 10 to 500 characters; Restore puts the asset back as proposed (D-69). */
+  onRemove: (assetId: string, note: string) => Promise<void>;
+  onRestore: (assetId: string) => Promise<void>;
   reply: string;
   setReply: (v: string) => void;
   draft: string;
@@ -92,6 +95,9 @@ export function SidePanel(p: PanelProps) {
   const [propWhy, setPropWhy] = useState<string | null>(null);
   const [whyLast, setWhyLast] = useState<string | null>(null);
   const [whySwap, setWhySwap] = useState(0);
+  const [removing, setRemoving] = useState(false);
+  const [removeNote, setRemoveNote] = useState('');
+  useEffect(() => { setRemoving(false); setRemoveNote(''); }, [p.sel]);
 
   // A new selection starts at the top of the panel, as in the design.
   useEffect(() => {
@@ -296,6 +302,31 @@ export function SidePanel(p: PanelProps) {
               <div className="decide">
                 <span style={st('font-size: 13px; color: #4A4946')}>{left.length} of 6 properties are still proposed.</span>
                 <button type="button" className="btn btn-dark btn-sm" disabled={p.busy} onClick={() => left.forEach((x) => p.onConfirm(asset.asset_id, x.k))}>{left.length === 1 ? 'Confirm it' : `Confirm all ${left.length}`}</button>
+              </div>
+            )}
+            {!isProp && asset.status === 'removed' && (
+              <div className="decide">
+                <span style={st('font-size: 13px; color: #4A4946; min-width: 0')}>
+                  <b style={st('font-weight: 600; color: #1C1B19')}>Removed.</b> The later stages do not use this asset.
+                  {asset.status_note && <span style={st('display: block; margin-top: 2px; color: #5F5E5B')}>Note: {asset.status_note}</span>}
+                </span>
+                <button type="button" className="btn btn-dark btn-sm" disabled={p.busy} onClick={() => p.onRestore(asset.asset_id)}>Restore</button>
+              </div>
+            )}
+            {!isProp && asset.status !== 'removed' && !removing && (
+              <div style={st('display: flex; justify-content: flex-end')}>
+                <button type="button" className="tlink" onClick={() => setRemoving(true)} style={st('color: #9F2F2D; text-decoration-color: #E6C4C2')}>Remove asset</button>
+              </div>
+            )}
+            {!isProp && asset.status !== 'removed' && removing && (
+              <div className="decide" style={st('flex-direction: column; align-items: stretch')}>
+                <label htmlFor="remove-note" style={st('font-size: 13px; font-weight: 500')}>Why is this not an asset? The note is kept with the asset.</label>
+                <textarea id="remove-note" className="fld" rows={2} maxLength={500} value={removeNote} onChange={(e) => setRemoveNote(e.target.value)} style={st('padding: 8px 10px; resize: vertical; background: #FFFFFF')} />
+                <span style={st('display: flex; flex-wrap: wrap; align-items: center; gap: 8px')}>
+                  <button type="button" className="btn btn-dark btn-sm" disabled={removeNote.trim().length < 10 || p.busy} onClick={() => p.onRemove(asset.asset_id, removeNote.trim()).then(() => { setRemoving(false); setRemoveNote(''); })}>Remove asset</button>
+                  <button type="button" className="btn btn-line btn-sm" onClick={() => { setRemoving(false); setRemoveNote(''); }}>Cancel</button>
+                  <span style={st('font-size: 12px; color: #6B6A66')}>10 to 500 characters. You can restore it later.</span>
+                </span>
               </div>
             )}
             {isProp && cell && !cell.reviewed && !p.changing && (

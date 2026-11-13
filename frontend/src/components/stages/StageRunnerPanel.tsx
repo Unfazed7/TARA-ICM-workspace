@@ -3,6 +3,7 @@
  * replace the generated asset list with their own CSV or XLSX file (D-54). Moved here from ProjectWorkspace.
  */
 
+import { AI_OFF_NOTE, useAiOff } from '@/lib/preview';
 import { useRef, useState } from 'react';
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Badge } from '@/components/ui/badge';
@@ -107,6 +108,8 @@ export function StageRunnerPanel({ assessmentId, stageNums, onStageStart, status
     ?? (assetRegisterStatusQuery.error instanceof Error ? assetRegisterStatusQuery.error.message : null);
   const hasAssetUpload = persistedAssetUpload?.uploaded === true;
 
+  const aiOff = useAiOff();
+
   const handleRun = async (stageNum: number) => {
     onStageStart(stageNum);
     try {
@@ -198,6 +201,7 @@ export function StageRunnerPanel({ assessmentId, stageNums, onStageStart, status
 
       {isLoading && <p className="text-xs text-muted-foreground">Loading stage catalogue…</p>}
       {error && <p className="text-xs text-state-red-foreground">Unable to load stage catalogue.</p>}
+      {aiOff && <p className="m-0 rounded-xl border border-state-blue-border bg-state-blue px-3 py-2 text-xs text-state-blue-foreground" role="note">{AI_OFF_NOTE}. The stages cannot be run.</p>}
 
       {stages.filter((stage) => stageNums.includes(stage.stage_num)).map((stage) => {
         const key = String(stage.stage_num).padStart(2, '0');
@@ -229,22 +233,24 @@ export function StageRunnerPanel({ assessmentId, stageNums, onStageStart, status
                   variant="ghost"
                   className="h-6 text-xs px-2"
                   onClick={() => handleRun(stage.stage_num)}
+                  disabled={aiOff}
+                  title={aiOff ? AI_OFF_NOTE : undefined}
                 >
                   {status === 'complete' ? 'Rerun' : 'Run'}
                 </Button>
               )}
               {status === 'running' && (
-                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'pause')}>
+                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'pause')} disabled={aiOff} title={aiOff ? AI_OFF_NOTE : undefined}>
                   <Pause className="size-3.5" aria-hidden="true" /> Pause
                 </Button>
               )}
               {status === 'paused' && (
-                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'resume')}>
+                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs" onClick={() => handleControl(stage.stage_num, 'resume')} disabled={aiOff} title={aiOff ? AI_OFF_NOTE : undefined}>
                   <Play className="size-3.5" aria-hidden="true" /> Resume
                 </Button>
               )}
               {(status === 'pending' || status === 'running' || status === 'paused') && (
-                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs text-state-red-foreground hover:text-state-red-foreground" onClick={() => handleControl(stage.stage_num, 'cancel')}>
+                <Button size="sm" variant="ghost" className="h-7 gap-1 px-2 text-xs text-state-red-foreground hover:text-state-red-foreground" onClick={() => handleControl(stage.stage_num, 'cancel')} disabled={aiOff} title={aiOff ? AI_OFF_NOTE : undefined}>
                   <Square className="size-3.5" aria-hidden="true" /> Cancel
                 </Button>
               )}

@@ -1,9 +1,12 @@
 /** Calls for the Stage 01 and 02 screens (specs 22, 23, 24). */
 
 import type {
+  Asset,
   AssetComment,
+  AssetOptions,
   AssetStatus,
   DocGroup,
+  NewAssetBody,
   PropertyCode,
   PipelineStatus,
   RationaleList,
@@ -47,7 +50,7 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
 }
 
 export const stagesApi = {
-  assessment: (id: string) => call<{ assessment_id: string; name: string; stages?: Record<string, string> }>(`/${id}`),
+  assessment: (id: string) => call<{ assessment_id: string; name: string; is_demo?: boolean; stages?: Record<string, string> }>(`/${id}`),
 
   documents: (id: string) => call<UploadedDocument[]>(`/${id}/documents`),
   upload: (id: string, file: File, group: DocGroup, typeLabel: string) => {
@@ -73,6 +76,8 @@ export const stagesApi = {
   rebuild03: (id: string) => call<{ stage: '03'; status: string }>(`/${id}/stages/03/rebuild`, { method: 'POST' }),
   assetStatus: (id: string, assetId: string, status: AssetStatus, note?: string) =>
     call<unknown>(`/${id}/stages/03/assets/${assetId}`, { method: 'PATCH', body: JSON.stringify({ status, note }) }),
+  assetOptions: (id: string) => call<AssetOptions>(`/${id}/stages/03/asset-options`),
+  addAsset: (id: string, body: NewAssetBody) => call<Asset>(`/${id}/stages/03/assets`, { method: 'POST', body: JSON.stringify(body) }),
   /** `{confirm: true}` keeps the value and marks it reviewed; `{applies, reason}` changes it. */
   assetProperty: (id: string, assetId: string, property: PropertyCode, body: { confirm: true } | { applies: boolean; reason: string }) =>
     call<unknown>(`/${id}/stages/03/assets/${assetId}/properties/${property}`, { method: 'PATCH', body: JSON.stringify(body) }),

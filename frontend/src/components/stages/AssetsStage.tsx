@@ -4,12 +4,14 @@
  * are in styles/assets-stage.css and assets/constants.ts. The top bar and the page header are the app's own.
  */
 
+import { AddAssetForm } from './assets/AddAssetForm';
+import { AI_OFF_NOTE, useAiOff } from '@/lib/preview';
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/layout/StageShell';
 import { stagesApi } from '@/lib/stagesApi';
-import type { Asset, AssetComment, PropertyCode, Stage03Output } from '@/types/stages';
+import type { Asset, AssetComment, NewAssetBody, PropertyCode, Stage03Output } from '@/types/stages';
 import { AssetTable } from './assets/AssetTable';
 import { SidePanel } from './assets/SidePanel';
 import { keyOf, splitKey, st } from './assets/constants';
@@ -169,12 +171,33 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
       refresh();
     } catch (err) { toast.error(message(err)); }
   };
+  // Add, remove and restore (D-69). Each one changes the list the later stages read, so their screens are read again.
+  const [adding, setAdding] = useState(false);
+  const laterScreens = () => queryClient.invalidateQueries({ queryKey: ['ui-stage', assessmentId] });
+  const addAsset = async (body: NewAssetBody) => {
+    const made = await stagesApi.addAsset(assessmentId, body);
+    setAdding(false);
+    refresh();
+    laterScreens();
+    toast.success(`${made.asset_id} ${made.name} added`);
+    resetSel(keyOf(made.asset_id, null));
+    openRail();
+  };
+  const setStatus = async (assetId: string, status: 'removed' | 'proposed', note?: string) => {
+    setBusy(true);
+    try {
+      await optimistic((a) => ({ ...a, status, status_note: note ?? null }), assetId, () => stagesApi.assetStatus(assessmentId, assetId, status, note));
+      laterScreens();
+    } catch { /* shown by the toast */ } finally { setBusy(false); }
+  };
+
   const finish = async () => {
     try {
       await stagesApi.finish03(assessmentId);
       refresh();
     } catch (err) { toast.error(message(err)); }
   };
+  const aiOff = useAiOff();
   const [rebuilding, setRebuilding] = useState(false);
   const rebuild = async () => {
     setRebuilding(true);
@@ -232,10 +255,15 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
       {action}
     </div>
   );
-  const rebuildButton = <button type="button" className="btn btn-line btn-sm" disabled={rebuilding || building} onClick={rebuild}>Rebuild assets</button>;
+  const rebuildButton = (
+    <span style={st('display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 10px')}>
+      {aiOff && <span style={st('font-size: 12.5px; font-weight: 400')}>{AI_OFF_NOTE}.</span>}
+      <button type="button" className="btn btn-line btn-sm" disabled={aiOff || rebuilding || building} title={aiOff ? AI_OFF_NOTE : undefined} onClick={rebuild}>Rebuild assets</button>
+    </span>
+  );
 
   return (
-    <div className="assets-stage" style={{ height: 'calc(100dvh - 70px)' }} onClick={onRoot}>
+    <div className="assets-stage" style={{ height: 'calc(100dvh - 70px - var(--preview-banner, 0px))' }} onClick={onRoot}>
       <main style={st('position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; width: 100%; max-width: 1600px; margin: 0 auto; padding: 24px clamp(16px, 2.5vw, 32px) 24px; box-sizing: border-box')}>
         <PageHeader
           project={project}
@@ -266,6 +294,10 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
                   <span className="hidesm" style={st('font-size: 12.5px; color: #6B6A66')}><span className="mono">{shown.length}</span> of <span className="mono">{assets.length}</span> assets</span>
                 </span>
                 <span style={st('display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px')}>
+                  <button type="button" className="btn btn-line btn-sm" disabled={building} onClick={() => setAdding(true)}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                    Add asset
+                  </button>
                   <button type="button" className="ibtn dens" aria-pressed={compact} aria-label="Compact rows" title={compact ? 'Compact rows: on' : 'Compact rows: off'} onClick={setDensity}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><path className="l1" d="M3 3.5h10" /><path d="M3 8h10" /><path className="l3" d="M3 12.5h10" /></svg>
                   </button>
@@ -360,6 +392,8 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
                   onComment={comment}
                   onResolve={resolve}
                   onProposal={proposal}
+                  onRemove={(id, note) => setStatus(id, 'removed', note)}
+                  onRestore={(id) => setStatus(id, 'proposed')}
                   reply={reply}
                   setReply={setReply}
                   draft={draft}
@@ -374,6 +408,7 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
           </div>
         )}
       </main>
+      {adding && <AddAssetForm assessmentId={assessmentId} onClose={() => setAdding(false)} onSave={addAsset} />}
     </div>
   );
 }
