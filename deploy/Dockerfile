@@ -4,7 +4,7 @@
 #   docker buildx build -f deploy/Dockerfile --platform linux/amd64 --target web -t tara-web .
 
 # ---- frontend build ----
-FROM node:20-slim AS fe
+FROM node:22-slim AS fe
 WORKDIR /fe
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
@@ -16,14 +16,14 @@ FROM caddy:2 AS web
 COPY --from=fe /fe/dist /srv
 COPY deploy/Caddyfile /etc/caddy/Caddyfile
 
-# ---- api: FastAPI + Node (stage agents are run as `node agent.js`) ----
+# ---- api: FastAPI + Node >= 22.13 (pdfjs-dist needs Promise.withResolvers; stage agents run as `node agent.js`) ----
 FROM python:3.12-slim AS api
-COPY --from=node:20-slim /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:22-slim /usr/local/bin/node /usr/local/bin/node
 WORKDIR /app
 COPY checkpoint-api/requirements.txt checkpoint-api/requirements.txt
 RUN pip install --no-cache-dir -r checkpoint-api/requirements.txt
 COPY package.json package-lock.json ./
-COPY --from=node:20-slim /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+COPY --from=node:22-slim /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
  && npm ci --omit=dev && rm -f /usr/local/bin/npm
 COPY checkpoint-api/ checkpoint-api/
