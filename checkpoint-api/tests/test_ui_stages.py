@@ -104,9 +104,9 @@ def test_threats_join_the_attack_path(client, headers, built):
 
 
 def test_residual_sheet_has_a_row_per_risk_with_both_sides(client, headers, built):
-    sheet = client.get(f"/api/v1/assessments/{built}/residual-risk", headers=headers).json()
+    sheet = screen(client, headers, built, "07")
     risks = folder(built, 8)
-    assert len(sheet["rows"]) == len(risks) and sheet["has_data"] and not sheet["stale"]["is"]
+    assert len(sheet["rows"]) == len(risks) and sheet["has_data"] and not sheet["stale"]["is"] and sheet["built_from"]["label"] == "risk treatment"
     residual = {r["threat_id"]: r for r in folder(built, 10)}
     row = sheet["rows"][0]
     assert row["pre"]["metrics"] == residual[row["record_id"]]["pre"]["metrics"] and row["post"]["risk"]["level"] == residual[row["record_id"]]["post"]["risk_level"]
@@ -126,7 +126,7 @@ def test_tara_one_row_per_risk_record(client, headers, built):
 
 
 def test_unknown_screen_and_other_users_assessment(client, headers, built):
-    assert client.get(f"/api/v1/assessments/{built}/ui-stages/07", headers=headers).status_code == 404
+    assert client.get(f"/api/v1/assessments/{built}/ui-stages/08", headers=headers).status_code == 404
     other = s.analyst_headers(client, "other@example.com")
     assert client.get(f"/api/v1/assessments/{built}/ui-stages/04", headers=other).status_code == 404
 

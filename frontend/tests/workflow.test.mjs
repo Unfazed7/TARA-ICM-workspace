@@ -32,7 +32,8 @@ test('sheet progress allocates an equal segment to every visible result sheet', 
 test('pills 04 to 06 show their pipeline folders, and 07 keeps the residual risk and the reports (D-72)', () => {
   assert.deepEqual(screenFolders['04'], [4, 7]);
   assert.deepEqual(screenFolders['05'], [5, 6]);
-  assert.deepEqual(screenFolders['06'], [8, 9, 10]);
+  assert.deepEqual(screenFolders['06'], [8, 9]);
+  assert.deepEqual(screenFolders['07'], [10]);
   // every folder of the pipeline belongs to exactly one screen
   assert.deepEqual(Object.values(screenFolders).flat().sort((a, b) => a - b), [4, 5, 6, 7, 8, 9, 10]);
   // The attack trees show on 05 and the goals and claims on 06, so 07 no longer repeats them.

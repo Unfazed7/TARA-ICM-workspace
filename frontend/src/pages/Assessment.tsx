@@ -15,6 +15,9 @@ import { Badge } from '@/components/ui/badge';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { TaraProvider } from '@/contexts/TaraContext';
 import { PhasePage } from '@/components/stages/PhasePage';
+import { ReportsPage } from '@/components/stages/ReportsPage';
+import { ResidualStage } from '@/components/stages/ResidualStage';
+import { SheetSwitch, type Sheet07 } from '@/components/stages/SheetSwitch';
 import { AssetsStage } from '@/components/stages/AssetsStage';
 import { ImpactsStage } from '@/components/stages/ImpactsStage';
 import { ThreatsStage } from '@/components/stages/ThreatsStage';
@@ -26,7 +29,7 @@ import { screenFolders, type WorkflowPhase } from '@/lib/workflow';
 import { useMotionPreset } from '@/lib/motion';
 import { isPipelineActive } from '@/lib/pipelineActive';
 import { ApiError, stagesApi } from '@/lib/stagesApi';
-import type { ImpactRow, RationaleItem, ScopeStatus, StageKey, TaraRow, ThreatRow } from '@/types/stages';
+import type { ImpactRow, RationaleItem, ResidualRow, ScopeStatus, StageKey, TaraRow, ThreatRow } from '@/types/stages';
 import { DocumentsStage } from '@/components/stages/DocumentsStage';
 import { Diagram, Legend } from '@/components/stages/Diagram';
 import { DetailsDrawer, DetailsEmpty } from '@/components/stages/DetailsDrawer';
@@ -49,12 +52,11 @@ const TABS: { key: PhaseKey; label: string; ready: boolean; note?: string }[] = 
   { key: '07', label: 'Review & Publish', ready: true },
 ];
 
-const PHASE_OF: Partial<Record<PhaseKey, WorkflowPhase>> = {
-  '07': 'review-publish',
-};
+/** No pill is a sheet page any more: 07 is the residual risk screen, with the reports one click away (D-73). */
+const PHASE_OF: Partial<Record<PhaseKey, WorkflowPhase>> = {};
 
 /** The screens that keep their own Assumptions panel; the top bar's button only tells them to open or close it. */
-const SCREENS: PhaseKey[] = ['03', '04', '05', '06'];
+const SCREENS: PhaseKey[] = ['03', '04', '05', '06', '07'];
 
 /** The kinds of area the diagram shows, as coloured tags for the workspace header. */
 function zoneTags(def: { zones: { kind: string }[]; containers: { kind: string; zone_id?: string }[] }) {
@@ -118,6 +120,8 @@ export default function Assessment() {
   const ui04 = useUiStageData<ImpactRow>(assessmentId, '04');
   const ui05 = useUiStageData<ThreatRow>(assessmentId, '05');
   const ui06 = useUiStageData<TaraRow>(assessmentId, '06');
+  const ui07 = useUiStageData<ResidualRow>(assessmentId, '07');
+  const [sheet07, setSheet07] = useState<Sheet07>('residual');
 
   const items01 = useMemo<RationaleItem[]>(() => rat01.data?.items ?? [], [rat01.data]);
   const items02 = useMemo<RationaleItem[]>(() => rat02.data?.items ?? [], [rat02.data]);
@@ -143,7 +147,7 @@ export default function Assessment() {
   const needs01 = useMemo(() => buildCards(items01, items02, '01').filter(needsYou).length, [items01, items02]);
   const needs02 = useMemo(() => cards02.filter(needsYou).length, [cards02]);
   const needs03 = assets.needCount;
-  const screenNeeds: Partial<Record<PhaseKey, number>> = { '03': needs03, '04': ui04.needCount, '05': ui05.needCount, '06': ui06.needCount };
+  const screenNeeds: Partial<Record<PhaseKey, number>> = { '03': needs03, '04': ui04.needCount, '05': ui05.needCount, '06': ui06.needCount, '07': ui07.needCount };
 
   // Pages 04 to 06 note a failed stage (yellow) or a running one (blue) in the top bar.
   const stages = assessment.data?.stages ?? {};
@@ -205,10 +209,10 @@ export default function Assessment() {
         needCount={screenNeeds[tab] ?? needCount}
         assumptionsOpen={SCREENS.includes(tab) ? screenRail : panelOpen}
         onAssumptions={toggleAssumptions}
-        assumptionsDisabled={phase ? 'Assumptions for these sheets come later' : undefined}
+        assumptionsDisabled={tab === '07' && sheet07 === 'reports' ? 'The assumptions belong to the residual risk sheet' : undefined}
         onSettings={() => setSettingsOpen(true)}
       />
-      {!SCREENS.includes(tab) && tab !== '07' && <DemoNote floating />}
+      {!SCREENS.includes(tab) && <DemoNote floating />}
 
       <div className="relative flex min-h-0">
         <main className="min-w-0 flex-1">
@@ -222,6 +226,12 @@ export default function Assessment() {
             <ThreatsStage assessmentId={assessmentId} project={project} railToggle={screenToggle} onRailChange={setScreenRail} onOpenDocuments={() => goTo('01')} />
           ) : tab === '06' ? (
             <TaraStage assessmentId={assessmentId} project={project} railToggle={screenToggle} onRailChange={setScreenRail} onOpenDocuments={() => goTo('01')} />
+          ) : tab === '07' ? (
+            sheet07 === 'reports' ? (
+              <ReportsPage project={project} headerExtra={<SheetSwitch value={sheet07} onChange={setSheet07} />} />
+            ) : (
+              <ResidualStage assessmentId={assessmentId} project={project} railToggle={screenToggle} onRailChange={setScreenRail} onOpenDocuments={() => goTo('01')} headerExtra={<SheetSwitch value={sheet07} onChange={setSheet07} />} />
+            )
           ) : phase ? (
             <TaraProvider projectId={assessmentId}>
               <TooltipProvider delayDuration={200}>

@@ -434,3 +434,8 @@
 .tara-stage button{font-family:inherit}
 /* Narrow screens (a difference from the design, which has no phone layout): the side panel never exceeds the screen. */
 @media (max-width:767px){.tara-stage .railwrap{width:min(400px,100%)}.tara-stage .railwrap aside{width:100%!important}}
+/* A notice in the bottom bar (07): a dot beside the legend button; its popover holds the message and Rebuild. */
+.tara-stage .noticedot{display:block;width:10px;height:10px;border-radius:99px;box-shadow:0 0 0 3px rgba(232,198,106,.28)}
+.tara-stage .noticedot.pulse{animation:noticepulse 1.6s ease-in-out infinite}
+@keyframes noticepulse{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.tara-stage .noticedot.pulse{animation:none}}

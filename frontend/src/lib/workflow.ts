@@ -91,10 +91,11 @@ export const stageDestination: Record<number, { phase: WorkflowPhase; tab: TaraT
 };
 
 /** The pipeline folders each of pills 04 to 06 shows (D-61), and the folder it starts a rebuild from. */
-export const screenFolders: Record<'04' | '05' | '06', number[]> = {
+export const screenFolders: Record<'04' | '05' | '06' | '07', number[]> = {
   '04': [4, 7],
   '05': [5, 6],
-  '06': [8, 9, 10],
+  '06': [8, 9],
+  '07': [10],
 };
 
 /** The stages shown in the runner of a phase. */

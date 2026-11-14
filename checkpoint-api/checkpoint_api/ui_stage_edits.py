@@ -46,6 +46,7 @@ COMMENT_FIELDS = {
     "04": {"overall", *(f"{g}.{k}" for g, k, _ in u.IMPACT_CATEGORIES)},
     "05": {"stride_category", "cvss", "feasibility", "attack_path", *u.FACTORS},
     "06": {"treatment_option", "cybersecurity_goal", "risk", "feasibility", "impact"},
+    "07": {*u.FACTORS, "feasibility", "risk", "residual"},
 }
 
 
@@ -326,6 +327,8 @@ EDITORS = {"04": edit_impact, "05": edit_threat, "06": edit_treatment}
 def apply_edit(db: Session, assessment_id: str, ui_stage: str, record_id: str, field: str, body: dict, by: str) -> dict:
     if u.anything_running(db, assessment_id):
         raise Refused(409, "A build is running. Wait for it to finish, then make this change.")
+    if ui_stage not in EDITORS:
+        raise Refused(405, "The residual risk is calculated from the attack paths and the treatments. Change them on 05 or 06.")
     return EDITORS[ui_stage](db, assessment_id, record_id, field, body, by)
 
 
@@ -333,7 +336,7 @@ def apply_edit(db: Session, assessment_id: str, ui_stage: str, record_id: str, f
 
 
 def valid_record(assessment_id: str, ui_stage: str, record_id: str) -> bool:
-    folder, key = {"04": (4, "damage_id"), "05": (5, "threat_id"), "06": (8, "threat_id")}[ui_stage]
+    folder, key = {"04": (4, "damage_id"), "05": (5, "threat_id"), "06": (8, "threat_id"), "07": (10, "threat_id")}[ui_stage]
     return any(r.get(key) == record_id for r in u.read_folder(folder, assessment_id) or [])
 
 

@@ -28,6 +28,18 @@
   "RAT-90003"
  ],
  "screens": {
+  "07": {
+   "comments": [
+    {
+     "record_id": "TH_01",
+     "text": "Check with the client that this control is in place before the first release. The lower rating depends on it.",
+     "field": "attack_complexity"
+    }
+   ],
+   "confirmed": [
+    "AS-07-01"
+   ]
+  },
   "04": {
    "comments": [
     {

@@ -155,6 +155,7 @@ def test_every_model_run_is_refused_with_503_when_ai_is_off(client, headers, cop
         f"/assessments/{copy_id}/ui-stages/04/rebuild",
         f"/assessments/{copy_id}/ui-stages/05/rebuild",
         f"/assessments/{copy_id}/ui-stages/06/rebuild",
+        f"/assessments/{copy_id}/ui-stages/07/rebuild",
         f"/assessments/{copy_id}/stages/4/run",
         f"/assessments/{copy_id}/stages/9/run",
     ]
@@ -236,7 +237,7 @@ def test_the_copy_has_every_stage(client, headers, copy_id, tmp_path):
     comments = get(client, headers, f"/assessments/{copy_id}/stages/03/comments")
     assert len(comments) == 3 and any(c["author"] == "assistant" and c["proposed_change"]["state"] == "open" for c in comments)
 
-    for ui in ("04", "05", "06"):
+    for ui in ("04", "05", "06", "07"):
         screen = get(client, headers, f"/assessments/{copy_id}/ui-stages/{ui}")
         assert screen["rows"] and not screen["stale"]["is"] and not screen["building"], ui
         assert all(re.fullmatch(r"AS_\d{2}", r["asset_ref"]) for r in screen["rows"]), ui  # one id for an asset on every screen (D-71)
@@ -265,10 +266,10 @@ def test_every_asset_has_one_id_on_every_screen(client, headers, copy_id):
     assert "AS-05 Certificate records" in texts and "DS-01" not in texts
 
 
-def test_residual_risk_sheet(client, headers, copy_id):
-    sheet = get(client, headers, f"/assessments/{copy_id}/residual-risk")
-    rows = sheet["rows"]
-    assert sheet["has_data"] and len(rows) == 66 and not sheet["stale"]["is"] and not sheet["building"]
+def test_residual_risk_screen(client, headers, copy_id):
+    screen = get(client, headers, f"/assessments/{copy_id}/ui-stages/07")
+    rows = screen["rows"]
+    assert screen["has_data"] and len(rows) == 66 and not screen["stale"]["is"] and not screen["building"]
     assert all(re.fullmatch(r"AS_\d{2}", r["asset_ref"]) and "property" not in r and r["threat"] and r["damage"] for r in rows)
     changed = [r for r in rows if r["changes"]]
     assert len(changed) == 24
@@ -282,12 +283,26 @@ def test_residual_risk_sheet(client, headers, copy_id):
     # The same numbers 06 shows for the risk before the controls.
     tara = {r["record_id"]: r for r in get(client, headers, f"/assessments/{copy_id}/ui-stages/06")["rows"]}
     assert all(tara[r["record_id"]]["risk"]["score"] == r["pre"]["risk"]["score"] for r in rows)
-    # An edit upstream puts the sheet out of date; another tester cannot read it.
+    # Like the other screens: assumptions of its own (06 no longer carries them), one confirmed, one comment.
+    assert len(screen["assumptions"]) == 24 + 0 and [a["status"] for a in screen["assumptions"]].count("confirmed") == 1
+    assert len(get(client, headers, f"/assessments/{copy_id}/ui-stages/07/comments")) == 1
+    assert all(a["folder"] == 10 for a in screen["assumptions"]) and all(a["folder"] != 10 for a in get(client, headers, f"/assessments/{copy_id}/ui-stages/06")["assumptions"])
+    # Comment, dispute and finish work; an edit does not, because the values are calculated.
+    target = changed[0]["record_id"]
+    assert client.post(f"/api/v1/assessments/{copy_id}/ui-stages/07/comments", headers=headers, json={"record_id": target, "field": "residual", "text": "Looks right."}).status_code == 201
+    open_asm = next(a for a in screen["assumptions"] if a["status"] == "open")
+    assert client.patch(f"/api/v1/assessments/{copy_id}/ui-stages/07/assumptions/{open_asm['id']}", headers=headers, json={"status": "disputed", "note": "The control is not in place yet."}).status_code == 200
+    assert client.post(f"/api/v1/assessments/{copy_id}/ui-stages/07/finish", headers=headers).status_code == 200
+    assert get(client, headers, f"/assessments/{copy_id}/ui-stages/07")["finished"] is not None
+    refused = client.patch(f"/api/v1/assessments/{copy_id}/ui-stages/07/records/{target}/fields/attack_complexity", headers=headers, json={"value": "L", "reason": "Trying to change it."})
+    assert refused.status_code == 405 and "calculated" in refused.json()["detail"]
+    # An edit upstream puts it out of date. AI is off, so Rebuild is refused with the same message.
     row = get(client, headers, f"/assessments/{copy_id}/ui-stages/05")["rows"][0]
     assert client.patch(f"/api/v1/assessments/{copy_id}/ui-stages/05/records/{row['record_id']}/fields/attack_vector", headers=headers, json={"value": "P", "reason": "Needs physical access to the server room."}).status_code == 200
-    assert get(client, headers, f"/assessments/{copy_id}/residual-risk")["stale"]["is"] is True
+    assert get(client, headers, f"/assessments/{copy_id}/ui-stages/07")["stale"]["is"] is True
+    assert client.post(f"/api/v1/assessments/{copy_id}/ui-stages/07/rebuild", headers=headers).status_code == 503
     other = s.analyst_headers(client, "other@example.com")
-    assert client.get(f"/api/v1/assessments/{copy_id}/residual-risk", headers=other).status_code in (403, 404)
+    assert client.get(f"/api/v1/assessments/{copy_id}/ui-stages/07", headers=other).status_code in (403, 404)
 
 
 def test_no_model_wording_in_the_seed():

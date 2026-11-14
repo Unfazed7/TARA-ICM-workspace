@@ -90,6 +90,8 @@ COMMENTS = {
     "05": ("Token check", "authenticity", None, "The attack path looks right. Ask the client if the token check can be reached from the office network only."),
     "06": ("CA signing key", "confidentiality", None, "Agree with the treatment. The controls must be in place before the first release."),
 }
+# 07: the first risk whose controls changed a metric (taken from folder 10, so the id always exists).
+COMMENT_07 = "Check with the client that this control is in place before the first release. The lower rating depends on it."
 
 
 def user(db, email: str) -> str:
@@ -222,6 +224,11 @@ def build_notes(db, aid: str, design: dict, ids: dict) -> dict:
         "confirmed_03": [by_design[i] for i in design["confirmed_design_ids"]],
         "screens": {},
     }
+    residual = json.loads((SEED / "folders" / STAGES_BY_NUMBER[10].key / "residual-risk.json").read_text(encoding="utf-8"))
+    changed = next(r["threat_id"] for r in residual if r["metric_changes"])
+    screen = ui_stages.read_screen(db, aid, "07")
+    assert any(r["record_id"] == changed for r in screen["rows"]) and len(screen["assumptions"]) >= 2 and all(a["record_id"] for a in screen["assumptions"]), screen["assumptions"][:2]
+    notes["screens"]["07"] = {"comments": [{"record_id": changed, "text": COMMENT_07, "field": "attack_complexity"}], "confirmed": [screen["assumptions"][0]["id"]]}
     for ui, (asset, prop, field, text) in COMMENTS.items():
         screen = ui_stages.read_screen(db, aid, ui)
         record = ids[(asset, prop)]["damage" if ui == "04" else "threat"]
@@ -244,13 +251,11 @@ def verify(db) -> None:
     seeded = json.loads((SEED / "folders" / STAGES_BY_NUMBER[4].key / Path(pipeline_runner.get_output_path(4, copy_id)).name).read_text(encoding="utf-8"))
     used = {d["asset_id"] for d in seeded}
     assert used <= set(known), f"folder 04 names assets the copy's register does not have: {sorted(used - set(known))}"
-    for ui in ("03", "04", "05", "06"):
-        if ui == "03":
-            continue
+    for ui in ("04", "05", "06", "07"):
         screen = ui_stages.read_screen(db, copy_id, ui)
         assert screen["rows"] and not screen["stale"]["is"] and not screen["building"], (ui, screen["stale"])
         assert all(r.get("asset_ref") for r in screen["rows"]), ui
-    sheet = ui_stages.residual_sheet(db, copy_id)
+    sheet = ui_stages.read_screen(db, copy_id, "07")
     changed = [r for r in sheet["rows"] if r["changes"]]
     assert len(sheet["rows"]) == len(seeded) and changed and not sheet["stale"]["is"], "the residual risk sheet of a fresh copy is not complete"
     print(f"Checked: the residual risk sheet has {len(sheet['rows'])} rows, {len(changed)} changed by controls.")

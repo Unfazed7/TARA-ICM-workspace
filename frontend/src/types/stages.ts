@@ -255,7 +255,7 @@ export interface AssetComment {
 
 // ── Screens 04 Impacts, 05 Threats, 06 TARA (specs 29 to 31) ──────────────────
 
-export type UiStage = '04' | '05' | '06';
+export type UiStage = '04' | '05' | '06' | '07';
 export type ImpactLevel = 'Negligible' | 'Moderate' | 'Major' | 'Severe';
 export type RiskLevel = 'informational' | 'low' | 'medium' | 'high' | 'critical';
 export type Treatment = 'reduce' | 'accept' | 'share' | 'avoid';
@@ -413,15 +413,8 @@ export interface ResidualState {
   risk: { score: number; level: RiskLevel };
 }
 
-export interface ResidualRow {
-  record_id: string;
+export interface ResidualRow extends Omit<UiRowBase, 'property'> {
   risk_id: string;
-  asset_id: string;
-  asset_ref: string;
-  asset_name: string;
-  asset_type: string | null;
-  family: string;
-  family_name: string;
   damage_id: string;
   damage: string | null;
   impact: { value: number; label: string };
@@ -433,14 +426,4 @@ export interface ResidualRow {
   pre: ResidualState;
   post: ResidualState;
   changes: { metric: string; from: string; to: string; control_id: string | null; reason: string | null }[];
-}
-
-export interface ResidualSheet {
-  building: boolean;
-  folders: { stage_num: number; status: string; error: string | null }[];
-  stale: { is: boolean; reason: string | null };
-  built_from: { label: string; run: number | null };
-  has_data: boolean;
-  families: { code: string; name: string }[];
-  rows: ResidualRow[];
 }

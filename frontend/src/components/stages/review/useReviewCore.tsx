@@ -115,7 +115,7 @@ export function useReviewCore<Row extends ReviewRow>(cfg: ReviewCfg<Row>) {
   const refresh = () => {
     for (const k of [key, ['ui-comments', assessmentId, ui], ['assessment', assessmentId], ['pipeline', assessmentId]]) queryClient.invalidateQueries({ queryKey: k });
     for (const n of [4, 5, 6, 7, 8, 9, 10]) queryClient.invalidateQueries({ queryKey: ['stage-output', assessmentId, n] });
-    for (const other of ['04', '05', '06']) if (other !== ui) queryClient.invalidateQueries({ queryKey: ['ui-stage', assessmentId, other] });
+    for (const other of ['04', '05', '06', '07']) if (other !== ui) queryClient.invalidateQueries({ queryKey: ['ui-stage', assessmentId, other] });
   };
   const edit = async (recordId: string, field: string, body: UiEditBody, value?: string): Promise<boolean> => {
     const before = queryClient.getQueryData<UiStageOutput<Row> | null>(key);

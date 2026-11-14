@@ -204,7 +204,7 @@ async def run_stage_03_only(assessment_id: str) -> None:
 # The model folders and the scoring folders that follow Stage 03, in catalog order (spec 29 to 31, D-61).
 CHAIN = (4, 5, 6, 7, 8, 9, 10)
 # The first folder of each screen from pill 04 on: a rebuild starts there and runs every folder after it.
-UI_FIRST_FOLDER = {"04": 4, "05": 5, "06": 8}
+UI_FIRST_FOLDER = {"04": 4, "05": 5, "06": 8, "07": 10}
 
 
 def _new_run(assessment_id: str, number: int) -> PipelineRun:

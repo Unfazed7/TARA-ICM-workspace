@@ -23,6 +23,10 @@ interface Props {
   onOpenDocuments: () => void;
   emptyText: string;
   buildingText: string;
+  /** The out-of-date, failed and building notices go to the bottom bar (the screen passes them to the footer). */
+  compactNotices?: boolean;
+  /** Beside the page title, left of "Built from". */
+  headerExtra?: ReactNode;
   children: ReactNode;
 }
 
@@ -52,6 +56,7 @@ export function ReviewFrame(p: Props) {
           title={p.title}
           right={d ? (
             <>
+              {p.headerExtra}
               <span>Built from {d.built_from.label}{' '}<span className="mono">run: {d.built_from.run ?? '–'}</span></span>
               {d.has_data && !building && (
                 <button type="button" className="tlink" disabled={aiOff || p.rebuilding} onClick={p.onRebuild} title={aiOff ? AI_OFF_NOTE : 'Runs this analysis again from the earlier stages. Changes made here are replaced.'} style={st(`padding: 0; font-size: 13px${aiOff ? '; opacity: .5; cursor: not-allowed; text-decoration: none' : ''}`)}>Rebuild</button>
@@ -60,9 +65,9 @@ export function ReviewFrame(p: Props) {
           ) : undefined}
         />
 
-        {building && banner('blue', p.buildingText)}
-        {!building && failed && banner('red', failed.error || `Building folder ${String(failed.stage_num).padStart(2, '0')} stopped. Try again.`, rebuild('Rebuild'))}
-        {!building && !failed && d?.stale.is && banner('yellow', 'This is out of date: a change you made means the later results were not written again.', rebuild('Rebuild'))}
+        {!p.compactNotices && building && banner('blue', p.buildingText)}
+        {!p.compactNotices && !building && failed && banner('red', failed.error || `Building folder ${String(failed.stage_num).padStart(2, '0')} stopped. Try again.`, rebuild('Rebuild'))}
+        {!p.compactNotices && !building && !failed && d?.stale.is && banner('yellow', 'This is out of date: a change you made means the later results were not written again.', rebuild('Rebuild'))}
 
         {p.loading ? (
           <p style={st('margin: 0; padding: 20px 4px; color: #6B6A66')}>Loading...</p>

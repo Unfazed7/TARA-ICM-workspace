@@ -3,10 +3,39 @@
  * the logic that builds them is in the screen's own hook. Every class is the design's own (styles/*-stage.css).
  */
 
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { st } from '../assets/constants';
 import type { Vals } from './types';
 import { DemoNote } from '@/components/layout/DemoNote';
+
+const DOT: Record<string, string> = { yellow: '#E8C66A', red: '#DD5A63', blue: '#1F6C9F' };
+
+/** A notice (out of date, failed, building) as a dot beside the legend button: it takes no room, and the popover holds the message and Rebuild. */
+function Notice({ v }: { v: Vals }) {
+  const [open, setOpen] = useState(false);
+  const n = v.notice as { tone: string; text: string; rebuild?: boolean } | null;
+  if (!n) return null;
+  const label = n.tone === 'red' ? 'A build stopped' : n.tone === 'blue' ? 'Building' : 'Out of date';
+  return (
+    <span style={st('position: relative; display: inline-flex; align-items: center')} className="noticewrap">
+      <button type="button" className="ibtn helpb" aria-expanded={open} aria-label={`${label}. Show details`} title={label} onClick={(e) => { e.stopPropagation(); setOpen((o) => !o); }}>
+        <span aria-hidden="true" className={n.tone === 'blue' ? 'noticedot pulse' : 'noticedot'} style={st(`background: ${DOT[n.tone] ?? DOT.yellow}`)} />
+      </button>
+      {open && (
+        <div className="legendpop" role="dialog" aria-label={label} style={st('min-width: 300px; max-width: 360px; left: 0')}>
+          <span style={st('font-weight: 600')}>{label}</span>
+          <span style={st('color: #4A4946; line-height: 1.5')}>{n.text}</span>
+          {n.rebuild && (
+            <span style={st('display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px')}>
+              <button type="button" className="btn btn-line btn-sm" disabled={Boolean(v.aiOffNote) || Boolean(v.noticeRebuilding)} title={(v.aiOffNote as string) || undefined} onClick={() => { setOpen(false); (v.noticeRebuild as () => void)(); }}>Rebuild</button>
+              {v.aiOffNote && <span style={st('font-size: 12px; color: #6B6A66')}>{v.aiOffNote as string}.</span>}
+            </span>
+          )}
+        </div>
+      )}
+    </span>
+  );
+}
 
 export function ReviewFooter({ v }: { v: Vals }) {
   const { finish, finishLabel, legendNode, legendOpen, legendStr, noun, nextDisabled, nextPage, pageLabel, pageMatched, pageRange, pageSize, prevDisabled, prevPage, sizeMenuOpen, sizeMenuStr, sizeOpts, toggleLegend, toggleSizeMenu } = v;
@@ -18,6 +47,7 @@ export function ReviewFooter({ v }: { v: Vals }) {
             <button type="button" className="ibtn helpb" aria-expanded={legendStr} aria-label="What the marks mean" title="What the marks mean" onClick={toggleLegend}>?</button>
             {legendOpen && legendNode}
           </span>
+          <Notice v={v} />
           <span style={st("color: #6B6A66")}>
             <span className="mono" style={st("color: #1C1B19")}>{pageRange}</span>
             {' '}of{' '}

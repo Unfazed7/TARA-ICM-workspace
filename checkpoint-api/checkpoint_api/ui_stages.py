@@ -19,10 +19,10 @@ from . import stage_store
 from .models import PipelineRun, PipelineRunAttempt
 
 
-UI_STAGES = ("04", "05", "06")
+UI_STAGES = ("04", "05", "06", "07")
 # The pipeline folders each screen shows, and the folder each screen's data starts from (D-61).
-UI_FOLDERS = {"04": (4, 7), "05": (5, 6), "06": (8, 9, 10)}
-FIRST_FOLDER = {"04": 4, "05": 5, "06": 8}
+UI_FOLDERS = {"04": (4, 7), "05": (5, 6), "06": (8, 9), "07": (10,)}
+FIRST_FOLDER = {"04": 4, "05": 5, "06": 8, "07": 10}
 CHAIN = (4, 5, 6, 7, 8, 9, 10)
 RUNNING = ("pending", "running", "paused")
 LEVELS = ("Negligible", "Moderate", "Major", "Severe")
@@ -47,7 +47,7 @@ FACTOR_WORDS = {
     "privileges_required": {"N": "None", "L": "Low", "H": "High"},
     "user_interaction": {"N": "None", "R": "Required"},
 }
-BUILT_FROM_LABEL = {"04": "asset analysis", "05": "impact analysis", "06": "impact and threat analysis"}
+BUILT_FROM_LABEL = {"04": "asset analysis", "05": "impact analysis", "06": "impact and threat analysis", "07": "risk treatment"}
 
 
 def upload_dir() -> Path:
@@ -174,6 +174,7 @@ ASSUMPTION_FIELDS = {
     "04": {f"{g}.{k}" for g, k, fixed in IMPACT_CATEGORIES if not fixed},
     "05": {"stride_category", *FACTORS},
     "06": {"treatment_option", "cybersecurity_goal"},
+    "07": set(FACTORS),
 }
 
 
@@ -367,7 +368,7 @@ def tara_rows(db: Session, assessment_id: str, assets: dict, ctx: dict, assumpti
     return rows
 
 
-BUILDERS = {"04": impact_rows, "05": threat_rows, "06": tara_rows}
+
 
 
 def context(assessment_id: str) -> dict:
@@ -413,7 +414,7 @@ def read_screen(db: Session, assessment_id: str, ui_stage: str) -> dict:
         run03 = stage_store.current_run(db, assessment_id, "03")
         built_from = run03.run_number if run03 else None
     else:
-        built_from = attempt_number(db, assessment_id, 4 if ui_stage == "05" else 7)
+        built_from = attempt_number(db, assessment_id, {"05": 4, "06": 7, "07": 9}[ui_stage])
     has_data = bool(rows)
     return {
         "ui_stage": ui_stage,
@@ -430,9 +431,9 @@ def read_screen(db: Session, assessment_id: str, ui_stage: str) -> dict:
     }
 
 
-# ── The residual risk sheet on 07 (D-73) ──────────────────────────────────────
+# ── 07 Residual risk (D-73) ───────────────────────────────────────────────────
 
-CVSS_FIELDS = ("attack_vector", "attack_complexity", "privileges_required", "user_interaction")
+CVSS_FIELDS = FACTORS
 
 
 def _state(state: dict) -> dict:
@@ -445,15 +446,12 @@ def _state(state: dict) -> dict:
     }
 
 
-def residual_sheet(db: Session, assessment_id: str) -> dict:
+def residual_rows(db: Session, assessment_id: str, assets: dict, ctx: dict, assumptions: list, flags: dict, edits: dict) -> list[dict]:
     """One row per risk, as on 06 TARA, with the feasibility before the controls and after them and the residual risk.
 
     Read only: every value is the pipeline's (folders 04 to 10). A row whose controls changed no metric shows the same
-    values on both sides.
+    values on both sides. The analyst reviews it with comments and assumptions, as on the other screens.
     """
-    runs = folder_runs(db, assessment_id)
-    stale_by_folder = stale_folders(db, assessment_id, runs)
-    assets = asset_index(assessment_id, db)
     risks = read_folder(8, assessment_id) or []
     residuals = {r["threat_id"]: r for r in read_folder(10, assessment_id) or []}
     threats = {t["threat_id"]: t for t in read_folder(5, assessment_id) or []}
@@ -464,7 +462,6 @@ def residual_sheet(db: Session, assessment_id: str) -> dict:
         res = residuals.get(risk["threat_id"])
         if res is None:
             continue
-        threat = threats.get(risk["threat_id"], {})
         treatment = treatments.get(risk["threat_id"])
         rows.append({
             "record_id": risk["threat_id"],
@@ -474,28 +471,15 @@ def residual_sheet(db: Session, assessment_id: str) -> dict:
             "damage": (scenarios.get(risk["damage_scenario_id"]) or {}).get("damage_scenario"),
             "impact": {"value": risk["impact_rating_value"], "label": risk["impact_rating_label"]},
             "threat_id": risk["threat_id"],
-            "threat": threat.get("threat_statement"),
+            "threat": (threats.get(risk["threat_id"]) or {}).get("threat_statement"),
             "option": treatment["treatment_option"] if treatment else res.get("treatment_option"),
             "controls": [{"id": c["control_id"], "title": c["control_title"], "type": c["control_type"]} for c in res.get("controls", [])],
             "pre": _state(res["pre"]),
             "post": _state(res["post"]),
             "changes": [{"metric": c["metric"], "from": c["from"], "to": c["to"], "control_id": c.get("control_id"), "reason": c.get("reason")} for c in res.get("metric_changes", [])],
+            "notes": notes_for(risk["threat_id"], flags, assumptions),
         })
-    rows.sort(key=lambda r: (r["_order"], r["record_id"]))
-    for r in rows:
-        r.pop("_order", None)
-    families = []
-    for r in rows:
-        if r["family"] not in [f["code"] for f in families]:
-            families.append({"code": r["family"], "name": r["family_name"]})
-    stale = stale_by_folder.get(10)
-    return {
-        "building": anything_running(db, assessment_id),
-        "folders": [{"stage_num": n, "status": runs[n].status if n in runs else "not_started", "error": runs[n].error_message if n in runs else None} for n in CHAIN],
-        "stale": {"is": stale is not None, "reason": stale["reason"] if stale else None},
-        "built_from": {"label": "risk treatment", "run": attempt_number(db, assessment_id, 9)},
-        "has_data": bool(rows),
-        "families": families,
-        "rows": rows,
-        "scales": engine_bridge.scales(),
-    }
+    return rows
+
+
+BUILDERS = {"04": impact_rows, "05": threat_rows, "06": tara_rows, "07": residual_rows}

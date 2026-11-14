@@ -18,13 +18,13 @@ router = APIRouter()
 log = run_log.get("pipeline")
 
 # What a rebuild from a screen's first folder needs to find already built.
-NEEDS = {"04": (3,), "05": (4,), "06": (6, 7)}
-NEEDS_TEXT = {"04": "the asset register", "05": "the damage scenarios", "06": "the attack paths and impact ratings"}
+NEEDS = {"04": (3,), "05": (4,), "06": (6, 7), "07": (9,)}
+NEEDS_TEXT = {"04": "the asset register", "05": "the damage scenarios", "06": "the attack paths and impact ratings", "07": "risk treatments"}
 
 
 def check_ui(ui_stage: str) -> str:
     if ui_stage not in u.UI_STAGES:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown screen. Use 04, 05 or 06.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown screen. Use 04, 05, 06 or 07.")
     return ui_stage
 
 
@@ -36,13 +36,6 @@ def analyst(claims: dict) -> str:
 
 def refused(exc: edits.Refused) -> HTTPException:
     return HTTPException(status_code=exc.status, detail=exc.message)
-
-
-@router.get("/{assessment_id}/residual-risk")
-def residual_risk(assessment_id: str, claims: dict = Depends(get_current_claims), db: Session = Depends(get_db)):
-    """The residual risk sheet of 07: the TARA rows with the feasibility before and after the controls (read only, D-73)."""
-    assessment_for(db, assessment_id, claims)
-    return u.residual_sheet(db, assessment_id)
 
 
 @router.get("/{assessment_id}/ui-stages/{ui_stage}")
