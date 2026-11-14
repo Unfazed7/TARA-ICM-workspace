@@ -120,16 +120,20 @@ def stale_folders(db: Session, assessment_id: str, runs: dict[int, PipelineRun] 
 # ── Assets ────────────────────────────────────────────────────────────────────
 
 
-def asset_index(assessment_id: str) -> dict:
+def asset_index(assessment_id: str, db: Session | None = None) -> dict:
     """AS_nn -> {ref, name, family, order}. The reference is the AS_nn itself, the one id every screen shows (D-71); the family
     still groups the rows and comes from the register's `asset_ref` (WL-01) when it has one."""
     register = read_json_file(output_path(3, assessment_id)) or []
     names = {f["code"]: f["name"] for f in asset_rules.families()}
+    types = {}
+    run = stage_store.current_run(db, assessment_id, "03") if db is not None else None
+    if run is not None:  # the asset type label the 03 screen shows under the name
+        types = {a.asset_id: a.type_label for a in db.query(m.Asset).filter_by(run_id=run.id)}
     index = {}
     for order, asset in enumerate(register):
         ref = asset["asset_id"]
         family = asset["asset_ref"].split("-")[0] if asset.get("asset_ref") else "AS"
-        index[asset["asset_id"]] = {"ref": ref, "name": asset.get("asset_title", ref), "family": family, "family_name": names.get(family, "Assets"), "order": order}
+        index[asset["asset_id"]] = {"ref": ref, "name": asset.get("asset_title", ref), "family": family, "family_name": names.get(family, "Assets"), "order": order, "type": types.get(asset.get("asset_ref") or "")}
     return index
 
 
@@ -142,7 +146,7 @@ def read_json_file(path: Path):
 
 def asset_fields(assets: dict, asset_id: str) -> dict:
     a = assets.get(asset_id) or {"ref": asset_id, "name": asset_id, "family": "AS", "family_name": "Assets", "order": 10**6}
-    return {"asset_id": asset_id, "asset_ref": a["ref"], "asset_name": a["name"], "family": a["family"], "family_name": a["family_name"], "_order": a["order"]}
+    return {"asset_id": asset_id, "asset_ref": a["ref"], "asset_name": a["name"], "asset_type": a.get("type"), "family": a["family"], "family_name": a["family_name"], "_order": a["order"]}
 
 
 # ── Notes: comments, assumptions and the analyst's edits ──────────────────────
@@ -394,7 +398,7 @@ def read_screen(db: Session, assessment_id: str, ui_stage: str) -> dict:
     assumptions = build_assumptions(db, assessment_id, ui_stage, ctx)
     flags = comment_flags(db, assessment_id, ui_stage)
     edits = latest_edits(db, assessment_id, ui_stage)
-    assets = asset_index(assessment_id)
+    assets = asset_index(assessment_id, db)
     rows = BUILDERS[ui_stage](db, assessment_id, assets, ctx, assumptions, flags, edits)
     rows.sort(key=lambda r: (r["_order"], r["record_id"]))
     for r in rows:

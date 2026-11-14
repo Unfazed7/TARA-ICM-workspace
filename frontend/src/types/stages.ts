@@ -279,6 +279,8 @@ export interface UiRowBase {
   asset_id: string;
   asset_ref: string;
   asset_name: string;
+  /** The type label 03 shows under the name (Data store); null for an uploaded asset list. */
+  asset_type: string | null;
   family: string;
   family_name: string;
   property: string | null;

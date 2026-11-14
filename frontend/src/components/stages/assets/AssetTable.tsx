@@ -36,7 +36,7 @@ export function AssetTable(p: TableProps) {
     const closed = Boolean(p.collapsed[family.code]);
     lines.push(
       <tr className="band" key={`band-${family.code}`}>
-        <td colSpan={10}>
+        <td colSpan={9}>
           <button type="button" className="bandbtn" aria-expanded={!closed} onClick={() => p.onBand(family.code)}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m9 6 6 6-6 6" />
@@ -62,14 +62,14 @@ export function AssetTable(p: TableProps) {
           <td style={st(`background: ${bg}${rowSel ? '; box-shadow: inset 3px 0 0 #1F6C9F' : ''}`)}>
             <button type="button" className="cell mono" onClick={() => p.onPickRow(a.asset_id)} onDoubleClick={(e) => { e.preventDefault(); p.onDblRow(a.asset_id); }} aria-label={`${shownId(a)} ${a.name}, open comments`} style={st('font-size: 12.5px; color: #6B6A66; white-space: nowrap; text-align: center')}>{shownId(a)}</button>
           </td>
-          <td style={st(`background: ${bg}`)}>
-            <button type="button" className="cell" onClick={() => p.onPickRow(a.asset_id)} onDoubleClick={(e) => { e.preventDefault(); p.onDblRow(a.asset_id); }} style={st('font-size: 13.5px; font-weight: 500; line-height: 1.35; text-align: center')}>{a.name}</button>
-          </td>
-          <td style={st(`background: ${bg}`)}>
-            <button type="button" className="cell" tabIndex={-1} onClick={() => p.onPickRow(a.asset_id)} onDoubleClick={(e) => { e.preventDefault(); p.onDblRow(a.asset_id); }} style={st('font-size: 13px; color: #5F5E5B; line-height: 1.35; text-align: center')}>
-              {a.type_label}
-              {a.interface && <span className="tag t-grey" style={st('font-size: 10px; padding: 1px 7px; margin: 4px auto 0; display: table')}>Interface</span>}
-              {removed && <span className="tag t-grey" style={st('font-size: 10px; padding: 1px 7px; margin: 4px auto 0; display: table')}>Removed</span>}
+          <td className="namecol" style={st(`background: ${bg}`)}>
+            <button type="button" className="cell" onClick={() => p.onPickRow(a.asset_id)} onDoubleClick={(e) => { e.preventDefault(); p.onDblRow(a.asset_id); }} title={`${a.name} · ${a.type_label}`} style={st('padding: 8px 18px 8px 18px; text-align: left')}>
+              <span className="aname" style={st('display: block; font-size: 13.5px; font-weight: 500; line-height: 1.35; color: #1C1B19; white-space: nowrap; overflow: hidden; text-overflow: ellipsis')}>{a.name}</span>
+              <span className="atype" style={st('display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12px; line-height: 1.35; color: #6B6A66')}>
+                <span style={st('white-space: nowrap; overflow: hidden; text-overflow: ellipsis')}>{a.type_label}</span>
+                {a.interface && <span className="tag t-grey" style={st('font-size: 10px; padding: 1px 7px')}>Interface</span>}
+                {removed && <span className="tag t-grey" style={st('font-size: 10px; padding: 1px 7px')}>Removed</span>}
+              </span>
             </button>
           </td>
           <td style={st(`background: ${bg}`)}>
@@ -121,8 +121,7 @@ export function AssetTable(p: TableProps) {
       <thead>
         <tr>
           <th style={st('width: 76px; text-align: center')}>Asset ID</th>
-          <th style={st('text-align: center')}>Asset</th>
-          <th style={st('width: 116px; text-align: center')}>Asset type</th>
+          <th style={st('width: 290px; text-align: left; padding-left: 18px')}>Asset</th>
           <th style={st('text-align: center; padding-left: 18px')}>Description</th>
           {PROPS.map((prop, i) => (
             <th key={prop.k} className={`pc k${i}`} title={prop.name} style={st(`width: 100px; background: #E6E2D9; color: #2F2E2B; font-weight: 600; --pc: ${prop.t}${i === 0 ? '; box-shadow: inset 1px 0 0 #C9C4B9' : ''}`)}>

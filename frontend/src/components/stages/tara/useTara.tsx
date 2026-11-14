@@ -115,7 +115,7 @@ export function useTara(p: TaraProps) {
       const needsGoal = (t?.option === 'reduce' || t?.option === 'share') && !goal;
       lines.push({
         isBand: false, isRow: true, first, span: String(span[r.asset_id]), firstDmg, dspan: String(dspan[r.asset_id + r.damage_id]),
-        assetLabel: `${assetCode(r.asset_ref)} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`, thr: threatCode(id), aid: assetCode(r.asset_ref), aname: r.asset_name,
+        assetLabel: `${assetCode(r.asset_ref)} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`, thr: threatCode(id), aid: assetCode(r.asset_ref), aname: r.asset_name, atype: r.asset_type ?? '',
         prop: PROPNAME[r.property ?? ''], dmg: damageCode(r.damage_id), dscen: r.damage, tscen: r.threat,
         dmgTd: `background: #FFFFFF${top}${dmgBottom}`,
         rowCorner: c.hasThread(threadKey(id, null)), plainTd: `background: ${bg}${top}`,

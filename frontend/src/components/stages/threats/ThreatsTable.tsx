@@ -81,7 +81,7 @@ export function ThreatsTable({ v }: { v: Vals }) {
                         <button type="button" className="cell mono" onClick={r.pickRow} onDoubleClick={r.dblRow} aria-label={r.assetLabel} title={r.assetLabel} style={st("font-size: 12px; color: #6B6A66; white-space: nowrap; text-align: center; padding: 8px 4px")}>{r.aid}</button>
                       </td>
                       <td className="acol" rowSpan={Number(r.span)} style={st(`${r.assetTd}; box-shadow: inset -1px 0 0 #E6E2D9`)}>
-                        <button type="button" className="cell" onClick={r.pickRow} onDoubleClick={r.dblRow} tabIndex={-1} style={st("font-size: 13px; font-weight: 500; line-height: 1.35; text-align: center; color: #1C1B19")}>{r.aname}</button>
+                        <button type="button" className="cell" onClick={r.pickRow} onDoubleClick={r.dblRow} tabIndex={-1} style={st("font-size: 13px; font-weight: 500; line-height: 1.35; text-align: left; color: #1C1B19")}><span style={st("display: block; font-weight: 500; color: #1C1B19")}>{r.aname}</span>{r.atype && <span style={st("display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: #6B6A66")}>{r.atype}</span>}</button>
                       </td>
                       </>
                     )}

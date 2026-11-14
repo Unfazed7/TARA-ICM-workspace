@@ -113,11 +113,11 @@ export function useImpacts(p: ImpactsProps) {
       const none = ov === 0;
       lines.push({
         isBand: false, isRow: true, first, span: String(span[r.asset_id]), assetLabel: `${assetCode(r.asset_ref)} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`,
-        dmg: damageCode(id), aid: assetCode(r.asset_ref), aname: r.asset_name, prop: PROPNAME[r.property ?? ''], scen: r.damage,
+        dmg: damageCode(id), aid: assetCode(r.asset_ref), aname: r.asset_name, atype: r.asset_type ?? '', prop: PROPNAME[r.property ?? ''], scen: r.damage,
         rowLabel: `${damageCode(id)} ${r.asset_name} ${PROPNAME[r.property ?? '']}, open comments`,
         rowCorner: c.hasThread(threadKey(id, null)),
         idStyle: 'font-size: 12px; color: #6B6A66; white-space: nowrap; text-align: center; padding: 8px 4px',
-        nameStyle: 'font-size: 13px; font-weight: 500; line-height: 1.35; text-align: center; color: #1C1B19; padding: 8px 8px',
+        nameStyle: 'font-size: 13px; font-weight: 500; line-height: 1.35; text-align: left; color: #1C1B19; padding: 8px 8px',
         idTd: `background: ${bg}${top}${rowSel ? '; box-shadow: inset 3px 0 0 #1F6C9F' : ''}`,
         plainTd: `background: ${bg}${top}`,
         rtTd: `width: 112px; background: ${none ? '#F7F6F2' : SOLID[ov - 1][0]}${top}${rowSel ? '; box-shadow: inset 0 0 0 2px #1F6C9F' : ''}`,

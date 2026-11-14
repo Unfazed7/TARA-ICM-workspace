@@ -117,7 +117,7 @@ export function useThreats(p: ThreatsProps) {
       })();
       lines.push({
         isBand: false, isRow: true, first, span: String(span[r.asset_id]), assetLabel: `${assetCode(r.asset_ref)} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`,
-        thr: threatCode(id), ap: attackCode(r.attack_id), aid: assetCode(r.asset_ref), aname: r.asset_name,
+        thr: threatCode(id), ap: attackCode(r.attack_id), aid: assetCode(r.asset_ref), aname: r.asset_name, atype: r.asset_type ?? '',
         openPath: (ev?: MouseEvent) => { ev?.stopPropagation(); set({ pathSheet: id, menu: null }); },
         prop: PROPNAME[r.property ?? ''], scen: r.threat,
         rowCorner: c.hasThread(threadKey(id, null)),
