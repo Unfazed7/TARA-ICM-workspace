@@ -294,6 +294,7 @@ function isNonRecoverableRequestError(error) {
 
 async function callClaudeForThreat(threat, damageScenario, fetchImpl = fetch) {
   const response = await callLLM({
+    stage: '07-impact',
     model: MODEL,
     max_tokens: 1024,
     system: buildSystemPrompt(),

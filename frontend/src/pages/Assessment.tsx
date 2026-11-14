@@ -96,17 +96,24 @@ export default function Assessment() {
   const stage02 = useQuery({ queryKey: ['stage02', assessmentId], queryFn: () => orNothing(stagesApi.stage02(assessmentId)) });
   const rat01 = useQuery({ queryKey: ['rationale', assessmentId, '01'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '01')) });
   const rat02 = useQuery({ queryKey: ['rationale', assessmentId, '02'], queryFn: () => orNothing(stagesApi.rationale(assessmentId, '02')) });
-  // Execute can be left running (the Documents page says so): when it ends, every screen shows what it stored.
+  // Execute can be left running (the Documents page says so). Every screen shows what a stage stored as soon
+  // as that stage finishes, not only when the whole run ends: refresh whenever any stage changes status.
   const pipeline = useQuery({
     queryKey: ['pipeline', assessmentId],
     queryFn: () => stagesApi.pipeline(assessmentId),
     refetchInterval: (q) => (isPipelineActive(q.state.data) ? 3000 : false),
   });
-  const wasRunning = useRef(false);
+  const lastSignature = useRef<string | null>(null);
   useEffect(() => {
-    const running = isPipelineActive(pipeline.data);
-    if (wasRunning.current && !running) queryClient.invalidateQueries({ predicate: (q) => q.queryKey[1] === assessmentId && q.queryKey[0] !== 'pipeline' });
-    wasRunning.current = running;
+    if (!pipeline.data) return;
+    const signature = JSON.stringify([
+      pipeline.data.stages.map((x) => [x.stage, x.status, x.completed_at]),
+      (pipeline.data.folders ?? []).map((x) => [x.stage_num, x.status, x.completed_at]),
+    ]);
+    if (lastSignature.current !== null && lastSignature.current !== signature) {
+      queryClient.invalidateQueries({ predicate: (q) => q.queryKey[1] === assessmentId && q.queryKey[0] !== 'pipeline' });
+    }
+    lastSignature.current = signature;
   }, [pipeline.data, assessmentId, queryClient]);
   const boundary = useQuery({ queryKey: ['boundary', assessmentId], queryFn: () => stagesApi.boundary(assessmentId) });
   const assets = useAssetsData(assessmentId);

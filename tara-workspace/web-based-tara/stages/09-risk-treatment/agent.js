@@ -222,6 +222,7 @@ function parseTextTreatment(response) {
 
 async function callClaudeForRiskChain(chain, systemPrompt, fetchImpl = fetch) {
   const response = await callLLM({
+    stage: '09-treatment',
     model: MODEL,
     max_tokens: 2048,
     system: systemPrompt,
