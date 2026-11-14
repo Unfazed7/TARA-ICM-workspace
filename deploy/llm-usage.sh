@@ -30,4 +30,27 @@ for (st, m), (c, i, o) in sorted(by.items()):
     if cost is not None: row += " %9.4f" % cost; tot[3] += cost
     print(row); tot[0] += c; tot[1] += i; tot[2] += o
 print("%-26s %-34s %6d %12d %12d" % ("TOTAL", "", tot[0], tot[1], tot[2]) + (" %9.4f" % tot[3] if pin is not None and pout is not None else ""))
+
+# Per-screen totals (screen names as the app shows them; see tara-workspace/web-based-tara/CONTEXT.md)
+def screen_of(st):
+    if st.startswith("01-"): return "01 Documents"
+    if st.startswith("02-"): return "02 Item Definition"
+    if st.startswith("03-"): return "03 Assets"
+    if st in ("04-damage", "07-impact"): return "04 Impacts"
+    if st in ("05-threat", "06-attack-path"): return "05 Threats"
+    if st in ("09-treatment", "10-residual", "10"): return "06 TARA"
+    if st == "default": return "04-06 older runs (not split by stage)"
+    return "Other"
+scr = collections.OrderedDict()
+for (st, m), (c, i, o) in by.items():
+    a = scr.setdefault(screen_of(st), [0, 0, 0]); a[0] += c; a[1] += i; a[2] += o
+print()
+hdr2 = "%-38s %6s %12s %12s" % ("screen", "calls", "in_tokens", "out_tokens")
+if pin is not None and pout is not None: hdr2 += " %9s" % "cost_usd"
+print(hdr2)
+for name in sorted(scr):
+    c, i, o = scr[name]
+    row = "%-38s %6d %12d %12d" % (name, c, i, o)
+    if pin is not None and pout is not None: row += " %9.4f" % ((i * pin + o * pout) / 1e6)
+    print(row)
 '
