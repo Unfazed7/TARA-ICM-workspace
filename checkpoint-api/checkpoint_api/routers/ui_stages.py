@@ -38,6 +38,13 @@ def refused(exc: edits.Refused) -> HTTPException:
     return HTTPException(status_code=exc.status, detail=exc.message)
 
 
+@router.get("/{assessment_id}/residual-risk")
+def residual_risk(assessment_id: str, claims: dict = Depends(get_current_claims), db: Session = Depends(get_db)):
+    """The residual risk sheet of 07: the TARA rows with the feasibility before and after the controls (read only, D-73)."""
+    assessment_for(db, assessment_id, claims)
+    return u.residual_sheet(db, assessment_id)
+
+
 @router.get("/{assessment_id}/ui-stages/{ui_stage}")
 def screen(assessment_id: str, ui_stage: str, claims: dict = Depends(get_current_claims), db: Session = Depends(get_db)):
     check_ui(ui_stage)

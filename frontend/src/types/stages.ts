@@ -402,3 +402,45 @@ export interface UiEditBody {
   goal_statement?: string;
   avoidance_action?: string;
 }
+
+// ── The residual risk sheet on 07 (D-73) ──────────────────────────────────────
+
+export interface ResidualState {
+  metrics: Record<'attack_vector' | 'attack_complexity' | 'privileges_required' | 'user_interaction', string>;
+  /** The exploitability number from the four metrics. */
+  cvss: number;
+  feasibility: { value: number; label: string };
+  risk: { score: number; level: RiskLevel };
+}
+
+export interface ResidualRow {
+  record_id: string;
+  risk_id: string;
+  asset_id: string;
+  asset_ref: string;
+  asset_name: string;
+  asset_type: string | null;
+  family: string;
+  family_name: string;
+  damage_id: string;
+  damage: string | null;
+  impact: { value: number; label: string };
+  threat_id: string;
+  threat: string | null;
+  option: Treatment;
+  controls: { id: string; title: string; type: string }[];
+  /** Before the controls (the attack path and risk register) and after them (Stage 10). */
+  pre: ResidualState;
+  post: ResidualState;
+  changes: { metric: string; from: string; to: string; control_id: string | null; reason: string | null }[];
+}
+
+export interface ResidualSheet {
+  building: boolean;
+  folders: { stage_num: number; status: string; error: string | null }[];
+  stale: { is: boolean; reason: string | null };
+  built_from: { label: string; run: number | null };
+  has_data: boolean;
+  families: { code: string; name: string }[];
+  rows: ResidualRow[];
+}

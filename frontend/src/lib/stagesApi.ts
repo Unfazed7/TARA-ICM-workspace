@@ -11,6 +11,7 @@ import type {
   PipelineStatus,
   RationaleList,
   ReviewStatus,
+  ResidualSheet,
   Stage01Output,
   Stage02Output,
   Stage03Output,
@@ -100,6 +101,8 @@ export const stagesApi = {
       method: 'PUT',
       body: JSON.stringify({ answer }),
     }),
+
+  residual: (id: string) => call<ResidualSheet>(`/${id}/residual-risk`),
 
   // Screens 04 Impacts, 05 Threats, 06 TARA
   uiStage: <Row,>(id: string, ui: UiStage) => call<UiStageOutput<Row>>(`/${id}/ui-stages/${ui}`),

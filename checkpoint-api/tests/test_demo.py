@@ -265,6 +265,31 @@ def test_every_asset_has_one_id_on_every_screen(client, headers, copy_id):
     assert "AS-05 Certificate records" in texts and "DS-01" not in texts
 
 
+def test_residual_risk_sheet(client, headers, copy_id):
+    sheet = get(client, headers, f"/assessments/{copy_id}/residual-risk")
+    rows = sheet["rows"]
+    assert sheet["has_data"] and len(rows) == 66 and not sheet["stale"]["is"] and not sheet["building"]
+    assert all(re.fullmatch(r"AS_\d{2}", r["asset_ref"]) and "property" not in r and r["threat"] and r["damage"] for r in rows)
+    changed = [r for r in rows if r["changes"]]
+    assert len(changed) == 24
+    for r in rows:
+        assert set(r["pre"]["metrics"]) == {"attack_vector", "attack_complexity", "privileges_required", "user_interaction"}
+        if r["changes"]:  # a control only ever makes the attack harder, so the numbers fall
+            assert r["post"]["cvss"] < r["pre"]["cvss"] and r["post"]["risk"]["score"] <= r["pre"]["risk"]["score"]
+            assert all(c["from"] != c["to"] and c["control_id"] and c["reason"] for c in r["changes"])
+        else:
+            assert r["pre"] == r["post"]
+    # The same numbers 06 shows for the risk before the controls.
+    tara = {r["record_id"]: r for r in get(client, headers, f"/assessments/{copy_id}/ui-stages/06")["rows"]}
+    assert all(tara[r["record_id"]]["risk"]["score"] == r["pre"]["risk"]["score"] for r in rows)
+    # An edit upstream puts the sheet out of date; another tester cannot read it.
+    row = get(client, headers, f"/assessments/{copy_id}/ui-stages/05")["rows"][0]
+    assert client.patch(f"/api/v1/assessments/{copy_id}/ui-stages/05/records/{row['record_id']}/fields/attack_vector", headers=headers, json={"value": "P", "reason": "Needs physical access to the server room."}).status_code == 200
+    assert get(client, headers, f"/assessments/{copy_id}/residual-risk")["stale"]["is"] is True
+    other = s.analyst_headers(client, "other@example.com")
+    assert client.get(f"/api/v1/assessments/{copy_id}/residual-risk", headers=other).status_code in (403, 404)
+
+
 def test_no_model_wording_in_the_seed():
     for path in (demo.SEED / "folders").rglob("*.json"):
         text = path.read_text(encoding="utf-8").lower()

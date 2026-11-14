@@ -208,7 +208,7 @@ export default function Assessment() {
         assumptionsDisabled={phase ? 'Assumptions for these sheets come later' : undefined}
         onSettings={() => setSettingsOpen(true)}
       />
-      {!SCREENS.includes(tab) && <DemoNote floating />}
+      {!SCREENS.includes(tab) && tab !== '07' && <DemoNote floating />}
 
       <div className="relative flex min-h-0">
         <main className="min-w-0 flex-1">

@@ -33,17 +33,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.590Z"
  },
  {
   "residual_id": "RES_02",
@@ -79,17 +87,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_03",
@@ -125,17 +141,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_04",
@@ -171,17 +195,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_55",
+    "reason": "Vault Dynamic Secrets Management makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_05",
@@ -217,17 +249,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_06",
@@ -263,17 +303,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_07",
@@ -309,17 +357,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_08",
@@ -355,17 +411,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_09",
@@ -401,17 +465,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_10",
@@ -447,17 +519,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_11",
@@ -493,17 +573,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_12",
@@ -539,17 +627,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_13",
@@ -585,17 +681,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_74",
+    "reason": "Cloud Workload Protection makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_14",
@@ -631,17 +735,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_15",
@@ -677,17 +789,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_16",
@@ -723,17 +843,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_17",
@@ -769,17 +897,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_18",
@@ -815,17 +951,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_19",
@@ -861,17 +1005,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_32",
+    "reason": "API Rate Limiting and Throttling makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.591Z"
  },
  {
   "residual_id": "RES_20",
@@ -907,17 +1059,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_21",
@@ -953,17 +1113,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_22",
@@ -999,17 +1167,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_23",
@@ -1045,17 +1221,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_24",
@@ -1091,17 +1275,25 @@
   "post": {
    "metrics": {
     "attack_vector": "N",
-    "attack_complexity": "L",
+    "attack_complexity": "H",
     "privileges_required": "L",
     "user_interaction": "N"
    },
-   "afr_value": 4,
-   "afr_label": "high",
-   "risk_score": 8,
-   "risk_level": "high"
+   "afr_value": 3,
+   "afr_label": "medium",
+   "risk_score": 6,
+   "risk_level": "medium"
   },
-  "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "metric_changes": [
+   {
+    "metric": "attack_complexity",
+    "from": "L",
+    "to": "H",
+    "control_id": "CTR_50",
+    "reason": "End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker."
+   }
+  ],
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_25",
@@ -1147,7 +1339,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_26",
@@ -1193,7 +1385,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_27",
@@ -1239,7 +1431,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_28",
@@ -1285,7 +1477,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_29",
@@ -1331,7 +1523,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_30",
@@ -1377,7 +1569,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_31",
@@ -1423,7 +1615,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_32",
@@ -1469,7 +1661,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_33",
@@ -1515,7 +1707,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_34",
@@ -1561,7 +1753,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_35",
@@ -1607,7 +1799,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_36",
@@ -1653,7 +1845,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_37",
@@ -1699,7 +1891,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_38",
@@ -1745,7 +1937,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_39",
@@ -1791,7 +1983,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_40",
@@ -1837,7 +2029,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_41",
@@ -1883,7 +2075,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_42",
@@ -1929,7 +2121,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_43",
@@ -1975,7 +2167,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_44",
@@ -2021,7 +2213,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_45",
@@ -2067,7 +2259,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_46",
@@ -2113,7 +2305,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_47",
@@ -2159,7 +2351,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_48",
@@ -2205,7 +2397,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_49",
@@ -2251,7 +2443,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_50",
@@ -2297,7 +2489,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_51",
@@ -2343,7 +2535,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_52",
@@ -2389,7 +2581,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_53",
@@ -2435,7 +2627,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_54",
@@ -2481,7 +2673,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_55",
@@ -2527,7 +2719,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_56",
@@ -2573,7 +2765,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_57",
@@ -2619,7 +2811,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_58",
@@ -2665,7 +2857,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_59",
@@ -2711,7 +2903,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_60",
@@ -2757,7 +2949,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_61",
@@ -2803,7 +2995,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_62",
@@ -2849,7 +3041,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_63",
@@ -2895,7 +3087,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_64",
@@ -2941,7 +3133,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_65",
@@ -2987,7 +3179,7 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  },
  {
   "residual_id": "RES_66",
@@ -3033,6 +3225,6 @@
    "risk_level": "medium"
   },
   "metric_changes": [],
-  "created_timestamp": "2026-11-14T09:45:43.758Z"
+  "created_timestamp": "2026-11-14T11:11:21.592Z"
  }
 ]

@@ -103,6 +103,16 @@ def test_threats_join_the_attack_path(client, headers, built):
     assert row["stride"]["value"] in ("spoofing", "tampering", "repudiation", "information_disclosure", "denial_of_service", "elevation_of_privilege")
 
 
+def test_residual_sheet_has_a_row_per_risk_with_both_sides(client, headers, built):
+    sheet = client.get(f"/api/v1/assessments/{built}/residual-risk", headers=headers).json()
+    risks = folder(built, 8)
+    assert len(sheet["rows"]) == len(risks) and sheet["has_data"] and not sheet["stale"]["is"]
+    residual = {r["threat_id"]: r for r in folder(built, 10)}
+    row = sheet["rows"][0]
+    assert row["pre"]["metrics"] == residual[row["record_id"]]["pre"]["metrics"] and row["post"]["risk"]["level"] == residual[row["record_id"]]["post"]["risk_level"]
+    assert row["pre"]["cvss"] == engine_bridge.cvss_number(residual[row["record_id"]]["pre"]["metrics"])
+
+
 def test_tara_one_row_per_risk_record(client, headers, built):
     body = screen(client, headers, built, "06")
     risks = folder(built, 8)

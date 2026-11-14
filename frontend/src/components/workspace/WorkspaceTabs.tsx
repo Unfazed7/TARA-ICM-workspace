@@ -12,7 +12,8 @@ import { RiskScoringTab } from './tara-tabs/RiskScoringTab';
 import { RiskTreatmentTab } from './tara-tabs/RiskTreatmentTab';
 import { CybersecurityGoalsTab } from './tara-tabs/CybersecurityGoalsTab';
 import { AttackTreesTab } from './tara-tabs/AttackTreesTab';
-import { ResidualRiskTab } from './tara-tabs/ResidualRiskTab';
+import { DemoNote } from '@/components/layout/DemoNote';
+import { ResidualRiskSheet } from '@/components/stages/ResidualRiskSheet';
 import { FinalTaraTab } from './tara-tabs/FinalTaraTab';
 import { ReportExportCenter } from './ReportExportCenter';
 import { useMemo } from 'react';
@@ -133,9 +134,9 @@ export function WorkspaceTabs({ activeTab, onTabChange, phase, stageStatuses }: 
           <TabsContent value="feasibility" className="h-full m-0 p-0"><RiskScoringTab /></TabsContent>
           <TabsContent value="risk-treatment" className="h-full m-0 p-0"><RiskTreatmentTab /></TabsContent>
           <TabsContent value="cybersecurity-goals" className="h-full m-0 p-0"><CybersecurityGoalsTab /></TabsContent>
-          <TabsContent value="residual-risk" className="h-full m-0 p-0"><ResidualRiskTab /></TabsContent>
+          <TabsContent value="residual-risk" className="h-full m-0 p-0"><ResidualRiskSheet /></TabsContent>
           <TabsContent value="final-tara" className="h-full m-0 p-0"><FinalTaraTab /></TabsContent>
-          <TabsContent value="reports" className="h-full m-0 p-0"><ReportExportCenter scenarios={scenarios} /></TabsContent>
+          <TabsContent value="reports" className="h-full m-0 p-0"><ReportExportCenter scenarios={scenarios} /><DemoNote floating /></TabsContent>
           {isActiveRunning && (
             <div className="absolute inset-0 z-50 grid place-items-center bg-background/80" role="status" aria-live="polite">
               <div className="flex min-w-48 flex-col items-center gap-3 aegis-card p-6 text-center">

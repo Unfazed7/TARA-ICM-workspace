@@ -18,6 +18,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -179,6 +180,12 @@ def main() -> None:
                 raise SystemExit(f"{target.name}/{path.name} still has no-model or workshop wording: ...{text[max(0, left.start() - 80):left.end() + 40]}...")
             (target / path.name).write_text(text, encoding="utf-8")
 
+    # Folder 10: the controls' effect by one plain rule instead of a model's proposal (see demo_residual.js).
+    done = subprocess.run(["node", str(API / "scripts" / "demo_residual.js"), str(SEED / "folders")], capture_output=True, text=True)
+    if done.returncode != 0:
+        raise SystemExit(f"The demo residual risk was not built: {done.stderr.strip()}")
+    print(done.stdout.strip())
+
     ids = record_ids(folders)
     notes_by_folder: dict[int, list] = {}
     for number, asset, prop, field, text in ASSUMPTIONS:
@@ -243,6 +250,10 @@ def verify(db) -> None:
         screen = ui_stages.read_screen(db, copy_id, ui)
         assert screen["rows"] and not screen["stale"]["is"] and not screen["building"], (ui, screen["stale"])
         assert all(r.get("asset_ref") for r in screen["rows"]), ui
+    sheet = ui_stages.residual_sheet(db, copy_id)
+    changed = [r for r in sheet["rows"] if r["changes"]]
+    assert len(sheet["rows"]) == len(seeded) and changed and not sheet["stale"]["is"], "the residual risk sheet of a fresh copy is not complete"
+    print(f"Checked: the residual risk sheet has {len(sheet['rows'])} rows, {len(changed)} changed by controls.")
     print(f"Checked: a fresh copy has {len(register)} assets in its register and screens 04 to 06 load.")
     demo.delete_copy(db, copy_id)
 

@@ -1,1 +1,146 @@
-[]
+[
+ {
+  "about_id": "RES_01",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_02",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_03",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_04",
+  "field": "attack_complexity",
+  "text": "Vault Dynamic Secrets Management is assumed to be in place, so how hard it is to carry out is rated harder for this threat: Vault Dynamic Secrets Management makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_05",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_06",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_07",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_08",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_09",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_10",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_11",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_12",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_13",
+  "field": "attack_complexity",
+  "text": "Cloud Workload Protection is assumed to be in place, so how hard it is to carry out is rated harder for this threat: Cloud Workload Protection makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_14",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_15",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_16",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_17",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_18",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_19",
+  "field": "attack_complexity",
+  "text": "API Rate Limiting and Throttling is assumed to be in place, so how hard it is to carry out is rated harder for this threat: API Rate Limiting and Throttling makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_20",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_21",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_22",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_23",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ },
+ {
+  "about_id": "RES_24",
+  "field": "attack_complexity",
+  "text": "End-to-End Encryption for Sensitive Data Flows is assumed to be in place, so how hard it is to carry out is rated harder for this threat: End-to-End Encryption for Sensitive Data Flows makes this step harder for an attacker.",
+  "needs_attention": true
+ }
+]
