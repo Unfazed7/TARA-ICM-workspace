@@ -6,6 +6,7 @@
 import { Fragment } from 'react';
 import { st } from '../assets/constants';
 import type { Vals } from './types';
+import { DemoNote } from '@/components/layout/DemoNote';
 
 export function ReviewFooter({ v }: { v: Vals }) {
   const { finish, finishLabel, legendNode, legendOpen, legendStr, noun, nextDisabled, nextPage, pageLabel, pageMatched, pageRange, pageSize, prevDisabled, prevPage, sizeMenuOpen, sizeMenuStr, sizeOpts, toggleLegend, toggleSizeMenu } = v;
@@ -24,6 +25,7 @@ export function ReviewFooter({ v }: { v: Vals }) {
             {' '}{noun}
           </span>
         </span>
+        <DemoNote />
         <span style={st("display: inline-flex; align-items: center; gap: 16px")}>
           <span style={st("display: inline-flex; align-items: center; gap: 14px")}>
             <span className="psize" style={st("display: inline-flex; align-items: center; gap: 8px; color: #6B6A66")}>

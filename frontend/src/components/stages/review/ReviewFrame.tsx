@@ -45,7 +45,7 @@ export function ReviewFrame(p: Props) {
   );
 
   return (
-    <div ref={p.rootRef} className={p.rootClass} style={{ height: 'calc(100dvh - 70px - var(--preview-banner, 0px))' }} onClick={p.onRoot}>
+    <div ref={p.rootRef} className={p.rootClass} style={{ height: 'calc(100dvh - 70px)' }} onClick={p.onRoot}>
       <main style={st('position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; width: 100%; max-width: 1600px; margin: 0 auto; padding: 24px clamp(16px, 2.5vw, 32px) 24px; box-sizing: border-box')}>
         <PageHeader
           project={p.project}

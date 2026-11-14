@@ -4,8 +4,7 @@
  * Settings has "What I read" and the pipeline runs.
  */
 
-import { DemoBanner } from '@/components/layout/DemoBanner';
-import { useAiOff } from '@/lib/preview';
+import { DemoNote } from '@/components/layout/DemoNote';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -89,7 +88,6 @@ export default function Assessment() {
   const [boundaryOpen, setBoundaryOpen] = useState(false);
   const { easeOut } = useMotionPreset();
   const queryClient = useQueryClient();
-  const aiOff = useAiOff();
 
   const assessment = useQuery({ queryKey: ['assessment', assessmentId], queryFn: () => stagesApi.assessment(assessmentId) });
   const stage01 = useQuery({ queryKey: ['stage01', assessmentId], queryFn: () => orNothing(stagesApi.stage01(assessmentId)) });
@@ -210,7 +208,7 @@ export default function Assessment() {
         assumptionsDisabled={phase ? 'Assumptions for these sheets come later' : undefined}
         onSettings={() => setSettingsOpen(true)}
       />
-      {assessment.data?.is_demo && <DemoBanner aiOff={aiOff} />}
+      {!SCREENS.includes(tab) && <DemoNote floating />}
 
       <div className="relative flex min-h-0">
         <main className="min-w-0 flex-1">
