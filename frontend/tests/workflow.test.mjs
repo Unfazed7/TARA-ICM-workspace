@@ -29,15 +29,15 @@ test('sheet progress allocates an equal segment to every visible result sheet', 
   assert.equal(calculateSheetProgress(threatSheets, { '05': 'complete', '06': 'complete' }), 100);
 });
 
-test('pills 04 to 06 show their pipeline folders, and the sheets without a screen are reachable from 07', () => {
+test('pills 04 to 06 show their pipeline folders, and 07 keeps the residual risk and the reports (D-72)', () => {
   assert.deepEqual(screenFolders['04'], [4, 7]);
   assert.deepEqual(screenFolders['05'], [5, 6]);
   assert.deepEqual(screenFolders['06'], [8, 9, 10]);
   // every folder of the pipeline belongs to exactly one screen
   assert.deepEqual(Object.values(screenFolders).flat().sort((a, b) => a - b), [4, 5, 6, 7, 8, 9, 10]);
-  assert.deepEqual(phaseTabs['review-publish'], ['final-tara', 'reports', 'attack-trees', 'cybersecurity-goals', 'residual-risk']);
-  for (const tab of ['attack-trees', 'cybersecurity-goals', 'residual-risk']) {
-    assert.ok(phaseTabs['review-publish'].includes(tab), `${tab} is reachable`);
-  }
+  // The attack trees show on 05 and the goals and claims on 06, so 07 no longer repeats them.
+  assert.deepEqual(phaseTabs['review-publish'], ['residual-risk', 'reports']);
   assert.equal(stageDestination[10].phase, 'review-publish');
+  assert.equal(stageDestination[6], undefined);
+  assert.equal(stageDestination[9], undefined);
 });

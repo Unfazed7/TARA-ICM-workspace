@@ -16,7 +16,7 @@
    "asset_id": "WL-01",
    "property": "C",
    "author": "assistant",
-   "text": "Agreed. The certificate service stores nothing of its own; the requests it handles are covered by DS-01 Certificate records. Under the D-22 rule this cell should be off.",
+   "text": "Agreed. The certificate service stores nothing of its own; the requests it handles are covered by AS-05 Certificate records. Under the D-22 rule this cell should be off.",
    "proposed_change": {
     "property": "C",
     "applies": false,

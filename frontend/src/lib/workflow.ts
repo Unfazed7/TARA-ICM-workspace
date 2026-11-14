@@ -51,8 +51,9 @@ export const phaseTabs: Record<WorkflowPhase, TaraTab[]> = {
   impacts: ['damage-analysis'],
   'threat-analysis': ['threat-analysis', 'attack-trees', 'attack-path'],
   'risk-treatment': ['impact-rating', 'feasibility', 'risk-treatment', 'cybersecurity-goals', 'residual-risk'],
-  // Pills 04 to 06 are screens of their own (specs 29 to 31). The sheets that have no screen moved here, so every one stays reachable.
-  'review-publish': ['final-tara', 'reports', 'attack-trees', 'cybersecurity-goals', 'residual-risk'],
+  // Pills 04 to 06 are screens of their own (specs 29 to 31). The attack trees show on 05, and the goals and claims on 06 (D-72),
+  // so 07 keeps the residual risk and the reports until it is redesigned.
+  'review-publish': ['residual-risk', 'reports'],
 };
 
 /** The pipeline stage each sheet shows. Residual risk is Stage 10 (D-55). */
@@ -76,7 +77,7 @@ export const phaseDefaultTab: Record<WorkflowPhase, TaraTab> = {
   impacts: 'damage-analysis',
   'threat-analysis': 'threat-analysis',
   'risk-treatment': 'impact-rating',
-  'review-publish': 'final-tara',
+  'review-publish': 'residual-risk',
 };
 
 /** Where the result of a pipeline stage is shown. */
@@ -84,10 +85,8 @@ export const stageDestination: Record<number, { phase: WorkflowPhase; tab: TaraT
   3: { phase: 'assets-damage', tab: 'asset-id' },
   4: { phase: 'impacts', tab: 'damage-analysis' },
   5: { phase: 'threat-analysis', tab: 'threat-analysis' },
-  6: { phase: 'review-publish', tab: 'attack-trees' },
   7: { phase: 'risk-treatment', tab: 'impact-rating' },
   8: { phase: 'risk-treatment', tab: 'feasibility' },
-  9: { phase: 'review-publish', tab: 'cybersecurity-goals' },
   10: { phase: 'review-publish', tab: 'residual-risk' },
 };
 

@@ -4,7 +4,7 @@
  */
 
 import type { MouseEvent } from 'react';
-import { damageCode, threatCode } from '@/lib/displayIds';
+import { assetCode, damageCode, threatCode } from '@/lib/displayIds';
 import type { ImpactCell, ImpactLevel, ImpactRow, UiStageOutput } from '@/types/stages';
 import { animAssetCol } from '../review/colAnim';
 import { OUT, SOLID, TINT } from '../review/palette';
@@ -68,7 +68,7 @@ export function useImpacts(p: ImpactsProps) {
     railToggle: p.railToggle, onRailChange: p.onRailChange,
     rowCode: (r) => damageCode(r.record_id),
     rowAbout: (r) => `${r.asset_name}, ${PROPNAME[r.property ?? '']}`,
-    searchText: (r) => `${damageCode(r.record_id)} ${r.asset_ref} ${r.asset_name} ${PROPNAME[r.property ?? '']} ${r.damage}`,
+    searchText: (r) => `${damageCode(r.record_id)} ${assetCode(r.asset_ref)} ${r.asset_name} ${PROPNAME[r.property ?? '']} ${r.damage}`,
     isTop: (r) => (r.overall?.value ?? 0) >= 2,
     topLabel: 'Major and Severe', filterFirst: 'Major and Severe', noun: 'scenarios',
     fieldName: catName,
@@ -112,8 +112,8 @@ export function useImpacts(p: ImpactsProps) {
       const focus = s.rail && s.sel === threadKey(id, null);
       const none = ov === 0;
       lines.push({
-        isBand: false, isRow: true, first, span: String(span[r.asset_id]), assetLabel: `${r.asset_ref} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`,
-        dmg: damageCode(id), aid: r.asset_ref, aname: r.asset_name, prop: PROPNAME[r.property ?? ''], scen: r.damage,
+        isBand: false, isRow: true, first, span: String(span[r.asset_id]), assetLabel: `${assetCode(r.asset_ref)} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`,
+        dmg: damageCode(id), aid: assetCode(r.asset_ref), aname: r.asset_name, prop: PROPNAME[r.property ?? ''], scen: r.damage,
         rowLabel: `${damageCode(id)} ${r.asset_name} ${PROPNAME[r.property ?? '']}, open comments`,
         rowCorner: c.hasThread(threadKey(id, null)),
         idStyle: 'font-size: 12px; color: #6B6A66; white-space: nowrap; text-align: center; padding: 8px 4px',
@@ -192,8 +192,8 @@ export function useImpacts(p: ImpactsProps) {
       base.state = ov ? LEVELS[ov - 1] : 'Not rated'; base.stateCls = 'tag t-ink';
       base.whyLabel = 'Why this impact rating'; base.isRow = true;
       base.reason = ov
-        ? `Impact rating ${LEVELS[ov - 1]} is the highest of the ratings, set by ${drivers(r).join(' and ')}. Affected: ${WHO[r.stakeholder] ?? r.stakeholder}. The scenario comes from the ${PROPNAME[r.property ?? '']} mark on ${r.asset_ref} in Asset Analysis.`
-        : `This scenario is rated after the threats are found. It comes from the ${PROPNAME[r.property ?? '']} mark on ${r.asset_ref} in Asset Analysis. Affected: ${WHO[r.stakeholder] ?? r.stakeholder}.`;
+        ? `Impact rating ${LEVELS[ov - 1]} is the highest of the ratings, set by ${drivers(r).join(' and ')}. Affected: ${WHO[r.stakeholder] ?? r.stakeholder}. The scenario comes from the ${PROPNAME[r.property ?? '']} mark on ${assetCode(r.asset_ref)} in Asset Analysis.`
+        : `This scenario is rated after the threats are found. It comes from the ${PROPNAME[r.property ?? '']} mark on ${assetCode(r.asset_ref)} in Asset Analysis. Affected: ${WHO[r.stakeholder] ?? r.stakeholder}.`;
       const mk = (cat: (typeof CATS)[number]) => {
         const n = level(r, cat.field);
         const wk = `${r.record_id}.${cat.field}`;

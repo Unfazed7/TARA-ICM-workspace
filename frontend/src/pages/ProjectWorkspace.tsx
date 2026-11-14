@@ -69,7 +69,7 @@ function WorkspaceContent({ projectId }: { projectId: string }) {
       'assets-damage': 'asset-id',
       'threat-analysis': 'threat-analysis',
       'risk-treatment': 'impact-rating',
-      'review-publish': 'final-tara',
+      'review-publish': 'residual-risk',
     };
     if (defaults[next]) setActiveTab(defaults[next]!);
   };

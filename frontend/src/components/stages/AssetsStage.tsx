@@ -14,7 +14,7 @@ import { stagesApi } from '@/lib/stagesApi';
 import type { Asset, AssetComment, NewAssetBody, PropertyCode, Stage03Output } from '@/types/stages';
 import { AssetTable } from './assets/AssetTable';
 import { SidePanel } from './assets/SidePanel';
-import { keyOf, splitKey, st } from './assets/constants';
+import { keyOf, shownId, shownIdOf, splitKey, st } from './assets/constants';
 import { useAssetsData, type Assumption } from './assets/useAssetsData';
 import '@/styles/assets-stage.css';
 
@@ -138,7 +138,7 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
       if (decision === 'confirmed') {
         await stagesApi.review(assessmentId, '03', a.id, 'confirmed');
       } else {
-        await stagesApi.review(assessmentId, '03', a.id, 'disputed', `Disputed in the asset list: see the comment on ${a.about}.`);
+        await stagesApi.review(assessmentId, '03', a.id, 'disputed', `Disputed in the asset list: see the comment on ${shownIdOf(assets, a.about)}.`);
         await stagesApi.addComment(assessmentId, a.about, null, `Disputed ${a.label}: ${a.text}`);
         resetSel(keyOf(a.about, null));
       }
@@ -179,7 +179,7 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
     setAdding(false);
     refresh();
     laterScreens();
-    toast.success(`${made.asset_id} ${made.name} added`);
+    toast.success(`${shownId(made)} ${made.name} added`);
     resetSel(keyOf(made.asset_id, null));
     openRail();
   };
@@ -226,7 +226,7 @@ export function AssetsStage({ assessmentId, project, railToggle, onRailChange, o
   const needle = q.trim().toLowerCase();
   const shown = assets.filter((a) => {
     if (filter === 'notes' && !rowHasNote(a)) return false;
-    if (needle && `${a.asset_id} ${a.name} ${a.description} ${a.type_label}`.toLowerCase().indexOf(needle) < 0) return false;
+    if (needle && `${shownId(a)} ${a.asset_id} ${a.name} ${a.description} ${a.type_label}`.toLowerCase().indexOf(needle) < 0) return false;
     return true;
   });
 

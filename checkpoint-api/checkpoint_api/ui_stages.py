@@ -121,13 +121,14 @@ def stale_folders(db: Session, assessment_id: str, runs: dict[int, PipelineRun] 
 
 
 def asset_index(assessment_id: str) -> dict:
-    """AS_nn -> {ref, name, family, order}. The reference is the register's `asset_ref` (WL-01), else the AS_nn."""
+    """AS_nn -> {ref, name, family, order}. The reference is the AS_nn itself, the one id every screen shows (D-71); the family
+    still groups the rows and comes from the register's `asset_ref` (WL-01) when it has one."""
     register = read_json_file(output_path(3, assessment_id)) or []
     names = {f["code"]: f["name"] for f in asset_rules.families()}
     index = {}
     for order, asset in enumerate(register):
-        ref = asset.get("asset_ref") or asset["asset_id"]
-        family = ref.split("-")[0] if asset.get("asset_ref") else "AS"
+        ref = asset["asset_id"]
+        family = asset["asset_ref"].split("-")[0] if asset.get("asset_ref") else "AS"
         index[asset["asset_id"]] = {"ref": ref, "name": asset.get("asset_title", ref), "family": family, "family_name": names.get(family, "Assets"), "order": order}
     return index
 

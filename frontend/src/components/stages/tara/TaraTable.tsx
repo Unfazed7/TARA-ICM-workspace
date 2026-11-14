@@ -66,6 +66,7 @@ export function TaraTable({ v }: { v: Vals }) {
               <th className="pc" style={st("text-align: center")}>Risk score</th>
               <th className="pc k2" style={st("text-align: center; --pc: #6F6B63")}>Risk treatment</th>
               <th className="hover" style={st("text-align: center")}>Cybersecurity goal</th>
+              <th className="hover" style={st("text-align: center")}>Cybersecurity claim</th>
             </tr>
           </thead>
           <tbody>
@@ -74,7 +75,7 @@ export function TaraTable({ v }: { v: Vals }) {
                 {r.isBand && (
                   <>
                   <tr className="band">
-                    <td colSpan={10}>
+                    <td colSpan={11}>
                       <button type="button" className="bandbtn" aria-expanded={r.expanded} onClick={r.toggle}>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d="m9 6 6 6-6 6" />
@@ -181,7 +182,17 @@ export function TaraTable({ v }: { v: Vals }) {
                           <span className="mono idtag">{r.goalId}</span>
                           </>
                         )}
-                        <span style={st(r.goalStyle)}>{r.goal}</span>
+                        {r.goalEmpty ? <span aria-label="No goal for this treatment" style={st("color: #B9B7B0")}>–</span> : <span style={st(r.goalStyle)}>{r.goal}</span>}
+                      </button>
+                    </td>
+                    <td style={st(r.plainTd)}>
+                      <button type="button" className="cell" onClick={r.pickRow} onDoubleClick={r.dblRow} tabIndex={-1} style={st("display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; padding: 10px 14px 11px")}>
+                        {r.hasClaimId && (
+                          <>
+                          <span className="mono idtag">{r.claimId}</span>
+                          </>
+                        )}
+                        {r.claimEmpty ? <span aria-label="No claim for this treatment" style={st("color: #B9B7B0")}>–</span> : <span style={st(r.claimStyle)}>{r.claim}</span>}
                       </button>
                     </td>
                   </tr>

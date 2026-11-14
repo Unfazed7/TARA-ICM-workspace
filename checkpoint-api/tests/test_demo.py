@@ -5,6 +5,7 @@ runs in these tests, except where a test checks that a run still starts with AI 
 """
 
 import json
+import re
 import time
 from datetime import timedelta
 from pathlib import Path
@@ -238,7 +239,7 @@ def test_the_copy_has_every_stage(client, headers, copy_id, tmp_path):
     for ui in ("04", "05", "06"):
         screen = get(client, headers, f"/assessments/{copy_id}/ui-stages/{ui}")
         assert screen["rows"] and not screen["stale"]["is"] and not screen["building"], ui
-        assert all(r["asset_ref"] and "_" not in r["asset_ref"] for r in screen["rows"]), ui  # WL-01, never a bare AS_nn
+        assert all(re.fullmatch(r"AS_\d{2}", r["asset_ref"]) for r in screen["rows"]), ui  # one id for an asset on every screen (D-71)
         assert [a["status"] for a in screen["assumptions"]].count("confirmed") == 1 and len(screen["assumptions"]) >= 2, ui
         assert len(get(client, headers, f"/assessments/{copy_id}/ui-stages/{ui}/comments")) == 1, ui
     assert len(get(client, headers, f"/assessments/{copy_id}/ui-stages/04")["rows"]) == 66
@@ -248,6 +249,20 @@ def test_the_copy_has_every_stage(client, headers, copy_id, tmp_path):
     for number in range(3, 11):
         assert Path(pipeline_runner.get_output_path(number, copy_id)).is_file()
     assert client.get(f"/api/v1/assessments/{copy_id}/sheets", headers=headers).status_code in (200, 404)
+
+
+def test_every_asset_has_one_id_on_every_screen(client, headers, copy_id):
+    assets = get(client, headers, f"/assessments/{copy_id}/stages/03/runs/current/output")["assets"]
+    shown = [a["display_id"] for a in assets]
+    assert shown == [f"AS_{n:02d}" for n in range(1, 23)]  # row order, no gaps, no family in the id
+    by_ref = {a["asset_id"]: a["display_id"] for a in assets}
+    assert by_ref["WL-01"] == "AS_01" and by_ref["DS-01"] == "AS_05" and by_ref["DS-02"] == "AS_06"
+    for ui in ("04", "05", "06"):
+        refs = {r["asset_ref"] for r in get(client, headers, f"/assessments/{copy_id}/ui-stages/{ui}")["rows"]}
+        assert refs == set(shown), ui
+    # The assistant's comment on 03 names the asset the way the screens do.
+    texts = " ".join(c["text"] for c in get(client, headers, f"/assessments/{copy_id}/stages/03/comments"))
+    assert "AS-05 Certificate records" in texts and "DS-01" not in texts
 
 
 def test_no_model_wording_in_the_seed():
@@ -386,7 +401,7 @@ def test_add_asset(client, headers, copy_id):
     response = client.post(f"/api/v1/assessments/{copy_id}/stages/03/assets", headers=headers, json=new_asset())
     assert response.status_code == 201, response.text
     asset = response.json()
-    assert asset["asset_id"] == "DS-07" and asset["status"] == "confirmed" and asset["source"]["ids"] == ["EL-018"]
+    assert asset["asset_id"] == "DS-07" and asset["display_id"] == "AS_23" and asset["status"] == "confirmed" and asset["source"]["ids"] == ["EL-018"]
     assert all(p["origin"] == "analyst" and p["reviewed"] for p in asset["properties"].values())
     assert [code for code, p in asset["properties"].items() if p["applies"]] == ["C", "I"]
 
@@ -463,7 +478,7 @@ def test_a_rebuild_with_ai_on_clears_the_mark(client, headers, copy_id, monkeypa
         time.sleep(0.5)
     after = stale(client, headers, copy_id)
     assert not any(v["is"] for v in after.values()), after
-    assert any(r["asset_ref"] == "DS-07" for r in get(client, headers, f"/assessments/{copy_id}/ui-stages/04")["rows"])
+    assert any(r["asset_ref"] == "AS_23" for r in get(client, headers, f"/assessments/{copy_id}/ui-stages/04")["rows"])
 
 
 def test_03_edits_on_an_assessment_with_no_later_folders_mark_nothing(client, headers):

@@ -206,8 +206,12 @@ def main() -> None:
 def build_notes(db, aid: str, design: dict, ids: dict) -> dict:
     """Sample comments and confirmed assumptions. Ids come from the generated folders, so they always exist."""
     by_design = {item["design_id"]: item["rationale_id"] for item in design["rationale"]}
+    # The design sample names assets as DS-01 in its comment text. Every screen shows AS-nn now (D-71), so the text does too.
+    register = json.loads(Path(pipeline_runner.get_output_path(3, aid)).read_text(encoding="utf-8"))
+    shown = {a["asset_ref"]: a["asset_id"].replace("_", "-") for a in register}
+    comments = [{**c, "text": re.sub(r"\b(?:EXT|NET|INF|WL|DS|IAM|API|COMM)-\d{2}\b", lambda m: shown.get(m.group(0), m.group(0)), c["text"])} for c in design["comments"] + design["change_proposed"]]
     notes = {
-        "comments_03": design["comments"] + design["change_proposed"],
+        "comments_03": comments,
         "confirmed_03": [by_design[i] for i in design["confirmed_design_ids"]],
         "screens": {},
     }

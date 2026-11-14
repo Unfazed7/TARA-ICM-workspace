@@ -195,6 +195,8 @@ export interface AssetProperty {
 
 export interface Asset {
   asset_id: string;
+  /** The id every screen shows for the asset: AS_01. `asset_id` (WL-01) stays the key of comments and edits (D-71). */
+  display_id: string;
   family: string;
   name: string;
   type_label: string;

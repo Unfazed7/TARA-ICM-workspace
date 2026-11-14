@@ -2,7 +2,7 @@
 
 import type { MouseEvent } from 'react';
 import type { Asset, PropertyCode } from '@/types/stages';
-import { keyOf, PROPS, st } from './constants';
+import { keyOf, PROPS, shownId, st } from './constants';
 
 export interface TableProps {
   families: { code: string; name: string }[];
@@ -60,7 +60,7 @@ export function AssetTable(p: TableProps) {
       lines.push(
         <tr className="row" key={a.asset_id} style={{ ...st(`--r: ${n}`), ...(removed ? { opacity: 0.55 } : {}) }}>
           <td style={st(`background: ${bg}${rowSel ? '; box-shadow: inset 3px 0 0 #1F6C9F' : ''}`)}>
-            <button type="button" className="cell mono" onClick={() => p.onPickRow(a.asset_id)} onDoubleClick={(e) => { e.preventDefault(); p.onDblRow(a.asset_id); }} aria-label={`${a.asset_id} ${a.name}, open comments`} style={st('font-size: 12.5px; color: #6B6A66; white-space: nowrap; text-align: center')}>{a.asset_id}</button>
+            <button type="button" className="cell mono" onClick={() => p.onPickRow(a.asset_id)} onDoubleClick={(e) => { e.preventDefault(); p.onDblRow(a.asset_id); }} aria-label={`${shownId(a)} ${a.name}, open comments`} style={st('font-size: 12.5px; color: #6B6A66; white-space: nowrap; text-align: center')}>{shownId(a)}</button>
           </td>
           <td style={st(`background: ${bg}`)}>
             <button type="button" className="cell" onClick={() => p.onPickRow(a.asset_id)} onDoubleClick={(e) => { e.preventDefault(); p.onDblRow(a.asset_id); }} style={st('font-size: 13.5px; font-weight: 500; line-height: 1.35; text-align: center')}>{a.name}</button>
@@ -101,7 +101,7 @@ export function AssetTable(p: TableProps) {
                     className={v.applies ? 'mark on' : 'mark'}
                     onClick={(e) => p.onToggle(a.asset_id, prop.k, v.applies, e)}
                     aria-pressed={v.applies}
-                    aria-label={`${prop.name} for ${a.asset_id}: ${v.applies ? 'applies' : 'does not apply'}${v.reviewed ? '' : ', proposed'}. Double-click to comment.`}
+                    aria-label={`${prop.name} for ${shownId(a)}: ${v.applies ? 'applies' : 'does not apply'}${v.reviewed ? '' : ', proposed'}. Double-click to comment.`}
                     title={`${prop.name}${v.applies ? ' applies. Click to untick.' : ' does not apply. Click to tick.'} Double-click to comment.`}
                     style={{ ...st(`--pc: ${prop.t}; ${fill}`), ...(v.applies && !v.reviewed ? { opacity: 0.42 } : {}) }}
                   >

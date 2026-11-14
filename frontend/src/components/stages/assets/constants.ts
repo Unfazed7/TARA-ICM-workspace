@@ -5,7 +5,12 @@
  */
 
 import type { CSSProperties } from 'react';
-import type { PropertyCode } from '@/types/stages';
+import type { Asset, PropertyCode } from '@/types/stages';
+import { dashed } from '@/lib/displayIds';
+
+/** The id shown for an asset: AS-01 (D-71). The key of its comments and edits stays WL-01. */
+export const shownId = (a: Pick<Asset, 'asset_id' | 'display_id'>): string => dashed(a.display_id || a.asset_id);
+export const shownIdOf = (assets: Asset[], id: string): string => { const a = assets.find((x) => x.asset_id === id); return a ? shownId(a) : id; };
 
 export const PROPS: { k: PropertyCode; name: string; h: string; b: string; t: string }[] = [
   { k: 'C', name: 'Confidentiality', h: '#DCEEFB', b: '#F1F8FD', t: '#1F6C9F' },

@@ -13,6 +13,7 @@ from jsonschema import Draft7Validator
 from sqlalchemy.orm import Session
 
 from . import asset_rules
+from . import stage03_bridge as bridge
 from . import stage_models as m
 from . import stage_store as store
 
@@ -156,9 +157,15 @@ def _iso(value) -> str | None:
     return store._iso(value) if value else None
 
 
-def read_asset(db: Session, row: m.Asset, stage01_run_id: int | None) -> dict:
+def read_asset(db: Session, row: m.Asset, stage01_run_id: int | None, numbers: dict | None = None) -> dict:
+    """`display_id` is the AS_nn every screen shows for the asset (D-71); `asset_id` stays the key of comments and edits."""
+    if numbers is None:
+        run = db.get(m.StageRun, row.run_id)
+        numbers = bridge.numbers_for(db, run.assessment_id, run)
+    number = numbers.get((row.asset_id, ",".join(sorted(row.source_ids))))
     return {
         "asset_id": row.asset_id,
+        "display_id": f"AS_{number:02d}" if number else row.asset_id,
         "family": row.family,
         "name": row.name,
         "type_label": row.type_label,
@@ -186,7 +193,9 @@ def read_output(db: Session, run: m.StageRun) -> dict:
     stage02 = db.get(m.StageRun, run.based_on_run_id)
     latest02 = store.current_run(db, run.assessment_id, "02")
     rows = db.query(m.Asset).filter_by(run_id=run.id).order_by(m.Asset.position).all()
-    assets = [read_asset(db, row, stage02.based_on_run_id if stage02 else None) for row in rows]
+    numbers = bridge.numbers_for(db, run.assessment_id, run)
+    db.commit()  # numbers given for the first time are kept
+    assets = [read_asset(db, row, stage02.based_on_run_id if stage02 else None, numbers) for row in rows]
     counts = {}
     for a in assets:
         counts[a["family"]] = counts.get(a["family"], 0) + 1

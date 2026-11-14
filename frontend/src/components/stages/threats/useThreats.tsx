@@ -5,7 +5,7 @@
  */
 
 import type { MouseEvent } from 'react';
-import { attackCode, damageCode, threatCode } from '@/lib/displayIds';
+import { assetCode, attackCode, damageCode, threatCode } from '@/lib/displayIds';
 import type { ThreatRow, UiAssumption, UiStageOutput } from '@/types/stages';
 import { PROPNAME } from '../impacts/useImpacts';
 import { animAssetCol } from '../review/colAnim';
@@ -58,7 +58,7 @@ export function useThreats(p: ThreatsProps) {
     railToggle: p.railToggle, onRailChange: p.onRailChange,
     rowCode: (r) => threatCode(r.record_id),
     rowAbout: (r) => `${r.asset_name}, ${strideName(r.stride.value).toLowerCase()}`,
-    searchText: (r) => `${threatCode(r.record_id)} ${attackCode(r.attack_id)} ${r.asset_ref} ${r.asset_name} ${strideName(r.stride.value)} ${r.threat} ${r.attack_path?.description ?? ''}`,
+    searchText: (r) => `${threatCode(r.record_id)} ${attackCode(r.attack_id)} ${assetCode(r.asset_ref)} ${r.asset_name} ${strideName(r.stride.value)} ${r.threat} ${r.attack_path?.description ?? ''}`,
     isTop: (r) => (r.feasibility?.value ?? 0) >= 4,
     topLabel: 'High and Very high', filterFirst: 'High and Very high', noun: 'threats',
     fieldName,
@@ -116,8 +116,8 @@ export function useThreats(p: ThreatsProps) {
         };
       })();
       lines.push({
-        isBand: false, isRow: true, first, span: String(span[r.asset_id]), assetLabel: `${r.asset_ref} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`,
-        thr: threatCode(id), ap: attackCode(r.attack_id), aid: r.asset_ref, aname: r.asset_name,
+        isBand: false, isRow: true, first, span: String(span[r.asset_id]), assetLabel: `${assetCode(r.asset_ref)} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`,
+        thr: threatCode(id), ap: attackCode(r.attack_id), aid: assetCode(r.asset_ref), aname: r.asset_name,
         openPath: (ev?: MouseEvent) => { ev?.stopPropagation(); set({ pathSheet: id, menu: null }); },
         prop: PROPNAME[r.property ?? ''], scen: r.threat,
         rowCorner: c.hasThread(threadKey(id, null)),
@@ -181,7 +181,7 @@ export function useThreats(p: ThreatsProps) {
     const steps = r.attack_path.steps;
     const lv = feasIdx(r);
     return {
-      ap: attackCode(r.attack_id), thr: threatCode(r.record_id), stride: strideName(r.stride.value), asset: `${r.asset_ref} · ${r.asset_name}`, scen: r.threat,
+      ap: attackCode(r.attack_id), thr: threatCode(r.record_id), stride: strideName(r.stride.value), asset: `${assetCode(r.asset_ref)} · ${r.asset_name}`, scen: r.threat,
       dmg: damageCode(r.damage_id), dmgText: r.damage ?? '', cvss: (r.cvss ?? 0).toFixed(2), afr: lv ? FEAS[lv - 1] : '–',
       afrStyle: lv ? `background: ${RISK[lv - 1][0]}; color: ${RISK[lv - 1][1]}` : '',
       steps: steps.map((text, i, all) => ({ n: String(i + 1), text, last: i === all.length - 1 })),

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Asset, AssetComment, PropertyCode } from '@/types/stages';
 import type { Assumption, Thread } from './useAssetsData';
-import { FLIP, keyOf, PROP_NAME, PROPS, splitKey, st, whenWords } from './constants';
+import { FLIP, keyOf, PROP_NAME, PROPS, shownId, shownIdOf, splitKey, st, whenWords } from './constants';
 import { holdScroll, morphWhy, rememberScroll, revealWhy } from './whyScroll';
 
 export interface PanelProps {
@@ -54,7 +54,7 @@ function MarkBox({ prop, applies, reviewed }: { prop: PropertyCode; applies: boo
   );
 }
 
-function AssumptionCard({ a, onPick, onDecide, inList }: { a: Assumption; onPick?: () => void; onDecide: (d: 'confirmed' | 'disputed') => void; inList: boolean }) {
+function AssumptionCard({ a, aboutCode, onPick, onDecide, inList }: { a: Assumption; aboutCode?: string; onPick?: () => void; onDecide: (d: 'confirmed' | 'disputed') => void; inList: boolean }) {
   const cls = a.state === 'open' ? 'tag t-yellow' : a.state === 'confirmed' || a.state === 'noted' ? 'tag t-grey' : 'tag t-red';
   const stateWord = a.state === 'open' ? 'Needs you' : a.state === 'confirmed' ? 'Confirmed' : a.state === 'disputed' ? 'Disputed' : 'Noted';
   const buttons = a.state === 'open' && (
@@ -79,7 +79,7 @@ function AssumptionCard({ a, onPick, onDecide, inList }: { a: Assumption; onPick
     <div className={a.state === 'open' ? 'asm open' : 'asm'}>
       <span style={st('display: flex; align-items: center; justify-content: space-between; gap: 8px')}>
         <button type="button" className="tlink" onClick={onPick} style={st('padding: 0; font-size: 12px; color: #6B6A66; text-decoration: none')}>
-          <span className="mono">{a.about}</span>
+          <span className="mono">{aboutCode ?? a.about}</span>
         </button>
         <span className={cls}>{stateWord}</span>
       </span>
@@ -200,7 +200,7 @@ export function SidePanel(p: PanelProps) {
               {isProp && cell && <MarkBox prop={code!} applies={cell.applies} reviewed={cell.reviewed} />}
               <span style={st('display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto')}>
                 <span style={st('display: inline-flex; align-items: center; gap: 10px; min-width: 0')}>
-                  <span className="mono" style={st('flex: none; padding: 2px 7px; border-radius: 6px; box-shadow: inset 0 0 0 1px #CFCAC0; font-size: 12px; font-weight: 500; color: #4A4946')}>{asset.asset_id}</span>
+                  <span className="mono" style={st('flex: none; padding: 2px 7px; border-radius: 6px; box-shadow: inset 0 0 0 1px #CFCAC0; font-size: 12px; font-weight: 500; color: #4A4946')}>{shownId(asset)}</span>
                   <span style={st('font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; color: #1C1B19; overflow: hidden; text-overflow: ellipsis; white-space: nowrap')}>{isProp ? `${asset.name} · ${PROP_NAME[code!]}` : asset.type_label}</span>
                 </span>
               </span>
@@ -356,7 +356,7 @@ export function SidePanel(p: PanelProps) {
             <p style={st('margin: 0; padding: 18px 20px; font-size: 13.5px; color: #5F5E5B; border-bottom: 1px solid #E6E4DE')}>Confirm or dispute the assumptions below. Select a row, or double-click a property cell, to see the reasoning and comment.</p>
             <div className="sec"><span>Assumptions</span><span className="n">{asmList.length}</span></div>
             {asmList.map((x) => (
-              <AssumptionCard key={x.id} a={x} inList onPick={() => p.assets.some((a) => a.asset_id === x.about) && p.onSelect(keyOf(x.about, null))} onDecide={(d) => p.onAssumption(x, d)} />
+              <AssumptionCard key={x.id} a={x} aboutCode={shownIdOf(p.assets, x.about)} inList onPick={() => p.assets.some((a) => a.asset_id === x.about) && p.onSelect(keyOf(x.about, null))} onDecide={(d) => p.onAssumption(x, d)} />
             ))}
             {asmList.length === 0 && <p style={st('margin: 0; padding: 4px 20px 12px; font-size: 13px; color: #6B6A66')}>None here.</p>}
           </>
@@ -372,7 +372,7 @@ export function SidePanel(p: PanelProps) {
                   <button key={t.key} type="button" role="listitem" className="trow" onClick={() => p.onSelect(t.key)}>
                     <span style={st('display: flex; align-items: center; justify-content: space-between; gap: 8px')}>
                       <span style={st('font-size: 13.5px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap')}>
-                        <span className="mono" style={st('font-size: 11.5px; color: #6B6A66; font-weight: 400; margin-right: 6px')}>{id}{k === 'asset' ? '' : `.${k}`}</span>{titleOf(t.key)}
+                        <span className="mono" style={st('font-size: 11.5px; color: #6B6A66; font-weight: 400; margin-right: 6px')}>{shownIdOf(p.assets, id)}{k === 'asset' ? '' : `.${k}`}</span>{titleOf(t.key)}
                       </span>
                       <span className="tag t-grey">{t.resolved ? 'Resolved' : 'Comment'}</span>
                     </span>

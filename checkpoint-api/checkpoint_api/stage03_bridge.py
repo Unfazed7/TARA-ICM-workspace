@@ -55,16 +55,31 @@ def _number(db: Session, assessment_id: str, asset_id: str, key: str) -> int:
     return row.number
 
 
+def numbers_for(db: Session, assessment_id: str, run: m.StageRun) -> dict[tuple[str, str], int]:
+    """The AS number of every asset of the run, removed ones included, so each asset shows one id on every screen (D-71).
+
+    Numbers are given in row order the first time an asset is seen and never change after that; a removed asset keeps
+    its number, so restoring it brings the same id back.
+    """
+    rows = db.query(m.Asset).filter_by(run_id=run.id).order_by(m.Asset.position).all()
+    out = {}
+    for row in rows:
+        key = (row.asset_id, ",".join(sorted(row.source_ids)))
+        out[key] = _number(db, assessment_id, row.asset_id, key[1])
+    return out
+
+
 def build_register(db: Session, assessment_id: str, run: m.StageRun) -> list[dict]:
     types = asset_rules.register_types()
     stamp = now().strftime("%Y-%m-%dT%H:%M:%SZ")
     register = []
     rows = db.query(m.Asset).filter_by(run_id=run.id).order_by(m.Asset.position).all()
+    numbers = numbers_for(db, assessment_id, run)
     for row in rows:
         props = {p.property: p for p in row.properties}
         if row.status == "removed" or not any(p.applies for p in props.values()):
             continue
-        number = _number(db, assessment_id, row.asset_id, ",".join(sorted(row.source_ids)))
+        number = numbers[(row.asset_id, ",".join(sorted(row.source_ids)))]
         entry = {
             "asset_id": f"AS_{number:02d}",
             "asset_title": row.name,

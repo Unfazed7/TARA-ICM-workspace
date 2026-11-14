@@ -5,7 +5,7 @@
  */
 
 import type { MouseEvent } from 'react';
-import { damageCode, goalCode, riskCode, threatCode } from '@/lib/displayIds';
+import { assetCode, claimCode, damageCode, goalCode, riskCode, threatCode } from '@/lib/displayIds';
 import type { RiskLevel, TaraRow, Treatment, UiAssumption, UiStageOutput } from '@/types/stages';
 import { PROPNAME } from '../impacts/useImpacts';
 import { animCols } from '../review/colAnim';
@@ -53,7 +53,7 @@ export function useTara(p: TaraProps) {
     railToggle: p.railToggle, onRailChange: p.onRailChange,
     rowCode: (r) => threatCode(r.record_id),
     rowAbout: (r) => `${r.asset_name}, risk ${r.risk.score}`,
-    searchText: (r) => `${threatCode(r.record_id)} ${riskCode(r.risk_id)} ${damageCode(r.damage_id)} ${r.asset_ref} ${r.asset_name} ${r.damage ?? ''} ${r.threat ?? ''} ${r.treatment?.goal?.statement ?? ''} ${optName(r.treatment?.option)}`,
+    searchText: (r) => `${threatCode(r.record_id)} ${riskCode(r.risk_id)} ${damageCode(r.damage_id)} ${assetCode(r.asset_ref)} ${r.asset_name} ${r.damage ?? ''} ${r.threat ?? ''} ${r.treatment?.goal?.statement ?? ''} ${optName(r.treatment?.option)}`,
     isTop: (r) => r.risk.level === 'high' || r.risk.level === 'critical',
     topLabel: 'High and Critical', filterFirst: 'High and Critical', noun: 'risks',
     fieldName,
@@ -109,11 +109,13 @@ export function useTara(p: TaraProps) {
       const goal = t?.goal ?? null;
       const goalText = t?.option === 'reduce' || t?.option === 'share'
         ? (goal ? goal.statement : 'No goal written yet')
-        : t?.option === 'avoid' ? (t.avoidance_action ?? 'No action written yet') : t?.option === 'accept' ? 'Not needed, risk accepted' : '';
+        : t?.option === 'avoid' ? (t.avoidance_action ?? 'No action written yet') : '';
+      // Accept carries a claim and no goal; Reduce and Share carry a goal and no claim (D-72).
+      const claim = t?.option === 'accept' ? (t.claim ?? null) : null;
       const needsGoal = (t?.option === 'reduce' || t?.option === 'share') && !goal;
       lines.push({
         isBand: false, isRow: true, first, span: String(span[r.asset_id]), firstDmg, dspan: String(dspan[r.asset_id + r.damage_id]),
-        assetLabel: `${r.asset_ref} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`, thr: threatCode(id), aid: r.asset_ref, aname: r.asset_name,
+        assetLabel: `${assetCode(r.asset_ref)} ${r.asset_name}`, assetTd: `background: #FFFFFF${top}; border-bottom: 0`, thr: threatCode(id), aid: assetCode(r.asset_ref), aname: r.asset_name,
         prop: PROPNAME[r.property ?? ''], dmg: damageCode(r.damage_id), dscen: r.damage, tscen: r.threat,
         dmgTd: `background: #FFFFFF${top}${dmgBottom}`,
         rowCorner: c.hasThread(threadKey(id, null)), plainTd: `background: ${bg}${top}`,
@@ -129,7 +131,12 @@ export function useTara(p: TaraProps) {
         rtTitle: `${LEVELS[r.impact.value]} impact (${r.impact.value}) times ${FEAS[lv - 1].toLowerCase()} feasibility (${lv}) gives risk score ${r.risk.score}, ${r.risk.level}.`,
         hasGoalId: Boolean(goal), goalId: goal ? goalCode(goal.id) : '',
         goal: goalText,
-        goalStyle: `font-size: 13px; line-height: 1.5; ${needsGoal ? 'color: #956400; font-weight: 500' : t?.option === 'accept' ? 'color: #8E8D89' : 'color: #2F2E2B'}`,
+        goalStyle: `font-size: 13px; line-height: 1.5; ${needsGoal ? 'color: #956400; font-weight: 500' : 'color: #2F2E2B'}`,
+        goalEmpty: !goalText,
+        hasClaimId: Boolean(claim), claimId: claim ? claimCode(claim.id) : '',
+        claim: t?.option === 'accept' ? (claim ? claim.statement : 'No claim written yet') : '',
+        claimEmpty: t?.option !== 'accept',
+        claimStyle: `font-size: 13px; line-height: 1.5; ${t?.option === 'accept' && !claim ? 'color: #956400; font-weight: 500' : 'color: #2F2E2B'}`,
         pickRow: c.pickRow(id), dblRow: c.dblRow(id),
         tr: {
           cls: 'kst k2', td: `background: ${bg}${top}`, btn: '--pc: #6F6B63', pcls: h.on ? 'pcell sel' : 'pcell', chip: NEUTRAL, text: optName(t?.option), corner: c.cellDot(id, 'treatment_option'),
@@ -182,7 +189,8 @@ export function useTara(p: TaraProps) {
     } else if (t?.option === 'avoid') {
       base.goalLabel = 'Avoidance action'; base.goalText = t.avoidance_action ?? 'No action written yet.';
     } else {
-      base.goalLabel = 'Reason for accepting'; base.goalText = t?.claim?.basis ?? t?.rationale ?? 'A reason is needed before you finish.';
+      base.goalLabel = 'Cybersecurity claim'; base.goalTag = t?.claim ? claimCode(t.claim.id) : ''; base.hasGoalTag = Boolean(t?.claim);
+      base.goalText = t?.claim ? t.claim.statement : (t?.rationale ?? 'A reason is needed before you finish.');
     }
     base.asms = c.asmView(p.assumptions.filter((a) => a.record_id === r.record_id && (row || a.field === field)));
     const lv = tv(r);
