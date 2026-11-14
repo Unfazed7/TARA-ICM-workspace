@@ -199,6 +199,7 @@ function ensureAssetTitleInStatement(statement, assetTitle) {
 
 async function callClaudeForDamageScenario(damageScenario, fetchImpl = fetch) {
   const response = await callLLM({
+    stage: '05-threat',
     model: MODEL,
     max_tokens: 1024,
     system: buildSystemPrompt(),

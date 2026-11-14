@@ -51,7 +51,12 @@
     "10-residual": {
       "max_tokens": 4000,
       "prompt_version": "residual-v1"
-    }
+    },
+    "04-damage": {},
+    "05-threat": {},
+    "06-attack-path": {},
+    "07-impact": {},
+    "09-treatment": {}
   },
   "provider_routing": {
     "service": "openrouter",

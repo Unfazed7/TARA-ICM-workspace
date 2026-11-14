@@ -304,6 +304,7 @@ function isNonRecoverableRequestError(error) {
 
 async function callClaudeForThreat(threat, fetchImpl = fetch) {
   const params = {
+    stage: '06-attack-path',
     model: MODEL,
     max_tokens: MAX_OUTPUT_TOKENS,
     system: buildSystemPrompt(),

@@ -191,6 +191,7 @@ function isNonRecoverableRequestError(error) {
 
 async function callModelForAsset(asset, properties, fetchImpl = fetch) {
   const response = await callLLM({
+    stage: '04-damage',
     model: MODEL,
     max_tokens: 2048,
     system: buildSystemPrompt(),
