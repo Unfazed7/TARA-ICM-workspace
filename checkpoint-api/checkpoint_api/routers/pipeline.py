@@ -161,7 +161,7 @@ def run_stage(
 ):
     validate_stage_num(stage_num)
     get_assessment_for_user(db, assessment_id, claims)
-    require_ai()
+    require_ai(claims)
     stage = get_stage(stage_num)
     if stage is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stage not found")

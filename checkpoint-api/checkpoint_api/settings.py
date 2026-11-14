@@ -13,9 +13,23 @@ def ai_enabled() -> bool:
     return os.getenv("AI_ENABLED", "true").strip().lower() not in _FALSE
 
 
-def require_ai() -> None:
+def is_admin(claims: dict | None) -> bool:
+    return bool(claims) and claims.get("role") == "admin"
+
+
+def ai_enabled_for(claims: dict | None) -> bool:
+    """AI is on for everyone, or, with the switch off, for admins only (D-70)."""
+    return ai_enabled() or is_admin(claims)
+
+
+def preview_only(claims: dict | None) -> bool:
+    """With AI switched off and the demo offered, everyone but an admin sees the demo only (D-70)."""
+    return not ai_enabled() and demo_enabled() and bool(claims) and not is_admin(claims) and claims.get("role") != "service"
+
+
+def require_ai(claims: dict | None = None) -> None:
     """Guards the endpoints that start a model run. Pure maths (the engines, folder 08 after an edit) is not guarded."""
-    if not ai_enabled():
+    if not ai_enabled_for(claims):
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=AI_OFF_MESSAGE)
 
 

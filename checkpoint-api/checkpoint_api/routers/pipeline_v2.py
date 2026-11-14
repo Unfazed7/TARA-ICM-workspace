@@ -211,7 +211,7 @@ def status_body(db: Session, assessment_id: str) -> dict:
 @router.post("/{assessment_id}/run", status_code=status.HTTP_202_ACCEPTED)
 def start_run(assessment_id: str, background_tasks: BackgroundTasks, claims: dict = Depends(get_current_claims), db: Session = Depends(get_db)):
     owned(db, assessment_id, claims)
-    require_ai()
+    require_ai(claims)
     busy = db.query(m.StageJob).filter(m.StageJob.assessment_id == assessment_id, m.StageJob.status.in_(["pending", "running"])).first()
     if busy:
         log.warning("%s | Execute refused: Stage %s is still %s", assessment_id, busy.stage, busy.status)

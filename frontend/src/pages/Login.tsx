@@ -44,10 +44,10 @@ export default function Login() {
     try {
       await login(email.trim(), password);
       setStep('success');
-      // A preview server (AI off) opens the demo TARA first; any other server opens the dashboard as before.
+      // A login limited to the demo (AI off, not an admin) opens the demo TARA; every other login opens the dashboard.
       let target = '/dashboard';
       const config = await fetchConfig();
-      if (config.demo_available) {
+      if (config.preview_only) {
         try {
           target = `/assessment/${await openDemo()}`;
         } catch {

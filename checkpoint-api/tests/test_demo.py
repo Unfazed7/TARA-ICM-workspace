@@ -17,7 +17,7 @@ from checkpoint_api import demo, pipeline_runner
 from checkpoint_api import stage_models as m
 from checkpoint_api.database import SessionLocal
 from checkpoint_api.main import app
-from checkpoint_api.models import Assessment, PipelineRun, PipelineRunAttempt
+from checkpoint_api.models import Assessment, PipelineRun, PipelineRunAttempt, User
 from checkpoint_api.stage_models import StageBase
 from test_pipeline_run import FAKES, ready
 
@@ -47,6 +47,20 @@ def client():
 @pytest.fixture
 def headers(client):
     return s.analyst_headers(client)
+
+
+def admin_headers(client, email="boss@example.com") -> dict:
+    """An admin: registration only makes analysts, so the role is set in the database, as deploy/make-admin.sh does."""
+    s.analyst_headers(client, email)
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter_by(email=email).one()
+        user.role = "admin"
+        db.commit()
+    finally:
+        db.close()
+    token = client.post("/api/v1/auth/login", json={"email": email, "password": "Test1234!"}).json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
 
 
 def open_demo(client, headers, key=KEY) -> str:
@@ -88,22 +102,53 @@ def rows_for(assessment_id: str) -> dict[str, int]:
 # ── The switch ────────────────────────────────────────────────────────────────
 
 
-def test_config_needs_no_login_and_follows_the_switch(client, monkeypatch):
-    assert client.get("/api/v1/config").json() == {"ai_enabled": False, "demo_available": True}
+def test_config_follows_the_switch_and_the_login(client, headers, monkeypatch):
+    boss = admin_headers(client)
+    # No login: the plain server switch. An analyst: demo only. An admin: AI on, not limited.
+    assert client.get("/api/v1/config").json() == {"ai_enabled": False, "demo_available": True, "preview_only": False}
+    assert client.get("/api/v1/config", headers=headers).json() == {"ai_enabled": False, "demo_available": True, "preview_only": True}
+    assert client.get("/api/v1/config", headers=boss).json() == {"ai_enabled": True, "demo_available": True, "preview_only": False}
+    assert client.get("/api/v1/config", headers={"Authorization": "Bearer not-a-token"}).json()["preview_only"] is False
     monkeypatch.setenv("AI_ENABLED", "true")
-    assert client.get("/api/v1/config").json() == {"ai_enabled": True, "demo_available": False}
-    monkeypatch.setenv("DEMO_ENABLED", "true")
-    assert client.get("/api/v1/config").json() == {"ai_enabled": True, "demo_available": True}
+    assert client.get("/api/v1/config", headers=headers).json() == {"ai_enabled": True, "demo_available": False, "preview_only": False}
+    monkeypatch.setenv("DEMO_ENABLED", "true")  # offered with AI on, but nobody is limited to it
+    assert client.get("/api/v1/config", headers=headers).json() == {"ai_enabled": True, "demo_available": True, "preview_only": False}
     monkeypatch.delenv("AI_ENABLED")
     monkeypatch.delenv("DEMO_ENABLED")
-    assert client.get("/api/v1/config").json() == {"ai_enabled": True, "demo_available": False}
+    assert client.get("/api/v1/config").json() == {"ai_enabled": True, "demo_available": False, "preview_only": False}
+
+
+def test_an_analyst_is_limited_to_the_demo_and_an_admin_is_not(client, headers):
+    response = client.post("/api/v1/assessments", headers=headers, json={"name": "mine", "vehicle_type": "sedan", "domains": ["backend"]})
+    assert response.status_code == 403 and "demo only" in response.json()["detail"]
+    boss = admin_headers(client)
+    assert client.post("/api/v1/assessments", headers=boss, json={"name": "boss item", "vehicle_type": "sedan", "domains": ["backend"]}).status_code == 201
+    assert [a["name"] for a in get(client, boss, "/assessments")] == ["boss item"]
+
+
+def test_an_admin_can_run_the_model_while_the_switch_is_off(client, headers):
+    boss = admin_headers(client)
+    own = s.create_assessment(client, boss)
+    ready(client, boss, own)
+    assert client.post(f"/api/v1/assessments/{own}/run", headers=headers).status_code in (403, 404)  # not theirs
+    assert client.post(f"/api/v1/assessments/{own}/run", headers=boss).status_code in (200, 202)
+    end = time.time() + 180
+    while time.time() < end:
+        body = get(client, boss, f"/assessments/{own}/pipeline")
+        if all(j["status"] == "complete" for j in body["stages"]) and len(body.get("folders", [])) == 7 and all(f["status"] == "complete" for f in body["folders"]):
+            break
+        time.sleep(0.5)
+    else:
+        raise AssertionError("the run did not finish")
+    # The admin can also rebuild on a demo copy; the analyst cannot.
+    copy = open_demo(client, boss)
+    assert client.post(f"/api/v1/assessments/{copy}/ui-stages/06/rebuild", headers=boss).status_code == 202
+    theirs = open_demo(client, headers)
+    assert client.post(f"/api/v1/assessments/{theirs}/ui-stages/06/rebuild", headers=headers).status_code == 503
 
 
 def test_every_model_run_is_refused_with_503_when_ai_is_off(client, headers, copy_id):
-    own = s.create_assessment(client, headers)
-    ready(client, headers, own)
     calls = [
-        f"/assessments/{own}/run",
         f"/assessments/{copy_id}/run",
         f"/assessments/{copy_id}/stages/03/rebuild",
         f"/assessments/{copy_id}/ui-stages/04/rebuild",
@@ -128,12 +173,13 @@ def test_the_same_calls_start_a_run_when_ai_is_on(client, headers, copy_id, monk
     while time.time() < end and get(client, headers, f"/assessments/{copy_id}/ui-stages/06")["building"]:
         time.sleep(0.3)
     assert not get(client, headers, f"/assessments/{copy_id}/ui-stages/06")["building"]
-    own = s.create_assessment(client, headers)
-    ready(client, headers, own)
-    assert client.post(f"/api/v1/assessments/{own}/run", headers=headers).status_code in (200, 202)
+    boss = admin_headers(client)
+    own = s.create_assessment(client, boss)
+    ready(client, boss, own)
+    assert client.post(f"/api/v1/assessments/{own}/run", headers=boss).status_code in (200, 202)
     end = time.time() + 180
     while time.time() < end:
-        body = get(client, headers, f"/assessments/{own}/pipeline")
+        body = get(client, boss, f"/assessments/{own}/pipeline")
         if all(j["status"] == "complete" for j in body["stages"]) and len(body.get("folders", [])) == 7 and all(f["status"] == "complete" for f in body["folders"]):
             break
         time.sleep(0.5)
@@ -225,9 +271,12 @@ def test_edits_on_a_copy_recalculate_without_a_model(client, headers, copy_id):
 
 
 def test_only_the_owner_sees_a_copy_and_lists_leave_it_out(client, headers, copy_id):
-    own = s.create_assessment(client, headers)
-    listed = get(client, headers, "/assessments")
-    assert [a["assessment_id"] for a in listed] == [own]
+    boss = admin_headers(client)
+    own = s.create_assessment(client, boss)
+    assert [a["assessment_id"] for a in get(client, boss, "/assessments")] == [own]
+    assert get(client, headers, "/assessments") == []
+    assert client.get(f"/api/v1/assessments/{copy_id}", headers=headers).status_code == 200
+    listed = get(client, boss, "/assessments")
     assert all(a["is_demo"] is False for a in listed)
 
     other = s.analyst_headers(client, "other@example.com")
@@ -276,9 +325,10 @@ def test_logout_deletes_the_copy_and_leaves_nothing(client, headers, copy_id, tm
 
 
 def test_a_normal_assessment_cannot_be_deleted_as_a_demo(client, headers):
-    own = s.create_assessment(client, headers)
-    assert client.delete(f"/api/v1/demo/session/{own}", headers=headers).status_code == 404
-    assert client.get(f"/api/v1/assessments/{own}", headers=headers).status_code == 200
+    boss = admin_headers(client)
+    own = s.create_assessment(client, boss)
+    assert client.delete(f"/api/v1/demo/session/{own}", headers=boss).status_code == 404
+    assert client.get(f"/api/v1/assessments/{own}", headers=boss).status_code == 200
 
 
 def test_copies_older_than_a_login_are_removed(client, headers, copy_id):
@@ -417,6 +467,7 @@ def test_a_rebuild_with_ai_on_clears_the_mark(client, headers, copy_id, monkeypa
 
 
 def test_03_edits_on_an_assessment_with_no_later_folders_mark_nothing(client, headers):
+    headers = admin_headers(client)
     own = s.create_assessment(client, headers)
     service = s.service_headers(client)
     for stage, payload in (("01", s.stage01_payload()), ("02", s.stage02_payload()), ("03", json.loads((demo.SEED / "stage03.json").read_text()))):

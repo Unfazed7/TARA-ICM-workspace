@@ -13,6 +13,7 @@ from ..schemas import AssessmentCreate, AssessmentResponse, AssessmentUpdate
 from ..stage_catalog import STAGES
 from ..stage_models import DemoCopy, StageBase
 from .auth import get_current_claims
+from ..settings import preview_only
 
 
 router = APIRouter()
@@ -79,6 +80,8 @@ def create_assessment(
     db: Session = Depends(get_db),
     claims: dict = Depends(get_current_claims),
 ):
+    if preview_only(claims):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="This preview has the demo only. Projects of your own are not available.")
     assessment = Assessment(
         name=request.name,
         description=request.description,

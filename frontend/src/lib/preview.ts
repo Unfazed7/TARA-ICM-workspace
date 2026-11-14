@@ -12,27 +12,38 @@ const SESSION_KEY = 'tara_session_key';
 const DEMO_ID = 'tara_demo_id';
 
 export interface AppConfig {
+  /** AI is on for this login. With the server switch off, only an admin has it (D-70). */
   ai_enabled: boolean;
   demo_available: boolean;
+  /** This login sees the demo only: it lands in the demo and cannot reach the dashboard or make projects. */
+  preview_only: boolean;
 }
 
 /** Until the server has answered, the screens behave as they always did: AI on, no demo. */
-const DEFAULT_CONFIG: AppConfig = { ai_enabled: true, demo_available: false };
+const DEFAULT_CONFIG: AppConfig = { ai_enabled: true, demo_available: false, preview_only: false };
 
+/** What the server says for this login (it answers per login when the token is sent). */
 export async function fetchConfig(): Promise<AppConfig> {
   try {
-    const res = await fetch('/api/v1/config');
+    const token = sessionStorage.getItem(TOKEN);
+    const res = await fetch('/api/v1/config', { headers: token ? { Authorization: `Bearer ${token}` } : {} });
     if (!res.ok) return DEFAULT_CONFIG;
     const body = await res.json();
-    return { ai_enabled: body.ai_enabled !== false, demo_available: body.demo_available === true };
+    return { ai_enabled: body.ai_enabled !== false, demo_available: body.demo_available === true, preview_only: body.preview_only === true };
   } catch {
     return DEFAULT_CONFIG;
   }
 }
 
+/** The config, and whether the server has answered yet. The key holds the token, so a new login asks again. */
+export function useAppConfigState(): { config: AppConfig; ready: boolean } {
+  const token = sessionStorage.getItem(TOKEN);
+  const query = useQuery({ queryKey: ['app-config', token], queryFn: fetchConfig, staleTime: 5 * 60 * 1000 });
+  return { config: query.data ?? DEFAULT_CONFIG, ready: query.isSuccess };
+}
+
 export function useAppConfig(): AppConfig {
-  const query = useQuery({ queryKey: ['app-config'], queryFn: fetchConfig, staleTime: 5 * 60 * 1000 });
-  return query.data ?? DEFAULT_CONFIG;
+  return useAppConfigState().config;
 }
 
 /** True when the buttons that start a model run must be disabled. */

@@ -4,7 +4,9 @@
  */
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useAppConfig } from '@/lib/preview';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Settings, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -29,6 +31,9 @@ type TopBarProps = {
 
 export function StageTopBar({ stages, current, onStage, needCount, assumptionsOpen, onAssumptions, onSettings, description, assumptionsDisabled }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const previewOnly = useAppConfig().preview_only;
   const { easeOut, riseList, riseItem } = useMotionPreset();
   const menuButton = useRef<HTMLButtonElement>(null);
 
@@ -164,9 +169,15 @@ export function StageTopBar({ stages, current, onStage, needCount, assumptionsOp
                 >
                   What I read
                 </button>
-                <Link to="/dashboard" className="inline-flex min-h-10 items-center self-start rounded-[10px] border border-border bg-card px-3.5 text-sm font-medium text-foreground no-underline hover:bg-accent">
-                  Back to the dashboard
-                </Link>
+                {previewOnly ? (
+                  <button type="button" onClick={() => { logout(); navigate('/login'); }} className="inline-flex min-h-10 items-center self-start rounded-[10px] border border-border bg-card px-3.5 text-sm font-medium text-foreground hover:bg-accent">
+                    Log out
+                  </button>
+                ) : (
+                  <Link to="/dashboard" className="inline-flex min-h-10 items-center self-start rounded-[10px] border border-border bg-card px-3.5 text-sm font-medium text-foreground no-underline hover:bg-accent">
+                    Back to the dashboard
+                  </Link>
+                )}
               </motion.div>
             </motion.div>
           </motion.div>

@@ -161,7 +161,7 @@ def rebuild(assessment_id: str, background_tasks: BackgroundTasks, claims: dict 
     """Builds Stage 03 again on the current Stage 02 run, for the "built on an older item definition" banner."""
     analyst(claims)
     assessment_for(db, assessment_id, claims)
-    require_ai()
+    require_ai(claims)
     if stage_store.current_run(db, assessment_id, "02") is None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Stage 02 has no stored result yet.")
     busy = db.query(m.StageJob).filter(m.StageJob.assessment_id == assessment_id, m.StageJob.status.in_(["pending", "running"])).first()

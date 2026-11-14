@@ -2,15 +2,16 @@
 
 import re
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Response, status
+import jwt
+from fastapi import APIRouter, Body, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 
 from .. import demo
 from .. import stage_models as m
 from ..database import get_db
-from ..settings import ai_enabled, demo_enabled
+from ..settings import ai_enabled_for, demo_enabled, preview_only
 from .assessments import current_user_id, is_admin
-from .auth import get_current_claims
+from .auth import decode_token, get_current_claims
 
 
 router = APIRouter()
@@ -21,10 +22,21 @@ def offered() -> bool:
     return demo_enabled() and demo.available()
 
 
+def optional_claims(request: Request) -> dict | None:
+    """The login's claims when a valid token came with the call; none otherwise (the login page asks before there is one)."""
+    header = request.headers.get("authorization") or ""
+    if not header.lower().startswith("bearer "):
+        return None
+    try:
+        return decode_token(header[7:].strip())
+    except jwt.PyJWTError:
+        return None
+
+
 @router.get("/config")
-def config():
-    """No login needed: it says only whether AI is on and whether the demo is offered."""
-    return {"ai_enabled": ai_enabled(), "demo_available": offered()}
+def config(claims: dict | None = Depends(optional_claims)):
+    """What the screens need: is AI on for this login, is the demo offered, and is this login limited to the demo (D-70)."""
+    return {"ai_enabled": ai_enabled_for(claims), "demo_available": offered(), "preview_only": preview_only(claims)}
 
 
 @router.post("/demo/session")

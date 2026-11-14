@@ -1,4 +1,6 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { openDemo, useAppConfigState } from '@/lib/preview';
 import { useAuth } from '@/contexts/AuthContext';
 import { ReactNode } from 'react';
 
@@ -24,6 +26,30 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
         return <Navigate to="/login" replace />;
     }
 
+    return <DemoOnly>{children}</DemoOnly>;
+}
+
+/** A login limited to the demo (D-70) can open assessment pages only; any other page sends it to its demo copy. */
+function DemoOnly({ children }: { children: ReactNode }) {
+    const { config, ready } = useAppConfigState();
+    const { pathname } = useLocation();
+    const navigate = useNavigate();
+    const away = ready && config.preview_only && !pathname.startsWith('/assessment/');
+
+    useEffect(() => {
+        if (!away) return;
+        let live = true;
+        openDemo().then((id) => { if (live) navigate(`/assessment/${id}`, { replace: true }); }).catch(() => undefined);
+        return () => { live = false; };
+    }, [away, navigate]);
+
+    if (!ready || away) {
+        return (
+            <div className="min-h-[100dvh] grid place-items-center bg-background" role="status" aria-live="polite">
+                <span className="text-sm text-muted-foreground">Opening the demo…</span>
+            </div>
+        );
+    }
     return <>{children}</>;
 }
 

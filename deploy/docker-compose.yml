@@ -3,8 +3,8 @@ services:
   api:
     image: ghcr.io/unfazed7/tara-api:latest
     restart: unless-stopped
-    # AI_ENABLED (and the optional DEMO_ENABLED) come from .env: AI_ENABLED=false turns every model run off
-    # and offers testers the demo TARA. See env.example.
+    # AI_ENABLED (and the optional DEMO_ENABLED) come from .env: AI_ENABLED=false turns model runs off for analysts
+    # (they see only the demo TARA); admins keep AI. See env.example.
     env_file: .env
     environment:
       ALLOWED_ORIGINS: https://aegis0212.duckdns.org
